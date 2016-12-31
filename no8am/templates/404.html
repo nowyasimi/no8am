@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}no8am{% endblock %}
+{% block head %}
+  {{ super() }}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if STATIC_LOCATION == "local" %}
+  <link rel="stylesheet" href="{{ APP_ROOT }}{{ url_for('static', filename='css/home.css') }}">
+  {% else %}
+  <link rel="stylesheet" href="{{ STATIC_LOCATION }}/css/home.css">
+  {% endif %}
+{% endblock %}
+{% block content %}
+  <section class="page0" id="start" style='height:100%'>
+    <div class="row" id="mainPage">
+      <div class="overlay"></div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3" style="background-color:rgba(112, 110, 89, 0.69); border-radius:10px">
+            <center>
+              <div style="padding-top: 20px; color: #fb9106; display: inline-block; vertical-align: middle; float: none;">
+                <div style="font-size: 40pt">
+                404
+                </div>
+                <br /> <br />
+                <div style="font-size: 20pt;">
+                  Sorry, that page does not exist. <br />
+                  Maybe you can try our <a style="color: #ffc905" href="/">home page</a>?
+                </div>
+              </div>
+            </center>
+            <br />
+            <br />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+{% endblock %}

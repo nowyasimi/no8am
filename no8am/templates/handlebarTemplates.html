@@ -1,0 +1,176 @@
+{% raw %}
+
+<script id="crnTableTemplate" type="x-handlebars-template">
+    {{#if this}}
+        <table class="table">
+            <thead>
+                <tr style="font-weight: bold;">
+                    <td>CRN</td>
+                    <td>Course Number</td>
+                    <td>Title</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each this}}
+                    <tr>
+                        <td>{{CRN}}</td>
+                        <td>{{courseNum}}</td>
+                        <td>
+                            <span class="hidden-xs hidden-sm">
+                                {{courseName}}
+                            </span>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        Come back here after you pick some classes!
+    {{/if}}
+</script>
+
+<script id="calendarElement" type="x-handlebars-template">
+    <li style="{{hidden}} height: {{height}}%; margin-top: {{margin}}%;background:{{color}}" id="section{{section}}" class="{{course}} section{{section}} {{selected}} ">
+        <p class="courseNum" style="display: block;">{{courseNum}}</p>
+        <p style="display: none;" class="timesMet">{{timesMet}}</p>
+    </li>
+</script>
+
+<script id="buttonGroupTemplate" type="x-handlebars-template">
+    <div class="list-group {{#if courseId}}anim{{courseId}}{{/if}}" style="display:none">
+        {{> courseButton}}
+    </div>
+</script>
+
+<script id="extraSectionsButtonTemplate" type="x-handlebars-template">
+    {{#each this}}
+        {{> courseButton}}
+    {{/each}}
+</script>
+
+
+<script id="courseButtonPartialTemplate" type="x-handlebars-template">
+    <a {{#if deptNum}}data-dept="{{deptNum}}"{{else}}data-course="{{courseId}}"{{/if}} style="border-left-width: 10px; padding-left: 5px; border-left-style: solid; border-left-color:{{color}}; {{#if isExtra}}display:none{{/if}}" {{#if courseId}}id='toggle{{courseId}}'{{/if}} class="list-group-item toggle course-button {{#if isDisabled}}disabled{{/if}}">
+        <h4 class="list-group-item-heading">
+            <span class="courseNumBox">
+                {{ name }}
+            </span>
+            <span class="glyphicon glyphicon-ok course-success" aria-hidden="true" style="font-size:15px; display:none;padding-left:5px">
+            </span>
+            {{#unless isExtra}}
+                <span style="color:red" class="close removeCourse">
+                    ×
+                </span>
+            {{/unless}}
+            {{#if deptNum}}
+                <span class="glyphicon glyphicon-collapse-up course-revert" aria-hidden="true" style="display:none;">
+                </span>
+            {{/if}}
+        </h4>
+        <p class="list-group-item-text">
+            <span class="sectionCount">
+                {{#if extra_text}}
+                    {{extra_text}}
+                {{else}}
+                    {{#if deptNum}}
+                        Loading Courses
+                    {{else}}
+                        Loading Sections
+                    {{/if}}
+                {{/if}}
+            </span>
+            <span class="pull-right cache-age"></span>
+            <span style='cursor:pointer;display:none;' class="retryButton btn-link">
+                retry
+            </span>
+        </p>
+    </a>
+</script>
+
+<script id="sectionTableTemplate" type="x-handlebars-template">
+    {{#each this}}
+        <tr id='section{{sectionNum}}' class='{{classId}} section{{sectionNum}} {{#if isSelected}}success{{/if}}'>
+            <td> {{courseNum}} </td>
+            <td> {{timesMet}} </td>
+            <td> {{roomMet}} </td>
+            <td> {{professor}} </td>
+            <td> {{freeSeats}} </td>
+        </tr>
+    {{/each}}
+</script>
+
+<script id="sectionDetailsTemplate" type="x-handlebars-template">
+    <div style='font-size:15px'>
+        <b> {{messageTitle}} </b> {{messageContents}}
+    </div>
+    <div>
+        <b>Title:</b> {{title}}
+    </div>
+    {{#if ccc}}
+        <div>
+            <b>CCC:</b> {{ccc}}
+        </div>
+    {{/if}}
+    {{#if waitList}}
+        <div>
+            <b>Waitlist:</b> {{waitList}}
+        </div>
+    {{/if}}
+    {{#if resSeats}}
+        <div>
+            <b>Reserved Seats:</b> {{resSeats}}
+        </div>
+    {{/if}}
+    {{#if prm}}
+        <div>
+            <b>Prm:</b> {{prm}}
+        </div>
+    {{/if}}
+    {{#each details}}
+        <div>
+            <b>{{detailTitle}}</b> {{detailMessage}}
+        </div>
+    {{/each}}
+</script>
+
+<script id="overlapTemplate" type="x-handlebars-template">
+    {{#each this}}
+        Your selection for <b><a style="cursor:pointer" class="toggle" data-course="{{course1Id}}">{{course1Name}}</a></b> overlaps with <b><a style="cursor:pointer" class="toggle" data-course="{{course2Id}}">{{course2Name}}</a></b>.<br>
+    {{/each}}
+</script>
+
+<script id="savedScheduleTemplate" type="x-handlebars-template">
+    {{#if this}}
+    {{#each this}}
+        <div id="courseConfig{{configNum}}" class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <b>{{currentConfig.semester}}</b><br>
+                        {{#if currentConfig.customName}}
+                            <b>Description:</b> {{currentConfig.customName}} <br>
+                        {{else}}
+                            <i>No description provided</i><br>
+                        {{/if}}
+                        {{{courseData}}}
+                    </div>
+                    <div class="col-md-4">
+                        <button id="selectConfig{{configNum}}" type="button" class="btn btn-primary selectCourseConfig">
+                            Select
+                        </button>
+                        <button type="button" id="removeConfig{{configNum}}" class="btn btn-danger removeCourseConfig">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+    {{else}}
+        <div style="text-align: center;font-size:14pt; padding-bottom: 10px">
+            You do not have any saved schedules. <br>Save your next schedule to access it here later.
+        </div>
+    {{/if}}
+</script>
+
+{% endraw %}

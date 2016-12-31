@@ -1,0 +1,17 @@
+Flask==0.10.1
+Jinja2==2.7.2
+MarkupSafe==0.23
+Werkzeug==0.9.4
+beautifulsoup4==4.3.2
+bottlenose==0.6.2
+itsdangerous==0.24
+python-dateutil==2.2
+redis==2.10.5
+requests==2.3.0
+rjsmin==1.0.12
+rcssmin==1.0.6
+wsgiref==0.1.2
+zappa==0.32.1
+enum34==1.1.6
+pytest==3.0.5
+freezegun==0.3.8

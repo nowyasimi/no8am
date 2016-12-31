@@ -1,0 +1,3862 @@
+<!-- CHEM -->
+<!DOCTYPE html>
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="Course Information" />
+    <meta name="author" content="" />
+    <meta property="history:section" content="Course Information" />
+    <meta property="history:title" content="Course Information" />
+    <meta property="og:title" content="" />
+    <meta property="og:url" content="/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:site_name" content="" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@BucknellU" />
+    <meta name="twitter:creator" content="@BucknellU" />
+    <meta name="twitter:url" content="http://www.bucknell.edu/x78053.xml" />
+    <meta name="twitter:title" content="Course Information" />
+    <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="" />
+    <title>Course Information</title>
+    <link rel="icon" href="https://www.bucknell.edu/images/system/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="https://www.bucknell.edu/images/system/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/site.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/print.css" type="text/css" media="print" />
+                <!--[if IE 9]>
+                    <script>var IE9 = true;</script>
+                    <script src="https://www.bucknell.edu/prebuilt/js/ie-9.js"></script>
+                    <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/ie-9.css" type="text/css" media="all" />
+                <![endif]-->
+                <!--[if LTE IE 8]>
+                    <script>var IE8 = true;</script>
+                    <script src="https://www.bucknell.edu/prebuilt/js/ie-8.js"></script>
+                    <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/ie-8.css" type="text/css" media="all" />
+                <![endif]-->
+
+<!-- ADDING CUSTOM CSS -->
+    <style>
+
+        .bgtabon img.headerImg { display:none }
+        .gridlock .row { width:100% }
+        .gridlock .row .max-8 { width:100% }
+
+        #footer .logo, #header .logo {color: rgba(0, 0, 0, 0);}
+
+
+        #coursetable { width:95%; }
+        #coursetable th{text-align:left; font-weight:bold; padding: 0 5px; }
+        #coursetable tbody td, #requirementstable tbody td, #buildingstable tbody td { padding: 0 5px;}
+        #coursetable tbody td  p {font-size:inherit; font-weight:inherit; color:#666;}
+        #coursetable tbody td:nth-child(2){ font-weight:bold; font-size:1.1em; }
+    </style>
+
+    <!--[if lt IE 10]><!-->
+    <style>
+
+        #coursetable{overflow-x:scroll}
+
+    </style>
+    <![endif]-->
+
+    <!--[if gt IE 9]><!-->
+    <style>
+
+        /* Make the course table mobile friendly*/
+
+        @media
+        only screen and (max-width: 980px),
+        (max-device-width: 980px)  {
+
+        #coursetable { width:100%; }
+
+        /* Force table to not be like tables anymore */
+        #coursetable,
+        #coursetable thead,
+        #coursetable tbody,
+        #coursetable th,
+        #coursetable td,
+        #coursetable tr,
+        #requirementstable,
+        #requirementstable thead,
+        #requirementstable tbody,
+        #requirementstable th,
+        #requirementstable td,
+        #requirementstable tr
+        {
+        display: block;
+        }
+
+        /* Hide table headers (but not display: none;, for accessibility) */
+        #coursetable tr th{
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        }
+
+        #coursetable tr { border: 1px solid #ccc; }
+
+        #coursetable tbody td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        }
+
+        #coursetable td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 10px;
+        left: 8px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight:bold;
+        }
+
+        /*
+        Label the data
+        */
+        #coursetable td:nth-of-type(1):before { content: "CRN"; }
+        #coursetable td:nth-of-type(2):before { content: "Course"; }
+        #coursetable td:nth-of-type(3):before { content: "Title"; }
+        #coursetable td:nth-of-type(4):before { content: "Meeting Time"; }
+        #coursetable td:nth-of-type(5):before { content: "Room"; }
+        #coursetable td:nth-of-type(6):before { content: "Instructor"; }
+        #coursetable td:nth-of-type(7):before { content: "Seats Avail."; }
+        #coursetable td:nth-of-type(8):before { content: "Res Seats"; }
+        #coursetable td:nth-of-type(9):before { content: "Prm"; }
+        #coursetable td:nth-of-type(10):before { content: "CLA"; }
+        #coursetable td:nth-of-type(11):before { content: "CCC"; }
+        #coursetable td:nth-of-type(12):before { content: "Crse Desc"; }
+        #coursetable td:nth-of-type(13):before { content: "Crse Guide"; }
+        #coursetable td:nth-of-type(14):before { content: "Text Books"; }
+
+        }
+
+    </style>
+    <![endif]-->
+
+</head>
+<body class="gridlock">
+<header id="header"><section class="branding"><a href="http://www.bucknell.edu/" class="logo">Bucknell University</a></section><span class="mobile_handle"></span><section class="mobile_navigation"><div class="block directory"><a href="http://www.bucknell.edu/script/communication/EverythingDirectory" class="icon">A-Z Directory</a></div>
+<div class="block search"><span class="icon">Search</span><form action="http://www.bucknell.edu/script/search/" method="get" class="search_form"><input type="text" class="text" name="q" placeholder="Find Departments, Offices, People, etc..." autocomplete="off"><input type="submit" class="submit" value="Go"></form>
+</div>
+<div class="block explore"><span class="icon">I'm looking for â¦</span><nav class="dropdown"><a href="http://www.bucknell.edu/info-about-attending-bucknell.html">Admissions Info</a><a href="http://www.bucknell.edu/Parents">Info for Families</a><a href="http://www.bucknell.edu/Visit">Info for Visitors</a><a href="http://www.bucknell.edu/current-student-resources.html">Student Resources</a><a href="http://www.bucknell.edu/faculty-and-staff.html">Faculty/Staff Resources</a><a href="http://www.bucknell.edu/alumni">Alumni Resources</a><a href="http://www.bucknell.edu/giving">Ways to Give</a></nav></div>
+<div class="block history"><span class="icon">Places I've Been</span></div></section><section class="desktop_navigation"><div class="block explore main with_dropdown">
+<div class="positioner"><span class="icon handle">I'm looking for   &hellip;  </span><nav class="dropdown"><span class="label">Choose Your Starting Point</span><a href="http://www.bucknell.edu/info-about-attending-bucknell.html" data-type="interested"><span>Info about attending Bucknell</span></a>
+<a href="http://www.bucknell.edu/Parents" data-type="family"><span>Info for parents &amp; families</span></a>
+<a href="http://www.bucknell.edu/Visit" data-type="visit"><span>Info about visiting</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html" data-type="student"><span>Current student resources</span></a>
+<a href="http://www.bucknell.edu/faculty-and-staff.html" data-type="staff"><span>Faculty/Staff resources</span></a>
+<a href="http://www.bucknell.edu/alumni" data-type="alumn"><span>Alumni resources</span></a>
+<a href="http://www.bucknell.edu/giving" data-type="giving"><span>Ways to give to Bucknell</span></a>
+</nav></div>
+</div>
+<div class="audience_dropdowns">
+<div class="block current main with_dropdown" data-type="">
+<div class="positioner"><span class="icon handle">myBucknell</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/"><span></span></a>
+<a href="http://www.bucknell.edu/"><span></span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="interested">
+<div class="positioner"><span class="icon handle">Admissions Info</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/who-we-are.html"><span>Who We Are</span></a>
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/academics-at-bucknell.html"><span>Academics at Bucknell</span></a>
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/beyond-the-classroom.html"><span>Beyond the Classroom</span></a>
+<a href="http://www.bucknell.edu/life-at-bucknell"><span>Life at Bucknell</span></a>
+<a href="http://www.bucknell.edu/interested-in-bucknell/how-bucknell-will-change-your-life"><span>How Your Life Will Change</span></a>
+<a href="http://www.bucknell.edu/admissions.html"><span>Admissions &amp; Financial Aid</span></a>
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/sports-and-recreation.html"><span>Sports &amp; Recreation</span></a>
+<a href="http://www.bucknell.edu/Visit"><span>Visit Bucknell</span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="family">
+<div class="positioner"><span class="icon handle">Info for Families</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/FamilyEvents"><span>Family Events</span></a>
+<a href="http://www.bucknell.edu/parents-and-family/ways-to-volunteer.html"><span>Ways to Volunteer</span></a>
+<a href="http://www.bucknell.edu/ParentsAssociation"><span>Parents Association</span></a>
+<a href="http://www.bucknell.edu/ParentsFund"><span>Parents Fund</span></a>
+<a href="http://www.bucknell.edu/parents-and-family/faqs.html"><span>FAQs for Families</span></a>
+<a href="http://www.bucknell.edu/x363.xml"><span>Main Bucknell Contacts</span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="visit">
+<div class="positioner"><span class="icon handle">Info for Visitors</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/visit-bucknell/directions-to-bucknell.html"><span>Directions to Bucknell</span></a>
+<a href="http://www.bucknell.edu/ToDo"><span>What to Do While Visiting</span></a>
+<a href="http://www.bucknell.edu/accommodations"><span>Where to Stay</span></a>
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/visit-bucknell/the-bucknell-campus.html"><span>The Bucknell Campus</span></a>
+<a href="http://www.bucknell.edu/info-about-attending-bucknell/visit-bucknell/the-bucknell-campus/the-location.html"><span>The Location</span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="student">
+<div class="positioner"><span class="icon handle">Student Resources</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/https://mail.google.com/a/bucknell.edu/?AuthEventSource=SSO"><span>Bmail</span></a>
+<a href="http://www.bucknell.edu/http://portal.bucknell.edu"><span>myBucknell</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_1"><span>Academic &amp; Career Resources</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_2"><span>Class Registration &amp; Grades</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_3"><span>Campus Life Resources</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_4"><span>Housing, Dining &amp; Transportation</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_5"><span>Billing &amp; Financial Aid</span></a>
+<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_6"><span>Health &amp; Safety</span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="staff">
+<div class="positioner"><span class="icon handle">Faculty/Staff Resources</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/https://mail.google.com/a/bucknell.edu/?AuthEventSource=SSO"><span>Bmail</span></a>
+<a href="http://www.bucknell.edu/http://portal.bucknell.edu"><span>myBucknell</span></a>
+<a href="http://www.bucknell.edu/https://secure.touchnet.com/C20464_tsa/web/caslogin.jsp"><span>B-Bill</span></a>
+<a href="http://www.bucknell.edu/http://moodle.bucknell.edu/"><span>Moodle</span></a>
+<a href="http://www.bucknell.edu/https://my.bucknell.edu/x52588.html"><span>Forms &amp; Policies</span></a>
+<a href="http://www.bucknell.edu/faculty-and-staff.html#linkgroup_1"><span>Quick Links &amp; Tools</span></a>
+<a href="http://www.bucknell.edu/faculty-and-staff.html#linkgroup_2"><span>Academic Resources</span></a>
+<a href="http://www.bucknell.edu/faculty-and-staff.html#linkgroup_3"><span>The Bucknell Story</span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="alumn">
+<div class="positioner"><span class="icon handle">Alumni Resources</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/alumni-relations/stay-connected.html"><span>Stay Connected</span></a>
+<a href="http://www.bucknell.edu/alumni-relations/stay-informed.html"><span>Stay Informed</span></a>
+<a href="http://www.bucknell.edu/alumni-relations/programs-benefits-and-resources.html"><span>Program, Benefits &amp; Resources</span></a>
+<a href="http://www.bucknell.edu/alumni-relations/how-to-contact-us.html"><span>How to Contact Us</span></a>
+<a href="http://www.bucknell.edu/alumniapp"><span>Alumni App</span></a>
+<a href="http://www.bucknell.edu/buaa"><span>Alumni Association</span></a>
+<a href="http://www.bucknell.edu/AlumniCareerServices"><span>Alumni Career Services</span></a>
+</nav>
+</div>
+</div>
+<div class="block current main with_dropdown" data-type="giving">
+<div class="positioner"><span class="icon handle">Ways to Give</span>
+<nav class="dropdown">
+<a href="http://www.bucknell.edu/GiveToPeople"><span>Give to People</span></a>
+<a href="http://www.bucknell.edu/GiveToPlaces"><span>Give to Places</span></a>
+<a href="http://www.bucknell.edu/GiveToPrograms"><span>Give to Programs</span></a>
+<a href="http://www.bucknell.edu/GiveTimeAndExpertise"><span>Give Time and Expertise</span></a>
+<a href="http://www.bucknell.edu/http://bucknell.plannedgiving.org/"><span>Give Assets</span></a>
+<a href="http://www.bucknell.edu/giving-to-bucknell/we-do-news-and-events.html"><span>We Do News &amp; Events</span></a>
+<a href="http://www.bucknell.edu/ThankYou"><span>Our Thanks to You</span></a>
+<a href="http://www.bucknell.edu/giving-to-bucknell/contact-us.html"><span>Contact Us</span></a>
+</nav>
+</div>
+</div>
+</div>
+<div class="block directory">
+<div class="positioner"><a href="http://www.bucknell.edu//script/communication/EverythingDirectory" class="icon">A-Z Directory</a></div>
+</div>
+<div class="block history"><span class="icon">Visited pages</span></div>
+<div class="block search with_dropdown">
+<div class="positioner">
+<form action="http://www.bucknell.edu/script/search/" method="get" class="search_form" data-content-url="x91653.xml"><input type="text" class="text" name="q" placeholder="Find Departments, Offices, People, etc..." autocomplete="off"><input type="submit" class="submit" value="Go"></form>
+<div class="dropdown"><a href="http://www.bucknell.edu/script/search" class="button black everything">Search all of Bucknell.edu</a><a href="http://www.bucknell.edu//Directory/" class="button blue people">Search for People</a><div class="search_results"></div>
+</div>
+</div>
+
+</div></section></header>
+<div id="page">
+        <header class="page_header margin_top_medium">
+            <div class="positioner">
+                <div class="row">
+                    <div class="mobile-full tablet-full desktop-full">
+                        <h1></h1>
+                        <div class="section_navigation clearfix">
+<nav class="subnavigation blue"><div class="handle">In this Section </div>
+<div class="dropdown"><a class="item breadcrumb" href="http://www.bucknell.edu/registrar.html">Registrar</a><div class="current"><a class="item" href="http://www.bucknell.edu/registrar/academic-information.html">Academic Information</a><span class="item active">Course Information</span><a class="item" href="http://www.bucknell.edu/registrar/registering-for-classes.html">Registering for Classes</a><a class="item" href="http://www.bucknell.edu/registrar/hold-clearance.html">Hold Clearance</a><a class="item" href="http://www.bucknell.edu/FinalExamSchedule">Final Exams</a><a class="item" href="http://www.bucknell.edu/registrar/enrollment-verification.html">Enrollment Verification</a><a class="item" href="http://www.bucknell.edu/registrar/transcripts.html">Transcripts</a><a class="item" href="http://www.bucknell.edu/registrar/forms.html">Forms</a><a class="item" href="http://www.bucknell.edu/registrar/staff-directory.html">Staff Directory</a><a class="item" href="http://www.bucknell.edu/4yrCalendar">Academic Calendar</a></div>
+</div></nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="full_bg" data-wallpaper-options="{&quot;source&quot;:&quot;images/&quot;}"></div>
+        </header><section class="contain">
+            <div class="row">
+                <div class="mobile-full tablet-full desktop-9 max-8">
+<div class="pagetitlediv">
+<table class="plaintable" summary="This table displays title and static header displays." width="100%">
+<tbody><tr>
+<td class="pldefault">
+<h2>Course Schedule Information</h2>
+</td>
+<td class="pldefault">
+&nbsp;
+</td>
+<td class="pldefault"><p class="rightaligntext"></p>
+<div class="staticheaders">
+</div>
+</td>
+</tr>
+</tbody></table>
+<a name="main_content"></a>
+</div>
+<div class="pagebodydiv">
+
+<center>
+<input type="button" class="button" value="Show / Hide Requirements" onclick="jQuery('#course-requirements').slideToggle();">
+<input type="button" class="button" value="Show / Hide Building Designation List" onclick="jQuery('#building-designations').slideToggle();">
+<div id="course-requirements" style="display:none">
+<center>
+<table  CLASS="datadisplaytable" id="requirementstable" border=1>
+<tbody>
+<tr>
+<TD CLASS="dddefault">
+<table  CLASS="datadisplaytable" >
+<tbody>
+<tr>
+<td colspan="6" CLASS="dddefault"BGCOLOR=CCCCFF><p class="centeraligntext">CCC Requirements</p></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>AHLG=Arts and Humanities Learning Goals</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>ARHC=Arts and Humanities</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>CBL=Community Based Learning</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>CCFL=Foreign Language</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>CCIP=Integrated Perspectives</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>CCQR=Quantitative Reasoning</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>DUSC=Diversity in the U.S.</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>EGHU=Engineering Humanities</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>EGSS=Engineering Social Science</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>EVCN=Environmental Connections</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>FOUN=Foundation Seminar</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>FRST=First year course</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>GBCC=Global Connections</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>GLSP=Engineering Global and Societal Perspectives</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>LBSC=Lab Science</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>NMLG=Natural Science and Mathematics Learning Goals</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>NSMC=Natural Science and Mathematics</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>RESC=Residential College</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>SL=Service Learning Course</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>SLSC=Social Science</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>SSLG=Social Science Learning Goals</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>W1=Writing Level 1</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>W2=Writing Level 2</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"><br></td>
+</tr>
+<tr>
+<td colspan="6" CLASS="dddefault"BGCOLOR=CCCCFF><center>Prm=Permission course requires signature of instructor.<br>M=Monday&nbsp;&nbsp;&nbsp;T=Tuesday&nbsp;&nbsp;&nbsp;W=Wednesday&nbsp;&nbsp;&nbsp;R=Thursday&nbsp;&nbsp;&nbsp;F=Friday</center></td>
+</tr>
+</tbody>
+</table>
+</TD>
+</tr>
+</tbody>
+</table>
+<!--- ADDING CLOSE DIV -->
+</div>
+<hr/>
+<!---- ADDING BUILDINGS  OPEN / CLOSE -->
+<div id="building-designations" style="display:none">
+
+<center>
+<table  CLASS="datadisplaytable" id="buildingstable" border=1>
+<tbody>
+<tr>
+<TD CLASS="dddefault">
+<table  CLASS="datadisplaytable" >
+<tbody>
+<tr>
+<td colspan="6" CLASS="dddefault"BGCOLOR=CCCCFF><p class="centeraligntext">Building Designation List</p></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>ACWS=Academic West</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>ANBL=Animal Behavior Lab</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>ARTB=Arts Building</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>BARN=Art Barn</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>BERT=Bertrand Library</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>BIOL=Biology Building</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>BRKI=Breakiron Engineering</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>CMTH=Campus Theatre</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>COLE=Coleman Hall</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>DANA=Dana Engineering</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>LANG=Elaine Langone Center</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>LRSN=Larison Hall</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>MART=Marts Hall</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>MCDL=McDonnell Hall</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>OBSV=Observatory</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>OLIN=Olin Science</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>OLRY=O'Leary Center</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>RCHM=Rooke Chemistry</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>SMTH=Smith Hall</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>SWMU=Sigfried Weis Music Building</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>TAYL=Taylor Hall</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+<tr>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>TUST=Tustin Theatre</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>VAUG=Vaughan Literature Building</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF>WEIS=Weis Center/Performing Arts</td>
+<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+</tr>
+</tbody>
+</table>
+</TD>
+</tr>
+</tbody>
+</table>
+</div>
+<h4>Spring Term 2016-2017</h4>
+<h4>Lookup Criteria: CHEM</h4>
+<table  CLASS="datadisplaytable" id="coursetable" border=1,noshade>
+<tbody>
+<tr align="center">
+<th CLASS="ddlabel" scope="row" >CRN</th>
+<th CLASS="ddlabel" scope="row" >Course</th>
+<th CLASS="ddlabel" scope="row" >Title</th>
+<th CLASS="ddlabel" scope="row" >Meeting Time</th>
+<th CLASS="ddlabel" scope="row" >Room</th>
+<th CLASS="ddlabel" scope="row" >Instructor</th>
+<th CLASS="ddlabel" scope="row" >Seats<br>Avail</th>
+<th CLASS="ddlabel" scope="row" >Wait<br>List</th>
+<th CLASS="ddlabel" scope="row" >Res<br>Seats</th>
+<th CLASS="ddlabel" scope="row" >Prm</th>
+<th CLASS="ddlabel" scope="row" >CCC<br>Req</th>
+<th CLASS="ddlabel" scope="row" >Crse<br>Desc</th>
+<th CLASS="ddlabel" scope="row" >Crse<br>Guide</th>
+<th CLASS="ddlabel" scope="row" >Text<br>Books</th>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58806</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 160 01</td>
+<td CLASS="dddefault">Intro Environmental Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+OBSV 105
+</TD>
+<TD CLASS="dddefault">
+Dutcher, Dabrina D.
+<br>McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">12</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">EVCN FRST LBSC NMLG NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=160">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58806&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='160' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 160 01: </b>Crosslisted with ENST 160</font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58808</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 160L 60</td>
+<td CLASS="dddefault">Lab-<br>Intro Environmental Chem</td>
+<TD NOWRAP CLASS="dddefault">
+W 1:00-3:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 107
+</TD>
+<TD CLASS="dddefault">
+Dutcher, Dabrina D.
+<br>McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">FRST </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=160L">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58808&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='160L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58809</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 160L 61</td>
+<td CLASS="dddefault">Lab-<br>Intro Environmental Chem</td>
+<TD NOWRAP CLASS="dddefault">
+W 1:00-3:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 107
+</TD>
+<TD CLASS="dddefault">
+Dutcher, Dabrina D.
+<br>McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">11</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">FRST </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=160L">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58809&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='160L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50040</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202 01</td>
+<td CLASS="dddefault">General Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+TR 8:00-9:22am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+BIOL 101
+</TD>
+<TD CLASS="dddefault">
+Panteva, Maria
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">40</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">CCQR LBSC NMLG NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50040&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 202 01: </b>Students must select a laboratory and recitation 40 or 41. </font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56048</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202 02</td>
+<td CLASS="dddefault">General Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 8:00-8:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">26</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">CCQR LBSC NMLG NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=56048&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202' sect='02' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 202 02: </b>Students must select lab and recitation 42 or 43. </font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50041</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202R 40</td>
+<td CLASS="dddefault">Recitation-<br>General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Panteva, Maria
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">19</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50042</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202R 41</td>
+<td CLASS="dddefault">Recitation-<br>General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 4:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Panteva, Maria
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">31</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202R' sect='41' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56049</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202R 42</td>
+<td CLASS="dddefault">Recitation-<br>General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+M 4:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">18</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202R' sect='42' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56824</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202R 43</td>
+<td CLASS="dddefault">Recitation-<br>General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">18</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202R' sect='43' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50044</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202L 60</td>
+<td CLASS="dddefault">Lab for General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+M 1:00-2:22pm
+<br>M 2:30-3:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 107
+<br>RCHM 017
+</TD>
+<TD CLASS="dddefault">
+Martino, Patrick (Pat) F.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">53512</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202L 61</td>
+<td CLASS="dddefault">Lab for General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 8:00-9:22am
+<br>T 9:30-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 107
+<br>RCHM 017
+</TD>
+<TD CLASS="dddefault">
+Martino, Patrick (Pat) F.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">9</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54452</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202L 62</td>
+<td CLASS="dddefault">Lab for General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 1:00-2:22pm
+<br>T 2:30-3:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 107
+<br>RCHM 017
+</TD>
+<TD CLASS="dddefault">
+STAFF
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202L' sect='62' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55672</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 202L 63</td>
+<td CLASS="dddefault">Lab for General Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+R 8:00-9:22am
+<br>R 9:30-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 107
+<br>RCHM 017
+</TD>
+<TD CLASS="dddefault">
+Martino, Patrick (Pat) F.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">15</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=202L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='202L' sect='63' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50045</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212 01</td>
+<td CLASS="dddefault">Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 9:00-9:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Baggett, Andrew W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50045&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 212 01: </b>Students must select a laboratory and recitation section 41 or 42.</font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50046</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212 02</td>
+<td CLASS="dddefault">Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Stockland, Robert A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50046&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212' sect='02' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 212 02: </b>Students must select a laboratory and recitation section 40.</font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50047</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212 03</td>
+<td CLASS="dddefault">Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+TR 9:30-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Casteel, Dee A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">21</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50047&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212' sect='03' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 212 03: </b>Students must select a laboratory and recitation section 43 or 44.</font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50599</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212R 40</td>
+<td CLASS="dddefault">Recitation for CHEM 212 02</td>
+<TD NOWRAP CLASS="dddefault">
+M 12:00-12:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Stockland, Robert A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50600</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212R 41</td>
+<td CLASS="dddefault">Recitation for CHEM 212 01</td>
+<TD NOWRAP CLASS="dddefault">
+R 7:00-7:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Baggett, Andrew W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212R' sect='41' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54627</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212R 42</td>
+<td CLASS="dddefault">Recitation for CHEM 212 01</td>
+<TD NOWRAP CLASS="dddefault">
+R 8:00-8:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Baggett, Andrew W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212R' sect='42' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58119</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212R 43</td>
+<td CLASS="dddefault">Recitation for CHEM 212 03</td>
+<TD NOWRAP CLASS="dddefault">
+F 1:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Casteel, Dee A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212R' sect='43' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58879</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212R 44</td>
+<td CLASS="dddefault">Recitation for CHEM 212 03</td>
+<TD NOWRAP CLASS="dddefault">
+F 2:00-2:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Casteel, Dee A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">21</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212R' sect='44' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50048</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 60</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+M 11:00-11:52am
+<br>M 12:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50049</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 61</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+M 2:00-2:52pm
+<br>M 3:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Stockland, Robert A.
+<br>Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">51603</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 62</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+T 8:00-8:52am
+<br>T 9:00-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Baggett, Andrew W.
+<br>Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='62' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54884</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 63</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+T 11:00-11:52am
+<br>T 12:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='63' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56443</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 64</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+T 2:00-2:52pm
+<br>T 3:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='64' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56445</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 65</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+W 11:00-11:52am
+<br>W 12:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='65' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50742</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 66</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+W 2:00-2:52pm
+<br>W 3:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+<br>Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='66' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56446</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 67</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+R 8:00-8:52am
+<br>R 9:00-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+<br>Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">13</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='67' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">57059</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 68</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+R 11:00-11:52am
+<br>R 12:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='68' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">57060</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 69</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+R 2:00-2:52pm
+<br>R 3:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Baggett, Andrew W.
+<br>Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='69' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">57061</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 212L 70</td>
+<td CLASS="dddefault">Lab for Organic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+F 2:00-2:52pm
+<br>F 3:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 335
+</TD>
+<TD CLASS="dddefault">
+Stockland, Robert A.
+<br>Merriett, Erica
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">4</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=212L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='212L' sect='70' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55042</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 222 01</td>
+<td CLASS="dddefault">Accel Gen CHEM:<br> Inorganic</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+BIOL 104
+</TD>
+<TD CLASS="dddefault">
+Smith, Brian J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">16</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=222">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='222' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55045</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 222R 40</td>
+<td CLASS="dddefault">Recitation-<br>Accel Gen CHEM</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Smith, Brian J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">16</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=222R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='222R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55044</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 222L 60</td>
+<td CLASS="dddefault">Lab for Accel Gen Chem</td>
+<TD NOWRAP CLASS="dddefault">
+R 2:00-2:52pm
+<br>R 3:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 017
+<br>RCHM 107
+</TD>
+<TD CLASS="dddefault">
+Smith, Brian J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">16</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=222L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='222L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50057</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231 01</td>
+<td CLASS="dddefault">Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 10:00-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">22</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">CCQR NMLG NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50057&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 231 01: </b>Students must select a laboratory and recitation section 40 or 41. </font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50058</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231 02</td>
+<td CLASS="dddefault">Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+TR 8:00-9:22am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 116
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">7</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">CCQR NMLG NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50058&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231' sect='02' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 231 02: </b>Students must select a laboratory and recitation section 42 OR 43.</font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50595</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231R 40</td>
+<td CLASS="dddefault">Recitation for CHEM 231 01</td>
+<TD NOWRAP CLASS="dddefault">
+M 12:00-12:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">14</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55046</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231R 41</td>
+<td CLASS="dddefault">Recitation for CHEM 231 01</td>
+<TD NOWRAP CLASS="dddefault">
+M 4:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">28</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231R' sect='41' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56915</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231R 42</td>
+<td CLASS="dddefault">Recitation for CHEM 231 02</td>
+<TD NOWRAP CLASS="dddefault">
+T 12:00-12:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231R' sect='42' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">57471</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231R 43</td>
+<td CLASS="dddefault">Recitation for CHEM 231 02</td>
+<TD NOWRAP CLASS="dddefault">
+T 1:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">26</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231R">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231R' sect='43' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50059</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231L 60</td>
+<td CLASS="dddefault">Lab for Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+M 1:00-1:52pm
+<br>M 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 110
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+<br>Perera, Maluge Neluni (Neluni) A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50060</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231L 61</td>
+<td CLASS="dddefault">Lab for Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 1:00-1:52pm
+<br>T 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+<br>RCHM 110
+</TD>
+<TD CLASS="dddefault">
+Perera, Maluge Neluni (Neluni) A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50061</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231L 62</td>
+<td CLASS="dddefault">Lab for Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+W 1:00-1:52pm
+<br>W 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 110
+</TD>
+<TD CLASS="dddefault">
+Perera, Maluge Neluni (Neluni) A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231L' sect='62' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50062</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231L 63</td>
+<td CLASS="dddefault">Lab for Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+R 8:00-8:52am
+<br>R 9:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+<br>RCHM 110
+</TD>
+<TD CLASS="dddefault">
+Perera, Maluge Neluni (Neluni) A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">11</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231L' sect='63' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55673</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231L 64</td>
+<td CLASS="dddefault">Lab for Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+R 1:00-1:52pm
+<br>R 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 110
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+<br>Perera, Maluge Neluni (Neluni) A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">6</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231L' sect='64' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">57644</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 231L 65</td>
+<td CLASS="dddefault">Lab for Analytical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+F 1:00-1:52pm
+<br>F 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+<br>RCHM 110
+</TD>
+<TD CLASS="dddefault">
+Perera, Maluge Neluni (Neluni) A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">7</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=231L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='231L' sect='65' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58767</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 314 01</td>
+<td CLASS="dddefault">Mechanistic Organic Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 8:00-8:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">11</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=314">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58767&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='314' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58768</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 314R 40</td>
+<td CLASS="dddefault">Recitation-<br>Mechnc Organic Chem</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">11</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=314R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58768&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='314R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50063</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 322 01</td>
+<td CLASS="dddefault">Inorganic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 9:00-9:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">4</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=322">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50063&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='322' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50796</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 322L 60</td>
+<td CLASS="dddefault">Lab for Inorganic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+W 1:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 330
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=322L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='322L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58769</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 322L 61</td>
+<td CLASS="dddefault">Lab for Inorganic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+R 1:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 330
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=322L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='322L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50079</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 340 01</td>
+<td CLASS="dddefault">Biological Physical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=340">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50079&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='340' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50080</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 340R 40</td>
+<td CLASS="dddefault">Rec-<br>Biological Physical Chem</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=340R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50080&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='340R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50081</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 340L 60</td>
+<td CLASS="dddefault">Lab-<br>Biological Physical Chem</td>
+<TD NOWRAP CLASS="dddefault">
+W 1:00-1:52pm
+<br>W 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+<br>RCHM 323
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=340L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='340L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50082</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 340L 61</td>
+<td CLASS="dddefault">Lab-<br>Biological Physical Chem</td>
+<TD NOWRAP CLASS="dddefault">
+R 1:00-1:52pm
+<br>R 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+<br>RCHM 323
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=340L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='340L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50083</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 342 01</td>
+<td CLASS="dddefault">Physical Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+TR 9:30-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">14</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC W2 </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=342">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50083&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='342' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55468</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 342R 40</td>
+<td CLASS="dddefault">Recitation for CHEM 342</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">13</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=342R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=55468&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='342R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50084</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 342L 60</td>
+<td CLASS="dddefault">Laboratory-<br>Physical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+M 1:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 323
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">3</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=342L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='342L' sect='60' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50085</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 342L 61</td>
+<td CLASS="dddefault">Laboratory-<br>Physical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+T 1:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 323
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=342L">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='342L' sect='61' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50087</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 352 01</td>
+<td CLASS="dddefault">Biochemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 10:00-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">28</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=352">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50087&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='352' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50088</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 352R 40</td>
+<td CLASS="dddefault">Recitation-<br>Biochemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+M 1:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">15</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=352R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50088&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='352R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50797</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 352R 41</td>
+<td CLASS="dddefault">Recitation-<br>Biochemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+T 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+BIOL 101
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">13</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=352R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50797&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='352R' sect='41' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50661</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 358 01</td>
+<td CLASS="dddefault">Biochemical Methods</td>
+<TD NOWRAP CLASS="dddefault">
+TR 1:00-1:52pm
+<br>TR 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 018
+<br>RCHM 226
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+<br>Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">8</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=358">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50661&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='358' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td colspan="14" CLASS="dddefault"><font color="green"><b>Section CHEM 358 01: </b>Crosslisted with BIOL 340</font></td>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55686</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 371 01</td>
+<td CLASS="dddefault">Chemistry Lecture Series</td>
+<TD NOWRAP CLASS="dddefault">
+W 12:00-12:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">19</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=371">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='371' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54171</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 01</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54173</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 02</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Casteel, Dee A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='02' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54174</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 03</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Castle, Karen J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='03' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54175</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 04</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='04' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54176</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 05</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='05' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54177</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 06</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Stockland, Robert A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='06' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54180</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 07</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='07' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54179</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 08</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='08' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56267</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 09</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='09' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54181</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 10</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='10' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54182</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 11</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='11' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58814</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 12</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Switzer, Rebecca L.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='12' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58815</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 13</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Smith, Brian J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='13' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58817</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 14</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Baggett, Andrew W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='14' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58826</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 376 15</td>
+<td CLASS="dddefault">Undergraduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Dutcher, Dabrina D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault">NSMC </td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=376">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='376' sect='15' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58120</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 386 01</td>
+<td CLASS="dddefault">Computational Drug Discovery</td>
+<TD NOWRAP CLASS="dddefault">
+R 7:00-9:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Panteva, Maria
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=386">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58120&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='386' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58901</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 614 01</td>
+<td CLASS="dddefault">Mechanistic Organic Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 8:00-8:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">6</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=614">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58901&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='614' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58902</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 614R 40</td>
+<td CLASS="dddefault">Recitation-<br>Mechnc Organic Chem</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">6</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=614R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58902&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='614R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50516</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 622 01</td>
+<td CLASS="dddefault">Inorganic Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 9:00-9:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 101
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">8</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=622">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50516&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='622' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50662</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 640 01</td>
+<td CLASS="dddefault">Biological Physical Chemistry</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=640">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50662&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='640' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50663</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 640R 40</td>
+<td CLASS="dddefault">Rec-<br>Biol Physical Chem</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">1</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=640R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50663&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='640R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50086</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 642 01</td>
+<td CLASS="dddefault">Physical Chemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+TR 9:30-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">9</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=642">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50086&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='642' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">55469</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 642R 40</td>
+<td CLASS="dddefault">Recitation for CHEM 642</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">9</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=642R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=55469&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='642R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50089</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 652 01</td>
+<td CLASS="dddefault">Biochemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+MWF 10:00-10:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">28</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=652">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50089&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='652' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50090</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 652R 40</td>
+<td CLASS="dddefault">Recitation-<br>Biochemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+M 1:00-1:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">15</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=652R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50090&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='652R' sect='40' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">50664</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 652R 41</td>
+<td CLASS="dddefault">Recitation-<br>Biochemistry II</td>
+<TD NOWRAP CLASS="dddefault">
+T 11:00-11:52am
+</TD>
+<TD NOWRAP CLASS="dddefault">
+BIOL 101
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">13</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=652R">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=50664&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='652R' sect='41' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">56637</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 658 01</td>
+<td CLASS="dddefault">Biochemical Methods</td>
+<TD NOWRAP CLASS="dddefault">
+TR 1:00-1:52pm
+<br>TR 2:00-4:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 018
+<br>RCHM 226
+</TD>
+<TD CLASS="dddefault">
+Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">2</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=658">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=56637&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='658' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54266</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 01</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Clapp, Charles H.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54469</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 02</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Casteel, Dee A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='02' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54480</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 03</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Castle, Karen J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='03' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54471</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 04</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+McGuire, Molly M.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='04' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54472</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 05</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Rovnyak, David S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='05' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">54473</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 06</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Stockland, Robert A.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='06' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58818</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 07</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Strein, Timothy G.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='07' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58819</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 08</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Swan, James S.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='08' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58820</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 09</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Williams, Brian W.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='09' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58821</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 10</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Kerber, William (Will) D.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='10' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58823</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 11</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='11' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58824</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 12</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Switzer, Rebecca L.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='12' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58825</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 676 13</td>
+<td CLASS="dddefault">Graduate Research</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Smith, Brian J.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=676">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='676' sect='13' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">58903</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 686 01</td>
+<td CLASS="dddefault">Computational Drug Discovery</td>
+<TD NOWRAP CLASS="dddefault">
+R 7:00-9:52pm
+</TD>
+<TD NOWRAP CLASS="dddefault">
+RCHM 102
+</TD>
+<TD CLASS="dddefault">
+Panteva, Maria
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">Closed</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=686">Desc</a></td>
+<td CLASS="dddefault"><a href="/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate?formopt=VIEWSECT&term=201705&updsubj=CHEM&crn=58903&viewterm=201705&viewlookopt=DPT&viewparam1=CHEM&viewparam2=&viewparam3=&viewparam4=&viewparam5=&viewopenopt=ALL&viewfrstopt=">Guide</a></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='686' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+<tr align="left">
+<td CLASS="dddefault">59041</td>
+<td nowrap="nowrap" CLASS="dddefault">CHEM 699 01</td>
+<td CLASS="dddefault">Thesis</td>
+<TD NOWRAP CLASS="dddefault">
+ TBA
+</TD>
+<TD NOWRAP CLASS="dddefault">
+<br>
+</TD>
+<TD CLASS="dddefault">
+Krout, Michael R.
+</TD>
+<td CLASS="dddefault"><p class="rightaligntext">&nbsp;</p></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault">Prm</td>
+<td CLASS="dddefault"><br></td>
+<td CLASS="dddefault"><a href="/ERPPRD/bwckctlg.p_disp_course_detail?cat_term_in=201705&subj_code_in=CHEM&crse_numb_in=699">Desc</a></td>
+<td CLASS="dddefault"><BR></td>
+<TD CLASS="dddefault">
+<form action="https://securex.bncollege.com/webapp/wcs/stores/servlet/TBListView?cm_mmc=RI-_-737-_-A-_-1" method="POST" target="_blank">
+<input type="hidden" name="termMapping" value="N" />
+<input type="hidden" name="catalogId" value="10001" />
+<input type="hidden" name="storeId" value="63056" />
+<input type="hidden" name="courseXml" value="<?xml version='1.0' encoding='UTF-8'?><textbookorder><school id='63056' /><courses><course dept='CHEM' num='699' sect='01' term='W17'/></courses></textbookorder>" />
+<input type="submit" value="Books" />
+</form>
+</TD>
+</tr>
+</center>
+</tbody>
+</table>
+<p>
+<img src="/wtlgifs/twggback.gif" align="top" alt="Back" CLASS="headerImg" TITLE="Back"  NAME="GeneralBackArrow" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=16 WIDTH=16 />
+<a href="/ERPPRD/hwzkschd.P_Bucknell_SchedbyDept?term=201705&frstopt=">Back to Lookup by Department</a>
+<p>
+<img src="/wtlgifs/twggback.gif" align="top" alt="Back" CLASS="headerImg" TITLE="Back"  NAME="GeneralBackArrow" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=16 WIDTH=16 />
+<a href="https://www.bucknell.edu/x6864.xml">Back to Course Information Menu</a>
+<table class="plaintable" summary="This is table displays line separator at end of the page." border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="bgtabon" colspan="2" width="100%"><img src="Course%20Schedule%20Information_files/web_transparent.gif" alt="Transparent Image" class="headerImg" title="Transparent Image" name="web_transparent" border="0" height="3" hspace="0" vspace="0" width="10"></td></tr></tbody></table>
+<a href="#top" onmouseover="window.status='Skip to top of page'; return true" onmouseout="window.status=''; return true" onfocus="window.status='Skip to top of page'; return true" onblur="window.status=''; return true" class="skiplinks">Skip to top of page</a>
+</p></center></div>
+</div>
+</div></section></div><footer id="footer"><div class="row">
+<div class="mobile-full tablet-fourth desktop-6 branding">
+<div class="social tablet_hide desktop_hide"><a href="http://www.facebook.com/BucknellU" class="facebook" target="_blank">Facebook</a><a href="http://twitter.com/BucknellU" class="twitter" target="_blank">Twitter</a></div><a href="/" class="logo">Bucknell University</a><p class="address">
+Lewisburg, PA 17837
+<span class="mobile_hide"><br>
+ph: 570.577.2000
+<br><a href="http://www.bucknell.edu/x58248.xml">Mailing Addresses</a></span></p>
+</div>
+<div class="mobile-full tablet-fourth desktop-2 contained links first"><a href="tel:570.577.2000" class="phone tablet_hide desktop_hide">570.577.2000</a><a href="http://www.bucknell.edu/x363.xml">Contact us</a><a href="http://www.bucknell.edu/giving">Giving to Bucknell</a><a href="http://www.bucknell.edu/News">News &amp; Media</a></div>
+<div class="mobile-full tablet-fourth desktop-2 contained links"><a href="http://www.bucknell.edu/EventsAndCalendars">Calendars</a><a href="http://bucknell.bncollege.com/">Bookstore</a><a href=""></a></div>
+<div class="mobile-full tablet-fourth desktop-2 contained links last"><a href="http://www.bucknell.edu/HR">Working at Bucknell</a><a href=""></a></div>
+</div>
+<div class="final">
+<div class="row">
+<div class="mobile-full tablet-full desktop-full">
+<p class="copyright">
+Copyright &copy; 2013 Bucknell University. All rights reserved.
+<a href="http://www.bucknell.edu/x360.xml">Terms of Use</a><a href="http://www.bucknell.edu/x362.xml">Privacy Policy</a></p>
+<div class="social mobile_hide"><a href="http://www.facebook.com/BucknellU" class="facebook" target="_blank">Facebook</a><a href="https://twitter.com/BucknellU" class="twitter" target="_blank">Twitter</a><a href="http://instagram.com/BucknellU" class="instagram" target="_blank">Instagram</a></div>
+</div>
+</div>
+</div></footer><div id="history"><span class="icon close">Close</span><div class="row">
+<div class="mobile-full tablet-full desktop-8">
+<h1>Places I've Been</h1>
+<p class="emphasized">The following links are virtual breadcrumbs marking the 12 most recent pages you have visited in Bucknell.edu. If you want to remember a specific page forever click the pin in the top right corner and we will be sure not to replace it. <span class="close text">Close this message.</span></p>
+</div>
+<div class="clear clear_fix pages"></div>
+</div>
+</div>
+<script src="https://www.bucknell.edu/script/js/site-template.js"></script>
+<script>
+jQuery('#coursetable .dddefault input[type="submit"]').addClass('button');
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!-- Invalid search term  -->
+<!DOCTYPE html>
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+	<head>
+		    <meta http-equiv="Content-Type" content="text/html" />
+		        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+			    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+			        <meta name="apple-mobile-web-app-capable" content="yes" />
+				    <meta name="keywords" content="" />
+				        <meta name="description" content="Course Information" />
+					    <meta name="author" content="" />
+					        <meta property="history:section" content="Course Information" />
+						    <meta property="history:title" content="Course Information" />
+						        <meta property="og:title" content="" />
+							    <meta property="og:url" content="/" />
+							        <meta property="og:type" content="website" />
+								    <meta property="og:image" content="" />
+								        <meta property="og:description" content="" />
+									    <meta property="og:site_name" content="" />
+									        <meta name="twitter:card" content="summary" />
+										    <meta name="twitter:site" content="@BucknellU" />
+										        <meta name="twitter:creator" content="@BucknellU" />
+											    <meta name="twitter:url" content="http://www.bucknell.edu/x78053.xml" />
+											        <meta name="twitter:title" content="Course Information" />
+												    <meta name="twitter:description" content="" />
+												        <meta name="twitter:image" content="" />
+													    <title>Course Information</title>
+													        <link rel="icon" href="https://www.bucknell.edu/images/system/favicon.ico" type="image/x-icon" />
+														    <link rel="shortcut icon" href="https://www.bucknell.edu/images/system/favicon.ico" type="image/x-icon" />
+														        <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/site.css" type="text/css" media="all" />
+															    <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/print.css" type="text/css" media="print" />
+															                    <!--[if IE 9]>
+																                        <script>var IE9 = true;</script>
+																                        <script src="https://www.bucknell.edu/prebuilt/js/ie-9.js"></script>
+																                        <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/ie-9.css" type="text/css" media="all" />
+																                    <![endif]-->
+																		                    <!--[if LTE IE 8]>
+																			                        <script>var IE8 = true;</script>
+																			                        <script src="https://www.bucknell.edu/prebuilt/js/ie-8.js"></script>
+																			                        <link rel="stylesheet" href="https://www.bucknell.edu/prebuilt/css/ie-8.css" type="text/css" media="all" />
+																			                    <![endif]-->
+
+																					    <!-- ADDING CUSTOM CSS -->
+																					        <style>
+
+        .bgtabon img.headerImg { display:none }
+	        .gridlock .row { width:100% }
+		        .gridlock .row .max-8 { width:100% }
+
+			        #footer .logo, #header .logo {color: rgba(0, 0, 0, 0);}
+
+
+				        #coursetable { width:95%; }
+					        #coursetable th{text-align:left; font-weight:bold; padding: 0 5px; }
+						        #coursetable tbody td, #requirementstable tbody td, #buildingstable tbody td { padding: 0 5px;}
+							        #coursetable tbody td  p {font-size:inherit; font-weight:inherit; color:#666;}
+								        #coursetable tbody td:nth-child(2){ font-weight:bold; font-size:1.1em; }
+									    </style>
+
+									        <!--[if lt IE 10]><!-->
+			     <style>
+
+        #coursetable{overflow-x:scroll}
+
+	    </style>
+	        <![endif]-->
+
+		    <!--[if gt IE 9]><!-->
+	          <style>
+    
+        /* Make the course table mobile friendly*/
+
+        @media
+	        only screen and (max-width: 980px),
+		        (max-device-width: 980px)  {
+
+				        #coursetable { width:100%; }
+
+					        /* Force table to not be like tables anymore */
+					        #coursetable,
+						        #coursetable thead,
+							        #coursetable tbody,
+								        #coursetable th,
+									        #coursetable td,
+										        #coursetable tr,
+											        #requirementstable,
+												        #requirementstable thead,
+													        #requirementstable tbody,
+														        #requirementstable th,
+															        #requirementstable td,
+																        #requirementstable tr
+																	        {
+																			        display: block;
+																					        }
+
+																		        /* Hide table headers (but not display: none;, for accessibility) */
+																		        #coursetable tr th{
+																				        position: absolute;
+																						        top: -9999px;
+																								        left: -9999px;
+																										        }
+
+																			        #coursetable tr { border: 1px solid #ccc; }
+
+																				        #coursetable tbody td {
+																						        /* Behave  like a "row" */
+																						        border: none;
+																								        border-bottom: 1px solid #eee;
+																										        position: relative;
+																												        padding-left: 50%;
+																														        padding-top: 10px;
+																																        padding-bottom: 10px;
+																																		        }
+
+																					        #coursetable td:before {
+																							        /* Now like a table header */
+																							        position: absolute;
+																									        /* Top/left values mimic padding */
+																									        top: 10px;
+																											        left: 8px;
+																													        width: 45%;
+																															        padding-right: 10px;
+																																	        white-space: nowrap;
+																																			        font-weight:bold;
+																																					        }
+
+																						        /*
+																							           Label the data
+																								           */
+																						        #coursetable td:nth-of-type(1):before { content: "CRN"; }
+																							        #coursetable td:nth-of-type(2):before { content: "Course"; }
+																								        #coursetable td:nth-of-type(3):before { content: "Title"; }
+																									        #coursetable td:nth-of-type(4):before { content: "Meeting Time"; }
+																										        #coursetable td:nth-of-type(5):before { content: "Room"; }
+																											        #coursetable td:nth-of-type(6):before { content: "Instructor"; }
+																												        #coursetable td:nth-of-type(7):before { content: "Seats Avail."; }
+																													        #coursetable td:nth-of-type(8):before { content: "Res Seats"; }
+																														        #coursetable td:nth-of-type(9):before { content: "Prm"; }
+																															        #coursetable td:nth-of-type(10):before { content: "CLA"; }
+																																        #coursetable td:nth-of-type(11):before { content: "CCC"; }
+																																	        #coursetable td:nth-of-type(12):before { content: "Crse Desc"; }
+																																		        #coursetable td:nth-of-type(13):before { content: "Crse Guide"; }
+																																			        #coursetable td:nth-of-type(14):before { content: "Text Books"; }
+
+																																				        }
+
+			    </style>
+			        <![endif]-->
+
+	</head>
+	<body class="gridlock">
+		<header id="header"><section class="branding"><a href="http://www.bucknell.edu/" class="logo">Bucknell University</a></section><span class="mobile_handle"></span><section class="mobile_navigation"><div class="block directory"><a href="http://www.bucknell.edu/script/communication/EverythingDirectory" class="icon">A-Z Directory</a></div>
+				<div class="block search"><span class="icon">Search</span><form action="http://www.bucknell.edu/script/search/" method="get" class="search_form"><input type="text" class="text" name="q" placeholder="Find Departments, Offices, People, etc..." autocomplete="off"><input type="submit" class="submit" value="Go"></form>
+				</div>
+				<div class="block explore"><span class="icon">I'm looking for â¦</span><nav class="dropdown"><a href="http://www.bucknell.edu/info-about-attending-bucknell.html">Admissions Info</a><a href="http://www.bucknell.edu/Parents">Info for Families</a><a href="http://www.bucknell.edu/Visit">Info for Visitors</a><a href="http://www.bucknell.edu/current-student-resources.html">Student Resources</a><a href="http://www.bucknell.edu/faculty-and-staff.html">Faculty/Staff Resources</a><a href="http://www.bucknell.edu/alumni">Alumni Resources</a><a href="http://www.bucknell.edu/giving">Ways to Give</a></nav></div>
+				<div class="block history"><span class="icon">Places I've Been</span></div></section><section class="desktop_navigation"><div class="block explore main with_dropdown">
+					<div class="positioner"><span class="icon handle">I'm looking for   &hellip;  </span><nav class="dropdown"><span class="label">Choose Your Starting Point</span><a href="http://www.bucknell.edu/info-about-attending-bucknell.html" data-type="interested"><span>Info about attending Bucknell</span></a>
+							<a href="http://www.bucknell.edu/Parents" data-type="family"><span>Info for parents &amp; families</span></a>
+							<a href="http://www.bucknell.edu/Visit" data-type="visit"><span>Info about visiting</span></a>
+							<a href="http://www.bucknell.edu/current-student-resources.html" data-type="student"><span>Current student resources</span></a>
+							<a href="http://www.bucknell.edu/faculty-and-staff.html" data-type="staff"><span>Faculty/Staff resources</span></a>
+							<a href="http://www.bucknell.edu/alumni" data-type="alumn"><span>Alumni resources</span></a>
+							<a href="http://www.bucknell.edu/giving" data-type="giving"><span>Ways to give to Bucknell</span></a>
+						</nav></div>
+				</div>
+				<div class="audience_dropdowns">
+					<div class="block current main with_dropdown" data-type="">
+						<div class="positioner"><span class="icon handle">myBucknell</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/"><span></span></a>
+								<a href="http://www.bucknell.edu/"><span></span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="interested">
+						<div class="positioner"><span class="icon handle">Admissions Info</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/who-we-are.html"><span>Who We Are</span></a>
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/academics-at-bucknell.html"><span>Academics at Bucknell</span></a>
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/beyond-the-classroom.html"><span>Beyond the Classroom</span></a>
+								<a href="http://www.bucknell.edu/life-at-bucknell"><span>Life at Bucknell</span></a>
+								<a href="http://www.bucknell.edu/interested-in-bucknell/how-bucknell-will-change-your-life"><span>How Your Life Will Change</span></a>
+								<a href="http://www.bucknell.edu/admissions.html"><span>Admissions &amp; Financial Aid</span></a>
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/sports-and-recreation.html"><span>Sports &amp; Recreation</span></a>
+								<a href="http://www.bucknell.edu/Visit"><span>Visit Bucknell</span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="family">
+						<div class="positioner"><span class="icon handle">Info for Families</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/FamilyEvents"><span>Family Events</span></a>
+								<a href="http://www.bucknell.edu/parents-and-family/ways-to-volunteer.html"><span>Ways to Volunteer</span></a>
+								<a href="http://www.bucknell.edu/ParentsAssociation"><span>Parents Association</span></a>
+								<a href="http://www.bucknell.edu/ParentsFund"><span>Parents Fund</span></a>
+								<a href="http://www.bucknell.edu/parents-and-family/faqs.html"><span>FAQs for Families</span></a>
+								<a href="http://www.bucknell.edu/x363.xml"><span>Main Bucknell Contacts</span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="visit">
+						<div class="positioner"><span class="icon handle">Info for Visitors</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/visit-bucknell/directions-to-bucknell.html"><span>Directions to Bucknell</span></a>
+								<a href="http://www.bucknell.edu/ToDo"><span>What to Do While Visiting</span></a>
+								<a href="http://www.bucknell.edu/accommodations"><span>Where to Stay</span></a>
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/visit-bucknell/the-bucknell-campus.html"><span>The Bucknell Campus</span></a>
+								<a href="http://www.bucknell.edu/info-about-attending-bucknell/visit-bucknell/the-bucknell-campus/the-location.html"><span>The Location</span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="student">
+						<div class="positioner"><span class="icon handle">Student Resources</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/https://mail.google.com/a/bucknell.edu/?AuthEventSource=SSO"><span>Bmail</span></a>
+								<a href="http://www.bucknell.edu/http://portal.bucknell.edu"><span>myBucknell</span></a>
+								<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_1"><span>Academic &amp; Career Resources</span></a>
+								<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_2"><span>Class Registration &amp; Grades</span></a>
+								<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_3"><span>Campus Life Resources</span></a>
+								<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_4"><span>Housing, Dining &amp; Transportation</span></a>
+								<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_5"><span>Billing &amp; Financial Aid</span></a>
+								<a href="http://www.bucknell.edu/current-student-resources.html#linkgroup_6"><span>Health &amp; Safety</span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="staff">
+						<div class="positioner"><span class="icon handle">Faculty/Staff Resources</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/https://mail.google.com/a/bucknell.edu/?AuthEventSource=SSO"><span>Bmail</span></a>
+								<a href="http://www.bucknell.edu/http://portal.bucknell.edu"><span>myBucknell</span></a>
+								<a href="http://www.bucknell.edu/https://secure.touchnet.com/C20464_tsa/web/caslogin.jsp"><span>B-Bill</span></a>
+								<a href="http://www.bucknell.edu/http://moodle.bucknell.edu/"><span>Moodle</span></a>
+								<a href="http://www.bucknell.edu/https://my.bucknell.edu/x52588.html"><span>Forms &amp; Policies</span></a>
+								<a href="http://www.bucknell.edu/faculty-and-staff.html#linkgroup_1"><span>Quick Links &amp; Tools</span></a>
+								<a href="http://www.bucknell.edu/faculty-and-staff.html#linkgroup_2"><span>Academic Resources</span></a>
+								<a href="http://www.bucknell.edu/faculty-and-staff.html#linkgroup_3"><span>The Bucknell Story</span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="alumn">
+						<div class="positioner"><span class="icon handle">Alumni Resources</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/alumni-relations/stay-connected.html"><span>Stay Connected</span></a>
+								<a href="http://www.bucknell.edu/alumni-relations/stay-informed.html"><span>Stay Informed</span></a>
+								<a href="http://www.bucknell.edu/alumni-relations/programs-benefits-and-resources.html"><span>Program, Benefits &amp; Resources</span></a>
+								<a href="http://www.bucknell.edu/alumni-relations/how-to-contact-us.html"><span>How to Contact Us</span></a>
+								<a href="http://www.bucknell.edu/alumniapp"><span>Alumni App</span></a>
+								<a href="http://www.bucknell.edu/buaa"><span>Alumni Association</span></a>
+								<a href="http://www.bucknell.edu/AlumniCareerServices"><span>Alumni Career Services</span></a>
+							</nav>
+						</div>
+					</div>
+					<div class="block current main with_dropdown" data-type="giving">
+						<div class="positioner"><span class="icon handle">Ways to Give</span>
+							<nav class="dropdown">
+								<a href="http://www.bucknell.edu/GiveToPetioner">
+									<form action="http://www.bucknell.edu/script/search/" method="get" class="search_form" data-content-url="x91653.xml"><input type="text" class="text" name="q" placeholder="Find Departments, Offices, People, etc..." autocomplete="off"><input type="submit" class="submit" value="Go"></form>
+									<div class="dropdown"><a href="http://www.bucknell.edu/script/search" class="button black everything">Search all of Bucknell.edu</a><a href="http://www.bucknell.edu//Directory/" class="button blue people">Search for People</a><div class="search_results"></div>
+									</div>
+						</div>
+
+					</div></section></header>
+					<div id="page">
+						        <header class="page_header margin_top_medium">
+								            <div class="positioner">
+										                    <div class="row">
+													                        <div class="mobile-full tablet-full desktop-full">
+																	                        <h1></h1>
+																				                        <div class="section_navigation clearfix">
+																								<nav class="subnavigation blue"><div class="handle">In this Section </div>
+																									<div class="dropdown"><a class="item breadcrumb" href="http://www.bucknell.edu/registrar.html">Registrar</a><div class="current"><a class="item" href="http://www.bucknell.edu/registrar/academic-information.html">Academic Information</a><span class="item active                  </div>
+																										                    </div>
+																												                    </div>
+																														                </div>
+																																            <div class="full_bg" data-wallpaper-options="{&quot;source&quot;:&quot;images/&quot;}"></div>
+																																	            </header><section class="contain">
+																																			                <div class="row">
+																																						                <div class="mobile-full tablet-full desktop-9 max-8">
+																																									<div class="pagetitlediv">
+																																										<table class="plaintable" summary="This table displays title and static header displays." width="100%">
+																																											<tbody><tr>
+																																													<td class="pldefault">
+																																														<h2>Course Schedule Information</h2>
+																																													</td>
+																																													<td class="pldefault">
+																																														&nbsp;
+																																													</td>
+																																													<td class="pldefault"><p class="rightaligntext"></p>
+																																														<div class="staticheaders">
+																																														</div>
+																																													</td>
+																																												</tr>
+																																											</tbody></table>
+																																											<a name="main_content"></a>
+																																									</div>
+																																									<div class="pagebodydiv">
+
+																																										<center>
+																																											<input type="button" class="button" value="Show / Hide Requirements" onclick="jQuery('#course-requirements').slideToggle();">
+																																											<input type="button" class="button" value="<td CLASS="dddefault"BGCOLOR=CCCCFF>CCIP=Integrated Perspectives</td>
+																																											<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																											<td CLASS="dddefault"BGCOLOR=CCCCFF>CCQR=Quantitative Reasoning</td>
+																																											<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																											</tr>
+																																											<tr>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF>DUSC=Diversity in the U.S.</td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF>EGHU=Engineering Humanities</td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF>GLSP=Engineering Global and Societal Perspectives</td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF>LBSC=Lab Science</td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																											</tr>
+																																											<tr>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF>NMLG=Natural Science and Mathematics Learning Goals</td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																												<td CLASS="dddefault"BGCOLOR=CCCCFF>NSMC=Natural Science and Mathematics<nbsp;T=Tuesday&nbsp;&nbsp;&nbsp;W=Wednesday&nbsp;&nbsp;&nbsp;R=Thursday&nbsp;&nbsp;&nbsp;F=Friday</center></td>
+																																											</tr>
+																																											</tbody>
+																																											</table>
+																																											</TD>
+																																											</tr>
+																																											</tbody>
+																																											</table>
+																																											<!--- ADDING CLOSE DIV -->
+																																									</div>
+																																									<hr/>
+																																									<!---- ADDING BUILDINGS  OPEN / CLOSE -->
+																																									<div id="building-designations" style="display:none">
+
+																																										<center>
+																																											<table  CLASS="datadisplaytable" id="buildingstable" border=1>
+																																												<tbody>
+																																													<tr>
+																																														<TD CLASS="dddefault">
+																																															<table  CLASS="datadisplaytable" >
+																																																<tbody>
+																																																	<tr>
+																																																		<td colspan="6" CLASS="dddefault"BGCOLOR=CCCCFF><p class="centeraligntext">Building Designation List</p></tdASS="dddefault"BGCOLOR=CCCCFF>BERT=Bertrand Library</td>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF>BIOL=Biology Building</td>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																																	</tr>
+																																																	<tr>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF>BRKI=Breakiron Engineering</td>
+																																																		<td CLASS="dddefault"BGCughan Literature Building</td>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF>WEIS=Weis Center/Performing Arts</td>
+																																																		<td CLASS="dddefault"BGCOLOR=CCCCFF><br></td>
+																																																	</tr>
+																																																</tbody>
+																																															</table>
+																																														</TD>
+																																													</tr>
+																																												</tbody>
+																																											</table>
+																																									</div>
+																																									<h4>Spring Term 2016-2017</h4>
+																																									<h4>Lookup Criteria: QQQQ</h4>
+																																										</center>
+
+																																										<b>No Sections found with selected criteria.</b>
+																																										<p>
+																																										<img src="/wtlgifs/twggback.gif" align="top" alt="Back" CLASS="headerImg" TITLE="Back"  NAME="GeneralBackArrow" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=16 WIDTH=16 />
+																																										<a href="/ERPPRD/hwzkschd.P_Bucknell_SchedbyDept?term=201705&frstopt=">Back to Lookup by Department</a>
+																																										<p>
+																																										<img src="/wtlgifs/twggback.gif" align="top" alt="Back" CLASS="headerImg" TITLE="Back"  NAME="GeneralBackArrow" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=16 WIDTH=16 />
+																																										<a href="https://www.bucknell.edu/x6864.xml">Back to Course Informat><footer id="footer"><div class="row">
+																																													<div class="mobile-full tablet-fourth desktop-6 branding">
+																																														<div class="social tablet_hi="http://bucknell.bncollege.com/">Bookstore</a><a href=""></a></div>
+																																														<div class="mobile-full tablet-fourth desktop-2 contained links last"><a href="http://www.bucknell.edu/HR">Working at Bucknell</a><a href=""></a></div>
+																																													</div>
+																																													<div class="final">
+																																														<div class="row">
+																																															<div class="mobile-full tablet-full desktop-full">
+																																																<p class="copyright">
+																																																Copyright &copy; 2013 Bucknell University. All rights reserved.
+																																																<a href="http://www.bucknell.edu/x360.xml">Terms of Use</a><a href="http://www.bucknell.edu/x362.xml"d">The following links are virtual breadcrumbs marking the 12 most recent pages you have visited in Bucknell.edu. If you want to remember a specific page forever click the pin in the top right corner and we will be sure not to replace it. <span class="close text">Close this message.</span></p>
+																																															</div>
+																																															<div class="c

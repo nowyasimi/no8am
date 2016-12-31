@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}no8am - {{ CURRENTSCHOOL }}{% endblock %}
+{% block head %}
+  {{ super() }}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if STATIC_LOCATION == "local" %}
+  <link rel="stylesheet" href="{{ APP_ROOT }}{{ url_for('static', filename='css/calendar.css') }}">
+  {% else %}
+  <link rel="stylesheet" href="{{ STATIC_LOCATION }}/css/bucknell.css">
+  {% endif %}
+{% endblock %}
+{% block content %}
+
+  <section class="page2">
+    {% include "calendar.html" %}
+  </section>
+
+  <script type="text/javascript">
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
+  <script type="text/javascript">
+      function sendSavedSchedule() {
+        {% if customData != None %}
+            var courseData = {{ customData|tojson }};
+            for (var courseNum in courseData) {
+              var currentCourse = courseNum.split(" ");
+              addNewCourse(currentCourse[0], currentCourse[1], JSON.stringify(courseData[courseNum]));
+            }
+        {% endif %}
+        }
+    APP_ROOT = "{{ APP_ROOT }}";
+  </script>
+
+  {% if STATIC_LOCATION == "local" %}
+  {% for file in jsFiles %}
+  <script type="text/javascript" src="{{ url_for('static', filename=file) }}"></script>
+  {% endfor %}
+  {% else %}
+  <script type="text/javascript" src="{{ STATIC_LOCATION }}/{{ ASSET_URL }}"></script>
+  {% endif %}
+
+  <script type="text/javascript">
+    {% if customData != None %}
+      $("#welcomeWell").slideUp();
+    {% endif %}
+  </script>
+
+  {% include "handlebarTemplates.html" %}
+
+
+
+{% endblock %}

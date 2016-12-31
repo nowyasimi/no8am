@@ -1,0 +1,30 @@
+{
+    "common": {
+        "app_function": "run.app",
+        "parameter_depth": 6,
+        "memory_size": 128,
+        "prebuild_script": "prebuild.update_static_files",
+        "integration_response_codes": [200, 204, 301, 400, 404, 500],
+        "method_response_codes": [200, 204, 301, 400, 404, 500],
+        "exclude": ["static/favicon.ico, static/css, static/js"],
+        "s3_bucket": "no8am-deployment",
+        "aws_region": "us-east-1",
+        "remote_env": "s3://no8am-deployment/no8am-environment-variables.json"
+    },
+    "dev": {
+       "extends": "common",
+       "debug": true,
+       "environment_variables": {
+         "APPLICATION_ROOT": "/dev",
+         "STATIC_LOCATION": "https://static.no8.am"
+        }
+    },
+    "production": {
+       "extends": "common",
+       "debug": false,
+       "domain": "no8.am",
+       "environment_variables": {
+         "STATIC_LOCATION": "https://static.no8.am"
+       }
+    }
+}

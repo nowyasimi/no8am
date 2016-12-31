@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <title>{% block title %}{% endblock %}</title>
+    {# CSS #}
+    {% if STATIC_LOCATION == "local" %}
+    <link rel="shortcut icon" href="{{ APP_ROOT }}{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ APP_ROOT }}{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    {% else %}
+    <link rel="shortcut icon" href="{{ STATIC_LOCATION }}/favicon.ico">
+    {% endif %}
+    {% endblock %}
+    {% include "analytics.html" %}
+  </head>
+
+  <body>
+    <div class="container-fluid" style='height:100%'>
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
