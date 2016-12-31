@@ -3,11 +3,11 @@ from rcssmin import cssmin
 import boto3
 import time
 import os
-# from no8am.utility import generate_course_descriptions
+from no8am.utility import generate_course_descriptions
 
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
-# STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
+STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
 
 jsBucknell = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
 			  'bucknellCourseDescriptions.json', 'bucknellDepartments.json', "bucknellCCCRequirements.json",
@@ -26,11 +26,11 @@ def minify_javascript(file_list):
 
 	minified = ""
 	for file_name in file_list:
-		# if file_name == "bucknellCourseDescriptions.json" and STATIC_LOCATION != "local":
-		# 	contents = generate_course_descriptions()
-		# else:
-		with open("no8am/static/" + file_name, 'r') as f:
-			contents = f.read()
+		if file_name == "bucknellCourseDescriptions.json" and STATIC_LOCATION != "local":
+			contents = generate_course_descriptions()
+		else:
+			with open("no8am/static/" + file_name, 'r') as f:
+				contents = f.read()
 		minified += jsmin(contents) + ";"
 	return minified
 
@@ -117,13 +117,14 @@ def update_static_files():
 
 	# invalidate CloudFront cache
 	response = cloudfront.create_invalidation(
-	    DistributionId=CLOUDFRONT_DISTRIBUTION_ID,
-	    InvalidationBatch={
-	        'Paths': {
-	        'Quantity': 1,
-	        'Items': ['/*']
-	        },
-	        'CallerReference': str(int(time.time()))
-	    }
+		DistributionId=CLOUDFRONT_DISTRIBUTION_ID,
+		InvalidationBatch={
+			'Paths': {
+				'Quantity': 1,
+				'Items': ['/*']
+			},
+			'CallerReference': str(int(time.time()))
+		}
 	)
+
 	print response

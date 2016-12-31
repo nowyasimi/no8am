@@ -1,10 +1,12 @@
 # TODO - create different cloudfront distributions and S3 for static files in different environments
 
-def update_static_files():
-    import imp
-    minify = imp.load_source('minify', '/Users/nadeem/Developer/no8am/no8am/minify.py')
-    minify.update_static_files()
+import sys
+sys.path.append('.')
+from no8am.minify import update_static_files
 
+
+def update_static_files_wrapper():
+    update_static_files()
 
 # TODO - implement post upload callback that creates a base path mapping, if it doesn't exist
 def create_base_path_mapping():

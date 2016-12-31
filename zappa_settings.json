@@ -3,7 +3,7 @@
         "app_function": "run.app",
         "parameter_depth": 6,
         "memory_size": 128,
-        "prebuild_script": "prebuild.update_static_files",
+        "prebuild_script": "prebuild.update_static_files_wrapper",
         "integration_response_codes": [200, 204, 301, 400, 404, 500],
         "method_response_codes": [200, 204, 301, 400, 404, 500],
         "s3_bucket": "no8am-deployment",

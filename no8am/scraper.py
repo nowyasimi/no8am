@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 from itertools import groupby
 import string
-from utility import get_bucknell_format_semester
+from no8am.utility import get_bucknell_format_semester
 from enum import Enum
 
 TERM = get_bucknell_format_semester()

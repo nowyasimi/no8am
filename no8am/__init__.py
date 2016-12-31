@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask
 app = Flask(__name__)
 
@@ -9,3 +7,4 @@ app.config.update(
 
 import no8am.views
 
+from no8am.minify import update_static_files

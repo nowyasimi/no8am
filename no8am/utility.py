@@ -2,9 +2,8 @@ from datetime import datetime
 import json
 import io
 import sys
-
-from no8am.metadata import DEPARTMENT_LIST
-from no8am.scraper import *
+import requests
+from bs4 import BeautifulSoup
 
 COURSE_DESCRIPTION_FILENAME = "bucknellCourseDescriptions.json"
 
@@ -41,6 +40,7 @@ def get_bucknell_format_semester():
 
 
 def get_course_numbers_in_department(department_name):
+	from no8am.scraper import Department
 
 	try:
 		all_courses = Department.process_department_request(department_name)
@@ -118,6 +118,8 @@ def get_all_course_numbers():
 def generate_course_descriptions():
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
+
+	from no8am.metadata import DEPARTMENT_LIST
 
 	global DEPARTMENTS
 
