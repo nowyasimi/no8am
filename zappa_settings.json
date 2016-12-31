@@ -6,10 +6,10 @@
         "prebuild_script": "prebuild.update_static_files",
         "integration_response_codes": [200, 204, 301, 400, 404, 500],
         "method_response_codes": [200, 204, 301, 400, 404, 500],
-        "exclude": ["static/favicon.ico, static/css, static/js"],
         "s3_bucket": "no8am-deployment",
         "aws_region": "us-east-1",
-        "remote_env": "s3://no8am-deployment/no8am-environment-variables.json"
+        "remote_env": "s3://no8am-deployment/no8am-environment-variables.json",
+        "timeout_seconds": 300
     },
     "dev": {
        "extends": "common",
