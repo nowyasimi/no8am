@@ -1,4 +1,4 @@
-from utility import get_bucknell_format_semester
+from no8am.utility import get_bucknell_format_semester
 from freezegun import freeze_time
 
 
