@@ -3,7 +3,7 @@ from rcssmin import cssmin
 import boto3
 import time
 import os
-from no8am.utility import generate_course_descriptions
+from no8am import generate_course_descriptions
 
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
