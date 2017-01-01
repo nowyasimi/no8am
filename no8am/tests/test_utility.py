@@ -1,4 +1,7 @@
-from no8am.utility import get_bucknell_format_semester
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from no8am.utility import get_bucknell_format_semester, convert_descriptions_to_string
 from freezegun import freeze_time
 
 
@@ -30,3 +33,9 @@ def test_get_bucknell_format_semester_fall():
     """
 
     assert get_bucknell_format_semester() == '201801'
+
+
+def test_convert_descriptions_to_string():
+
+    utf8_data = [{'Japan': '日本'}]
+    convert_descriptions_to_string(utf8_data)

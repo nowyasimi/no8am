@@ -3,7 +3,8 @@ from rcssmin import cssmin
 import boto3
 import time
 import os
-from no8am import generate_course_descriptions
+from no8am import generate_course_descriptions, convert_descriptions_to_string
+
 
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
@@ -15,6 +16,10 @@ jsBucknell = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bun
 jsHome = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js']
 jsHome2 = ['js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js', 'bucknellCourseDescriptions.json']
 
+MINIFY_JS_FILE_NAMES = ['packed.js', 'packed2.js', 'packed3.js']
+
+course_descriptions = None
+
 
 def minify_javascript(file_list):
 	"""
@@ -24,10 +29,12 @@ def minify_javascript(file_list):
 	:return: Minified files bundled together in one string.
 	"""
 
+	global course_descriptions
+
 	minified = ""
 	for file_name in file_list:
-		if file_name == "bucknellCourseDescriptions.json" and STATIC_LOCATION != "local":
-			contents = generate_course_descriptions()
+		if file_name == "bucknellCourseDescriptions.json" and course_descriptions is not None:
+			contents = course_descriptions
 		else:
 			with open("no8am/static/" + file_name, 'r') as f:
 				contents = f.read()
@@ -78,8 +85,14 @@ def update_static_files():
 	Minifies and pushes static assets to Amazon Cloudfront.
 	"""
 
+	global course_descriptions
+
 	# Ask developer if static file update is necessary
-	update_static = None
+	if STATIC_LOCATION == "local":
+		update_static = None
+	else:
+		update_static = 'y'
+		course_descriptions = convert_descriptions_to_string(generate_course_descriptions())
 
 	while update_static not in ['y', 'n']:
 		update_static = raw_input("Update static files? [y/n]: ")
@@ -97,7 +110,7 @@ def update_static_files():
 		s3.Object(S3_BUCKET_NAME, d + '/').put(Body='')
 
 	# generate and upload minified JS
-	to_minify = ["packed.js", "packed2.js", "packed3.js"]
+	to_minify = MINIFY_JS_FILE_NAMES
 	for m in to_minify:
 		data = map_minify_name_to_files(m)
 		s3.Object(S3_BUCKET_NAME, m).put(Body=data, ContentType ='application/javascript', CacheControl='max-age=900')

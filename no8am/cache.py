@@ -5,7 +5,7 @@ import os
 DEFAULT_CACHE_TIME = 172800
 REDIS_PASS = os.environ.get("REDIS_PASS")
 REDIS_SERVER = os.environ.get("REDIS_SERVER")
-DISABLE_CACHE = True
+DISABLE_CACHE = False
 
 redis_cache = None
 
@@ -19,10 +19,9 @@ def connect_to_cache(func):
 		if DISABLE_CACHE:
 			return None
 		global redis_cache
-		if redis_cache is not None:
-			return
-		redis_cache = RedisCache(host=REDIS_SERVER, password=REDIS_PASS, default_timeout=DEFAULT_CACHE_TIME)
-		func(*args, **kwargs)
+		if redis_cache is None:
+			redis_cache = RedisCache(host=REDIS_SERVER, password=REDIS_PASS, default_timeout=DEFAULT_CACHE_TIME)
+		return func(*args, **kwargs)
 
 	return wrapper
 

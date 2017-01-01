@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 import json
 import io
@@ -128,18 +130,23 @@ def generate_course_descriptions():
 	return parseAndCurate()
 
 
-if __name__ == "__main__":
-	descriptions = generate_course_descriptions()
+def convert_descriptions_to_string(descriptions):
+	return "courseDescriptions = ".decode("utf8") + json.dumps(descriptions, ensure_ascii=False)
 
-	with io.open(COURSE_DESCRIPTION_FILENAME, "w", encoding='utf8') as f:
-		f.write("courseDescriptions = [".decode("utf8"))
-		for x in range(len(descriptions)):
-			data = json.dumps(descriptions[x], ensure_ascii=False).decode('utf8')
-			try:
-				f.write(data)
-			except TypeError:
-				# Decode data to Unicode first
-				f.write(data.decode('utf8'))
-			if x != len(descriptions) - 1:
-				f.write(", ".decode("utf8"))
-		f.write("]".decode("utf8"))
+# if __name__ == "__main__":
+# 	descriptions = generate_course_descriptions()
+# 	descriptions_string = convert_descriptions_to_string(descriptions)
+#
+# 	with io.open(COURSE_DESCRIPTION_FILENAME, "w", encoding='utf8') as f:
+# 		f.write(descriptions_string)
+		# f.write("courseDescriptions = [".decode("utf8"))
+		# for x in range(len(descriptions)):
+		# 	data = json.dumps(descriptions[x], ensure_ascii=False).decode('utf8')
+		# 	try:
+		# 		f.write(data)
+		# 	except TypeError:
+		# 		# Decode data to Unicode first
+		# 		f.write(data.decode('utf8'))
+		# 	if x != len(descriptions) - 1:
+		# 		f.write(", ".decode("utf8"))
+		# f.write("]".decode("utf8"))
