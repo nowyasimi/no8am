@@ -2,10 +2,11 @@
 
 from datetime import datetime
 import json
-import io
 import sys
 import requests
 from bs4 import BeautifulSoup
+
+BUCKNELL_COURSE_DESCRIPTIONS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/bwckctlg.p_display_courses"
 
 COURSE_DESCRIPTION_FILENAME = "bucknellCourseDescriptions.json"
 
@@ -76,11 +77,11 @@ def parseAndCurate():
 				elif count == 1:
 					realInfo = x.strip().replace("\n", " ")
 					break
-			temp = {}
-			temp["courseNum"] = courseNum
-			temp["courseName"] = courseName
-			temp["info"] = realInfo
-			final.append(temp)
+			final.append({
+				'courseNum': courseNum,
+				'courseName': courseName,
+				'info': realInfo
+			})
 
 	# TODO - add courses that are not in descriptions (without description)
 	# might not be necessary, mostly shows crosslisted courses
@@ -101,7 +102,7 @@ def get_all_course_descriptions():
 	 ("sel_divs","dummy"), ("sel_dept","dummy"), ("sel_attr","dummy")]
 	for x in DEPARTMENTS:
 		payload.append(("sel_subj", x))
-	r = requests.get("https://www.bannerssb.bucknell.edu/ERPPRD/bwckctlg.p_display_courses", params=payload)
+	r = requests.get(BUCKNELL_COURSE_DESCRIPTIONS_URL, params=payload)
 	soup = BeautifulSoup(r.text)
 	table = soup.find_all("table")[3]
 	rows = table.find_all("tr")
@@ -111,6 +112,7 @@ def get_all_course_descriptions():
 def get_all_course_numbers():
 	courseNums = []
 	print "Getting course nums..."
+	# TODO - parallelize this to ensure completion with 5 minute AWS Lambda execution limit
 	for x in DEPARTMENTS:
 		print x
 		courseNums += get_course_numbers_in_department(x)
@@ -134,6 +136,7 @@ def convert_descriptions_to_string(descriptions):
 	return "courseDescriptions = ".decode("utf8") + json.dumps(descriptions, ensure_ascii=False)
 
 # if __name__ == "__main__":
+# 	import io
 # 	descriptions = generate_course_descriptions()
 # 	descriptions_string = convert_descriptions_to_string(descriptions)
 #

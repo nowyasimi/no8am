@@ -76,6 +76,7 @@ def get_course_configuration(config):
 @app.route('/lookup/')
 @handle_response_errors(['department', 'course_number'])
 def course_lookup(department, course_number):
+	# TODO - move cache handling to scraper to make async requests possible, keep in mind tests will need to avoid cache
 	cache_data = course_data_get(department)
 	if cache_data is None:
 		dept_data = Department.process_department_request(department)

@@ -5,8 +5,22 @@ sys.path.append('.')
 from no8am.minify import update_static_files
 
 
+# TODO - improve workaround to get multiple scheduled events for the same function
 def update_static_files_wrapper():
     update_static_files()
+
+
+def update_static_files_wrapper_b():
+    update_static_files()
+
+
+def update_static_files_wrapper_c():
+    update_static_files()
+
+
+def update_static_files_wrapper_d():
+    update_static_files()
+
 
 # TODO - implement post upload callback that creates a base path mapping, if it doesn't exist
 def create_base_path_mapping():
