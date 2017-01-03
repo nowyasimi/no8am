@@ -154,6 +154,7 @@ class Section:
 			"main": self.main
 		}
 
+		# TODO - clean up this export
 		if self.main:
 			export_data["extra_section_lists"] = {section_type: {x: self.extra_section_lists[section_type][x].export() for x in self.extra_section_lists[section_type]} for section_type in self.extra_section_lists}
 			export_data["extra_section_independent"] = self.extra_section_independent
@@ -205,8 +206,6 @@ class Course:
 
 		for index, section in enumerate(self.all_sections):
 			message = section.message
-			# TODO - see if the regex can be replaced by course_number (or remove course_number)
-			course_number = section.course_number
 
 			# Makes sure section is DEPT 101 00, not DEPT 101R 00 or DEPT 101L 00
 			if message is None or len(re.findall(courseNumFull_regex, message)) == 0 or not section.main:
@@ -225,9 +224,7 @@ class Course:
 
 			# checks if section has been linked to a recitation using number of lab sections in pre-collected list
 			has_extra_section = {
-				"R": len(self.extra_section_numbers["R"]) > 0,
-				"L": len(self.extra_section_numbers["L"]) > 0,
-				"P": len(self.extra_section_numbers["P"]) > 0
+				x: len(self.extra_section_numbers[x]) > 0 for x in self.extra_section_numbers
 			}
 
 			# now it's time to see what the sections correspond to
@@ -241,12 +238,11 @@ class Course:
 						section.extra_section_lists[extra_section_type][extra_section_crn] = self.extra_sections[extra_section_type][extra_section_crn]
 						has_extra_section[extra_section_type] = False
 
-			if len(self.extra_section_numbers["L"]) > len([x for x in legal_sections if x in self.extra_section_numbers["L"]]) > 0:
-				section.extra_section_independent["L"] = False
-			if len(self.extra_section_numbers["R"]) > len([x for x in legal_sections if x in self.extra_section_numbers["R"]]) > 0:
-				section.extra_section_independent["R"] = False
-			if len(self.extra_section_numbers["P"]) > len([x for x in legal_sections if x in self.extra_section_numbers["P"]]) > 0:
-				section.extra_section_independent["P"] = False
+			for extra_section_type in EXTRA_SECTIONS:
+				extra_sections = [x for x in legal_sections if x in self.extra_section_numbers[extra_section_type]]
+
+				if len(self.extra_section_numbers[extra_section_type]) > len(extra_sections) > 0:
+					section.extra_section_independent[extra_section_type] = False
 
 			# if message didn't link section to a specific extra section
 			for extra_section_type in has_extra_section:

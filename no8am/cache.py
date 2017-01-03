@@ -2,10 +2,13 @@ from werkzeug.contrib.cache import RedisCache
 from time import time
 import os
 
+# TODO - adjust cache time based on time of year
 DEFAULT_CACHE_TIME = 172800
 REDIS_PASS = os.environ.get("REDIS_PASS")
 REDIS_SERVER = os.environ.get("REDIS_SERVER")
-DISABLE_CACHE = False
+
+# cache is disabled if Redis is not configured
+DISABLE_CACHE = True if REDIS_PASS is None or REDIS_SERVER is None else False
 
 redis_cache = None
 

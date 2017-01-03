@@ -10,6 +10,7 @@ CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
 STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
 
+# TODO - get bucknell data from metadata file
 jsBucknell = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
 			  'bucknellCourseDescriptions.json', 'bucknellDepartments.json', "bucknellCCCRequirements.json",
 			  'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js']
