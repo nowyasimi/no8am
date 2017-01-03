@@ -1,5 +1,5 @@
+// TODO - use server generated current semester
 CURRENT_SEMESTER = "Spring 2017"; // change during semester transitions
-currentSchool = "Bucknell";
 
 CREDITS = [
   {"shortCred": ".5", "long": "Half Credit"},

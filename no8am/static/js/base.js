@@ -2,7 +2,8 @@
 var sched;
 
 // handlebars templates
-var calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule, crnTable;
+var calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
+    crnTable;
 
 // for adding tooltip to custom link button
 var showTooltip = false;
@@ -286,7 +287,6 @@ function generateAndStoreJSON() {
     data.customName = description;
     data.courseData = generateCourseDataToStore();
     data.semester = CURRENT_SEMESTER;
-    data.school = currentSchool;
 
     // Put it into storage
     localStorage.setItem("courseConfigData" + courseConfigCounter, JSON.stringify(data));
@@ -699,7 +699,7 @@ function generateCustomLink() {
         $("#openGenerateLinkModal span")
             .removeClass("glyphicon-cloud-upload")
             .addClass("glyphicon-ok");
-        $("#generatedLinkHolder").html("no8.am/" + currentSchool.toLowerCase() + "/" + data.shortLink);
+        $("#generatedLinkHolder").html("no8.am/bucknell/" + data.shortLink);
         $("#generatedLink").slideDown();
     });
 }
@@ -822,7 +822,6 @@ function sendReport() {
             courseNum: $("#reportCourseNum").val(),
             name: $("#reportName").val(),
             email: $("#reportEmail").val(),
-            school: currentSchool,
             useragent: navigator.userAgent
         });
         $("#reportErrorModal").modal('hide');

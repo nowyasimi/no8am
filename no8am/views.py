@@ -54,12 +54,12 @@ def handle_response_errors(api_arguments):
 
 @app.route('/')
 def index():
-	return render_template('index.html', ASSET_URL = "packed.js", ASSET2_URL = "packed2.js", APP_ROOT = APPLICATION_ROOT, STATIC_LOCATION = STATIC_LOCATION)
+	return render_template('index.html', ASSET_URL="packed.js", ASSET2_URL="packed2.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION)
 
 
 @app.route('/bucknell/')
 def bucknell():
-	return render_template('start.html', customData = None, ASSET_URL = "packed3.js", CURRENTSCHOOL = "Bucknell", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
+	return render_template('start.html', customData=None, ASSET_URL="packed3.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
 
 
 @app.route('/bucknell/<config>')
@@ -70,7 +70,7 @@ def get_course_configuration(config):
 		if "Item" not in response.keys():
 			return redirect(url_for('bucknell'))
 		custom_data = json.loads(response["Item"]["schedule"]["S"])
-	return render_template('start.html', customData = custom_data, ASSET_URL = "packed3.js", CURRENTSCHOOL = "Bucknell", APP_ROOT = APPLICATION_ROOT, STATIC_LOCATION = STATIC_LOCATION, jsFiles = jsBucknell)
+	return render_template('start.html', customData=custom_data, ASSET_URL="packed3.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
 
 
 @app.route('/lookup/')
@@ -119,7 +119,7 @@ def get_details(crn, department):
 	if details is None:
 		details = fetch_section_details(crn, department)
 		course_data_set(key, details, timeout=259200)
-	return jsonify(html = details)
+	return jsonify(html=details)
 
 
 @app.route('/storeConfig/')
@@ -127,7 +127,7 @@ def get_details(crn, department):
 def store_course_configuration(config):
 	link = generate_short_link()
 	store_link(link, config)
-	return jsonify(shortLink = link)
+	return jsonify(shortLink=link)
 
 
 @app.route('/reportError/')
@@ -141,4 +141,4 @@ def report_error(courseNum, name, email, useragent):
 
 @app.errorhandler(httplib.NOT_FOUND)
 def page_not_found(error):
-	return render_template('404.html', ASSET_URL = "packed.js", APP_ROOT = APPLICATION_ROOT, STATIC_LOCATION = STATIC_LOCATION), httplib.NOT_FOUND
+	return render_template('404.html', ASSET_URL="packed.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION), httplib.NOT_FOUND
