@@ -700,33 +700,36 @@ Schedule.prototype.getSectionDetails = function(dept_id, course, sectionNum) {
     success: function(data) {
       $(".spinner2").hide();
         var section = this.section;
-      $page = $($.parseHTML(data.html));
+      $page = $($.parseHTML(data.html.data));
       var rows = $page.find("tr");
-      var message = section.message;
+      var message = section.message || ":";
       var message_split_index = message.indexOf(":");
-        var details = [];
 
-        for (var x = 5; x < 10; x++) {
-            if ($.trim(rows[x].children[1].innerText) != "") {
-                details.push({
-                    detailTitle: rows[x].children[0].innerText,
-                    detailMessage: rows[x].children[1].innerText
-                });
-            }
-        }
+      var details = [];
 
-        var options = {
-            messageTitle: message.slice(0,message_split_index),
-            messageContents: message.slice(message_split_index),
-            title: section.courseName,
-            ccc: section.ccc,
-            waitList: section.waitList,
-            resSeats: section.resSeats,
-            prm: section.prm,
-            details: details
-        };
+      for (var x = 5; x < 10; x++) {
+          if ($.trim(rows[x].children[1].innerText) != "") {
+              details.push({
+                  detailTitle: rows[x].children[0].innerText,
+                  detailMessage: rows[x].children[1].innerText
+              });
+          }
+      }
 
-        var sectionDetailsHTML = sectionDetails(options);
+      var message_contents = message == ":" ? "" : message.slice(message_split_index);
+
+      var options = {
+          messageTitle: message.slice(0,message_split_index),
+          messageContents: message_contents,
+          title: section.courseName,
+          ccc: section.ccc,
+          waitList: section.waitList,
+          resSeats: section.resSeats,
+          prm: section.prm,
+          details: details
+      };
+
+      var sectionDetailsHTML = sectionDetails(options);
       $("#sectionDetails").html(sectionDetailsHTML);
       updateCourseTableBackdrop();
     }
