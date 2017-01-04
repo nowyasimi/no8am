@@ -7,7 +7,8 @@ app.config.update(
 
 from no8am.cache import cache_get_string, course_data_get, course_data_set
 from no8am.database import store_link, get_link, generate_short_link
-from no8am.utility import get_bucknell_format_semester, generate_course_descriptions, convert_descriptions_to_string
+from no8am.utility import get_bucknell_format_semester, generate_course_descriptions, convert_descriptions_to_string, \
+	get_user_format_semester
 from no8am.minify import jsBucknell, update_static_files
 from no8am.scraper import Department, CreditOrCCC, find_course_in_department, fetch_section_details
 

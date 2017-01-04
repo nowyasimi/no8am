@@ -39,6 +39,22 @@ def get_bucknell_format_semester():
 		return str(course_selection_year) + '05'
 
 
+def get_user_format_semester():
+	"""
+	Converts the Bucknell-format semester string to a user-friendly representation.
+
+	:return: A string representing the current semester like 'Fall 2016-2017'
+	"""
+
+	bucknell_format = get_bucknell_format_semester()
+
+	bucknell_format_year, bucknell_format_semester = int(bucknell_format[:4]), bucknell_format[4:]
+
+	user_format_semester = 'Fall' if bucknell_format_semester == '01' else 'Spring'
+
+	return "{0} {1}-{2}".format(user_format_semester, bucknell_format_year - 1, bucknell_format_year)
+
+
 # TODO - make this a cron job and write to S3
 
 

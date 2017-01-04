@@ -181,7 +181,7 @@ function generateHTMLFromCourseData(courseData) {
  * @param courseConfigs An object containing saved course configurations
  */
 function displayCourseConfigurations(courseConfigs) {
-
+    // TODO - make it more obvious that a schedule from a previous semester cannot be displayed
     var schedules = [];
 
     // generate HTML parameters for the schedules

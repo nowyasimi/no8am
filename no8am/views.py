@@ -7,7 +7,8 @@ from functools import wraps
 import json
 
 from no8am import app, cache_get_string, course_data_get, course_data_set, store_link, get_link, \
-	generate_short_link, jsBucknell, Department, CreditOrCCC, find_course_in_department, fetch_section_details
+	generate_short_link, jsBucknell, Department, CreditOrCCC, find_course_in_department, fetch_section_details, \
+	get_user_format_semester
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -59,18 +60,19 @@ def index():
 
 @app.route('/bucknell/')
 def bucknell():
-	return render_template('start.html', customData=None, ASSET_URL="packed3.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
+	return render_template('start.html', customData=None, ASSET_URL="packed3.js", CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
 
 
 @app.route('/bucknell/<config>')
 def get_course_configuration(config):
 	custom_data = None
 	if config:
+		# TODO - fix custom link retrieval if invalid link and make a redirect
 		response = get_link(config)
 		if "Item" not in response.keys():
 			return redirect(url_for('bucknell'))
 		custom_data = json.loads(response["Item"]["schedule"]["S"])
-	return render_template('start.html', customData=custom_data, ASSET_URL="packed3.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
+	return render_template('start.html', customData=custom_data, ASSET_URL="packed3.js", CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
 
 
 @app.route('/lookup/')
