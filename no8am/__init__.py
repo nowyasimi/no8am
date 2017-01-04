@@ -1,10 +1,13 @@
 from flask import Flask
+import os
+
 app = Flask(__name__)
 
-# TODO - make this an environment variable
+secret_key = os.environ.get("SECRET_KEY") or "something_super_secret"
+
 app.config.update(
-		SECRET_KEY="\xc6lx<\x01\xefO\x9c\x81\x12}\x16q\x0c\xd4\x9dCd\x93\x93\x18\xa7f\x87"
-	)
+	SECRET_KEY=secret_key
+)
 
 from no8am.cache import cache_get_string, course_data_get, course_data_set
 from no8am.database import store_link, get_link, generate_short_link
