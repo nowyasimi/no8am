@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, redirect, url_for
+from flask import render_template, request, jsonify, redirect, url_for, session
 import requests
 import sys
 import os
@@ -59,20 +59,18 @@ def index():
 
 
 @app.route('/bucknell/')
-def bucknell():
-	return render_template('start.html', customData=None, ASSET_URL="packed3.js", CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
-
-
 @app.route('/bucknell/<config>')
-def get_course_configuration(config):
-	custom_data = None
+def bucknell(config=None):
 	if config:
-		# TODO - fix custom link retrieval if invalid link and make a redirect
+		# Verify that custom link is valid
 		response = get_link(config)
-		if "Item" not in response.keys():
-			return redirect(url_for('bucknell'))
-		custom_data = json.loads(response["Item"]["schedule"]["S"])
-	return render_template('start.html', customData=custom_data, ASSET_URL="packed3.js", CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
+		if "Item" in response.keys():
+			# store course data in cookie and redirect to /bucknell/
+			session['custom_data'] = response["Item"]["schedule"]["S"]
+		return redirect(url_for('bucknell'))
+	else:
+		custom_data = json.loads(session.pop('custom_data', 'null'))
+		return render_template('start.html', customData=custom_data, ASSET_URL="packed3.js", CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell)
 
 
 @app.route('/lookup/')
