@@ -104,8 +104,8 @@ def other_lookup(lookup_type, val):
 @app.route('/sectiondetails/')
 @handle_response_errors(['crn', 'department'])
 def get_details(crn, department):
-	details = fetch_section_details(crn, department)
-	return jsonify(html=details)
+	cache_time, section_details = fetch_section_details(crn, department)
+	return jsonify(section_details=section_details, cache_time=cache_time)
 
 
 @app.route('/storeConfig/')

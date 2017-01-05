@@ -30,23 +30,11 @@ def connect_to_cache(func):
 
 
 @connect_to_cache
-def cache_get_string(type):
-	"""
-	Get a string (like a course description) stored in cache
-
-	:param type: name of string to retrieve
-	"""
-
-	response = redis_cache.get(type)
-	return response
-
-
-@connect_to_cache
 def course_data_get(type):
 	"""
 	Get course data stored in cache
 
-	:param type: Name of course data (CSCI, W1, ...)
+	:param type: Name of course data eg CSCI, W1, 34934details (for section details)
 	"""
 
 	response = redis_cache.get(type)

@@ -700,7 +700,7 @@ Schedule.prototype.getSectionDetails = function(dept_id, course, sectionNum) {
     success: function(data) {
       $(".spinner2").hide();
         var section = this.section;
-      $page = $($.parseHTML(data.html.data));
+      $page = $($.parseHTML(data.section_details));
       var rows = $page.find("tr");
       var message = section.message || ":";
       var message_split_index = message.indexOf(":");

@@ -4,7 +4,7 @@ import re
 from itertools import groupby
 import string
 from enum import Enum
-from no8am import get_bucknell_format_semester, course_data_get, course_data_set, cache_get_string
+from no8am import get_bucknell_format_semester, course_data_get, course_data_set
 
 TERM = get_bucknell_format_semester()
 message_regex = re.compile("([ -])([0-9]{2})([ ,.]|$)")
@@ -52,10 +52,10 @@ def fetch_section_details(crn, department):
 
 	# return cached data, if it exists
 	key = crn + "details"
-	details = cache_get_string(key)
+	details = course_data_get(key)
 
 	if details is not None:
-		return details
+		return details["set_time"], details["data"]
 
 	# Create and execute server request
 	payload = {
@@ -78,9 +78,9 @@ def fetch_section_details(crn, department):
 	details = str(soup.find_all(class_='datadisplaytable')[0])
 
 	# store details in cache
-	course_data_set(key, details, timeout=259200)
+	cache_time = course_data_set(key, details, timeout=259200)
 
-	return details
+	return cache_time, details
 
 
 def extract_sections(html):
