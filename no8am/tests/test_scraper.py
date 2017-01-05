@@ -28,7 +28,7 @@ def import_html_files():
     :return: A dictionary containing filenames and file text
     """
 
-    return {filename: import_file("no8am/tests/webpages/" + filename + ".html") for filename in FILENAMES}
+    return {filename: import_file("no8am/tests/webpages/" + filename + ".txt") for filename in FILENAMES}
 
 
 def test_extract_sections_cached_data(import_html_files):

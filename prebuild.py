@@ -1,4 +1,4 @@
-# TODO - create different cloudfront distributions and S3 for static files in different environments
+# TODO - create different cloudfront distributions and S3 buckets for static files in different environments
 
 import sys
 sys.path.append('.')
