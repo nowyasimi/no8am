@@ -37,6 +37,7 @@
   {% for file in jsFiles %}
   <script type="text/javascript" src="{{ url_for('static', filename=file) }}"></script>
   {% endfor %}
+  <script>{{ metadata|safe }}</script>
   {% else %}
   <script type="text/javascript" src="{{ STATIC_LOCATION }}/{{ ASSET_URL }}"></script>
   {% endif %}

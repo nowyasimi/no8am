@@ -3,7 +3,8 @@ from rcssmin import cssmin
 import boto3
 import time
 import os
-from no8am import generate_course_descriptions, convert_descriptions_to_string
+import json
+from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
 
 
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
@@ -12,7 +13,6 @@ STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
 
 # TODO - get bucknell data from metadata file
 jsBucknell = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
-			  'bucknellCourseDescriptions.json', 'bucknellDepartments.json', "bucknellCCCRequirements.json",
 			  'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js']
 jsHome = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js']
 jsHome2 = ['js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js', 'bucknellCourseDescriptions.json']
@@ -20,6 +20,23 @@ jsHome2 = ['js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js', 'bucknellCou
 MINIFY_JS_FILE_NAMES = ['packed.js', 'packed2.js', 'packed3.js']
 
 course_descriptions = None
+
+
+def generate_metadata():
+	global course_descriptions
+
+	if course_descriptions is None:
+		with open("no8am/static/bucknellCourseDescriptions.json", 'r') as f:
+			course_descriptions = json.loads(f.read())
+
+	metadata = {
+		"course": course_descriptions,
+		"department": DEPARTMENT_LIST,
+		"ccc": CCC_LIST,
+		"credit": CREDIT_LIST
+	}
+
+	return "metadata=" + json.dumps(metadata, ensure_ascii=False)
 
 
 def minify_javascript(file_list):
@@ -32,15 +49,14 @@ def minify_javascript(file_list):
 
 	global course_descriptions
 
-	minified = ""
+	strings_to_minify = [generate_metadata()]
+
 	for file_name in file_list:
-		if file_name == "bucknellCourseDescriptions.json" and course_descriptions is not None:
-			contents = course_descriptions
-		else:
-			with open("no8am/static/" + file_name, 'r') as f:
-				contents = f.read()
-		minified += jsmin(contents) + ";"
-	return minified
+		with open("no8am/static/" + file_name, 'r') as f:
+			contents = f.read()
+		strings_to_minify.append(contents)
+
+	return "".join([jsmin(x) + ";" for x in strings_to_minify])
 
 
 def minify_css(file_list):
@@ -93,7 +109,7 @@ def update_static_files():
 		update_static = None
 	else:
 		update_static = 'y'
-		course_descriptions = convert_descriptions_to_string(generate_course_descriptions())
+		course_descriptions = generate_course_descriptions()
 
 	while update_static not in ['y', 'n']:
 		update_static = raw_input("Update static files? [y/n]: ")

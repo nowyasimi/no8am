@@ -612,7 +612,7 @@ function initializeTypeahead() {
             limit: 999,
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace.apply(this, TYPEAHEAD_OPTIONS[type].token),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: TYPEAHEAD_OPTIONS[type].local
+            local: metadata[type]
         };
 
         if (type === "course") {

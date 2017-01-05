@@ -1,8 +1,3 @@
-CREDITS = [
-  {"shortCred": ".5", "long": "Half Credit"},
-  {"shortCred": ".25", "long": "Quarter Credit"}
-];
-
 colorDict = {
   "blue":{
     "s": "#5496dd", // selected
@@ -83,25 +78,21 @@ TYPEAHEAD_OPTIONS = {
     credit : {
         token: ["long"],
         header: CREDIT_HEADER,
-        suggestion: CREDIT_SUGGESTION,
-        local: CREDITS
+        suggestion: CREDIT_SUGGESTION
     },
     ccc : {
         token: ["shortCCC", "long"],
         header: CCC_HEADER,
-        suggestion: CCC_SUGGESTION,
-        local: CCC
+        suggestion: CCC_SUGGESTION
     },
     department : {
         token: ["short", "long"],
         header: DEPARTMENT_HEADER,
-        suggestion: DEPARTMENT_SUGGESTION,
-        local: departments
+        suggestion: DEPARTMENT_SUGGESTION
     },
     course : {
         token: ["courseNum", "courseName"],
         header: COURSE_HEADER,
-        suggestion: COURSE_SUGGESTION,
-        local: courseDescriptions
+        suggestion: COURSE_SUGGESTION
     }
 };

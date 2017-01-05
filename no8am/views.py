@@ -7,7 +7,7 @@ from functools import wraps
 import json
 
 from no8am import app, store_link, get_link, generate_short_link, jsBucknell, Department, CreditOrCCC, \
-	find_course_in_department, fetch_section_details, get_user_format_semester
+	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -72,9 +72,10 @@ def bucknell(config=None):
 		return redirect(url_for('bucknell'))
 	else:
 		custom_data = json.loads(session.pop('custom_data', 'null'))
+		metadata = generate_metadata() if STATIC_LOCATION == 'local' else None
 		return render_template(
 			'start.html', customData=custom_data, ASSET_URL="packed3.js", CURRENT_SEMESTER=get_user_format_semester(),
-			APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell
+			APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=jsBucknell, metadata=metadata
 		)
 
 
