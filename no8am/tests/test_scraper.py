@@ -58,8 +58,10 @@ def test_department_lookup(import_html_files, monkeypatch):
     """
 
     monkeypatch.setattr('no8am.scraper.fetch_course_html', lambda name, _: import_html_files[name])
+    monkeypatch.setattr('no8am.scraper.course_data_get', lambda _: None)
+    monkeypatch.setattr('no8am.scraper.course_data_set', lambda _, __: None)
 
-    processed_department_data = Department.process_department_request('department')
+    _, processed_department_data = Department.process_department_request('department')
 
     # verify courses exist
     assert len(processed_department_data) > 0
@@ -83,9 +85,11 @@ def test_ccc_and_credit_lookup(import_html_files, monkeypatch):
     """
 
     monkeypatch.setattr('no8am.scraper.fetch_course_html', lambda name, _: import_html_files[name])
+    monkeypatch.setattr('no8am.scraper.course_data_get', lambda _: None)
+    monkeypatch.setattr('no8am.scraper.course_data_set', lambda _, __: None)
 
     for course_type in ['ccc', 'credit']:
-        processed_data = Department.process_department_request(course_type)
+        _, processed_data = Department.process_department_request(course_type)
 
         # verify courses exist
         assert len(processed_data) > 0
