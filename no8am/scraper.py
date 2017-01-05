@@ -122,6 +122,7 @@ class Section(object):
 		:param section: Section HTML
 		:param message: Message containing restrictions and other information for the section
 		"""
+
 		course_number_with_section = str(''.join(section[1].strings))
 		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
 		department, course_number, section_number = course_number_with_section.split(" ")
@@ -160,8 +161,9 @@ class Section(object):
 			for crn, extra_section in extra_section_list.iteritems():
 				if type(extra_section) is not dict:
 					export_extra_section = extra_section.__dict__
-					del export_extra_section['extra_section_lists']
-					del export_extra_section['extra_section_independent']
+					if 'extra_section_lists' in export_extra_section.keys():
+						del export_extra_section['extra_section_lists']
+						del export_extra_section['extra_section_independent']
 					extra_section_list[crn] = export_extra_section
 
 		return self.__dict__
