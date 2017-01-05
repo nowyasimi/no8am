@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 import re
 from itertools import groupby
 import string
-from no8am import get_bucknell_format_semester, course_data_get, course_data_set, cache_get_string
 from enum import Enum
+from no8am import get_bucknell_format_semester, course_data_get, course_data_set, cache_get_string
 
 TERM = get_bucknell_format_semester()
 message_regex = re.compile("([ -])([0-9]{2})([ ,.]|$)")
@@ -109,8 +109,19 @@ def extract_sections(html):
 
 
 # TODO - inherit from object so __dict__ can be used for export
-class Section:
+class Section(object):
+	"""
+	Stores data for an individual section.
+	"""
+
 	def __init__(self, section, message=None):
+		"""
+		Parses HTML for an individual section and stores extra sections (labs, etc) if it
+		is a main section.
+
+		:param section: Section HTML
+		:param message: Message containing restrictions and other information for the section
+		"""
 		course_number_with_section = str(''.join(section[1].strings))
 		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
 		department, course_number, section_number = course_number_with_section.split(" ")
@@ -144,36 +155,24 @@ class Section:
 		:return: A dictionary of relevant section data
 		"""
 
-		export_data = {
-			"bare_course_number": self.bare_course_number,
-			"courseNum": self.courseNum,
-			"department": self.department,
-			"course_number": self.course_number,
-			"sectionNum": self.sectionNum,
-			"courseName": self.courseName,
-			"timesMet": self.timesMet,
-			"roomMet": self.roomMet,
-			"professor": self.professor,
-			"freeSeats": self.freeSeats,
-			"waitList": self.waitList,
-			"resSeats": self.resSeats,
-			"prm": self.prm,
-			"CCC": self.CCC,
-			"CRN": self.CRN,
-			"message": self.message,
-			"main": self.main
-		}
+		# replace extra section objects with dictionaries
+		for extra_section_type, extra_section_list in self.extra_section_lists.iteritems():
+			for crn, extra_section in extra_section_list.iteritems():
+				if type(extra_section) is not dict:
+					export_extra_section = extra_section.__dict__
+					del export_extra_section['extra_section_lists']
+					del export_extra_section['extra_section_independent']
+					extra_section_list[crn] = export_extra_section
 
-		# TODO - clean up this export
-		if self.main:
-			export_data["extra_section_lists"] = {section_type: {x: self.extra_section_lists[section_type][x].export() for x in self.extra_section_lists[section_type]} for section_type in self.extra_section_lists}
-			export_data["extra_section_independent"] = self.extra_section_independent
-
-		return export_data
+		return self.__dict__
 
 
 class Course:
-	def __init__(self, sections, set_to_main = False):
+	"""
+	Parses course data by dividing into sections and grouping sections together.
+	"""
+
+	def __init__(self, sections, set_to_main=False):
 		self.all_sections = sections
 		# sections is actually a single extra section if set_to_main
 		self.main_sections = {} if not set_to_main else {sections.CRN: sections}
@@ -189,6 +188,11 @@ class Course:
 			self.link_extra_sections_to_main_sections()
 
 	def divide_into_section_types(self):
+		"""
+		Identifies the type of each section (main, lab, etc) and stores relevant data in the
+		object for further parsing.
+		"""
+
 		# Types of extra sections L (lab), R (recitation), P (problem session)
 		EXTRA_SECTIONS = "LRP"
 
@@ -212,6 +216,10 @@ class Course:
 				self.main_sections[crn] = section
 
 	def link_extra_sections_to_main_sections(self):
+		"""
+		Groups extra sections (labs, recitations, etc) to the main sections of the course.
+		"""
+
 		EXTRA_SECTIONS = "LRP"
 
 		for index, section in enumerate(self.all_sections):
@@ -243,9 +251,8 @@ class Course:
 					# found match, now merge
 					if legalSection in self.extra_section_numbers[extra_section_type]:
 						extra_section_crn = self.extra_section_numbers[extra_section_type][legalSection]
-
-						# valid labs have been matched
-						section.extra_section_lists[extra_section_type][extra_section_crn] = self.extra_sections[extra_section_type][extra_section_crn]
+						extra_section = self.extra_sections[extra_section_type][extra_section_crn]
+						section.extra_section_lists[extra_section_type][extra_section_crn] = extra_section
 						has_extra_section[extra_section_type] = False
 
 			for extra_section_type in EXTRA_SECTIONS:
@@ -266,6 +273,11 @@ class Course:
 					section.extra_section_lists[extra_section_type] = self.extra_sections[extra_section_type]
 
 	def export(self):
+		"""
+		Exports the course object.
+
+		:return: A dictionary of course data that can be read by the client
+		"""
 
 		return {
 			"sections": {crn: self.main_sections[crn].export() for crn in self.main_sections},
@@ -275,6 +287,9 @@ class Course:
 
 
 class CreditOrCCC:
+	"""
+	Groups together static methods that are used to process CCC or credit requests.
+	"""
 
 	@staticmethod
 	def process_ccc_or_credit_request(lookup_type, lookup_value):
@@ -330,13 +345,17 @@ class CreditOrCCC:
 
 
 class Department:
+	"""
+	Groups together static methods that are used to process department requests.
+	"""
 
 	@staticmethod
 	def process_department_request(department_name):
 		"""
+		Fetches course data table in HTML, extracts sections, and generates list of courses.
 
-		:param department_name:
-		:return:
+		:param department_name: The department being requested (CSCI, ECON, etc)
+		:return: List of parsed course data
 		"""
 
 		# return cached data, if it exists
