@@ -11,13 +11,10 @@ CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
 STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
 
-# TODO - get bucknell data from metadata file
-jsBucknell = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
-			  'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js']
-jsHome = ['js/jquery-1.9.1.min.js', 'js/bootstrap.min.js']
-jsHome2 = ['js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js', 'bucknellCourseDescriptions.json']
-
-MINIFY_JS_FILE_NAMES = ['packed.js', 'packed2.js', 'packed3.js']
+JS_FILES = [
+	'js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
+	'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js'
+]
 
 course_descriptions = None
 
@@ -83,12 +80,8 @@ def map_minify_name_to_files(page):
 	:return: Minifed files
 	"""
 
-	if page == "packed3.js":
-		return minify_javascript(jsBucknell)
-	elif page == "packed.js":
-		return minify_javascript(jsHome)
-	elif page == "packed2.js":
-		return minify_javascript(jsHome2)
+	if page == "app.js":
+		return minify_javascript(JS_FILES)
 	elif page == "home.css":
 		return minify_css(["css/bootstrap.min.css", "css/home.css"])
 	elif page == "bucknell.css":
@@ -127,10 +120,8 @@ def update_static_files():
 		s3.Object(S3_BUCKET_NAME, d + '/').put(Body='')
 
 	# generate and upload minified JS
-	to_minify = MINIFY_JS_FILE_NAMES
-	for m in to_minify:
-		data = map_minify_name_to_files(m)
-		s3.Object(S3_BUCKET_NAME, m).put(Body=data, ContentType ='application/javascript', CacheControl='max-age=900')
+	data = map_minify_name_to_files('app.js')
+	s3.Object(S3_BUCKET_NAME, 'app.js').put(Body=data, ContentType='application/javascript', CacheControl='max-age=900')
 
 	# generate and upload minified CSS
 	to_minify = ["home.css", "bucknell.css"]
