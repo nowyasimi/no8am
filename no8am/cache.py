@@ -63,7 +63,9 @@ def course_data_set(type, val, timeout=DEFAULT_CACHE_TIME):
 	:param timeout: Time before data expires
 	"""
 
-	if val is None or val == []: return None
+	if val is None or val == []:
+		return None
+
 	cache_time = int(time())
 	redis_cache.set(type, {"set_time": cache_time, "data": val}, timeout)
 	return cache_time

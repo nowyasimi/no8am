@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 from itertools import groupby
 import string
-from no8am import get_bucknell_format_semester
+from no8am import get_bucknell_format_semester, course_data_get, course_data_set, cache_get_string
 from enum import Enum
 
 TERM = get_bucknell_format_semester()
@@ -41,24 +41,31 @@ def fetch_course_html(payload_value, lookup_type):
 	return r.text
 
 
-def fetch_section_details(crn, dept):
+def fetch_section_details(crn, department):
 	"""
 	Fetches description and other data for an individual section.
 
 	:param crn: CRN of the section
-	:param dept: Department the section belongs to
+	:param department: Department the section belongs to
 	:return: Section details
 	"""
+
+	# return cached data, if it exists
+	key = crn + "details"
+	details = cache_get_string(key)
+
+	if details is not None:
+		return details
 
 	# Create and execute server request
 	payload = {
 		'formopt': 'VIEWSECT',
 		'term': TERM,
-		'updsubj': dept,
+		'updsubj': department,
 		'crn': crn,
 		'viewterm': TERM,
 		'viewlookopt': 'DPT',
-		'viewparam1': dept,
+		'viewparam1': department,
 		'viewopenopt': 'ALL',
 	}
 
@@ -69,6 +76,9 @@ def fetch_section_details(crn, dept):
 
 	# Extract section details
 	details = str(soup.find_all(class_='datadisplaytable')[0])
+
+	# store details in cache
+	course_data_set(key, details, timeout=259200)
 
 	return details
 
@@ -276,6 +286,12 @@ class CreditOrCCC:
 		:return: List of parsed course data
 		"""
 
+		# return cached data, if it exists
+		cache_data = course_data_get(lookup_value)
+
+		if cache_data is not None:
+			return cache_data["set_time"], cache_data["data"]
+
 		# fetch the HTML
 		lookup_type_enum = LookupType[lookup_type.upper()]
 		html = fetch_course_html(lookup_value, lookup_type_enum)
@@ -287,7 +303,12 @@ class CreditOrCCC:
 		filtered_sections = filter(lambda x: len(x) > 5, sections)
 
 		# generate a list of dictionaries to organize data for each section
-		return map(CreditOrCCC.handle_ccc_or_credit_section, filtered_sections)
+		all_courses = map(CreditOrCCC.handle_ccc_or_credit_section, filtered_sections)
+
+		# store in cache and return data
+		cache_time = course_data_set(lookup_value, all_courses)
+
+		return cache_time, all_courses
 
 	@staticmethod
 	def handle_ccc_or_credit_section(section):
@@ -318,6 +339,12 @@ class Department:
 		:return:
 		"""
 
+		# return cached data, if it exists
+		cache_data = course_data_get(department_name)
+
+		if cache_data is not None:
+			return cache_data["set_time"], cache_data["data"]
+
 		# fetch the HTML
 		html = fetch_course_html(department_name, LookupType.DEPARTMENT)
 
@@ -336,8 +363,12 @@ class Department:
 		# parse courses to group sections with their labs, recitations, etc.
 		parsed_courses = map(Course, grouped_sections)
 
-		# return formatted results
-		return [course.export() for course in parsed_courses]
+		# create format that can be stored in cache or returned to user
+		formatted_results = [course.export() for course in parsed_courses]
+
+		cache_time = course_data_set(department_name, formatted_results)
+
+		return cache_time, formatted_results
 
 	@staticmethod
 	def group_sections_by_course(sections):

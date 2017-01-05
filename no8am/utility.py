@@ -55,9 +55,6 @@ def get_user_format_semester():
 	return "{0} {1}-{2}".format(user_format_semester, bucknell_format_year - 1, bucknell_format_year)
 
 
-# TODO - make this a cron job and write to S3
-
-
 def get_course_numbers_in_department(department_name):
 	from no8am.scraper import Department
 
@@ -128,7 +125,7 @@ def get_all_course_descriptions():
 def get_all_course_numbers():
 	courseNums = []
 	print "Getting course nums..."
-	# TODO - parallelize this to ensure completion with 5 minute AWS Lambda execution limit
+	# TODO - parallelize this to guarantee completion within 5 minute AWS Lambda execution limit
 	for x in DEPARTMENTS:
 		print x
 		courseNums += get_course_numbers_in_department(x)
