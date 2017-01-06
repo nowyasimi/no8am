@@ -18,7 +18,7 @@ Features
 Develop
 -------
 
-It's a good idea to create and activate a [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) environment first to avoid installing dependencies globally.
+It's a good idea to create a [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) environment first to avoid installing dependencies globally.
 
 
     git clone ssh://git@github.com/nowyasimi/no8am.git && cd no8am
@@ -56,7 +56,7 @@ Deploy
 
 No8am is currently deployed on Amazon Web Services. Full deployment guide coming soon.
 
-![AWS diagram][docs/aws-diagram.png]
+![AWS diagram](docs/aws-diagram.png)
 
 
 
