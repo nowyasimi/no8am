@@ -56,7 +56,7 @@ Deploy
 
 No8am is currently deployed on Amazon Web Services. Full deployment guide coming soon.
 
-![AWS diagram](doc/aws-diagram.png)
+![AWS diagram](docs/aws-diagram.png)
 
 
 
