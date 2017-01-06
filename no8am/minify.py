@@ -95,6 +95,8 @@ def update_static_files():
 	Minifies and pushes static assets to Amazon Cloudfront.
 	"""
 
+	# TODO - write metadata file to S3 for general use
+
 	global course_descriptions
 
 	# Ask developer if static file update is necessary

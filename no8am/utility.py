@@ -6,7 +6,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-from no8am import Department, DEPARTMENT_LIST
+from no8am import DEPARTMENT_LIST
 
 BUCKNELL_COURSE_DESCRIPTIONS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/bwckctlg.p_display_courses"
 
@@ -65,6 +65,8 @@ def get_course_numbers_in_department(department_name):
 	:param department_name: A department such as CSCI or ECON
 	:return: A list of course numbers in the department
 	"""
+
+	from no8am.scraper import Department
 
 	try:
 		all_courses = Department.process_department_request(department_name)
