@@ -120,7 +120,7 @@ def other_lookup(category, lookup_val=None):
 
 	# invalid lookup type
 	else:
-		return jsonify(error="Category should be either 'ccc' or 'credit'")
+		return jsonify(error="Category should be either 'ccc' or 'credit'"), httplib.BAD_REQUEST
 
 
 @app.route('/sectiondetails/')

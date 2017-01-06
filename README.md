@@ -3,8 +3,23 @@ no8am [![Build Status](https://travis-ci.com/nowyasimi/no8am.svg?token=xptabDthi
 
 A dynamic course scheduling platform. Helps students easily create their course schedules each semester.
 
+Develop
+-------
+
+It's a good idea to create and activate a [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) environment first to avoid installing dependencies globally.
+
+
+    git clone ssh://git@github.com/nowyasimi/no8am.git
+    cd no8am
+    pip install -r requirements.txt
+    python run.py
+
+That's it! Open a web browser and go to `localhost:3000`.
+
 API
 -------
+
+If you would like to use no8am data in another application, feel free to use this API!
 
 ### Course
 
@@ -22,19 +37,6 @@ API
 | [GET /category/:category/:value](https://no8.am/category/ccc/NSMC) | Get a list of course data for the category |
 
 Keep in mind that this API is not yet versioned and is subject to change at any time.
-
-Develop
--------
-
-It's a good idea to create and activate a [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) environment first to avoid installing dependencies globally.
-
-
-    git clone ssh://git@github.com/nowyasimi/no8am.git
-    cd no8am
-    pip install -r requirements.txt
-    python run.py
-
-That's it! Open a web browser and go to `localhost:3000`.
 
 Deploy
 -------

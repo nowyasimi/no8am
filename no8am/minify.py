@@ -18,6 +18,8 @@ JS_FILES = [
 
 course_descriptions = None
 
+# TODO - save course descriptions remotely and use remote descriptions when updating static files
+
 
 def generate_metadata():
 	global course_descriptions
