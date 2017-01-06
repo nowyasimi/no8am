@@ -7,7 +7,8 @@ from functools import wraps
 import json
 
 from no8am import app, store_link, get_link, generate_short_link, JS_FILES, Department, CreditOrCCC, \
-	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata
+	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
+	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -78,26 +79,48 @@ def bucknell(config=None):
 		)
 
 
-@app.route('/lookup/')
-@handle_response_errors(['department', 'course_number'])
-def course_lookup(department, course_number):
+@app.route('/course')
+@app.route('/course/<department>')
+@app.route('/course/<department>/<course_number>')
+def course_lookup(department=None, course_number=None):
+
+	# return metadata if no parameters are provided
+	if department is None and course_number is None:
+		return jsonify(departments=DEPARTMENT_LIST)
+
 	cache_time, department_data = Department.process_department_request(department)
-	course_data = find_course_in_department(department_data, department, course_number)
-	return jsonify(sections = course_data, cache_time = cache_time)
+
+	# return all courses in department
+	if course_number is None:
+		return jsonify(courses=department_data, cache_time=cache_time)
+
+	# return data on specified course
+	else:
+		course_data = find_course_in_department(department_data, department, course_number)
+		return jsonify(sections=course_data, cache_time=cache_time)
 
 
-@app.route('/deptlookup/')
-@handle_response_errors(['department'])
-def department_lookup(department):
-	cache_time, department_data = Department.process_department_request(department)
-	return jsonify(courses = department_data, cache_time = cache_time)
+@app.route('/category/<category>')
+@app.route('/category/<category>/<lookup_val>')
+def other_lookup(category, lookup_val=None):
 
+	category = category.lower()
 
-@app.route('/otherlookup/')
-@handle_response_errors(['type', 'val'])
-def other_lookup(lookup_type, val):
-	cache_time, all_courses = CreditOrCCC.process_ccc_or_credit_request(lookup_type, val)
-	return jsonify(courses=all_courses, cache_time=cache_time)
+	# provide metadata if lookup value is not specified
+	if category == 'ccc' and lookup_val is None:
+		return jsonify(ccc=CCC_LIST)
+
+	elif category == 'credit' and lookup_val is None:
+		return jsonify(credit=CREDIT_LIST)
+
+	# provide course data
+	elif category in ['ccc', 'credit'] and lookup_val is not None:
+		cache_time, all_courses = CreditOrCCC.process_ccc_or_credit_request(category, lookup_val)
+		return jsonify(courses=all_courses, cache_time=cache_time)
+
+	# invalid lookup type
+	else:
+		return jsonify(error="Category should be either 'ccc' or 'credit'")
 
 
 @app.route('/sectiondetails/')

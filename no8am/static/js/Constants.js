@@ -54,9 +54,9 @@ colorDict = {
 DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
 SECTION_TYPES = ["main", "R", "L", "P"];
 
-OTHER_LOOKUP_URL = APP_ROOT + "/otherlookup/";
-DEPT_LOOKUP_URL = APP_ROOT + "/deptlookup/";
-COURSE_LOOKUP_URL = APP_ROOT + "/lookup/";
+OTHER_LOOKUP_URL = APP_ROOT + "/category/";
+DEPT_LOOKUP_URL = APP_ROOT + "/course/";
+COURSE_LOOKUP_URL = APP_ROOT + "/course/";
 SECTION_DETAILS_URL = APP_ROOT + "/sectiondetails/";
 STORE_CONFIG_URL = APP_ROOT + "/storeConfig/";
 
@@ -66,27 +66,27 @@ NEW_CUSTOM_LINK_WARNING = "You have modified your schedule. Be sure to generate 
 JUST_DO_IT = '<div class="shia-do-it" style="margin-right: 30px;"><div class="container"><video id="doitvid" width="960" height="540" autoplay="" name="media" src="https://etaheri.github.io/output.webm" style="visibility: visible;"><source type="video/webm"></video></div></div>';
 
 CREDIT_HEADER = "<p style='font-size:24px; padding-left:10px'><b>Credits</b></p>";
-CREDIT_SUGGESTION = "<div><p>{{{long}}}</p></div>";
+CREDIT_SUGGESTION = "<div><p>{{{name}}}</p></div>";
 CCC_HEADER = "<p style='font-size:24px; padding-left:10px'><b>CCC Requirements</b></p>";
-CCC_SUGGESTION = "<div><p>{{{shortCCC}}} - {{{long}}}</p></div>";
+CCC_SUGGESTION = "<div><p>{{{abbreviation}}} - {{{name}}}</p></div>";
 DEPARTMENT_HEADER = "<p style='font-size:24px; padding-left:10px'><b>Departments</b></p>";
-DEPARTMENT_SUGGESTION = "<div><p>{{{short}}} - {{{long}}}</p></div>";
+DEPARTMENT_SUGGESTION = "<div><p>{{{abbreviation}}} - {{{name}}}</p></div>";
 COURSE_HEADER =  "<p style='font-size:24px; padding-left:10px'><b>Courses</b></p>";
 COURSE_SUGGESTION = "<div><p>{{{courseNum}}} - {{{courseName}}}</p><p class='courseDescription'>{{info}}</p></div>";
 
 TYPEAHEAD_OPTIONS = {
     credit : {
-        token: ["long"],
+        token: ["abbreviation", "name"],
         header: CREDIT_HEADER,
         suggestion: CREDIT_SUGGESTION
     },
     ccc : {
-        token: ["shortCCC", "long"],
+        token: ["abbreviation", "name"],
         header: CCC_HEADER,
         suggestion: CCC_SUGGESTION
     },
     department : {
-        token: ["short", "long"],
+        token: ["abbreviation", "name"],
         header: DEPARTMENT_HEADER,
         suggestion: DEPARTMENT_SUGGESTION
     },

@@ -6,7 +6,22 @@ A dynamic course scheduling platform. Helps students easily create their course 
 API
 -------
 
+### Course
 
+| Endpoint | Description |
+| ---- | --------------- |
+| [GET /course](https://no8.am/course) | Get a list of departments |
+| [GET /course/:department](https://no8.am/course/CSCI) | Get a list of course data for the department |
+| [GET /course/:department/:course_number](https://no8.am/course/CSCI/203) | Get a list of sections for the course |
+
+### Category
+
+| Endpoint | Description |
+| ---- | --------------- |
+| [GET /category/:category](https://no8.am/category/ccc) | Get a list of lookup options for the category |
+| [GET /category/:category/:value](https://no8.am/category/ccc/NSMC) | Get a list of course data for the category |
+
+Keep in mind that this API is not yet versioned and is subject to change at any time.
 
 Develop
 -------
@@ -18,7 +33,7 @@ It's a good idea to create and activate a [virtualenv](http://docs.python-guide.
     cd no8am
     pip install -r requirements.txt
     python run.py
-    
+
 That's it! Open a web browser and go to `localhost:3000`.
 
 Deploy

@@ -466,8 +466,7 @@ Schedule.prototype.convertDeptToCourse = function(clickedCourse, clickedSection)
 
         // get the course data
         $.ajax({
-            url: COURSE_LOOKUP_URL,
-            data: { department: department, course_number: course },
+            url: COURSE_LOOKUP_URL + department + '/' + course,
             context: {dept: dept, courseNum: department + " " + course, clickedSection: section, extra: extra}
         }).done(function(data) {
             var newCourse = new Course(this.courseNum);

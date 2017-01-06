@@ -178,7 +178,7 @@ def generate_course_descriptions():
 
 	global DEPARTMENTS
 
-	DEPARTMENTS = [x["short"] for x in DEPARTMENT_LIST]
+	DEPARTMENTS = [x["abbreviation"] for x in DEPARTMENT_LIST]
 
 	return parseAndCurate()
 

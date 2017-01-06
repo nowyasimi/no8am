@@ -352,8 +352,7 @@ function addNewCourse(department, course, section) {
 function submitCourseRequest(courseLength, department, course, section) {
 
     $.ajax({
-        url: COURSE_LOOKUP_URL,
-        data: { department: department, course_number: course},
+        url: COURSE_LOOKUP_URL + department + '/' + course,
         context: {courseLength: courseLength, selectedSectionInfo: section}
     }).done(courseResponseHandler).error(courseButtonErrorHandler);
 
@@ -368,8 +367,7 @@ function submitDeptRequest(dept) {
     var deptNum = sched.pushDept(newDept);
 
     $.ajax({
-        url: DEPT_LOOKUP_URL,
-        data: {department: dept},
+        url: DEPT_LOOKUP_URL + dept,
         context: {deptNum: deptNum}
     }).done(deptResponseHandler).error(courseButtonErrorHandler);
 
@@ -392,8 +390,7 @@ function submitOtherRequest(type, val, long) {
     var deptNum = sched.pushDept(newDept);
 
     $.ajax({
-        url: OTHER_LOOKUP_URL,
-        data: {val: val, type: type},
+        url: OTHER_LOOKUP_URL + type + '/' + val,
         context: {deptNum: deptNum}
     }).done(deptResponseHandler).error(courseButtonErrorHandler);
 
@@ -612,7 +609,10 @@ function initializeTypeahead() {
             limit: 999,
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace.apply(this, TYPEAHEAD_OPTIONS[type].token),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: metadata[type]
+            local: metadata[type].map(function(x) {
+                x['category'] = type;
+                return x;
+            })
         };
 
         if (type === "course") {
@@ -710,24 +710,27 @@ function generateCustomLink() {
  * @param $e
  * @param datum
  */
-function handleNewInput(_, datum){
+function handleNewInput(x, datum){
+    console.log(x);
+    console.log(datum);
+
     // clear input from typeahead
     $(this).typeahead('val', "");
 
     // lookup department
-    if (datum.hasOwnProperty("short")) {
-        var dept = datum["short"];
+    if (datum.category === "department") {
+        var dept = datum["abbreviation"];
         submitDeptRequest(dept);
     }
     // lookup CCC requirement
-    else if (datum.hasOwnProperty("shortCCC")) {
-        var ccc = datum["shortCCC"];
-        submitOtherRequest('ccc', ccc, datum["long"]);
+    else if (datum.category === "ccc") {
+        var ccc = datum["abbreviation"];
+        submitOtherRequest('ccc', ccc, datum["name"]);
     }
     // lookup by credit
-    else if (datum.hasOwnProperty("shortCred")) {
-        var cred = datum["shortCred"];
-        submitOtherRequest('credit', cred, datum["long"]);
+    else if (datum.category === "credit") {
+        var cred = datum["abbreviation"];
+        submitOtherRequest('credit', cred, datum["name"]);
     }
     // lookup course number
     else {
