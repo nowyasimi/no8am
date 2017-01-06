@@ -6,6 +6,8 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+from no8am import Department, DEPARTMENT_LIST
+
 BUCKNELL_COURSE_DESCRIPTIONS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/bwckctlg.p_display_courses"
 
 COURSE_DESCRIPTION_FILENAME = "bucknellCourseDescriptions.json"
@@ -56,7 +58,13 @@ def get_user_format_semester():
 
 
 def get_course_numbers_in_department(department_name):
-	from no8am.scraper import Department
+	"""
+	Gets course numbers in a department for the current term. This is used to filter out descriptions for
+	courses not being offered in the current term.
+
+	:param department_name: A department such as CSCI or ECON
+	:return: A list of course numbers in the department
+	"""
 
 	try:
 		all_courses = Department.process_department_request(department_name)
@@ -69,6 +77,12 @@ def get_course_numbers_in_department(department_name):
 
 
 def parseAndCurate():
+	"""
+	Fetches all course descriptions and filters the descriptions to only include courses currently being offered.
+
+	:return: A list of descriptions for courses being offered in the current term.
+	"""
+
 	courseNums = get_all_course_numbers()
 	print "doing descriptions...."
 	final = []
@@ -96,33 +110,51 @@ def parseAndCurate():
 				'info': realInfo
 			})
 
-	# TODO - add courses that are not in descriptions (without description)
-	# might not be necessary, mostly shows crosslisted courses
-
-	# print "adding missing courses"
-	# courseNumsWithDescriptions = [x["courseNum"] for x in final]
-	# missingCourseNums = [x for x in courseNums if x not in courseNumsWithDescriptions]
-	# print "missing courses:"
-	# print missingCourseNums
 	return final
 
 
 def get_all_course_descriptions():
+	"""
+	Gets course descriptions for courses across all departments. May include descriptions for courses not currently
+	being offered.
+
+	:return: A list of course descriptions
+	"""
+
 	term = get_bucknell_format_semester()
 
-	payload = [("term_in", term), ("call_proc_in","bwckctlg.p_disp_dyn_ctlg"),
-	 ("sel_subj","dummy"), ("sel_levl","dummy"), ("sel_schd","dummy"), ("sel_coll","dummy"),
-	 ("sel_divs","dummy"), ("sel_dept","dummy"), ("sel_attr","dummy")]
+	payload = [
+		("term_in", term),
+		("call_proc_in", "bwckctlg.p_disp_dyn_ctlg"),
+		("sel_subj", "dummy"),
+		("sel_levl", "dummy"),
+		("sel_schd", "dummy"),
+		("sel_coll", "dummy"),
+		("sel_divs", "dummy"),
+		("sel_dept", "dummy"),
+		("sel_attr", "dummy")
+	]
+
+	# add each department to bucknell server request
 	for x in DEPARTMENTS:
 		payload.append(("sel_subj", x))
+
+	# return rows of course descriptions from table
 	r = requests.get(BUCKNELL_COURSE_DESCRIPTIONS_URL, params=payload)
 	soup = BeautifulSoup(r.text)
 	table = soup.find_all("table")[3]
 	rows = table.find_all("tr")
+
 	return rows
 
 
 def get_all_course_numbers():
+	"""
+	Gets course numbers for courses being offered in the current term across all departments.
+
+	:return: A list of course numbers
+	"""
+
 	courseNums = []
 	print "Getting course nums..."
 	# TODO - parallelize this to guarantee completion within 5 minute AWS Lambda execution limit
@@ -133,10 +165,14 @@ def get_all_course_numbers():
 
 
 def generate_course_descriptions():
+	"""
+	Creates a list of departments and fetches course descriptions for all departments
+
+	:return: A list of course descriptions
+	"""
+
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
-
-	from no8am.metadata import DEPARTMENT_LIST
 
 	global DEPARTMENTS
 
@@ -145,13 +181,12 @@ def generate_course_descriptions():
 	return parseAndCurate()
 
 
-def convert_descriptions_to_string(descriptions):
-	return json.dumps(descriptions, ensure_ascii=False)
+# updates the local course description file for testing
 
 # if __name__ == "__main__":
 # 	import io
 # 	descriptions = generate_course_descriptions()
-# 	descriptions_string = convert_descriptions_to_string(descriptions)
+# 	descriptions_string = json.dumps(descriptions, ensure_ascii=False)
 #
 # 	with io.open(COURSE_DESCRIPTION_FILENAME, "w", encoding='utf8') as f:
 # 		f.write(descriptions_string)
