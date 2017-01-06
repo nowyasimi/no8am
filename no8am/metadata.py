@@ -1,5 +1,3 @@
-# TODO - change to more user-friendly names
-
 DEPARTMENT_LIST = [
 	{"abbreviation":"ACFM", "name":"Accounting & Financial Management"},
 	{"abbreviation":"AFST", "name":"Africana Studies"},

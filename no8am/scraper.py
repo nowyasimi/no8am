@@ -14,6 +14,9 @@ courseNumFull_regex = re.compile("[A-Z]+ [0-9]{3}[A-Z]* [0-9]+")
 BUCKNELL_COURSE_DATA_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/hwzkschd.P_Bucknell_SchedDisplay"
 BUCKNELL_SECTION_DETAILS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate"
 
+# Types of extra sections L (lab), R (recitation), P (problem session)
+EXTRA_SECTIONS = "LRP"
+
 
 class LookupType(Enum):
 	DEPARTMENT = 'DPT'
@@ -108,7 +111,6 @@ def extract_sections(html):
 	return sections
 
 
-# TODO - inherit from object so __dict__ can be used for export
 class Section(object):
 	"""
 	Stores data for an individual section.
@@ -195,9 +197,6 @@ class Course:
 		object for further parsing.
 		"""
 
-		# Types of extra sections L (lab), R (recitation), P (problem session)
-		EXTRA_SECTIONS = "LRP"
-
 		# The number of characters in a main course number (203, not 203L)
 		MAIN_COURSE_NUMBER_LENGTH = 3
 
@@ -221,8 +220,6 @@ class Course:
 		"""
 		Groups extra sections (labs, recitations, etc) to the main sections of the course.
 		"""
-
-		EXTRA_SECTIONS = "LRP"
 
 		for index, section in enumerate(self.all_sections):
 			message = section.message

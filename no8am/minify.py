@@ -22,6 +22,14 @@ course_descriptions = None
 
 
 def generate_metadata():
+	"""
+	Creates a metadata object containing course descriptions, department names, ccc names, and credit types. This data
+	is added to the minified javascript file that is uploaded to S3. It is also sent directly to the browser during
+	debugging.
+
+	:return: A dictionary containing metadata
+	"""
+
 	global course_descriptions
 
 	if course_descriptions is None:
@@ -40,7 +48,7 @@ def generate_metadata():
 
 def minify_javascript(file_list):
 	"""
-	Runs files through JavaScript minification program.
+	Runs files through JavaScript minification program. Used for uploading to S3.
 
 	:param file_list: Files to minify
 	:return: Minified files bundled together in one string.
@@ -60,7 +68,7 @@ def minify_javascript(file_list):
 
 def minify_css(file_list):
 	"""
-	Runs files through CSS minification program.
+	Runs files through CSS minification program. Used for uploading to S3.
 
 	:param file_list: Files to minify
 	:return: Minified files bundled together in one string.
@@ -94,7 +102,9 @@ def map_minify_name_to_files(page):
 
 def update_static_files():
 	"""
-	Minifies and pushes static assets to Amazon Cloudfront.
+	Minifies and pushes static assets to S3 and invalidates the cache in Amazon Cloudfront. The files are minified to
+	reduce the number of requests the client needs to make when retrieving static assets. The cache invalidation is made
+	to reduce the time needed for the client to access the updated files.
 	"""
 
 	# TODO - write metadata file to S3 for general use

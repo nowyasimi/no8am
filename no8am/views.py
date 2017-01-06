@@ -28,8 +28,6 @@ def handle_response_errors(api_arguments):
 
 		@wraps(api_function)
 		def wrapper():
-			# TODO - also validate departments, CCC, and other inputs server side using metadata file
-
 			# find arguments missing from API call
 			missing_arguments = set(api_arguments) - set(request.args.keys())
 
@@ -159,5 +157,5 @@ def report_error(courseNum, name, email, useragent):
 @app.errorhandler(httplib.NOT_FOUND)
 def page_not_found(error):
 	return render_template(
-		'404.html', ASSET_URL="packed.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
+		'404.html', ASSET_URL="app.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
 	), httplib.NOT_FOUND
