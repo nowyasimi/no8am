@@ -20,7 +20,7 @@ function setNumberOfCourses(courseGroupID, numCourses) {
 /**
  * Updates the number of sections available for selection in the GUI for a given course.
  * @param courseID The ID for the course to be updated in the GUI
- * @param numCourses The number of courses that course has
+ * @param numSections The number of courses that course has
  */
 function setNumberOfSections(courseID, numSections) {
     $("a[data-course='"+ courseID +"'] .list-group-item-text .sectionCount").text(numSections + " Sections");
@@ -139,7 +139,7 @@ Object.size = function(obj) {
  * @return {Array|*} An array that increases by 1 after each value
  */
 function range(start, count) {
-  return Array.apply(0, Array(count))
+  return Array.apply(0, new Array(count))
       .map(function (element, index) {
           return index + start;
       });
@@ -215,8 +215,7 @@ function findCourseConfigurations() {
         if (itemName.length > 16 && itemName.slice(0,16) === "courseConfigData") {
             var configID = itemName.substring(16);
             var configData = localStorage.getItem(itemName);
-            var parsedData = JSON.parse(configData);
-            courseConfigs[configID] = parsedData;
+            courseConfigs[configID] = JSON.parse(configData);
         }
     }
 
@@ -420,6 +419,10 @@ function deptResponseHandler(data) {
     sched.streamDept(data.courses, this.deptNum);
 }
 
+/**
+ * Let the user know if the data fails to load.
+ * @param e The event object to be logged in the console.
+ */
 function courseButtonErrorHandler(e) {
     var selector;
     if (this.courseLength !== undefined) {
@@ -512,6 +515,7 @@ function updateCourseTableBackdrop() {
 function drawToScreen(y, selected, hidden, color, sections) {
     var generated_list = [];
     for (var x in sections) { // iterates through sections and draws
+        // true if section is unselected section that be an option to select
         var hidden2;
         if (selected === null || x != selected) {
             hidden2 = true;
@@ -537,20 +541,21 @@ function drawToScreen(y, selected, hidden, color, sections) {
 function sectionSelectionHandler() {
     $("#sectionDetails").html("");
     var row = $("#listViewData .success");
-    var isDept = $("#listViewData tbody")[0].hasAttribute("data-dept-level");
-    var clickedSection = null;
+    var $sectionTable = $("#listViewData tbody");
+    var isDept = $sectionTable[0].hasAttribute("data-dept-level");
+    var clickedSection, clickedCourse = null;
     if (row.length > 0) {
         var id = row.attr('id');
         clickedSection = id.substring(7);
     }
     if (isDept && row.length != 0) {
-        var dept = $("#listViewData tbody").attr("data-dept-level");
-        var clickedCourse = row.attr("class").split(" ")[0].substring(6);
+        var dept = $sectionTable.attr("data-dept-level");
+        clickedCourse = row.attr("class").split(" ")[0].substring(6);
         sched.convertDeptToCourse(clickedCourse, clickedSection);
         sched.redrawData();
     }
     else {
-        var clickedCourse = sched.lastClickedCourseButton.id;
+        clickedCourse = sched.lastClickedCourseButton.id;
         if (row.length == 0) {
             var schedClickedSection = sched.selected[clickedCourse];
             if (schedClickedSection != null) { // set to self to reset
@@ -559,7 +564,6 @@ function sectionSelectionHandler() {
             }
         }
         else if (sched.selected[clickedCourse] == clickedSection) { // no change
-            return;
         }
         else { // set to new
             sched.handleSelect(clickedCourse, clickedSection);
@@ -570,7 +574,6 @@ function sectionSelectionHandler() {
 
 /**
  * Generates a new schedule when one is selected from the saved schedule list.
- * @param selectedConfig The configuration ID selected
  */
 function newScheduleFromConfig() {
     var selectedConfig = $(this).attr("id").substring(12);
@@ -707,12 +710,10 @@ function generateCustomLink() {
 /**
  * Called when an item is selected from the typeahead search box. Checks the item type (eg course, CCC, etc)
  * and calls the relevant retrieval function.
- * @param $e
- * @param datum
+ * @param _ Unused input, reference to Typeahead in the DOM
+ * @param datum The data that was selected from the search box
  */
-function handleNewInput(x, datum){
-    console.log(x);
-    console.log(datum);
+function handleNewInput(_, datum){
 
     // clear input from typeahead
     $(this).typeahead('val', "");
@@ -742,7 +743,7 @@ function handleNewInput(x, datum){
 
 /**
  * Called when the remove button is clicked for a course button.
- * @param e The event.
+ * @param e The default event in response to the click.
  */
 function removeCourseButtonHandler(e) {
     e.stopPropagation();
@@ -819,13 +820,16 @@ function viewSectionListFromCalendarHandler() {
  * Sends an error report with the values in the modal fields.
  */
 function sendReport() {
-    if ($("#reportCourseNum").val() !== "") {
+    var errorDescription = $("#errorDescription").val();
+
+    if (errorDescription !== "") {
         $(".reportRequired").removeClass("has-error");
         $.get(APP_ROOT + "/reportError", {
-            courseNum: $("#reportCourseNum").val(),
+            errorDescription: errorDescription,
             name: $("#reportName").val(),
             email: $("#reportEmail").val(),
-            useragent: navigator.userAgent
+            useragent: navigator.userAgent,
+            schedule: JSON.stringify(generateCourseDataToStore())
         });
         $("#reportErrorModal").modal('hide');
         $("#alertRegion").append(REPORT_SENT_MESSAGE);
@@ -937,15 +941,7 @@ function openSaveModalButtonHandler() {
  */
 function retryButtonHandler() {
     // TODO - implement retry handler or resend AJAX request in error handler
-    var id;
-
-    if ($(this).attr("data-course") !== undefined) {
-        id = $(this).attr("data-course");
-    }
-    else {
-        id = $(this).attr("data-dept");
-    }
-
+    var id = $(this).attr("data-course") !== undefined ? $(this).attr("data-course") : $(this).attr("data-dept");
 }
 
 // called when page is fully loaded

@@ -137,16 +137,17 @@ def store_course_configuration(config):
 
 
 @app.route('/reportError/')
-@handle_response_errors(['courseNum', 'name', 'email', 'useragent'])
-def report_error(courseNum, name, email, useragent):
+@handle_response_errors(['errorDescription', 'name', 'email', 'useragent', 'schedule'])
+def report_error(error_description, name, email, useragent, schedule):
 	ip = request.remote_addr
 
 	payload = {
-		'courseNum': courseNum,
+		'error_description': error_description,
 		'name': name,
 		'email': email,
 		'useragent': useragent,
 		'ip': ip,
+		'schedule': schedule,
 		'form_api_token': SIMPLE_FORM_TOKEN
 	}
 

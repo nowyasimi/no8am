@@ -1,5 +1,7 @@
-no8am [![Build Status](https://travis-ci.com/nowyasimi/no8am.svg?token=xptabDthiPrFvZ5xLTzX&branch=master)](https://travis-ci.com/nowyasimi/no8am) [![Website](https://img.shields.io/website/https/no8.am.svg)](https://no8.am)
+no8am
 ==================
+[![Build Status](https://travis-ci.com/nowyasimi/no8am.svg?token=xptabDthiPrFvZ5xLTzX&branch=master)](https://travis-ci.com/nowyasimi/no8am)
+[![Website](https://img.shields.io/website/https/no8.am.svg)](https://no8.am)
 
 Help students easily create their course schedules each semester.
 
@@ -64,8 +66,8 @@ Contributing
 -------
 
 This project has features that can be developed by students at any level of
-CS experience. See the [issues](http://https://github.com/nowyasimi/no8am/issues)
-page for features that are tagged for difference levels of difficulty.
+CS experience. See the [issues](https://github.com/nowyasimi/no8am/issues)
+page for features that are tagged as `easy`.
 
 License
 -------
