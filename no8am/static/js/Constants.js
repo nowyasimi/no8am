@@ -1,4 +1,4 @@
-colorDict = {
+export const colorDict = {
   "blue":{
     "s": "#5496dd", // selected
     "h": "#5c9ef9", // selected + hover
@@ -51,30 +51,29 @@ colorDict = {
   }
 };
 
-DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
-SECTION_TYPES = ["main", "R", "L", "P"];
+export const DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
+export const SECTION_TYPES = ["main", "R", "L", "P"];
 
-OTHER_LOOKUP_URL = APP_ROOT + "/category/";
-DEPT_LOOKUP_URL = APP_ROOT + "/course/";
-COURSE_LOOKUP_URL = APP_ROOT + "/course/";
-SECTION_DETAILS_URL = APP_ROOT + "/sectiondetails/";
-STORE_CONFIG_URL = APP_ROOT + "/storeConfig/";
+export const OTHER_LOOKUP_URL = APP_ROOT + "/category/";
+export const DEPT_LOOKUP_URL = APP_ROOT + "/course/";
+export const COURSE_LOOKUP_URL = APP_ROOT + "/course/";
+export const SECTION_DETAILS_URL = APP_ROOT + "/sectiondetails/";
+export const STORE_CONFIG_URL = APP_ROOT + "/storeConfig/";
+export const SUCCESSFUL_SAVE_MESSAGE = '<div class="alert alert-success alert-dismissible saveSuccess" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>Saved!</b>  This schedule has been saved to your browser.</div>';
+export const REPORT_SENT_MESSAGE = '<div class="alert alert-success alert-dismissible reportSuccess" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>Report sent!</b>  We\'ll fix it as soon as possible.</div>';
+export const NEW_CUSTOM_LINK_WARNING = "You have modified your schedule. Be sure to generate a new custom link!";
+export const JUST_DO_IT = '<div class="shia-do-it" style="margin-right: 30px;"><div class="container"><video id="doitvid" width="960" height="540" autoplay="" name="media" src="https://etaheri.github.io/output.webm" style="visibility: visible;"><source type="video/webm"></video></div></div>';
 
-SUCCESSFUL_SAVE_MESSAGE = '<div class="alert alert-success alert-dismissible saveSuccess" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>Saved!</b>  This schedule has been saved to your browser.</div>';
-REPORT_SENT_MESSAGE = '<div class="alert alert-success alert-dismissible reportSuccess" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>Report sent!</b>  We\'ll fix it as soon as possible.</div>';
-NEW_CUSTOM_LINK_WARNING = "You have modified your schedule. Be sure to generate a new custom link!";
-JUST_DO_IT = '<div class="shia-do-it" style="margin-right: 30px;"><div class="container"><video id="doitvid" width="960" height="540" autoplay="" name="media" src="https://etaheri.github.io/output.webm" style="visibility: visible;"><source type="video/webm"></video></div></div>';
+export const CREDIT_HEADER = "<p style='font-size:24px; padding-left:10px'><b>Credits</b></p>";
+export const CREDIT_SUGGESTION = "<div><p>{{{name}}}</p></div>";
+export const CCC_HEADER = "<p style='font-size:24px; padding-left:10px'><b>CCC Requirements</b></p>";
+export const CCC_SUGGESTION = "<div><p>{{{abbreviation}}} - {{{name}}}</p></div>";
+export const DEPARTMENT_HEADER = "<p style='font-size:24px; padding-left:10px'><b>Departments</b></p>";
+export const DEPARTMENT_SUGGESTION = "<div><p>{{{abbreviation}}} - {{{name}}}</p></div>";
+export const COURSE_HEADER =  "<p style='font-size:24px; padding-left:10px'><b>Courses</b></p>";
+export const COURSE_SUGGESTION = "<div><p>{{{courseNum}}} - {{{courseName}}}</p><p class='courseDescription'>{{info}}</p></div>";
 
-CREDIT_HEADER = "<p style='font-size:24px; padding-left:10px'><b>Credits</b></p>";
-CREDIT_SUGGESTION = "<div><p>{{{name}}}</p></div>";
-CCC_HEADER = "<p style='font-size:24px; padding-left:10px'><b>CCC Requirements</b></p>";
-CCC_SUGGESTION = "<div><p>{{{abbreviation}}} - {{{name}}}</p></div>";
-DEPARTMENT_HEADER = "<p style='font-size:24px; padding-left:10px'><b>Departments</b></p>";
-DEPARTMENT_SUGGESTION = "<div><p>{{{abbreviation}}} - {{{name}}}</p></div>";
-COURSE_HEADER =  "<p style='font-size:24px; padding-left:10px'><b>Courses</b></p>";
-COURSE_SUGGESTION = "<div><p>{{{courseNum}}} - {{{courseName}}}</p><p class='courseDescription'>{{info}}</p></div>";
-
-TYPEAHEAD_OPTIONS = {
+export const TYPEAHEAD_OPTIONS = {
     credit : {
         token: ["abbreviation", "name"],
         header: CREDIT_HEADER,

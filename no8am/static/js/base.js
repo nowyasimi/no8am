@@ -1,8 +1,24 @@
+var $ = require('jquery');
+var Handlebars = require('handlebars');
+var typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
+var Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
+
+import {
+    colorDict, SECTION_TYPES, OTHER_LOOKUP_URL, DEPT_LOOKUP_URL, COURSE_LOOKUP_URL, STORE_CONFIG_URL,
+    SUCCESSFUL_SAVE_MESSAGE, REPORT_SENT_MESSAGE, NEW_CUSTOM_LINK_WARNING, JUST_DO_IT, TYPEAHEAD_OPTIONS
+} from './Constants';
+
+import {Schedule} from './Schedule';
+import {Department} from './Department';
+
+
+
+
 // global schedule object
 var sched;
 
 // handlebars templates
-var calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
+export var calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
     crnTable;
 
 // for adding tooltip to custom link button
@@ -13,7 +29,7 @@ var showTooltip = false;
  * @param courseGroupID The ID for the course group to be updated in the GUI
  * @param numCourses The number of courses that course group has
  */
-function setNumberOfCourses(courseGroupID, numCourses) {
+export function setNumberOfCourses(courseGroupID, numCourses) {
     $("a[data-dept='" + courseGroupID + "'] .list-group-item-text .sectionCount").text(numCourses + " Courses");
 }
 
@@ -22,7 +38,7 @@ function setNumberOfCourses(courseGroupID, numCourses) {
  * @param courseID The ID for the course to be updated in the GUI
  * @param numSections The number of courses that course has
  */
-function setNumberOfSections(courseID, numSections) {
+export function setNumberOfSections(courseID, numSections) {
     $("a[data-course='"+ courseID +"'] .list-group-item-text .sectionCount").text(numSections + " Sections");
 }
 
@@ -31,7 +47,7 @@ function setNumberOfSections(courseID, numSections) {
  * least frequently used color.
  * @return The least common color
  */
-function colorChooser(courseArray, departmentsArray, usedColors) {
+export function colorChooser(courseArray, departmentsArray, usedColors) {
     var counters = {};
 
     // Initialize color counter to 0's
@@ -80,7 +96,7 @@ function colorChooser(courseArray, departmentsArray, usedColors) {
 /**
  * Replaces introduction window with class hours counter and copyright information.
  */
-function removeIntroInfo() {
+export function removeIntroInfo() {
     $("#welcomeWell").slideUp();
     $("#welcomeWell").remove();
 
@@ -98,7 +114,7 @@ function removeIntroInfo() {
  * @param b A time within a time interval
  * @return {Boolean} True if a > b
  */
-function customSort(a, b) {
+export function customSort(a, b) {
     var aFullInterval = a.time;
     var bFullInterval = b.time;
     var aTimeComponent = parseFloat(aFullInterval.substring(0, aFullInterval.length));
@@ -442,7 +458,7 @@ function courseButtonErrorHandler(e) {
  * @param time The time being converted (it can be either the start or end time for a section).
  * @return {number} Integer representing the number of 30 minute intervals past 8am for the provided time.
  */
-function parseHours(time) {
+export function parseHours(time) {
   var splitted = time.split(":");
   var hour = parseInt(splitted[0]);
   var minutes = parseInt(splitted[1].slice(0,2));
@@ -512,7 +528,7 @@ function updateCourseTableBackdrop() {
  * @param color Color of the sections
  * @param sections All sections for the current course
  */
-function drawToScreen(y, selected, hidden, color, sections) {
+export function drawToScreen(y, selected, hidden, color, sections) {
     var generated_list = [];
     for (var x in sections) { // iterates through sections and draws
         // true if section is unselected section that be an option to select

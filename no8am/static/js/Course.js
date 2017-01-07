@@ -1,3 +1,17 @@
+import {setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, range,
+    generateHTMLFromNullOrCrnAndSection, generateHTMLFromCourseData, displayCourseConfigurations,
+    findCourseConfigurations, generateCourseDataToStore, generateAndStoreJSON, removeFromStorage,
+    setSearchBox, addNewCourse, submitCourseRequest, submitDeptRequest, submitOtherRequest,
+    courseResponseHandler, deptResponseHandler, courseButtonErrorHandler, parseHours, justDoIt,
+    updateCourseTableBackdrop, drawToScreen, sectionSelectionHandler, newScheduleFromConfig,
+    initializeTypeahead, generateCustomLink, handleNewInput, removeCourseButtonHandler,
+    initializeHandlebarsTemplates, revertToCourseGroupButtonHandler, viewSectionListButtonHandler,
+    viewSectionListFromCalendarHandler, sendReport, viewSelectionsButtonHandler, editButtonHandler,
+    clearReportErrorModal, calendarSectionHoverHandler, courseTableSectionHoverHandler, courseTableSectionClickHandler,
+    openSaveModalButtonHandler, retryButtonHandler,
+    calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
+    crnTable} from './base';
+
 function Course(courseNum) {
   this.courseNum = courseNum == null ? "" : courseNum;
   this.extra_sections = {}; // eg {"r": "blue"} // recitation with color blue

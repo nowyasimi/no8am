@@ -5,9 +5,7 @@ app = Flask(__name__)
 
 secret_key = os.environ.get("SECRET_KEY") or "something_super_secret"
 
-app.config.update(
-	SECRET_KEY=secret_key
-)
+app.config.update(SECRET_KEY=secret_key)
 
 from no8am.metadata import DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
 from no8am.cache import course_data_get, course_data_set

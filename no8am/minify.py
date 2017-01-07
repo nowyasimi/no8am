@@ -4,7 +4,11 @@ import boto3
 import time
 import os
 import json
-from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
+from flask_assets import Environment, Bundle
+from webassets.filter import register_filter
+from webassets_browserify import Browserify
+
+from no8am import app, generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
 
 
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
@@ -15,6 +19,19 @@ JS_FILES = [
 	'js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
 	'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js'
 ]
+
+register_filter(Browserify)
+
+assets = Environment(app)
+
+js_file_names = [
+	'Constants.js', 'Section.js', 'Course.js', 'Department.js', 'Schedule.js', 'base.js'
+]
+
+js_files = Bundle(*['js/' + x for x in js_file_names], filters='browserify', output="app.js")
+
+assets.register('app-js', js_files)
+
 
 course_descriptions = None
 

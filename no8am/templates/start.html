@@ -34,13 +34,12 @@
   </script>
 
   {% if STATIC_LOCATION == "local" %}
-  {% for file in jsFiles %}
-  <script type="text/javascript" src="{{ url_for('static', filename=file) }}"></script>
-  {% endfor %}
-  <script>{{ metadata|safe }}</script>
-  {% else %}
-  <script type="text/javascript" src="{{ STATIC_LOCATION }}/{{ ASSET_URL }}"></script>
+    <script>{{ metadata|safe }}</script>
   {% endif %}
+
+  {% assets "app-js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
 
   <script type="text/javascript">
     {% if customData != None %}

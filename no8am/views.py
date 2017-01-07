@@ -6,7 +6,7 @@ import httplib
 from functools import wraps
 import json
 
-from no8am import app, store_link, get_link, generate_short_link, JS_FILES, Department, CreditOrCCC, \
+from no8am import app, store_link, get_link, generate_short_link, Department, CreditOrCCC, \
 	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
 	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST
 
@@ -54,7 +54,7 @@ def handle_response_errors(api_arguments):
 @app.route('/')
 def index():
 	return render_template(
-		'index.html', ASSET_URL="app.js", APP_ROOT=APPLICATION_ROOT, jsFiles=JS_FILES, STATIC_LOCATION=STATIC_LOCATION
+		'index.html', ASSET_URL="app.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
 	)
 
 
@@ -73,7 +73,7 @@ def bucknell(config=None):
 		metadata = generate_metadata() if STATIC_LOCATION == 'local' else None
 		return render_template(
 			'start.html', customData=custom_data, ASSET_URL="app.js", CURRENT_SEMESTER=get_user_format_semester(),
-			APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, jsFiles=JS_FILES, metadata=metadata
+			APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, metadata=metadata
 		)
 
 
