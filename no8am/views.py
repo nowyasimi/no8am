@@ -1,22 +1,16 @@
 from flask import render_template, request, jsonify, redirect, url_for, session
 import requests
 import sys
-import os
 import httplib
 from functools import wraps
 import json
 
 from no8am import app, store_link, get_link, generate_short_link, Department, CreditOrCCC, \
 	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
-	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST
+	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, STATIC_LOCATION, SIMPLE_FORM_TOKEN
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
-
-APPLICATION_ROOT = os.environ.get('APPLICATION_ROOT') or ""
-STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
-
-SIMPLE_FORM_TOKEN = os.environ.get("SIMPLE_FORM_TOKEN")
 
 
 def handle_response_errors(api_arguments):
@@ -54,7 +48,7 @@ def handle_response_errors(api_arguments):
 @app.route('/')
 def index():
 	return render_template(
-		'index.html', ASSET_URL="app.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
+		'index.html', APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
 	)
 
 
@@ -72,7 +66,7 @@ def bucknell(config=None):
 		custom_data = json.loads(session.pop('custom_data', 'null'))
 		metadata = generate_metadata() if STATIC_LOCATION == 'local' else None
 		return render_template(
-			'start.html', customData=custom_data, ASSET_URL="app.js", CURRENT_SEMESTER=get_user_format_semester(),
+			'start.html', customData=custom_data, CURRENT_SEMESTER=get_user_format_semester(),
 			APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, metadata=metadata
 		)
 
@@ -157,6 +151,4 @@ def report_error(error_description, name, email, useragent, schedule):
 
 @app.errorhandler(httplib.NOT_FOUND)
 def page_not_found(error):
-	return render_template(
-		'404.html', ASSET_URL="app.js", APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
-	), httplib.NOT_FOUND
+	return render_template('404.html', APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION), httplib.NOT_FOUND

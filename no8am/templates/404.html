@@ -3,11 +3,11 @@
 {% block head %}
   {{ super() }}
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% if STATIC_LOCATION == "local" %}
-  <link rel="stylesheet" href="{{ APP_ROOT }}{{ url_for('static', filename='css/home.css') }}">
-  {% else %}
-  <link rel="stylesheet" href="{{ STATIC_LOCATION }}/css/home.css">
-  {% endif %}
+
+  {% assets "home-css" %}
+  <link rel="stylesheet" href="{{ ASSET_URL }}" />
+  {% endassets %}
+
 {% endblock %}
 {% block content %}
   <section class="page0" id="start" style='height:100%'>

@@ -3,8 +3,10 @@
 # development cache for files like Jquery
 browserify-cache.json
 
-# development cache for all JS files
+# development cache for minified files
 app.js
+min_css
+
 
 ### macOS ###
 *.DS_Store

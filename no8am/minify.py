@@ -1,43 +1,14 @@
-from rjsmin import jsmin
 from rcssmin import cssmin
 import boto3
 import time
-import os
 import json
-from flask_assets import Environment, Bundle
-from webassets.filter import register_filter
-from webassets_browserify import Browserify
 import StringIO
 
-from no8am import app, generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
+from no8am import app, generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, STATIC_LOCATION, \
+	CLOUDFRONT_DISTRIBUTION_ID
 
-
-CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
-STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
 JS_OUTPUT_FILENAME = "app.js"
-
-# TODO - remove this
-JS_FILES = [
-	'js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
-	'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js'
-]
-
-app.config.update(
-	BROWSERIFY_BIN='./node_modules/.bin/browserifyinc',
-)
-
-register_filter(Browserify)
-
-assets = Environment(app)
-
-assets.cache = False
-assets.manifest = None
-
-js_files_development = Bundle('js/Index.js', filters=['browserify'], output=JS_OUTPUT_FILENAME)
-js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], output=JS_OUTPUT_FILENAME)
-
-assets.register('app-js', js_files_development)
 
 course_descriptions = None
 

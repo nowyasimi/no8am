@@ -22,7 +22,10 @@ global.sched = sched;
 $(function() {
 
     initializeHandlebarsTemplates();
-    initializeTypeahead();
+
+    $.getJSON(METADATA_URL, function(metadata) {
+       initializeTypeahead(metadata)
+    });
 
     // call a function created in the template for creating schedule from custom link
     sendSavedSchedule();

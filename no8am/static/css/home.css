@@ -18,7 +18,8 @@ body,html{height: 100%;}
   margin-right:0;
 }
 #mainPage {
-  background: url("bg.png");
+  padding-bottom:0;
+  background: url("/static/bg.png");
   background-size: cover;
   background-attachment: fixed;
 }

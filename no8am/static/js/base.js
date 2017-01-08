@@ -611,8 +611,9 @@ export function newScheduleFromConfig() {
 
 /**
  * Initializes typeahead (search box) to use pre-loaded course descriptions and type names.
+ * @param metadata Information about courses such as course descriptions, department names, CCC requirements, etc
  */
-export function initializeTypeahead() {
+export function initializeTypeahead(metadata) {
     let typeaheadConfiguration = [];
 
     // create typeahead objects for each lookup type (CCC, credit, department, course)

@@ -3,13 +3,9 @@
   <head>
     {% block head %}
     <title>{% block title %}{% endblock %}</title>
-    {# CSS #}
-    {% if STATIC_LOCATION == "local" %}
-    <link rel="shortcut icon" href="{{ APP_ROOT }}{{ url_for('static', filename='favicon.ico') }}">
-    <link rel="stylesheet" href="{{ APP_ROOT }}{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    {% else %}
-    <link rel="shortcut icon" href="{{ STATIC_LOCATION }}/favicon.ico">
-    {% endif %}
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
     {% endblock %}
     {% include "analytics.html" %}
   </head>

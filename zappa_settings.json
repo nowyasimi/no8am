@@ -9,7 +9,8 @@
         "s3_bucket": "no8am-deployment",
         "aws_region": "us-east-1",
         "remote_env": "s3://no8am-deployment/no8am-environment-variables.json",
-        "timeout_seconds": 300
+        "timeout_seconds": 300,
+        "exclude": ["no8am/static"]
     },
     "dev": {
        "extends": "common",
