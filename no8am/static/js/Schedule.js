@@ -1,18 +1,11 @@
+$ = global.jQuery = global.$ = require('jquery');
+
 import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL} from './Constants';
 
-import {setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, range,
-    generateHTMLFromNullOrCrnAndSection, generateHTMLFromCourseData, displayCourseConfigurations,
-    findCourseConfigurations, generateCourseDataToStore, generateAndStoreJSON, removeFromStorage,
-    setSearchBox, addNewCourse, submitCourseRequest, submitDeptRequest, submitOtherRequest,
-    courseResponseHandler, deptResponseHandler, courseButtonErrorHandler, parseHours, justDoIt,
-    updateCourseTableBackdrop, drawToScreen, sectionSelectionHandler, newScheduleFromConfig,
-    initializeTypeahead, generateCustomLink, handleNewInput, removeCourseButtonHandler,
-    initializeHandlebarsTemplates, revertToCourseGroupButtonHandler, viewSectionListButtonHandler,
-    viewSectionListFromCalendarHandler, sendReport, viewSelectionsButtonHandler, editButtonHandler,
-    clearReportErrorModal, calendarSectionHoverHandler, courseTableSectionHoverHandler, courseTableSectionClickHandler,
-    openSaveModalButtonHandler, retryButtonHandler,
-    calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
-    crnTable} from './base';
+import {
+    setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, buttonGroup,
+    extraSectionsButton, sectionDetails, courseOverlap, crnTable
+} from './base';
 
 export class Schedule {
     constructor() {
@@ -601,7 +594,7 @@ export class Schedule {
 
         // draws all sections for current course, and only selected sections for other courses
         for (var y in this.course) {
-            var course_elements = this.course[y].drawToScreen(y, this.selected[y], y!=this.lastClickedCourseButton.id);
+            var course_elements = this.course[y].courseDrawToScreen(y, this.selected[y], y!=this.lastClickedCourseButton.id);
         }
 
         this.updateCRNList();
@@ -622,12 +615,12 @@ export class Schedule {
 
         // draw selected sections for each course
         for (var y in this.course) {
-            this.course[y].drawToScreen(y, this.selected[y], true);
+            this.course[y].courseDrawToScreen(y, this.selected[y], true);
         }
 
         // draw courses for the currently selected department
         for (var y in this.departments[dept].courses) {
-            this.departments[dept].courses[y].drawToScreen(y, null, false);
+            this.departments[dept].courses[y].courseDrawToScreen(y, null, false);
         }
 
         // link the course sections with the currently selected department

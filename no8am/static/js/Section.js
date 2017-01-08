@@ -1,6 +1,8 @@
+$ = global.jQuery = global.$ = require('jquery');
+
 import {parseHours, calendarElement} from './base';
 
-class Section {
+export class Section {
     constructor(object, CRN) {
         this.CRN = CRN;
         this.courseNum = object["courseNum"];
@@ -104,7 +106,7 @@ class Section {
                 this.daysMet.push( [days[day], parsedStart, parsedEnd, start.slice(0,-2), end.slice(0,-2)] );
             }
         }
-    };
+    }
 
     genElement(classID, hidden, sectionNum, color) { // if selected, no 'N' in front
         var elements = [];
@@ -157,8 +159,7 @@ class Section {
             professor: this.professor,
             freeSeats: this.freeSeats
         };
-    };
-
+    }
 }
 
 

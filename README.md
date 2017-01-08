@@ -25,6 +25,7 @@ It's a good idea to create a [virtualenv](http://docs.python-guide.org/en/latest
 
     git clone ssh://git@github.com/nowyasimi/no8am.git && cd no8am
     pip install -r requirements.txt
+    npm install
     python run.py
 
 That's it! Open a web browser and go to `localhost:3000`.

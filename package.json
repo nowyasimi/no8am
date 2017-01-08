@@ -2,7 +2,7 @@
   "name": "no8am",
   "version": "1.0.0",
   "description": "no8am",
-  "main": "base.js",
+  "main": "Index.js",
   "directories": {
     "doc": "docs"
   },
@@ -25,11 +25,22 @@
     "babelify": "^7.3.0",
     "bootstrap": "^3.3.7",
     "browserify": "^13.3.0",
+    "browserify-shim": "^3.8.12",
     "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
+    "jquery-shim": "^1.0.1",
     "typeahead.js": "^0.11.1"
   },
   "browserify": {
-    "transform": [["babelify", { "presets": ["es2015"] }]]
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
   }
 }

@@ -1,3 +1,7 @@
+$ = global.jQuery = global.$ = require('jquery');
+
+import {Course} from './Course';
+
 // TODO - rename class to CourseGroup, since it's used for departments, ccc requirements, etc
 export class Department {
     constructor(deptName, deptType) {

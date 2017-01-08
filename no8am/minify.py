@@ -25,7 +25,7 @@ register_filter(Browserify)
 assets = Environment(app)
 
 js_file_names = [
-	'Constants.js', 'Section.js', 'Course.js', 'Department.js', 'Schedule.js', 'base.js'
+	'Index.js', 'base.js', 'Constants.js', 'Section.js', 'Course.js', 'Department.js', 'Schedule.js'
 ]
 
 js_files = Bundle(*['js/' + x for x in js_file_names], filters='browserify', output="app.js")

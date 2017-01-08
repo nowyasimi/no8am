@@ -1,7 +1,10 @@
-var $ = require('jquery');
+$ = global.jQuery = global.$ = require('jquery');
+
 var Handlebars = require('handlebars');
 var typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
 var Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
+
+require('bootstrap');
 
 import {
     colorDict, SECTION_TYPES, OTHER_LOOKUP_URL, DEPT_LOOKUP_URL, COURSE_LOOKUP_URL, STORE_CONFIG_URL,
@@ -10,12 +13,6 @@ import {
 
 import {Schedule} from './Schedule';
 import {Department} from './Department';
-
-
-
-
-// global schedule object
-var sched;
 
 // handlebars templates
 export var calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
@@ -97,8 +94,7 @@ export function colorChooser(courseArray, departmentsArray, usedColors) {
  * Replaces introduction window with class hours counter and copyright information.
  */
 export function removeIntroInfo() {
-    $("#welcomeWell").slideUp();
-    $("#welcomeWell").remove();
+    $("#welcomeWell").slideUp().remove();
 
     $(".under-courses").slideDown();
 }
@@ -220,7 +216,7 @@ function displayCourseConfigurations(courseConfigs) {
 /**
  * Retrieve all saved schedule configuration using Javascript Localstorage API.
  */
-function findCourseConfigurations() {
+export function findCourseConfigurations() {
     var numItems = localStorage.length;
     var courseConfigs = {};
 
@@ -279,7 +275,7 @@ function generateCourseDataToStore() {
 /**
  * Save current schedule to localStorage with a description, if provided.
  */
-function generateAndStoreJSON() {
+export function generateAndStoreJSON() {
     var $courseConfigDescription = $("#courseConfigDescription")
 
     var description = $courseConfigDescription.val();
@@ -313,7 +309,7 @@ function generateAndStoreJSON() {
 /**
  * Remove saved schedule from localstorage and generate new list of course configurations.
  */
-function removeFromStorage() {
+export function removeFromStorage() {
     var selectedConfig = $(this).attr("id").substring(12);
     localStorage.removeItem("courseConfigData" + selectedConfig);
     findCourseConfigurations();
@@ -475,7 +471,7 @@ export function parseHours(time) {
 /**
  * Yes you can!
  */
-function justDoIt() {
+export function justDoIt() {
     var text = $(this).val();
     text = text.toLowerCase();
     var doIt = ["doit", "do it", "just do it", "justdoit"];
@@ -509,7 +505,7 @@ function justDoIt() {
 /**
  * Fixes some spacing issues with the backdrop when section details to the course table.
  */
-function updateCourseTableBackdrop() {
+export function updateCourseTableBackdrop() {
     // add space to the current dialog
     var newHeight = parseInt($("#courseTable .modal-dialog").css("height")) + 100;
 
@@ -554,7 +550,7 @@ export function drawToScreen(y, selected, hidden, color, sections) {
 /**
  * Called to check for a new section selection.
  */
-function sectionSelectionHandler() {
+export function sectionSelectionHandler() {
     $("#sectionDetails").html("");
     var row = $("#listViewData .success");
     var $sectionTable = $("#listViewData tbody");
@@ -591,7 +587,7 @@ function sectionSelectionHandler() {
 /**
  * Generates a new schedule when one is selected from the saved schedule list.
  */
-function newScheduleFromConfig() {
+export function newScheduleFromConfig() {
     var selectedConfig = $(this).attr("id").substring(12);
 
     // remove old courses and course buttons
@@ -619,7 +615,7 @@ function newScheduleFromConfig() {
 /**
  * Initializes typeahead (search box) to use pre-loaded course descriptions and type names.
  */
-function initializeTypeahead() {
+export function initializeTypeahead() {
     var typeaheadConfiguration = [];
 
     // create typeahead objects for each lookup type (CCC, credit, department, course)
@@ -693,7 +689,7 @@ function initializeTypeahead() {
  * Called when the generate custom link button is clicked. Uploads course configuration and sets
  * the returned custom link in the GUI.
  */
-function generateCustomLink() {
+export function generateCustomLink() {
     if ($(this).hasClass("disabled")) {
         return;
     }
@@ -729,7 +725,7 @@ function generateCustomLink() {
  * @param _ Unused input, reference to Typeahead in the DOM
  * @param datum The data that was selected from the search box
  */
-function handleNewInput(_, datum){
+export function handleNewInput(_, datum){
 
     // clear input from typeahead
     $(this).typeahead('val', "");
@@ -761,7 +757,7 @@ function handleNewInput(_, datum){
  * Called when the remove button is clicked for a course button.
  * @param e The default event in response to the click.
  */
-function removeCourseButtonHandler(e) {
+export function removeCourseButtonHandler(e) {
     e.stopPropagation();
     var parentobj = $(this).parent().parent();
     if (parentobj[0].hasAttribute("data-dept")) {
@@ -779,7 +775,7 @@ function removeCourseButtonHandler(e) {
 /**
  * Initialize templates for dynamically generating and inserting HTML.
  */
-function initializeHandlebarsTemplates() {
+export function initializeHandlebarsTemplates() {
     calendarElement = Handlebars.compile($("#calendarElement").html());
     buttonGroup = Handlebars.compile($("#buttonGroupTemplate").html());
     extraSectionsButton = Handlebars.compile($("#extraSectionsButtonTemplate").html());
@@ -795,7 +791,7 @@ function initializeHandlebarsTemplates() {
  * Called when the course-revert button is clicked to revert a course to a course-group.
  * @param e
  */
-function revertToCourseGroupButtonHandler(e) {
+export function revertToCourseGroupButtonHandler(e) {
     var parent = $(this).parent().parent().attr("data-course");
     sched.convertCourseToDept(parent);
     e.stopPropagation();
@@ -804,7 +800,7 @@ function revertToCourseGroupButtonHandler(e) {
 /**
  * Called when a sections list button is clicked.
  */
-function viewSectionListButtonHandler() {
+export function viewSectionListButtonHandler() {
     if ($(this)[0].hasAttribute("data-dept")) {
         var dept = $(this).attr("data-dept");
         sched.lastClickedCourseButton = {"type": "dept", "id": dept};
@@ -825,7 +821,7 @@ function viewSectionListButtonHandler() {
  * Called when a section in the calendar is clicked. Opens the course table modal
  * for that course.
  */
-function viewSectionListFromCalendarHandler() {
+export function viewSectionListFromCalendarHandler() {
     var clickedCourse = $(this).attr('class').split(' ')[0].substring(6);
     sched.lastClickedCourseButton = {"type": "course", "id": clickedCourse};
     sched.redrawData();
@@ -835,7 +831,7 @@ function viewSectionListFromCalendarHandler() {
 /**
  * Sends an error report with the values in the modal fields.
  */
-function sendReport() {
+export function sendReport() {
     var errorDescription = $("#errorDescription").val();
 
     if (errorDescription !== "") {
@@ -858,7 +854,7 @@ function sendReport() {
 /**
  * Switches to the view selections window.
  */
-function viewSelectionsButtonHandler() {
+export function viewSelectionsButtonHandler() {
     $(".editRegion").slideUp();
     $(".viewRegion").slideDown();
     $("#openGenerateLinkModal").removeClass("disabled");
@@ -872,7 +868,7 @@ function viewSelectionsButtonHandler() {
 /**
  * Switches to the edit window.
  */
-function editButtonHandler() {
+export function editButtonHandler() {
     $("#generatedLink .glyphicon").tooltip("destroy");
     $(".viewRegion").slideUp();
     $(".editRegion").slideDown();
@@ -881,7 +877,7 @@ function editButtonHandler() {
 /**
  * Called when the report error modal is closed. Clears all values in the modal.
  */
-function clearReportErrorModal() {
+export function clearReportErrorModal() {
     $("#reportCourseNum").val("");
     $("#reportName").val("");
     $("#reportEmail").val("");
@@ -892,7 +888,7 @@ function clearReportErrorModal() {
  * Called when a section is hovered over in the calendar. Toggles between times met and the course
  * name for each instance of that section.
  */
-function calendarSectionHoverHandler(){
+export function calendarSectionHoverHandler(){
     var stuff = $(this).attr("class").split(" ");
     var selector = 'li.' + stuff[0] + '.' + stuff[1];
     $(selector + " .timesMet").toggle();
@@ -903,7 +899,7 @@ function calendarSectionHoverHandler(){
  * Called when a section in the section list is hovered over or unhovered. Toggles the visibility
  * of each instance of that section.
  */
-function courseTableSectionHoverHandler() {
+export function courseTableSectionHoverHandler() {
     if ($(this).parent().is("tbody")) {
         var clickedCourse = $(this).attr('class').split(' ')[0];
         var clickedCourseNum = clickedCourse.substring(6);
@@ -919,7 +915,7 @@ function courseTableSectionHoverHandler() {
 /**
  * Update course table and calendar when a section from the section list is clicked.
  */
-function courseTableSectionClickHandler() {
+export function courseTableSectionClickHandler() {
     if ($(this).hasClass("success")) {
         $(this).removeClass("success");
         $("#sectionDetails").html("");
@@ -947,7 +943,7 @@ function courseTableSectionClickHandler() {
 /**
  * Show confirmation of schedule being saved.
  */
-function openSaveModalButtonHandler() {
+export function openSaveModalButtonHandler() {
     $("#saveModal").modal();
     $("#configBeingSaved").html(generateHTMLFromCourseData(generateCourseDataToStore()));
 }
@@ -955,46 +951,8 @@ function openSaveModalButtonHandler() {
 /**
  * Retry sending failed request.
  */
-function retryButtonHandler() {
+export function retryButtonHandler() {
     // TODO - implement retry handler or resend AJAX request in error handler
     var id = $(this).attr("data-course") !== undefined ? $(this).attr("data-course") : $(this).attr("data-dept");
 }
 
-// called when page is fully loaded
-$(function() {
-
-    initializeHandlebarsTemplates();
-    initializeTypeahead();
-
-    // Global instance of Schedule, used GUI listeners are triggered
-    sched = new Schedule();
-
-    // call a function created in the template for creating schedule from custom link
-    sendSavedSchedule();
-
-    $(document)
-        .on("click", ".removeCourse", removeCourseButtonHandler)
-        .on("click", ".course-revert", revertToCourseGroupButtonHandler)
-        .on('click', '.toggle', viewSectionListButtonHandler)
-        .on('click', '.open li', viewSectionListFromCalendarHandler)
-        .on("mouseenter mouseleave", ".open li", calendarSectionHoverHandler)
-        .on("mouseenter mouseleave", "#courseTable tr", courseTableSectionHoverHandler)
-        .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
-        .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })
-        .on('shown.bs.modal', '#courseTable', updateCourseTableBackdrop)
-        .on('hidden.bs.modal', "#courseTable", sectionSelectionHandler)
-        .on("click", ".selectCourseConfig", newScheduleFromConfig)
-        .on("click", ".removeCourseConfig", removeFromStorage)
-        .on("click", ".openModalButton", function(){ findCourseConfigurations(); $("#openModal").modal();})
-        .on("click", "#saveSchedule", generateAndStoreJSON)
-        .on("click", "#openSaveDialog", openSaveModalButtonHandler)
-        .on("click", "#openReportDialog", function() { $("#reportErrorModal").modal(); })
-        .on("click", "#sendReport", sendReport)
-        .on('hidden.bs.modal', "#reportErrorModal", clearReportErrorModal)
-        .on("click", "#openGenerateLinkModal", generateCustomLink)
-        .on("click", "#viewSelectionsButton", viewSelectionsButtonHandler)
-        .on("click", "#editButton", editButtonHandler)
-        .on("click", ".retryButton", retryButtonHandler)
-        .on("input", ".typeahead", justDoIt)
-        .on('typeahead:selected', ".typeahead", handleNewInput);
-});
