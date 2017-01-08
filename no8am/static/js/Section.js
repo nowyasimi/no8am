@@ -1,4 +1,4 @@
-$ = global.jQuery = global.$ = require('jquery');
+$ = require('jquery');
 
 import {parseHours, calendarElement} from './base';
 

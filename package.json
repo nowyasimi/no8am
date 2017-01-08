@@ -40,7 +40,19 @@
             "es2015"
           ]
         }
+      ],
+      [
+        "browserify-shim",
+        {
+          "global": true
+        }
       ]
     ]
+  },
+  "browser": {
+    "jquery": "./node_modules/jquery/dist/jquery.js"
+  },
+  "browserify-shim": {
+    "jquery": "$"
   }
 }

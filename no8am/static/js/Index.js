@@ -1,4 +1,4 @@
-$ = global.jQuery = global.$ = require('jquery');
+$ = require('jquery');
 
 require('bootstrap');
 
@@ -15,7 +15,7 @@ import {Schedule} from './Schedule';
 
 
 // global schedule object
-export var sched;
+export var sched = new Schedule();
 global.sched = sched;
 
 // called when page is fully loaded
@@ -23,9 +23,6 @@ $(function() {
 
     initializeHandlebarsTemplates();
     initializeTypeahead();
-
-    // Global instance of Schedule, used GUI listeners are triggered
-    sched = new Schedule();
 
     // call a function created in the template for creating schedule from custom link
     sendSavedSchedule();

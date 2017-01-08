@@ -1,4 +1,4 @@
-$ = global.jQuery = global.$ = require('jquery');
+$ = require('jquery');
 
 import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL} from './Constants';
 
@@ -6,6 +6,8 @@ import {
     setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, buttonGroup,
     extraSectionsButton, sectionDetails, courseOverlap, crnTable
 } from './base';
+
+import {Course, ExtraCourse} from './Course';
 
 export class Schedule {
     constructor() {

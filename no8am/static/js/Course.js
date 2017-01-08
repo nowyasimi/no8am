@@ -1,4 +1,4 @@
-$ = global.jQuery = global.$ = require('jquery');
+$ = require('jquery');
 
 import {drawToScreen} from './base';
 import {Section} from './Section';
@@ -40,11 +40,6 @@ export class Course {
         drawToScreen(y, selected, hidden, this.mainColor, this.sections);
     }
 }
-
-
-
-
-
 
 export class ExtraCourse {
     constructor(data, color) {

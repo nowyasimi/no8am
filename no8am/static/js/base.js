@@ -1,4 +1,4 @@
-$ = global.jQuery = global.$ = require('jquery');
+$ = require('jquery');
 
 var Handlebars = require('handlebars');
 var typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
@@ -376,6 +376,8 @@ function submitCourseRequest(courseLength, department, course, section) {
 function submitDeptRequest(dept) {
     var newDept = new Department(dept, "dept");
     var deptNum = sched.pushDept(newDept);
+
+    console.log($('body'));
 
     $.ajax({
         url: DEPT_LOOKUP_URL + dept,
