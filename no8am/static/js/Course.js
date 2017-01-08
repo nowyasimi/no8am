@@ -1,5 +1,3 @@
-$ = require('jquery');
-
 import {drawToScreen} from './base';
 import {Section} from './Section';
 

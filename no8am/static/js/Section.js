@@ -1,5 +1,7 @@
 $ = require('jquery');
 
+import {colorDict} from './Constants';
+
 import {parseHours, calendarElement} from './base';
 
 export class Section {

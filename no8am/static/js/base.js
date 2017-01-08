@@ -1,5 +1,3 @@
-$ = require('jquery');
-
 var Handlebars = require('handlebars');
 var typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
 var Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
@@ -11,6 +9,7 @@ import {
     SUCCESSFUL_SAVE_MESSAGE, REPORT_SENT_MESSAGE, NEW_CUSTOM_LINK_WARNING, JUST_DO_IT, TYPEAHEAD_OPTIONS
 } from './Constants';
 
+import {Course, ExtraCourse} from './Course';
 import {Schedule} from './Schedule';
 import {Department} from './Department';
 
@@ -365,7 +364,7 @@ function submitCourseRequest(courseLength, department, course, section) {
     $.ajax({
         url: COURSE_LOOKUP_URL + department + '/' + course,
         context: {courseLength: courseLength, selectedSectionInfo: section}
-    }).done(courseResponseHandler).error(courseButtonErrorHandler);
+    }).done(courseResponseHandler).fail(courseButtonErrorHandler);
 
 }
 
@@ -377,12 +376,10 @@ function submitDeptRequest(dept) {
     var newDept = new Department(dept, "dept");
     var deptNum = sched.pushDept(newDept);
 
-    console.log($('body'));
-
     $.ajax({
         url: DEPT_LOOKUP_URL + dept,
         context: {deptNum: deptNum}
-    }).done(deptResponseHandler).error(courseButtonErrorHandler);
+    }).done(deptResponseHandler).fail(courseButtonErrorHandler);
 
     ga('send', {
         hitType: 'event',
@@ -405,7 +402,7 @@ function submitOtherRequest(type, val, long) {
     $.ajax({
         url: OTHER_LOOKUP_URL + type + '/' + val,
         context: {deptNum: deptNum}
-    }).done(deptResponseHandler).error(courseButtonErrorHandler);
+    }).done(deptResponseHandler).fail(courseButtonErrorHandler);
 
     var eventCat = type == 'ccc' ? type : 'credit';
 
@@ -647,7 +644,6 @@ export function initializeTypeahead() {
                 // case 1: a and b are in same dept:
                 // compare the letter ordering (eg MATH 120 vs MATH 200)
                 if (InputString === shortA && InputString === shortB) {
-                    // console.log(shortA + " > " + )
                     return a.courseNum.localeCompare(b.courseNum);
                 }
                 // case 2: a is in dept, b isn't:

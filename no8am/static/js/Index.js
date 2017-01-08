@@ -15,12 +15,12 @@ import {Schedule} from './Schedule';
 
 
 // global schedule object
-export var sched = new Schedule();
+export let sched = new Schedule();
 global.sched = sched;
 
 // called when page is fully loaded
 $(function() {
-
+    
     initializeHandlebarsTemplates();
     initializeTypeahead();
 

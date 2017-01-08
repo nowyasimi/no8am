@@ -28,7 +28,6 @@
     "browserify-shim": "^3.8.12",
     "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
-    "jquery-shim": "^1.0.1",
     "typeahead.js": "^0.11.1"
   },
   "browserify": {
@@ -38,7 +37,8 @@
         {
           "presets": [
             "es2015"
-          ]
+          ],
+          "compact": true
         }
       ],
       [
@@ -47,7 +47,12 @@
           "global": true
         }
       ]
-    ]
+    ],
+    "require": [
+      "jquery", "handlebars", "typeahead", "bootstrap"
+    ],
+    "noParse": ["jquery"],
+    "detectGlobals": false
   },
   "browser": {
     "jquery": "./node_modules/jquery/dist/jquery.js"

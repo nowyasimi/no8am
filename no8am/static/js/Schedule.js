@@ -1,10 +1,8 @@
-$ = require('jquery');
-
-import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL} from './Constants';
+import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL, DAYS_OF_WEEK} from './Constants';
 
 import {
-    setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, buttonGroup,
-    extraSectionsButton, sectionDetails, courseOverlap, crnTable
+    setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, updateCourseTableBackdrop,
+    buttonGroup, extraSectionsButton, sectionDetails, courseOverlap, crnTable
 } from './base';
 
 import {Course, ExtraCourse} from './Course';
@@ -709,43 +707,42 @@ export class Schedule {
         $.ajax({
             url: SECTION_DETAILS_URL,
             data: {department: dept, crn: crn},
-            context: {section: section},
-            success: (data) => {
-                $(".spinner2").hide();
-                var section = this.section;
-                $page = $($.parseHTML(data.section_details));
-                var rows = $page.find("tr");
-                var message = section.message || ":";
-                var message_split_index = message.indexOf(":");
+            context: {section: section}
+        }).done(function(data) {
+            $(".spinner2").hide();
+            var section = this.section;
+            var $page = $($.parseHTML(data.section_details));
+            var rows = $page.find("tr");
+            var message = section.message || ":";
+            var message_split_index = message.indexOf(":");
 
-                var details = [];
+            var details = [];
 
-                for (var x = 5; x < 10; x++) {
-                    if ($.trim(rows[x].children[1].innerText) != "") {
-                        details.push({
-                            detailTitle: rows[x].children[0].innerText,
-                            detailMessage: rows[x].children[1].innerText
-                        });
-                    }
+            for (var x = 5; x < 10; x++) {
+                if ($.trim(rows[x].children[1].innerText) != "") {
+                    details.push({
+                        detailTitle: rows[x].children[0].innerText,
+                        detailMessage: rows[x].children[1].innerText
+                    });
                 }
-
-                var message_contents = message == ":" ? "" : message.slice(message_split_index);
-
-                var options = {
-                    messageTitle: message.slice(0,message_split_index),
-                    messageContents: message_contents,
-                    title: section.courseName,
-                    ccc: section.ccc,
-                    waitList: section.waitList,
-                    resSeats: section.resSeats,
-                    prm: section.prm,
-                    details: details
-                };
-
-                var sectionDetailsHTML = sectionDetails(options);
-                $("#sectionDetails").html(sectionDetailsHTML);
-                updateCourseTableBackdrop();
             }
+
+            var message_contents = message == ":" ? "" : message.slice(message_split_index);
+
+            var options = {
+                messageTitle: message.slice(0,message_split_index),
+                messageContents: message_contents,
+                title: section.courseName,
+                ccc: section.ccc,
+                waitList: section.waitList,
+                resSeats: section.resSeats,
+                prm: section.prm,
+                details: details
+            };
+
+            var sectionDetailsHTML = sectionDetails(options);
+            $("#sectionDetails").html(sectionDetailsHTML);
+            updateCourseTableBackdrop();
         });
     }
 }
