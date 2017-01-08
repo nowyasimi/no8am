@@ -7,6 +7,7 @@ import json
 from flask_assets import Environment, Bundle
 from webassets.filter import register_filter
 from webassets_browserify import Browserify
+import StringIO
 
 from no8am import app, generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
 
@@ -14,11 +15,17 @@ from no8am import app, generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, 
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 S3_BUCKET_NAME = "no8.am"
 STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
+JS_OUTPUT_FILENAME = "app.js"
 
+# TODO - remove this
 JS_FILES = [
 	'js/jquery-1.9.1.min.js', 'js/bootstrap.min.js', 'js/typeahead.bundle.min.js', 'js/handlebars-v1.3.0.js',
 	'js/Constants.js', 'js/Section.js', 'js/Course.js', 'js/Department.js', 'js/Schedule.js', 'js/base.js'
 ]
+
+app.config.update(
+	BROWSERIFY_BIN='./node_modules/.bin/browserifyinc',
+)
 
 register_filter(Browserify)
 
@@ -27,14 +34,10 @@ assets = Environment(app)
 assets.cache = False
 assets.manifest = None
 
-js_file_names = [
-	'Index.js', 'base.js', 'Constants.js', 'Section.js', 'Course.js', 'Department.js', 'Schedule.js'
-]
+js_files_development = Bundle('js/Index.js', filters=['browserify'], output=JS_OUTPUT_FILENAME)
+js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], output=JS_OUTPUT_FILENAME)
 
-js_files = Bundle(*['js/' + x for x in js_file_names], filters='browserify', output="app.js")
-
-assets.register('app-js', js_files)
-
+assets.register('app-js', js_files_development)
 
 course_descriptions = None
 
@@ -66,7 +69,7 @@ def generate_metadata():
 	return "metadata=" + json.dumps(metadata, ensure_ascii=False)
 
 
-def minify_javascript(file_list):
+def minify_javascript():
 	"""
 	Runs files through JavaScript minification program. Used for uploading to S3.
 
@@ -74,16 +77,18 @@ def minify_javascript(file_list):
 	:return: Minified files bundled together in one string.
 	"""
 
-	global course_descriptions
+	global js_files_production
 
-	strings_to_minify = [generate_metadata()]
+	app.config.update(
+		UGLIFYJS_BIN='./node_modules/.bin/uglifyjs',
+		UGLIFYJS_EXTRA_ARGS=['-c', '-m']
+	)
 
-	for file_name in file_list:
-		with open("no8am/static/" + file_name, 'r') as f:
-			contents = f.read()
-		strings_to_minify.append(contents)
+	output = StringIO.StringIO()
 
-	return "".join([jsmin(x) + ";" for x in strings_to_minify])
+	js_files_production.build(force=True, output=output, disable_cache=True)
+
+	return output.getvalue()
 
 
 def minify_css(file_list):
@@ -102,19 +107,17 @@ def minify_css(file_list):
 	return minified
 
 
-def map_minify_name_to_files(page):
+def map_minify_name_to_files(file):
 	"""
 	Defines groups of files that can be minified.
 
-	:param page: Name of group of files to minify.
+	:param file: Name of group of files to minify.
 	:return: Minifed files
 	"""
 
-	if page == "app.js":
-		return minify_javascript(JS_FILES)
-	elif page == "home.css":
+	if file == "home.css":
 		return minify_css(["css/bootstrap.min.css", "css/home.css"])
-	elif page == "bucknell.css":
+	elif file == "bucknell.css":
 		return minify_css(["css/bootstrap.min.css", "css/calendar.css"])
 
 	print "invalid page"
@@ -154,8 +157,8 @@ def update_static_files():
 		s3.Object(S3_BUCKET_NAME, d + '/').put(Body='')
 
 	# generate and upload minified JS
-	data = map_minify_name_to_files('app.js')
-	s3.Object(S3_BUCKET_NAME, 'app.js').put(Body=data, ContentType='application/javascript', CacheControl='max-age=900')
+	data = minify_javascript()
+	s3.Object(S3_BUCKET_NAME, JS_OUTPUT_FILENAME).put(Body=data, ContentType='application/javascript', CacheControl='max-age=900')
 
 	# generate and upload minified CSS
 	to_minify = ["home.css", "bucknell.css"]
