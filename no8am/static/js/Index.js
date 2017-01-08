@@ -20,7 +20,7 @@ global.sched = sched;
 
 // called when page is fully loaded
 $(function() {
-    
+
     initializeHandlebarsTemplates();
     initializeTypeahead();
 

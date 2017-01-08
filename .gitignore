@@ -1,3 +1,11 @@
+### Package-specific files ###
+
+# development cache for files like Jquery
+browserify-cache.json
+
+# development cache for all JS files
+app.js
+
 ### macOS ###
 *.DS_Store
 .AppleDouble

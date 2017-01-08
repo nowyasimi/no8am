@@ -24,6 +24,9 @@ register_filter(Browserify)
 
 assets = Environment(app)
 
+assets.cache = False
+assets.manifest = None
+
 js_file_names = [
 	'Index.js', 'base.js', 'Constants.js', 'Section.js', 'Course.js', 'Department.js', 'Schedule.js'
 ]

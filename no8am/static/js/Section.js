@@ -24,14 +24,10 @@ export class Section {
                            // Wednesday is from 8am to 9:30am
         this.parseTimesMet();
         this.extra_section_lists = {"L": [], "R": [], "P": []};
-        var labs = object["labs"];
-        var recitations = object["recitations"];
-        var probSessions = object["probSessions"];
 
         if (object.hasOwnProperty('extra_section_lists')) {
             // Initial extra sections
-            for (var index in Object.keys(this.extra_section_lists)) {
-                var extra_section_type = Object.keys(this.extra_section_lists)[index];
+            for (let extra_section_type of Object.keys(this.extra_section_lists)) {
                 var current_extra_sections = object['extra_section_lists'][extra_section_type];
                 for (var extra_section_crn in current_extra_sections) {
                     var new_section = new Section(current_extra_sections[extra_section_crn], extra_section_crn);
