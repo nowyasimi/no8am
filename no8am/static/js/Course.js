@@ -13,15 +13,15 @@ export class Course {
     }
 
     initialRequest(data) {
-        var sections = [];
-        var all = data;
+        let sections = [];
+        let all = data;
 
-        for (var x in all) { // handles all sections of a class for calendar addition
-            var newSection = new Section(all[x], x);
+        for (let x in all) { // handles all sections of a class for calendar addition
+            let newSection = new Section(all[x], x);
             sections.push(newSection);
         }
-        var testSection = sections[0];
-        for (var x in testSection.extra_section_lists) {
+        let testSection = sections[0];
+        for (let x in testSection.extra_section_lists) {
             if (testSection.extra_section_lists[x].length > 0) {
                 this.extra_sections[x] = null;
                 this.extra_section_independent[x] = testSection.extra_section_independent[x];

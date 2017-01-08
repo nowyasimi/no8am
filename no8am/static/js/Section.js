@@ -1,5 +1,3 @@
-$ = require('jquery');
-
 import {colorDict} from './Constants';
 
 import {parseHours, calendarElement} from './base';
@@ -10,7 +8,7 @@ export class Section {
         this.courseNum = object["courseNum"];
         this.courseName = object["courseName"];
         this.sectionNum = object["sectionNum"];
-        this.timesMet = this.restructureHours(object["timesMet"]);
+        this.timesMet = Section.restructureHours(object["timesMet"]);
         this.roomMet = object["roomMet"] === ", " ? "" : object["roomMet"];
         this.message = object["message"];
         this.professor = object["professor"] === "; " ? "" : object["professor"];
@@ -28,9 +26,9 @@ export class Section {
         if (object.hasOwnProperty('extra_section_lists')) {
             // Initial extra sections
             for (let extra_section_type of Object.keys(this.extra_section_lists)) {
-                var current_extra_sections = object['extra_section_lists'][extra_section_type];
-                for (var extra_section_crn in current_extra_sections) {
-                    var new_section = new Section(current_extra_sections[extra_section_crn], extra_section_crn);
+                let current_extra_sections = object['extra_section_lists'][extra_section_type];
+                for (let extra_section_crn in current_extra_sections) {
+                    let new_section = new Section(current_extra_sections[extra_section_crn], extra_section_crn);
                     this.extra_section_lists[extra_section_type].push(new_section);
                 }
             }
@@ -40,37 +38,27 @@ export class Section {
         }
     }
 
-    restructureHours(hours) {
-        var timesMet = [];
+    static restructureHours(hours) {
+        let timesMet = [];
         while (hours != '') {
-            if (hours.length >= 3 && hours.slice(0,3) == "TBA") {
+            if (hours.includes("TBA")) {
                 return timesMet;
             }
-            if (hours.length >= 4 && hours.slice(1,4) == "TBA") {
-                return timesMet;
-            }
-            if (hours.length >= 5 && hours.slice(2,5) == "TBA") {
-                return timesMet;
-            }
-            if (hours.length >= 6 && hours.slice(1,6) == "TBA") {
-                return timesMet;
-            }
-            var mIndex = hours.indexOf('m');
+            let mIndex = hours.indexOf('m');
 
-            var tempTimes = hours.substring(0, mIndex+1);
+            let tempTimes = hours.substring(0, mIndex+1);
             hours = hours.substring(mIndex+1);
 
-            var tempHours = tempTimes.split(" ")[1];
-            var startTime = tempHours.split("-")[0];
-            var endTime = tempHours.split("-")[1];
+            let tempHours = tempTimes.split(" ")[1];
+            let startTime = tempHours.split("-")[0];
+            let endTime = tempHours.split("-")[1];
 
-            var cI1 = startTime.indexOf(":");
-            var cI2 = endTime.indexOf(":");
-            var hI = tempHours.indexOf("-");
+            let cI1 = startTime.indexOf(":");
+            let cI2 = endTime.indexOf(":");
 
-            var startHour = parseInt(startTime.slice(0, cI1));
-            var endHour = parseInt(endTime.slice(0, cI2));
-            var amOrPm = endTime.slice(cI2 + 3);
+            let startHour = parseInt(startTime.slice(0, cI1));
+            let endHour = parseInt(endTime.slice(0, cI2));
+            let amOrPm = endTime.slice(cI2 + 3);
 
             if (amOrPm == 'am' || (startHour != 12 && endHour == 12) || startHour > endHour) {
                 tempTimes = tempTimes.split("-").join("am-");
@@ -86,39 +74,39 @@ export class Section {
     }
 
     parseTimesMet() {
-        for (var x in this.timesMet) {
-            var dayAndTime = this.timesMet[x].split(" ");
-            var days = dayAndTime[0];
-            var duration = dayAndTime[1];
+        for (let x of this.timesMet) {
+            let dayAndTime = x.split(" ");
+            let days = dayAndTime[0];
+            let duration = dayAndTime[1];
 
-            var time = duration.split("-");
-            var start = time[0];
-            var end = time[1];
-            var parsedStart = parseHours(start);
-            var parsedEnd = parseHours(end) - parsedStart;
+            let time = duration.split("-");
+            let start = time[0];
+            let end = time[1];
+            let parsedStart = parseHours(start);
+            let parsedEnd = parseHours(end) - parsedStart;
 
-            for (var day in days){
-                if (days[day] == "S") {
+            for (let day of days){
+                if (day === "S") {
                     continue;
                 }
-                this.daysMet.push( [days[day], parsedStart, parsedEnd, start.slice(0,-2), end.slice(0,-2)] );
+                this.daysMet.push( [day, parsedStart, parsedEnd, start.slice(0,-2), end.slice(0,-2)] );
             }
         }
     }
 
     genElement(classID, hidden, sectionNum, color) { // if selected, no 'N' in front
-        var elements = [];
-        for (var day in this.daysMet) {
-            var visDuration;
+        let elements = [];
+        for (let day in this.daysMet) {
+            let visDuration;
             if (this.daysMet[day][1] + this.daysMet[day][2] > 26) {
                 visDuration = 25.73 - this.daysMet[day][1];
             }
             else {
                 visDuration = this.daysMet[day][2];
             }
-            var hexColor;
-            var selectedCalendarSection;
-            var hiddenStyle = "";
+            let hexColor;
+            let selectedCalendarSection;
+            let hiddenStyle = "";
             if (hidden) {
                 hiddenStyle = "display:none;";
                 hexColor = colorDict[color]["n"];
@@ -128,7 +116,7 @@ export class Section {
                 hexColor = colorDict[color]["s"];
                 selectedCalendarSection = " selectedCalendarSection ";
             }
-            var options = {
+            let options = {
                 height: visDuration*20/5.6,
                 margin: this.daysMet[day][1]*20/5.6,
                 color: hexColor,
@@ -141,7 +129,7 @@ export class Section {
                 day: this.daysMet[day][0]
             };
             elements.push(options);
-            var generatedHTML = calendarElement(options);
+            let generatedHTML = calendarElement(options);
             $("#" + this.daysMet[day][0] + " .open ul").append(generatedHTML);
         }
     }

@@ -1,6 +1,6 @@
-var Handlebars = require('handlebars');
-var typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
-var Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
+let Handlebars = require('handlebars');
+let typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
+let Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
 
 require('bootstrap');
 
@@ -14,11 +14,11 @@ import {Schedule} from './Schedule';
 import {Department} from './Department';
 
 // handlebars templates
-export var calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
+export let calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
     crnTable;
 
 // for adding tooltip to custom link button
-var showTooltip = false;
+let showTooltip = false;
 
 /**
  * Updates the number of courses available for selection in the GUI for a given course group.
@@ -44,49 +44,47 @@ export function setNumberOfSections(courseID, numSections) {
  * @return The least common color
  */
 export function colorChooser(courseArray, departmentsArray, usedColors) {
-    var counters = {};
+    let counters = {};
 
     // Initialize color counter to 0's
-    for (var color in colorDict) {
+    for (let color in colorDict) {
         counters[color] = 0;
     }
 
     // Iterate through courses
-    for (var x in courseArray) {
-        var current = courseArray[x];
+    for (let x in courseArray) {
+        let current = courseArray[x];
         // make sure it's not an extra course
         if (current instanceof ExtraCourse) {
             continue;
         }
         // up the counters
         counters[current.mainColor]++;
-        for (var extra in current.extra_sections) {
+        for (let extra in current.extra_sections) {
             if (current.extra_sections[extra] !== null)
                 counters[current.extra_sections[extra]]++;
         }
     }
 
     // iterate through departments
-    for (var x in departmentsArray) {
+    for (let x in departmentsArray) {
         // they currently only have one color, since only main sections are included
-        var current_color = departmentsArray[x].color;
+        let current_color = departmentsArray[x].color;
         // up the counter
         counters[current_color]++;
     }
 
     // iterate through colors currently being used
-    for (var x in usedColors) {
+    for (let x in usedColors) {
         counters[usedColors[x]]++;
     }
 
     // find and return the least common color
-    var least_frequent = Object.keys(counters).reduce(
+    return Object.keys(counters).reduce(
         function(a, b) {
             return counters[a] <= counters[b] ? a : b
         }
     );
-
-    return least_frequent;
 }
 
 /**
@@ -110,12 +108,12 @@ export function removeIntroInfo() {
  * @return {Boolean} True if a > b
  */
 export function customSort(a, b) {
-    var aFullInterval = a.time;
-    var bFullInterval = b.time;
-    var aTimeComponent = parseFloat(aFullInterval.substring(0, aFullInterval.length));
-    var bTimeComponent = parseFloat(bFullInterval.substring(0, bFullInterval.length));
+    const aFullInterval = a.time;
+    const bFullInterval = b.time;
+    const aTimeComponent = parseFloat(aFullInterval.substring(0, aFullInterval.length));
+    const bTimeComponent = parseFloat(bFullInterval.substring(0, bFullInterval.length));
 
-    var result;
+    let result;
 
     // Time components are equivalent so check if they're the start or end of the interval
     if (aTimeComponent == bTimeComponent) {
@@ -135,7 +133,7 @@ export function customSort(a, b) {
  * @return {number} The size of the object
  */
 Object.size = function(obj) {
-    var size = 0, key;
+    let size = 0, key;
     for (key in obj) {
         if (obj.hasOwnProperty(key)) size++;
     }
@@ -174,12 +172,12 @@ function generateHTMLFromNullOrCrnAndSection(courseNum, data, letter) {
  * @return {string} An HTML string containing one saved course per line.
  */
 function generateHTMLFromCourseData(courseData) {
-    var htmlString = "";
-    for (var courseNum in courseData) {
-        for (var typeIndex in SECTION_TYPES) {
-            var type = SECTION_TYPES[typeIndex];
+    let htmlString = "";
+    for (let courseNum in courseData) {
+        for (let typeIndex in SECTION_TYPES) {
+            let type = SECTION_TYPES[typeIndex];
             if (courseData[courseNum].hasOwnProperty(type)) {
-                var data = courseData[courseNum][type];
+                let data = courseData[courseNum][type];
                 htmlString += generateHTMLFromNullOrCrnAndSection(courseNum, data, type == "main" ? "" : type);
             }
         }
@@ -193,11 +191,11 @@ function generateHTMLFromCourseData(courseData) {
  */
 function displayCourseConfigurations(courseConfigs) {
     // TODO - make it more obvious that a schedule from a previous semester cannot be displayed
-    var schedules = [];
+    let schedules = [];
 
     // generate HTML parameters for the schedules
-    for (var configNum in courseConfigs) {
-        var currentConfig = courseConfigs[configNum];
+    for (let configNum in courseConfigs) {
+        let currentConfig = courseConfigs[configNum];
 
         schedules.push({
             configNum: configNum,
@@ -206,7 +204,7 @@ function displayCourseConfigurations(courseConfigs) {
         });
     }
 
-    var courseConfigurationHTML = savedSchedule(schedules);
+    let courseConfigurationHTML = savedSchedule(schedules);
 
     // display the HTML
     $("#courseConfigs").html(courseConfigurationHTML);
@@ -216,16 +214,16 @@ function displayCourseConfigurations(courseConfigs) {
  * Retrieve all saved schedule configuration using Javascript Localstorage API.
  */
 export function findCourseConfigurations() {
-    var numItems = localStorage.length;
-    var courseConfigs = {};
+    let numItems = localStorage.length;
+    let courseConfigs = {};
 
     // iterate through all values stored in localstorage
-    for (var x in range(0, numItems)) {
-        var itemName = localStorage.key(x);
+    for (let x in range(0, numItems)) {
+        let itemName = localStorage.key(x);
         // found a saved schedule
         if (itemName.length > 16 && itemName.slice(0,16) === "courseConfigData") {
-            var configID = itemName.substring(16);
-            var configData = localStorage.getItem(itemName);
+            let configID = itemName.substring(16);
+            let configData = localStorage.getItem(itemName);
             courseConfigs[configID] = JSON.parse(configData);
         }
     }
@@ -241,23 +239,23 @@ export function findCourseConfigurations() {
  */
 function generateCourseDataToStore() {
     // Generated course information object
-    var courseData = {};
+    let courseData = {};
 
     // iterate through all courses
-    for (var x in sched.course) {
-        var currentCourse = sched.course[x];
-        var currentCourseNum = currentCourse.courseNum;
-        var tempCourseObj = {};
+    for (let x in sched.course) {
+        let currentCourse = sched.course[x];
+        let currentCourseNum = currentCourse.courseNum;
+        let tempCourseObj = {};
         if (currentCourse instanceof Course) {
 
             // add main section to saved schedule, along with selected section if it exists
-            var tempMain = sched.getSelectedSectionForCourse(x);
+            let tempMain = sched.getSelectedSectionForCourse(x);
             tempCourseObj["main"] = tempMain === null ? null : [tempMain.CRN, tempMain.sectionNum];
 
             // do the same for extra sections
-            for (var extra in currentCourse.extra_sections) {
+            for (let extra in currentCourse.extra_sections) {
                 if (sched.selected.hasOwnProperty(x + extra) && sched.selected[x + extra] !== null) {
-                    var tempExtra= sched.course[x + extra].sections[sched.selected[x + extra]];
+                    let tempExtra= sched.course[x + extra].sections[sched.selected[x + extra]];
                     tempCourseObj[extra] = [tempExtra.CRN, tempExtra.sectionNum];
                 }
                 else {
@@ -275,9 +273,9 @@ function generateCourseDataToStore() {
  * Save current schedule to localStorage with a description, if provided.
  */
 export function generateAndStoreJSON() {
-    var $courseConfigDescription = $("#courseConfigDescription")
+    let $courseConfigDescription = $("#courseConfigDescription");
 
-    var description = $courseConfigDescription.val();
+    let description = $courseConfigDescription.val();
     $courseConfigDescription.val("");
 
     // Replace characters unfriendly with JSON
@@ -289,11 +287,11 @@ export function generateAndStoreJSON() {
     }
 
     // Increment counter
-    var courseConfigCounter = localStorage.getItem("courseConfigCounter");
+    let courseConfigCounter = localStorage.getItem("courseConfigCounter");
     localStorage.setItem("courseConfigCounter", ++courseConfigCounter);
 
     // Create object to be stored and add relevant information
-    var data = {};
+    let data = {};
     data.customName = description;
     data.courseData = generateCourseDataToStore();
     data.semester = CURRENT_SEMESTER;
@@ -309,7 +307,7 @@ export function generateAndStoreJSON() {
  * Remove saved schedule from localstorage and generate new list of course configurations.
  */
 export function removeFromStorage() {
-    var selectedConfig = $(this).attr("id").substring(12);
+    let selectedConfig = $(this).attr("id").substring(12);
     localStorage.removeItem("courseConfigData" + selectedConfig);
     findCourseConfigurations();
 }
@@ -331,8 +329,8 @@ function setSearchBox(value) {
  * @param section An optional specific section (eg 01)
  */
 function addNewCourse(department, course, section) {
-    var newCourse = new Course(department + " " + course);
-    var courseLength = sched.pushData(newCourse);
+    let newCourse = new Course(department + " " + course);
+    let courseLength = sched.pushData(newCourse);
 
     submitCourseRequest(courseLength, department, course, section);
 
@@ -373,8 +371,8 @@ function submitCourseRequest(courseLength, department, course, section) {
  * @param dept The department (eg CSCI)
  */
 function submitDeptRequest(dept) {
-    var newDept = new Department(dept, "dept");
-    var deptNum = sched.pushDept(newDept);
+    let newDept = new Department(dept, "dept");
+    let deptNum = sched.pushDept(newDept);
 
     $.ajax({
         url: DEPT_LOOKUP_URL + dept,
@@ -396,15 +394,15 @@ function submitDeptRequest(dept) {
  * @param long The actual name for the type (eg .5)
  */
 function submitOtherRequest(type, val, long) {
-    var newDept = type == 'ccc' ? new Department(val,type) : new Department(long, type);
-    var deptNum = sched.pushDept(newDept);
+    let newDept = type == 'ccc' ? new Department(val,type) : new Department(long, type);
+    let deptNum = sched.pushDept(newDept);
 
     $.ajax({
         url: OTHER_LOOKUP_URL + type + '/' + val,
         context: {deptNum: deptNum}
     }).done(deptResponseHandler).fail(courseButtonErrorHandler);
 
-    var eventCat = type == 'ccc' ? type : 'credit';
+    let eventCat = type == 'ccc' ? type : 'credit';
 
     ga('send', {
         hitType: 'event',
@@ -435,7 +433,7 @@ function deptResponseHandler(data) {
  * @param e The event object to be logged in the console.
  */
 function courseButtonErrorHandler(e) {
-    var selector;
+    let selector;
     if (this.courseLength !== undefined) {
         selector = "a[data-course='" + this.courseLength + "']";
     }
@@ -454,10 +452,10 @@ function courseButtonErrorHandler(e) {
  * @return {number} Integer representing the number of 30 minute intervals past 8am for the provided time.
  */
 export function parseHours(time) {
-  var splitted = time.split(":");
-  var hour = parseInt(splitted[0]);
-  var minutes = parseInt(splitted[1].slice(0,2));
-  var amOrPm = splitted[1].slice(2);
+  let splitted = time.split(":");
+  let hour = parseInt(splitted[0]);
+  let minutes = parseInt(splitted[1].slice(0,2));
+  let amOrPm = splitted[1].slice(2);
 
   if (amOrPm == "pm" && hour != 12) {
     hour += 12;
@@ -471,9 +469,9 @@ export function parseHours(time) {
  * Yes you can!
  */
 export function justDoIt() {
-    var text = $(this).val();
+    let text = $(this).val();
     text = text.toLowerCase();
-    var doIt = ["doit", "do it", "just do it", "justdoit"];
+    let doIt = ["doit", "do it", "just do it", "justdoit"];
     if (doIt.indexOf(text) !== -1) {
         $("#daysmonth").prepend(JUST_DO_IT);
         document.getElementById('doitvid').addEventListener('ended',function() {$(".shia-do-it").remove();},false);
@@ -489,7 +487,7 @@ export function justDoIt() {
     if (text === "inception") {
         recCount = (typeof recCount === 'undefined') ? 0 : recCount;
         recCount++;
-        var recString = '<iframe src="' + window.location.href + '" style="height:100%;width:100%;"></iframe>';
+        let recString = '<iframe src="' + window.location.href + '" style="height:100%;width:100%;"></iframe>';
         if (recCount == 1) {
             $("#daysmonth").html(recString);
         }
@@ -506,10 +504,10 @@ export function justDoIt() {
  */
 export function updateCourseTableBackdrop() {
     // add space to the current dialog
-    var newHeight = parseInt($("#courseTable .modal-dialog").css("height")) + 100;
+    let newHeight = parseInt($("#courseTable .modal-dialog").css("height")) + 100;
 
     // set the backdrop to the new height if it doesn't have enough space
-    var obj = $("#courseTable .modal-backdrop");
+    let obj = $("#courseTable .modal-backdrop");
     if (parseInt(obj.css("height")) < newHeight) {
         obj.css("height", newHeight + "px");
     }
@@ -524,10 +522,10 @@ export function updateCourseTableBackdrop() {
  * @param sections All sections for the current course
  */
 export function drawToScreen(y, selected, hidden, color, sections) {
-    var generated_list = [];
-    for (var x in sections) { // iterates through sections and draws
+    let generated_list = [];
+    for (let x in sections) { // iterates through sections and draws
         // true if section is unselected section that be an option to select
-        var hidden2;
+        let hidden2;
         if (selected === null || x != selected) {
             hidden2 = true;
             if (hidden) {
@@ -542,7 +540,7 @@ export function drawToScreen(y, selected, hidden, color, sections) {
             generated_list.push(sections[x].listGen('course' + y, !hidden2, x));
         }
     }
-    var sectionListHTML = sectionList(generated_list);
+    let sectionListHTML = sectionList(generated_list);
     $("#listViewData tbody").append(sectionListHTML);
 }
 
@@ -551,16 +549,16 @@ export function drawToScreen(y, selected, hidden, color, sections) {
  */
 export function sectionSelectionHandler() {
     $("#sectionDetails").html("");
-    var row = $("#listViewData .success");
-    var $sectionTable = $("#listViewData tbody");
-    var isDept = $sectionTable[0].hasAttribute("data-dept-level");
-    var clickedSection, clickedCourse = null;
+    let row = $("#listViewData .success");
+    let $sectionTable = $("#listViewData tbody");
+    let isDept = $sectionTable[0].hasAttribute("data-dept-level");
+    let clickedSection, clickedCourse = null;
     if (row.length > 0) {
-        var id = row.attr('id');
+        let id = row.attr('id');
         clickedSection = id.substring(7);
     }
     if (isDept && row.length != 0) {
-        var dept = $sectionTable.attr("data-dept-level");
+        let dept = $sectionTable.attr("data-dept-level");
         clickedCourse = row.attr("class").split(" ")[0].substring(6);
         sched.convertDeptToCourse(clickedCourse, clickedSection);
         sched.redrawData();
@@ -568,7 +566,7 @@ export function sectionSelectionHandler() {
     else {
         clickedCourse = sched.lastClickedCourseButton.id;
         if (row.length == 0) {
-            var schedClickedSection = sched.selected[clickedCourse];
+            let schedClickedSection = sched.selected[clickedCourse];
             if (schedClickedSection != null) { // set to self to reset
                 sched.handleSelect(clickedCourse, schedClickedSection);
                 sched.redrawData();
@@ -587,10 +585,10 @@ export function sectionSelectionHandler() {
  * Generates a new schedule when one is selected from the saved schedule list.
  */
 export function newScheduleFromConfig() {
-    var selectedConfig = $(this).attr("id").substring(12);
+    let selectedConfig = $(this).attr("id").substring(12);
 
     // remove old courses and course buttons
-    for (var y in sched.course) {
+    for (let y in sched.course) {
         $('.course' + y).remove();
     }
     $(".course-button").parent().remove();
@@ -599,12 +597,12 @@ export function newScheduleFromConfig() {
     sched = new Schedule();
 
     // retrieve saved schedule from local storage
-    var configData = localStorage.getItem("courseConfigData" + selectedConfig);
-    var courseData = JSON.parse(configData).courseData;
+    let configData = localStorage.getItem("courseConfigData" + selectedConfig);
+    let courseData = JSON.parse(configData).courseData;
 
     // send requests for the courses
-    for (var courseNum in courseData) {
-        var currentCourse = courseNum.split(" ");
+    for (let courseNum in courseData) {
+        let currentCourse = courseNum.split(" ");
         addNewCourse(currentCourse[0], currentCourse[1], JSON.stringify(courseData[courseNum]));
     }
 
@@ -615,11 +613,11 @@ export function newScheduleFromConfig() {
  * Initializes typeahead (search box) to use pre-loaded course descriptions and type names.
  */
 export function initializeTypeahead() {
-    var typeaheadConfiguration = [];
+    let typeaheadConfiguration = [];
 
     // create typeahead objects for each lookup type (CCC, credit, department, course)
-    for (var type in TYPEAHEAD_OPTIONS) {
-        var houndParams = {
+    for (let type in TYPEAHEAD_OPTIONS) {
+        let houndParams = {
             limit: 999,
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace.apply(this, TYPEAHEAD_OPTIONS[type].token),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -633,13 +631,13 @@ export function initializeTypeahead() {
             houndParams.sorter = function(a, b) {
 
                 //get input text
-                var InputString = $("#typeaheadInput").typeahead("val").toLowerCase();
+                let InputString = $("#typeaheadInput").typeahead("val").toLowerCase();
 
-                var inputLen = InputString.length;
+                let inputLen = InputString.length;
 
                 // get shortened courseNum, look at first len(InputString) letters
-                var shortA = a.courseNum.substring(0,inputLen).toLowerCase();
-                var shortB = b.courseNum.substring(0,inputLen).toLowerCase();
+                let shortA = a.courseNum.substring(0,inputLen).toLowerCase();
+                let shortB = b.courseNum.substring(0,inputLen).toLowerCase();
 
                 // case 1: a and b are in same dept:
                 // compare the letter ordering (eg MATH 120 vs MATH 200)
@@ -663,7 +661,7 @@ export function initializeTypeahead() {
             };
         }
 
-        var hound = new Bloodhound(houndParams);
+        let hound = new Bloodhound(houndParams);
 
         hound.initialize();
 
@@ -704,7 +702,7 @@ export function generateCustomLink() {
         .addClass("glyphicon-cloud-upload");
 
     // send course data
-    var courseData = generateCourseDataToStore();
+    let courseData = generateCourseDataToStore();
     $.when(
         $.get(STORE_CONFIG_URL, {config: JSON.stringify(courseData)})
     ).then(function (data) {
@@ -730,23 +728,23 @@ export function handleNewInput(_, datum){
 
     // lookup department
     if (datum.category === "department") {
-        var dept = datum["abbreviation"];
+        let dept = datum["abbreviation"];
         submitDeptRequest(dept);
     }
     // lookup CCC requirement
     else if (datum.category === "ccc") {
-        var ccc = datum["abbreviation"];
+        let ccc = datum["abbreviation"];
         submitOtherRequest('ccc', ccc, datum["name"]);
     }
     // lookup by credit
     else if (datum.category === "credit") {
-        var cred = datum["abbreviation"];
+        let cred = datum["abbreviation"];
         submitOtherRequest('credit', cred, datum["name"]);
     }
     // lookup course number
     else {
-        var courseNum = datum["courseNum"];
-        var currentCourse = courseNum.split(' ');
+        let courseNum = datum["courseNum"];
+        let currentCourse = courseNum.split(' ');
         addNewCourse(currentCourse[0], currentCourse[1], null);
     }
 }
@@ -757,12 +755,12 @@ export function handleNewInput(_, datum){
  */
 export function removeCourseButtonHandler(e) {
     e.stopPropagation();
-    var parentobj = $(this).parent().parent();
+    let parentobj = $(this).parent().parent();
     if (parentobj[0].hasAttribute("data-dept")) {
         sched.removeDept(parentobj.attr("data-dept"));
     }
     else {
-        var parent = parentobj.attr("data-course");
+        let parent = parentobj.attr("data-course");
         sched.removeCourse(parent);
     }
     parentobj.parent().slideUp('fast', function() {
@@ -790,7 +788,7 @@ export function initializeHandlebarsTemplates() {
  * @param e
  */
 export function revertToCourseGroupButtonHandler(e) {
-    var parent = $(this).parent().parent().attr("data-course");
+    let parent = $(this).parent().parent().attr("data-course");
     sched.convertCourseToDept(parent);
     e.stopPropagation();
 }
@@ -800,13 +798,13 @@ export function revertToCourseGroupButtonHandler(e) {
  */
 export function viewSectionListButtonHandler() {
     if ($(this)[0].hasAttribute("data-dept")) {
-        var dept = $(this).attr("data-dept");
+        let dept = $(this).attr("data-dept");
         sched.lastClickedCourseButton = {"type": "dept", "id": dept};
         sched.redrawDeptData(dept);
         $("#courseTable").modal();
     }
     else {
-        var id = $(this).attr('data-course');
+        let id = $(this).attr('data-course');
         if ($(this).hasClass("disabled") === false) {
             sched.lastClickedCourseButton = {"type": "course", "id": id};
             sched.redrawData();
@@ -820,7 +818,7 @@ export function viewSectionListButtonHandler() {
  * for that course.
  */
 export function viewSectionListFromCalendarHandler() {
-    var clickedCourse = $(this).attr('class').split(' ')[0].substring(6);
+    let clickedCourse = $(this).attr('class').split(' ')[0].substring(6);
     sched.lastClickedCourseButton = {"type": "course", "id": clickedCourse};
     sched.redrawData();
     $("#courseTable").modal();
@@ -830,7 +828,7 @@ export function viewSectionListFromCalendarHandler() {
  * Sends an error report with the values in the modal fields.
  */
 export function sendReport() {
-    var errorDescription = $("#errorDescription").val();
+    let errorDescription = $("#errorDescription").val();
 
     if (errorDescription !== "") {
         $(".reportRequired").removeClass("has-error");
@@ -887,8 +885,8 @@ export function clearReportErrorModal() {
  * name for each instance of that section.
  */
 export function calendarSectionHoverHandler(){
-    var stuff = $(this).attr("class").split(" ");
-    var selector = 'li.' + stuff[0] + '.' + stuff[1];
+    let stuff = $(this).attr("class").split(" ");
+    let selector = 'li.' + stuff[0] + '.' + stuff[1];
     $(selector + " .timesMet").toggle();
     $(selector + " .courseNum").toggle();
 }
@@ -899,11 +897,11 @@ export function calendarSectionHoverHandler(){
  */
 export function courseTableSectionHoverHandler() {
     if ($(this).parent().is("tbody")) {
-        var clickedCourse = $(this).attr('class').split(' ')[0];
-        var clickedCourseNum = clickedCourse.substring(6);
-        var id = $(this).attr('id');
-        var idNum = id.substring(7);
-        var $calendarSection = $("#calendar .course" + clickedCourseNum + ".section" + idNum);
+        let clickedCourse = $(this).attr('class').split(' ')[0];
+        let clickedCourseNum = clickedCourse.substring(6);
+        let id = $(this).attr('id');
+        let idNum = id.substring(7);
+        let $calendarSection = $("#calendar .course" + clickedCourseNum + ".section" + idNum);
         if (!$calendarSection.hasClass("selectedCalendarSection") && !$(this).hasClass("success")){
             $("#calendar ." + clickedCourse + "."+id).toggle().css("z-index", "5");
         }
@@ -921,13 +919,13 @@ export function courseTableSectionClickHandler() {
     }
     $("#listViewData .success").removeClass("success");
     $(this).addClass("success");
-    var clickedCourse = $(this).attr('class').split(' ')[0];
-    var clickedCourseNum = clickedCourse.substring(6);
-    var clickedSection = $(this).attr('class').split(' ')[1];
-    var idNum = clickedSection.substring(7);
-    var isDept = false;
+    let clickedCourse = $(this).attr('class').split(' ')[0];
+    let clickedCourseNum = clickedCourse.substring(6);
+    let clickedSection = $(this).attr('class').split(' ')[1];
+    let idNum = clickedSection.substring(7);
+    let isDept = false;
     if ($("#listViewData tbody")[0].hasAttribute("data-dept-level")) {
-        var dept = $(this).parent().attr("data-dept-level");
+        let dept = $(this).parent().attr("data-dept-level");
         $("#calendar [data-dept-num='" + dept + "'].unselectedCalendarSection").hide();
         isDept = true;
     }
@@ -951,6 +949,13 @@ export function openSaveModalButtonHandler() {
  */
 export function retryButtonHandler() {
     // TODO - implement retry handler or resend AJAX request in error handler
-    var id = $(this).attr("data-course") !== undefined ? $(this).attr("data-course") : $(this).attr("data-dept");
+    let id = $(this).attr("data-course") !== undefined ? $(this).attr("data-course") : $(this).attr("data-dept");
 }
 
+/**
+ * Setter method for showTooltop
+ * @param newShowTooltip A new boolean value
+ */
+export function setShowTooltip(newShowTooltip) {
+    showTooltip = newShowTooltip;
+}

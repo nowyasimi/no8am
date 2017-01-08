@@ -12,8 +12,8 @@ export class Department {
 
     initialRequest(data, color) {
         // create course objects for all courses in course group
-        for (var x in data) {
-            var newCourse = new Course(data[x].courseNum);
+        for (let x in data) {
+            let newCourse = new Course(data[x].courseNum);
             newCourse.mainColor = color;
             newCourse.initialRequest(data[x].sections);
             this.courses.push(newCourse);

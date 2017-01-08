@@ -2,7 +2,7 @@ import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL, DAYS_O
 
 import {
     setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, updateCourseTableBackdrop,
-    buttonGroup, extraSectionsButton, sectionDetails, courseOverlap, crnTable
+    buttonGroup, extraSectionsButton, sectionDetails, courseOverlap, crnTable, setShowTooltip
 } from './base';
 
 import {Course, ExtraCourse} from './Course';
@@ -24,8 +24,8 @@ export class Schedule {
      */
     streamDept(courses, deptNum) {
         // initialize course group with courses
-        var color = this.departments[deptNum].color;
-        var numCourses = this.departments[deptNum].initialRequest(courses, color);
+        let color = this.departments[deptNum].color;
+        let numCourses = this.departments[deptNum].initialRequest(courses, color);
 
         // update GUI with the number of courses
         setNumberOfCourses(deptNum, numCourses);
@@ -44,7 +44,7 @@ export class Schedule {
 
         this.departments[this.departmentLength] = data;
 
-        var options = {
+        let options = {
             deptNum: this.departmentLength,
             name: data.deptName,
             color: colorDict[data.color]["s"]
@@ -52,12 +52,12 @@ export class Schedule {
 
         // TODO - if ccc type course group, add list of department names to options
 
-        var buttonHTML = buttonGroup(options);
+        let buttonHTML = buttonGroup(options);
 
-        var button1Length = $("#buttons-1 .list-group-item").length;
-        var button2Length = $("#buttons-2 .list-group-item").length;
+        let button1Length = $("#buttons-1 .list-group-item").length;
+        let button2Length = $("#buttons-2 .list-group-item").length;
 
-        var buttonLocation = (button1Length <= button2Length) ? "#buttons-1" : "#buttons-2";
+        let buttonLocation = (button1Length <= button2Length) ? "#buttons-1" : "#buttons-2";
 
         $(buttonLocation).append(buttonHTML);
 
@@ -72,9 +72,9 @@ export class Schedule {
      * @returns {Array} An array of colors
      */
     generateColorArray(numColors) {
-        var usedColors = [];
-        for (var i = 0; i < numColors; i++) {
-            var current_color = colorChooser(this.course, this.departments, usedColors);
+        let usedColors = [];
+        for (let i = 0; i < numColors; i++) {
+            let current_color = colorChooser(this.course, this.departments, usedColors);
             usedColors.push(current_color);
         }
         return usedColors;
@@ -87,8 +87,8 @@ export class Schedule {
      */
     parseSelectedSections(courseLength, selectedSections) {
         selectedSections = JSON.parse(selectedSections);
-        for (var typeIndex in SECTION_TYPES) {
-            var type = SECTION_TYPES[typeIndex];
+        for (let typeIndex in SECTION_TYPES) {
+            let type = SECTION_TYPES[typeIndex];
             if (selectedSections.hasOwnProperty(type) && selectedSections[type] !== null) {
                 this.searchAndSet(courseLength, selectedSections[type][0], type == "main" ? "" : type);
             }
@@ -108,28 +108,28 @@ export class Schedule {
         }
 
         // initialize course with sections
-        var numSections = this.course[courseLength].initialRequest(sections);
+        let numSections = this.course[courseLength].initialRequest(sections);
 
-        var a = this.course[courseLength].sections[0];
+        let a = this.course[courseLength].sections[0];
 
-        var colors = this.generateColorArray(Object.keys(this.course[courseLength].extra_sections).length);
-        var color_i = 0;
+        let colors = this.generateColorArray(Object.keys(this.course[courseLength].extra_sections).length);
+        let color_i = 0;
 
-        var courseNum = this.course[courseLength].courseNum;
+        let courseNum = this.course[courseLength].courseNum;
 
-        var templateSections = [];
+        let templateSections = [];
 
-        for (var extra in this.course[courseLength].extra_sections) {
-            var current_color = colors[color_i++];
+        for (let extra in this.course[courseLength].extra_sections) {
+            let current_color = colors[color_i++];
             this.course[courseLength].extra_sections[extra] = current_color;
             if (this.course[courseLength].extra_section_independent[extra]) {
                 this.course[courseLength].extra_section_lists[extra] = new ExtraCourse(a.extra_section_lists[extra], current_color);
             }
 
-            var isIndependent = this.course[courseLength].extra_section_independent[extra];
-            var extra_text = isIndependent ? this.course[courseLength].extra_section_lists[extra].sections.length + " Sections" : "Select Main Section First";
+            let isIndependent = this.course[courseLength].extra_section_independent[extra];
+            let extra_text = isIndependent ? this.course[courseLength].extra_section_lists[extra].sections.length + " Sections" : "Select Main Section First";
 
-            var options = {
+            let options = {
                 name: courseNum + extra,
                 courseId: courseLength + extra.toUpperCase(),
                 color: colorDict[current_color]["s"],
@@ -141,10 +141,10 @@ export class Schedule {
             templateSections.push(options);
         }
 
-        var buttonHTML = extraSectionsButton(templateSections);
+        let buttonHTML = extraSectionsButton(templateSections);
         $("a[data-course='"+ courseLength +"']").parent().append(buttonHTML).children().slideDown();
 
-        for (var extra in this.course[courseLength].extra_sections) {
+        for (let extra in this.course[courseLength].extra_sections) {
             if (this.course[courseLength].extra_section_independent[extra]) {
                 this.course[courseLength + extra] = this.course[courseLength].extra_section_lists[extra];
                 this.selected[courseLength + extra] = null;
@@ -165,16 +165,16 @@ export class Schedule {
     pushData(courseInfo) { // for initial creation
         removeIntroInfo();
 
-        var courseNum = courseInfo.courseNum;
+        let courseNum = courseInfo.courseNum;
         courseInfo.mainColor = this.generateColorArray(1)[0];
 
-        var options = {
+        let options = {
             name: courseNum,
             courseId: this.courseLength,
             color: colorDict[courseInfo.mainColor]["s"]
         };
 
-        var buttonHTML = buttonGroup(options);
+        let buttonHTML = buttonGroup(options);
 
         if ($("#buttons-1 .list-group-item").length <= $("#buttons-2 .list-group-item").length) {
             $("#buttons-1").append(buttonHTML);
@@ -196,18 +196,18 @@ export class Schedule {
      * displayed in the GUI.
      */
     calculateClassHours() {
-        var totalHours = 0;
+        let totalHours = 0;
 
-        for (var section in this.selected) {
+        for (let section in this.selected) {
             if (this.selected[section] !== null){
-                var daysMet = this.getSelectedSectionForCourse(section).daysMet;
-                for (var i in daysMet) {
+                let daysMet = this.getSelectedSectionForCourse(section).daysMet;
+                for (let i in daysMet) {
                     totalHours += Math.round(daysMet[i][2])/2;
                 }
             }
         }
 
-        var stringFormatted = Math.round(totalHours * 100) / 100;
+        let stringFormatted = Math.round(totalHours * 100) / 100;
         $(".courseHours").text(stringFormatted);
     }
 
@@ -217,8 +217,8 @@ export class Schedule {
      * @returns Either the selected section or null if a section hasn't been selected
      */
     getSelectedSectionForCourse(courseIndex) {
-        var sectionIndex = this.selected[courseIndex];
-        var courseObject = this.course[courseIndex];
+        let sectionIndex = this.selected[courseIndex];
+        let courseObject = this.course[courseIndex];
 
         return sectionIndex === null ? null : courseObject.sections[sectionIndex];
     };
@@ -229,16 +229,16 @@ export class Schedule {
      * @returns {*[]} An array containing time intervals for each day of the week.
      */
     generateTimeIntervalsPerDay() {
-        var weekDays = [[], [], [], [], []];
+        let weekDays = [[], [], [], [], []];
 
-        for (var section in this.selected) {
-            var sectionObject = this.getSelectedSectionForCourse(section);
+        for (let section in this.selected) {
+            let sectionObject = this.getSelectedSectionForCourse(section);
             if (sectionObject !== null) {
-                var daysMet = sectionObject.daysMet;
-                for (var i in daysMet) {
-                    var dayWeek = daysMet[i][0];
-                    var interval = daysMet[i].slice(1);
-                    var iToPush = DAYS_OF_WEEK.indexOf(dayWeek);
+                let daysMet = sectionObject.daysMet;
+                for (let i in daysMet) {
+                    let dayWeek = daysMet[i][0];
+                    let interval = daysMet[i].slice(1);
+                    let iToPush = DAYS_OF_WEEK.indexOf(dayWeek);
                     weekDays[iToPush].push({"course": section, "time": interval[0] + "s"}, {
                         "course": section,
                         "time": (interval[0] + interval[1]) + "e"
@@ -251,25 +251,25 @@ export class Schedule {
     };
 
     overlapDetection() {
-        var weekDays = this.generateTimeIntervalsPerDay();
+        let weekDays = this.generateTimeIntervalsPerDay();
 
-        var overlaps = [];
+        let overlaps = [];
 
-        var tempCourse = "";
-        for (var day in weekDays) {
+        let tempCourse = "";
+        for (let day in weekDays) {
             weekDays[day].sort(customSort);
-            var inClass = false;
-            for (var x in weekDays[day]) {
-                var timeInt = weekDays[day][x].time;
-                var startOrEnd = timeInt.substring(timeInt.length-1);
+            let inClass = false;
+            for (let x in weekDays[day]) {
+                let timeInt = weekDays[day][x].time;
+                let startOrEnd = timeInt.substring(timeInt.length-1);
                 if (startOrEnd == "s" && inClass === true) {
-                    var course2 = weekDays[day][x].course;
-                    var repeat = false;
+                    let course2 = weekDays[day][x].course;
+                    let repeat = false;
                     // place overlapping sections alongside each other
                     $("#" + DAYS_OF_WEEK[day] + " .course" + tempCourse).css("width", "10%");
                     $("#" + DAYS_OF_WEEK[day] + " .course" + course2).css("width", "10%").css("margin-left", "10%");
 
-                    for (var i = 0; i < overlaps.length; i++) {
+                    for (let i = 0; i < overlaps.length; i++) {
                         if ((overlaps[i]["course1Id"] == tempCourse && overlaps[i]["course2Id"] == course2) ||
                             (overlaps[i]["course2Id"] == tempCourse && overlaps[i]["course1Id"] == course2)) {
                             repeat = true;
@@ -296,7 +296,7 @@ export class Schedule {
         }
 
         if (overlaps.length > 0) {
-            var overlapStr = courseOverlap(overlaps);
+            let overlapStr = courseOverlap(overlaps);
             $("#doneEditing").addClass("course-overlap");
             $("#hasOverlap").show().html(overlapStr);
         }
@@ -316,7 +316,7 @@ export class Schedule {
      * @param letter Empty string if a main section, or a letter like "R", "L", "P"
      */
     searchAndSet(courseNum, sectionToSet, letter){
-        for (var x in this.course[courseNum + letter].sections) {
+        for (let x in this.course[courseNum + letter].sections) {
             if (this.course[courseNum + letter].sections[x].CRN == sectionToSet) {
                 this.handleSelect(courseNum + letter, x.toString());
                 this.redrawData();
@@ -333,16 +333,16 @@ export class Schedule {
      */
     updateExtraSectionsAfterMainSelect(clickedCourse, clickedSection, convertFromDept) {
         // loop through extra courses
-        for (var extra in this.course[clickedCourse].extra_sections) {
+        for (let extra in this.course[clickedCourse].extra_sections) {
             // ignore extra courses that are independent of the main course
             if (this.course[clickedCourse].extra_section_independent[extra]) {
                 continue;
             }
-            // TODO - see if this variable is necessary
+            // TODO - see if this letiable is necessary
             if (convertFromDept !== null) {
                 // enable selection of extra section and update section count in GUI
                 $('a[data-course="'+ clickedCourse + extra +'"]').removeClass('disabled');
-                var sections_to_add = this.course[clickedCourse].sections[clickedSection].extra_section_lists[extra];
+                let sections_to_add = this.course[clickedCourse].sections[clickedSection].extra_section_lists[extra];
                 this.course[clickedCourse + extra] = new ExtraCourse(sections_to_add, this.course[clickedCourse].extra_sections[extra]);
                 $("a[data-course='"+ clickedCourse + extra +"']" + " .course-success").hide();
                 setNumberOfSections(clickedCourse + extra, this.course[clickedCourse + extra].sections.length);
@@ -357,7 +357,7 @@ export class Schedule {
      * @param clickedCourse
      */
     removeExtraSectionsAfterMainSelect(clickedCourse) {
-        for (var extra in this.course[clickedCourse].extra_sections) {
+        for (let extra in this.course[clickedCourse].extra_sections) {
             if (!this.course[clickedCourse].extra_section_independent[extra]) {
                 $("a[data-course='"+ clickedCourse + extra +"']" + ' p').text("Select Main Section First");
                 $("a[data-course='"+ clickedCourse + extra +"']").addClass('disabled');
@@ -378,8 +378,8 @@ export class Schedule {
 
         // Check if course being handle is a main course by checking
         // if the last character of the course ID is a number
-        var lastChar = clickedCourse.substring(clickedCourse.length-1);
-        var isMainSection = Number(lastChar) == lastChar;
+        let lastChar = clickedCourse.substring(clickedCourse.length-1);
+        let isMainSection = Number(lastChar) == lastChar;
 
         // No section was previously chosen for this course
         if (this.selected[clickedCourse] === null) {
@@ -409,7 +409,7 @@ export class Schedule {
 
         // notify user that their custom link is out of date
         if ($("#generatedLinkHolder").text().length > 0) {
-            showTooltip = true;
+            setShowTooltip(true);
         }
 
         // send event to Google Analytics
@@ -429,16 +429,16 @@ export class Schedule {
     }
 
     convertCourseToDept(clickedCourse) {
-        var courseInfo = this.course[clickedCourse];
-        var dept_id = courseInfo.fromDeptButton;
-        var dept = this.departments[dept_id];
+        let courseInfo = this.course[clickedCourse];
+        let dept_id = courseInfo.fromDeptButton;
+        let dept = this.departments[dept_id];
         $("a[data-course='"+ clickedCourse +"']").removeAttr("data-course").attr("data-dept", dept_id);
         $("a[data-dept='" + dept_id + "'] .course-success").hide();
         $("a[data-dept='" + dept_id + "'] .courseNumBox").text(dept.deptName);
         $("a[data-dept='" + dept_id + "'] .course-revert").hide();
         setNumberOfCourses(dept_id, dept.courses.length);
 
-        for (var extra in courseInfo.extra_sections) {
+        for (let extra in courseInfo.extra_sections) {
             $("a[data-course='"+ clickedCourse + extra +"']").slideUp('fast', function() {
                 $(this).remove();
             });
@@ -448,19 +448,19 @@ export class Schedule {
     }
 
     convertDeptToCourse(clickedCourse, clickedSection) {
-        var dept = this.lastClickedCourseButton.id;
-        var type = this.departments[dept].deptType;
+        let dept = this.lastClickedCourseButton.id;
+        let type = this.departments[dept].deptType;
         if (type == "dept") {
-            var courseInfo = this.departments[dept].courses[clickedCourse];
+            let courseInfo = this.departments[dept].courses[clickedCourse];
             this.convertDeptToCourseHelper(dept, courseInfo, clickedSection, null);
         }
         else {
-            var sectionObj = this.departments[dept].courses[clickedCourse].sections[clickedSection];
-            var department = sectionObj.courseNum.split(" ")[0];
-            var courseOrig = sectionObj.courseNum.split(" ")[1];
-            var section = sectionObj.courseNum.split(" ")[2];
-            var course = courseOrig;
-            var extra = course.slice(course.length-1);
+            let sectionObj = this.departments[dept].courses[clickedCourse].sections[clickedSection];
+            let department = sectionObj.courseNum.split(" ")[0];
+            let courseOrig = sectionObj.courseNum.split(" ")[1];
+            let section = sectionObj.courseNum.split(" ")[2];
+            let course = courseOrig;
+            let extra = course.slice(course.length-1);
 
             // check if course is a main section or extra section
             if (extra > "9") {
@@ -481,7 +481,7 @@ export class Schedule {
                 url: COURSE_LOOKUP_URL + department + '/' + course,
                 context: {dept: dept, courseNum: department + " " + course, clickedSection: section, extra: extra}
             }).done(function(data) {
-                var newCourse = new Course(this.courseNum);
+                let newCourse = new Course(this.courseNum);
                 newCourse.initialRequest(data.sections);
                 sched.convertDeptToCourseHelper(this.dept, newCourse, null, this);
             });
@@ -489,19 +489,19 @@ export class Schedule {
     }
 
     convertDeptToCourseHelper(dept, courseInfo, clickedSection, info) {
-        var clickedCourse = this.courseLength.toString();
+        let clickedCourse = this.courseLength.toString();
 
-        var courseNum = courseInfo.courseNum;
+        let courseNum = courseInfo.courseNum;
 
-        var testSection = courseInfo.sections[0];
+        let testSection = courseInfo.sections[0];
 
         courseInfo.mainColor = this.departments[dept].color;
 
-        var colors = this.generateColorArray(Object.keys(courseInfo.extra_sections).length);
-        var color_i = 0;
+        let colors = this.generateColorArray(Object.keys(courseInfo.extra_sections).length);
+        let color_i = 0;
 
-        for (var extra in courseInfo.extra_sections) {
-            var current_color = colors[color_i];
+        for (let extra in courseInfo.extra_sections) {
+            let current_color = colors[color_i];
             courseInfo.extra_sections[extra] = current_color;
             color_i++;
             // TODO - set the extra course color to the dept color if extra course was selected
@@ -517,12 +517,12 @@ export class Schedule {
         this.selected[this.courseLength] = null;
 
 
-        var clickedSectionNew = null;
+        let clickedSectionNew = null;
         if (clickedSection == null) {
-            var extra = info.extra;
+            let extra = info.extra;
             // need to find clickedSection, is main
             if (info.extra == "") {
-                for (var section in courseInfo.sections) {
+                for (let section in courseInfo.sections) {
                     if (courseInfo.sections[section].sectionNum == info.clickedSection) {
                         clickedSectionNew = section;
                     }
@@ -531,7 +531,7 @@ export class Schedule {
             // need to find clickedSection, is extra
             else if (courseInfo.extra_section_lists.hasOwnProperty(extra) ) {
                 clickedCourse = clickedCourse + extra;
-                for (var section in courseInfo.extra_section_lists[extra].sections) {
+                for (let section in courseInfo.extra_section_lists[extra].sections) {
                     if (courseInfo.extra_section_lists[extra].sections[section].sectionNum == info.clickedSection) {
                         clickedSectionNew = section;
                     }
@@ -547,17 +547,17 @@ export class Schedule {
             clickedSectionNew = clickedSection;
         }
 
-        var $courseButton = $("a[data-dept='" + dept + "']").attr("data-course", this.courseLength).removeAttr("data-dept");
+        let $courseButton = $("a[data-dept='" + dept + "']").attr("data-course", this.courseLength).removeAttr("data-dept");
         $courseButton.find(".courseNumBox").text(courseNum);
         $courseButton.find(".course-revert").show();
 
         setNumberOfSections(this.courseLength, courseInfo.sections.length);
 
-        var templateSections = [];
+        let templateSections = [];
 
-        for (var extra in courseInfo.extra_sections) {
-            var courseId = this.courseLength + extra
-            var options = {
+        for (let extra in courseInfo.extra_sections) {
+            let courseId = this.courseLength + extra
+            let options = {
                 name: courseNum + extra,
                 courseId: courseId,
                 color: colorDict[courseInfo.extra_sections[extra]]["s"],
@@ -569,7 +569,7 @@ export class Schedule {
             templateSections.push(options);
         }
 
-        var buttonHTML = extraSectionsButton(templateSections);
+        let buttonHTML = extraSectionsButton(templateSections);
         $courseButton.parent().append(buttonHTML).children().slideDown();
 
         if (clickedSectionNew != null) {
@@ -593,8 +593,8 @@ export class Schedule {
         $('.open li').remove();
 
         // draws all sections for current course, and only selected sections for other courses
-        for (var y in this.course) {
-            var course_elements = this.course[y].courseDrawToScreen(y, this.selected[y], y!=this.lastClickedCourseButton.id);
+        for (let y in this.course) {
+            let course_elements = this.course[y].courseDrawToScreen(y, this.selected[y], y!=this.lastClickedCourseButton.id);
         }
 
         this.updateCRNList();
@@ -614,12 +614,12 @@ export class Schedule {
         $('.open li').remove();
 
         // draw selected sections for each course
-        for (var y in this.course) {
+        for (let y in this.course) {
             this.course[y].courseDrawToScreen(y, this.selected[y], true);
         }
 
         // draw courses for the currently selected department
-        for (var y in this.departments[dept].courses) {
+        for (let y in this.departments[dept].courses) {
             this.departments[dept].courses[y].courseDrawToScreen(y, null, false);
         }
 
@@ -642,7 +642,7 @@ export class Schedule {
             eventLabel: this.course[parent].courseNum
         });
 
-        for (var extra in this.course[parent].extra_sections) {
+        for (let extra in this.course[parent].extra_sections) {
             if (this.selected[parent + extra] !== null) {
                 $(".course" + parent + extra).remove();
             }
@@ -670,19 +670,19 @@ export class Schedule {
      * Update list of selected sections, including CRNs.
      */
     updateCRNList() {
-        var $crnPanel = $("#crnlist .panel-body");
-        var crnListData = [];
+        let $crnPanel = $("#crnlist .panel-body");
+        let crnListData = [];
 
-        for (var course in this.selected) {
+        for (let course in this.selected) {
             if (this.selected[course] === null) {
                 continue;
             }
-            var current = this.getSelectedSectionForCourse(course);
+            let current = this.getSelectedSectionForCourse(course);
 
             crnListData.push(current);
         }
 
-        var crnListHTML = crnTable(crnListData);
+        let crnListHTML = crnTable(crnListData);
         $crnPanel.html(crnListHTML);
     }
 
@@ -693,14 +693,14 @@ export class Schedule {
      * @param sectionNum The specific section to get details for.
      */
     getSectionDetails(dept_id, course, sectionNum) {
-        var section;
+        let section;
         if (dept_id)
             section = this.departments[this.lastClickedCourseButton.id].courses[course].sections[sectionNum];
         else
             section = this.course[course].sections[sectionNum];
 
-        var crn = section.CRN;
-        var dept = section.courseNum.split(" ")[0];
+        let crn = section.CRN;
+        let dept = section.courseNum.split(" ")[0];
 
         $(".spinner2").show();
 
@@ -710,15 +710,15 @@ export class Schedule {
             context: {section: section}
         }).done(function(data) {
             $(".spinner2").hide();
-            var section = this.section;
-            var $page = $($.parseHTML(data.section_details));
-            var rows = $page.find("tr");
-            var message = section.message || ":";
-            var message_split_index = message.indexOf(":");
+            let section = this.section;
+            let $page = $($.parseHTML(data.section_details));
+            let rows = $page.find("tr");
+            let message = section.message || ":";
+            let message_split_index = message.indexOf(":");
 
-            var details = [];
+            let details = [];
 
-            for (var x = 5; x < 10; x++) {
+            for (let x = 5; x < 10; x++) {
                 if ($.trim(rows[x].children[1].innerText) != "") {
                     details.push({
                         detailTitle: rows[x].children[0].innerText,
@@ -727,9 +727,9 @@ export class Schedule {
                 }
             }
 
-            var message_contents = message == ":" ? "" : message.slice(message_split_index);
+            let message_contents = message == ":" ? "" : message.slice(message_split_index);
 
-            var options = {
+            let options = {
                 messageTitle: message.slice(0,message_split_index),
                 messageContents: message_contents,
                 title: section.courseName,
@@ -740,7 +740,7 @@ export class Schedule {
                 details: details
             };
 
-            var sectionDetailsHTML = sectionDetails(options);
+            let sectionDetailsHTML = sectionDetails(options);
             $("#sectionDetails").html(sectionDetailsHTML);
             updateCourseTableBackdrop();
         });
