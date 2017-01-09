@@ -5,6 +5,7 @@ browserify-cache.json
 
 # development cache for minified files
 app.js
+prod-app.js
 min_css
 
 

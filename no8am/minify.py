@@ -1,18 +1,37 @@
-from rcssmin import cssmin
 import boto3
 import time
 import json
+import os
 import StringIO
+from flask_assets import Bundle
+from webassets.filter import register_filter
+from webassets_browserify import Browserify
 
-from no8am import app, generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, STATIC_LOCATION, \
-	CLOUDFRONT_DISTRIBUTION_ID
+from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, STATIC_LOCATION, \
+	CLOUDFRONT_DISTRIBUTION_ID, assets
 
 S3_BUCKET_NAME = "no8.am"
 JS_OUTPUT_FILENAME = "app.js"
+PROD_JS_OUTPUT_FILENAME = "prod-app.js"
 
 course_descriptions = None
+output_stream = StringIO.StringIO()
 
-# TODO - save course descriptions remotely and use remote descriptions when updating static files
+register_filter(Browserify)
+
+assets.cache = False
+assets.manifest = None
+
+js_files_development = Bundle('js/Index.js', filters=['browserify'], output=JS_OUTPUT_FILENAME)
+js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], output=PROD_JS_OUTPUT_FILENAME)
+
+css_home = Bundle('css/bootstrap.min.css', 'css/home.css', filters='cleancss', output='min_css/home.css')
+css_bucknell = Bundle('css/bootstrap.min.css', 'css/calendar.css', filters='cleancss', output='min_css/bucknell.css')
+
+assets.register('app-js', js_files_development)
+assets.register('app-js-prod', js_files_production)
+assets.register('home-css', css_home)
+assets.register('bucknell-css', css_bucknell)
 
 
 def generate_metadata():
@@ -37,32 +56,12 @@ def generate_metadata():
 		"credit": CREDIT_LIST
 	}
 
-	return "metadata=" + json.dumps(metadata, ensure_ascii=False)
-
-
-def minify_javascript():
-	"""
-	Runs files through JavaScript minification program. Used for uploading to S3.
-
-	:param file_list: Files to minify
-	:return: Minified files bundled together in one string.
-	"""
-
-	global js_files_production
-
-	app.config.update(
-		UGLIFYJS_BIN='./node_modules/.bin/uglifyjs',
-		UGLIFYJS_EXTRA_ARGS=['-c', '-m']
-	)
-
-	output = StringIO.StringIO()
-
-	js_files_production.build(force=True, output=output, disable_cache=True)
+	return json.dumps(metadata, ensure_ascii=False)
 
 	return output.getvalue()
 
 
-def minify_css(file_list):
+def minify_css(file):
 	"""
 	Runs files through CSS minification program. Used for uploading to S3.
 
@@ -70,28 +69,14 @@ def minify_css(file_list):
 	:return: Minified files bundled together in one string.
 	"""
 
-	minified = ""
-	for file_name in file_list:
-		with open("no8am/static/" + file_name, 'r') as f:
-			contents = f.read()
-		minified += cssmin(contents)
-	return minified
+	output = StringIO.StringIO()
 
+	if file == 'home.css':
+		css_home.build(force=True, output=output, disable_cache=True)
+	elif file == 'bucknell.css':
+		css_bucknell.build(force=True, output=output, disable_cache=True)
 
-def map_minify_name_to_files(file):
-	"""
-	Defines groups of files that can be minified.
-
-	:param file: Name of group of files to minify.
-	:return: Minifed files
-	"""
-
-	if file == "home.css":
-		return minify_css(["css/bootstrap.min.css", "css/home.css"])
-	elif file == "bucknell.css":
-		return minify_css(["css/bootstrap.min.css", "css/calendar.css"])
-
-	print "invalid page"
+	return output.getvalue()
 
 
 def update_static_files():
@@ -122,27 +107,23 @@ def update_static_files():
 	s3 = boto3.resource('s3')
 	cloudfront = boto3.client('cloudfront')
 
-	# create the directories, if they don't exist
-	directories = ["css", "fonts"]
-	for d in directories:
-		s3.Object(S3_BUCKET_NAME, d + '/').put(Body='')
-
-	# generate and upload minified JS
-	data = minify_javascript()
-	s3.Object(S3_BUCKET_NAME, JS_OUTPUT_FILENAME).put(Body=data, ContentType='application/javascript', CacheControl='max-age=900')
+	# delete old file minified file and generate and upload new minified JS (.urls() method runs file through minifier)
+	os.remove('no8am/static/' + PROD_JS_OUTPUT_FILENAME)
+	js_files_production.urls()
+	s3.Object(S3_BUCKET_NAME, 'static/' + JS_OUTPUT_FILENAME).put(Body=open("no8am/static/"+PROD_JS_OUTPUT_FILENAME, 'rb'), ContentType='application/javascript', CacheControl='max-age=900')
 
 	# generate and upload minified CSS
 	to_minify = ["home.css", "bucknell.css"]
 	for m in to_minify:
-		data = map_minify_name_to_files(m)
-		s3.Object(S3_BUCKET_NAME, "css/" + m).put(Body=data, ContentType = 'text/css', CacheControl='max-age=900')
+		data = minify_css(m)
+		s3.Object(S3_BUCKET_NAME, 'static/min_css/' + m).put(Body=data, ContentType = 'text/css', CacheControl='max-age=900')
 
 	# upload all other files to S3
-	files = ["css/bg.png", "fonts/glyphicons-halflings-regular.eot", "fonts/glyphicons-halflings-regular.svg",
+	files = ["bg.png", "fonts/glyphicons-halflings-regular.eot", "fonts/glyphicons-halflings-regular.svg",
 	"fonts/glyphicons-halflings-regular.ttf", "fonts/glyphicons-halflings-regular.woff",
 	"fonts/glyphicons-halflings-regular.woff2", "favicon.ico"]
 	for f in files:
-		s3.Object(S3_BUCKET_NAME, f).put(Body=open("no8am/static/" + f, 'rb'))
+		s3.Object(S3_BUCKET_NAME, 'static/' + f).put(Body=open("no8am/static/" + f, 'rb'))
 
 	# invalidate CloudFront cache
 	response = cloudfront.create_invalidation(

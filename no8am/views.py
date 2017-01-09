@@ -80,6 +80,8 @@ def course_lookup(department=None, course_number=None):
 	if department is None and course_number is None:
 		return jsonify(departments=DEPARTMENT_LIST)
 
+	department = department.upper()
+
 	cache_time, department_data = Department.process_department_request(department)
 
 	# return all courses in department
