@@ -7,7 +7,7 @@ from flask_assets import Bundle
 from webassets.filter import register_filter
 from webassets_browserify import Browserify
 
-from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, STATIC_LOCATION, \
+from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, \
 	CLOUDFRONT_DISTRIBUTION_ID, assets
 
 S3_BUCKET_NAME = "no8.am"
@@ -40,7 +40,7 @@ def generate_metadata():
 	is added to the minified javascript file that is uploaded to S3. It is also sent directly to the browser during
 	debugging.
 
-	:return: A dictionary containing metadata
+	:return: A JSON-formatted string containing metadata
 	"""
 
 	global course_descriptions
@@ -57,8 +57,6 @@ def generate_metadata():
 	}
 
 	return json.dumps(metadata, ensure_ascii=False)
-
-	return output.getvalue()
 
 
 def minify_css(file):
@@ -99,28 +97,20 @@ def invalidate_cache():
 
 def update_metadata():
 	"""
-
-	:return: True if metadata is updated
+	Get course descriptions and use them to create a new metadata dictionary. This dictionary is uploaded to S3 and is
+	used for the autocomplete search box.
 	"""
 
 	global course_descriptions
 
-	update_static = None if STATIC_LOCATION == "local" else 'y'
-
-	while update_static not in ['y', 'n']:
-		update_static = raw_input("Update metadata? [y/n]: ")
-
-	if update_static == 'n':
-		return False
-
 	course_descriptions = generate_course_descriptions()
 	metadata = generate_metadata()
+	remote_metadata_path = 'static/metadata.json'
 
 	s3 = boto3.resource('s3')
 
-	s3.Object(S3_BUCKET_NAME, 'static/metadata.json').put(Body=metadata, ContentType='application/json', CacheControl='max-age=900')
-
-	return True
+	s3.Object(S3_BUCKET_NAME, remote_metadata_path)\
+		.put(Body=metadata, ContentType='application/json', CacheControl='max-age=900')
 
 
 def update_static_files():
@@ -128,22 +118,9 @@ def update_static_files():
 	Minifies and pushes static assets to S3 and invalidates the cache in Amazon Cloudfront. The files are minified to
 	reduce the number of requests the client needs to make when retrieving static assets. The cache invalidation is made
 	to reduce the time needed for the client to access the updated files.
-
-	:return True if files are uploaded
 	"""
 
-	# TODO - write metadata file to S3 for general use
-
 	global course_descriptions
-
-	update_static = None
-
-	# Ask developer if static file update is necessary
-	while update_static not in ['y', 'n']:
-		update_static = raw_input("Update static files? [y/n]: ")
-
-	if update_static == 'n':
-		return False
 
 	print "updating static"
 	s3 = boto3.resource('s3')
@@ -153,13 +130,15 @@ def update_static_files():
 	if os.path.isfile(prod_js_path):
 		os.remove(prod_js_path)
 	js_files_production.urls()
-	s3.Object(S3_BUCKET_NAME, 'static/' + JS_OUTPUT_FILENAME).put(Body=open(prod_js_path, 'rb'), ContentType='application/javascript', CacheControl='max-age=900')
+	s3.Object(S3_BUCKET_NAME, 'static/' + JS_OUTPUT_FILENAME).\
+		put(Body=open(prod_js_path, 'rb'), ContentType='application/javascript', CacheControl='max-age=900')
 
 	# generate and upload minified CSS
 	to_minify = ["home.css", "bucknell.css"]
 	for m in to_minify:
 		data = minify_css(m)
-		s3.Object(S3_BUCKET_NAME, 'static/min_css/' + m).put(Body=data, ContentType = 'text/css', CacheControl='max-age=900')
+		s3.Object(S3_BUCKET_NAME, 'static/min_css/' + m).\
+			put(Body=data, ContentType='text/css', CacheControl='max-age=900')
 
 	# upload all other files to S3
 	files = ["bg.png", "fonts/glyphicons-halflings-regular.eot", "fonts/glyphicons-halflings-regular.svg",
@@ -168,6 +147,3 @@ def update_static_files():
 
 	for f in files:
 		s3.Object(S3_BUCKET_NAME, 'static/' + f).put(Body=open("no8am/static/" + f, 'rb'))
-
-	return True
-

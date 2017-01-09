@@ -6,10 +6,25 @@ from no8am.minify import update_static_files, update_metadata, invalidate_cache
 
 
 def update_static_files_wrapper():
-    invalidate_from_files = update_static_files()
-    invalidate_from_metadata = update_metadata()
 
-    if invalidate_from_files or invalidate_from_metadata:
+    update_static_response = None
+    update_metadata_response = None
+
+    # Ask developer if static file update is necessary
+    while update_static_response not in ['y', 'n']:
+        update_static_response = raw_input("Update static files? [y/n]: ")
+
+    while update_metadata_response not in ['y', 'n']:
+        update_metadata_response = raw_input("Update metadata? [y/n]: ")
+
+    # update the requested files to S3 and invalidate the CloudFront cache
+    if update_static_response:
+        update_static_files()
+
+    if update_metadata_response:
+        update_metadata()
+
+    if update_metadata_response or update_static_response:
         invalidate_cache()
 
 
