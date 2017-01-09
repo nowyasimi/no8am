@@ -326,9 +326,9 @@ function setSearchBox(value) {
  *
  * @param department The department for the course (eg CSCI)
  * @param course The course number (eg 203)
- * @param section An optional specific section (eg 01)
+ * @param section Select a specific section (eg 01) when all sections load in
  */
-export function addNewCourse(department, course, section) {
+function addNewCourse(department, course, section) {
     let newCourse = new Course(department + " " + course);
     let courseLength = sched.pushData(newCourse);
 
@@ -349,7 +349,19 @@ export function addNewCourse(department, course, section) {
     });
 }
 
-global.addNewCourse = addNewCourse;
+
+/**
+ * Send course requests for each course in the saved schedule.
+ *
+ * @param savedSchedule An object containing saved course data
+ */
+export function addCoursesInSavedSchedule(savedSchedule) {
+    console.log(savedSchedule);
+    for (let courseNum in savedSchedule) {
+        let currentCourse = courseNum.split(" ");
+        addNewCourse(currentCourse[0], currentCourse[1], JSON.stringify(savedSchedule[courseNum]));
+    }
+}
 
 /**
  * Submits new course request for all sections of a course.

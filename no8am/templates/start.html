@@ -21,15 +21,7 @@
   </script>
 
   <script type="text/javascript">
-      function sendSavedSchedule() {
-        {% if customData != None %}
-            var courseData = {{ customData|tojson }};
-            for (var courseNum in courseData) {
-              var currentCourse = courseNum.split(" ");
-              addNewCourse(currentCourse[0], currentCourse[1], JSON.stringify(courseData[courseNum]));
-            }
-        {% endif %}
-        }
+    var savedSchedule = {{ session.pop('saved_schedule', '{}')|safe }};
     APP_ROOT = "{{ APP_ROOT }}";
     METADATA_URL = "{{ url_for('static', filename='metadata.json') }}";
   </script>
@@ -38,13 +30,6 @@
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
   {% endassets %}
 
-  <script type="text/javascript">
-    {% if customData != None %}
-      $("#welcomeWell").slideUp();
-    {% endif %}
-  </script>
-
   {% include "handlebarTemplates.html" %}
-
 
 {% endblock %}

@@ -8,7 +8,8 @@ import {
     initializeHandlebarsTemplates, revertToCourseGroupButtonHandler, viewSectionListButtonHandler,
     viewSectionListFromCalendarHandler, sendReport, viewSelectionsButtonHandler, editButtonHandler,
     clearReportErrorModal, calendarSectionHoverHandler, courseTableSectionHoverHandler, courseTableSectionClickHandler,
-    openSaveModalButtonHandler, retryButtonHandler, updateCourseTableBackdrop, findCourseConfigurations, justDoIt
+    openSaveModalButtonHandler, retryButtonHandler, updateCourseTableBackdrop, findCourseConfigurations, justDoIt,
+    addCoursesInSavedSchedule
 } from './base';
 
 import {Schedule} from './Schedule';
@@ -27,8 +28,14 @@ $(function() {
        initializeTypeahead(metadata)
     });
 
-    // call a function created in the template for creating schedule from custom link
-    sendSavedSchedule();
+    console.log(savedSchedule);
+
+    // add courses if saved schedule from custom link if schedule exists
+    if (!$.isEmptyObject(savedSchedule)) {
+        $("#welcomeWell").slideUp();
+        addCoursesInSavedSchedule(savedSchedule);
+    }
+
 
     $(document)
         .on("click", ".removeCourse", removeCourseButtonHandler)

@@ -47,9 +47,7 @@ def handle_response_errors(api_arguments):
 
 @app.route('/')
 def index():
-	return render_template(
-		'index.html', APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION
-	)
+	return render_template('index.html', APP_ROOT=APPLICATION_ROOT)
 
 
 @app.route('/bucknell/')
@@ -60,14 +58,12 @@ def bucknell(config=None):
 		response = get_link(config)
 		if "Item" in response.keys():
 			# store course data in cookie and redirect to /bucknell/
-			session['custom_data'] = response["Item"]["schedule"]["S"]
+			session['saved_schedule'] = response["Item"]["schedule"]["S"]
 		return redirect(url_for('bucknell'))
 	else:
-		custom_data = json.loads(session.pop('custom_data', 'null'))
 		metadata = generate_metadata() if STATIC_LOCATION == 'local' else None
 		return render_template(
-			'start.html', customData=custom_data, CURRENT_SEMESTER=get_user_format_semester(),
-			APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION, metadata=metadata
+			'start.html', CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, metadata=metadata
 		)
 
 
@@ -161,4 +157,4 @@ def report_error(error_description, name, email, useragent, schedule):
 
 @app.errorhandler(httplib.NOT_FOUND)
 def page_not_found(error):
-	return render_template('404.html', APP_ROOT=APPLICATION_ROOT, STATIC_LOCATION=STATIC_LOCATION), httplib.NOT_FOUND
+	return render_template('404.html', APP_ROOT=APPLICATION_ROOT), httplib.NOT_FOUND
