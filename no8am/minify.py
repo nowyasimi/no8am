@@ -79,33 +79,74 @@ def minify_css(file):
 	return output.getvalue()
 
 
+def invalidate_cache():
+
+	cloudfront = boto3.client('cloudfront')
+
+	response = cloudfront.create_invalidation(
+		DistributionId=CLOUDFRONT_DISTRIBUTION_ID,
+		InvalidationBatch={
+			'Paths': {
+				'Quantity': 1,
+				'Items': ['/*']
+			},
+			'CallerReference': str(int(time.time()))
+		}
+	)
+
+	print response
+
+
+def update_metadata():
+	"""
+
+	:return: True if metadata is updated
+	"""
+
+	global course_descriptions
+
+	update_static = None if STATIC_LOCATION == "local" else 'y'
+
+	while update_static not in ['y', 'n']:
+		update_static = raw_input("Update metadata? [y/n]: ")
+
+	if update_static == 'n':
+		return False
+
+	course_descriptions = generate_course_descriptions()
+	metadata = generate_metadata()
+
+	s3 = boto3.resource('s3')
+
+	s3.Object(S3_BUCKET_NAME, 'static/metadata.json').put(Body=metadata, ContentType='application/json', CacheControl='max-age=900')
+
+	return True
+
+
 def update_static_files():
 	"""
 	Minifies and pushes static assets to S3 and invalidates the cache in Amazon Cloudfront. The files are minified to
 	reduce the number of requests the client needs to make when retrieving static assets. The cache invalidation is made
 	to reduce the time needed for the client to access the updated files.
+
+	:return True if files are uploaded
 	"""
 
 	# TODO - write metadata file to S3 for general use
 
 	global course_descriptions
 
-	# Ask developer if static file update is necessary
-	if STATIC_LOCATION == "local":
-		update_static = None
-	else:
-		update_static = 'y'
-		course_descriptions = generate_course_descriptions()
+	update_static = None
 
+	# Ask developer if static file update is necessary
 	while update_static not in ['y', 'n']:
 		update_static = raw_input("Update static files? [y/n]: ")
 
 	if update_static == 'n':
-		return
+		return False
 
 	print "updating static"
 	s3 = boto3.resource('s3')
-	cloudfront = boto3.client('cloudfront')
 
 	# delete old file minified file and generate and upload new minified JS (.urls() method runs file through minifier)
 	os.remove('no8am/static/' + PROD_JS_OUTPUT_FILENAME)
@@ -122,19 +163,9 @@ def update_static_files():
 	files = ["bg.png", "fonts/glyphicons-halflings-regular.eot", "fonts/glyphicons-halflings-regular.svg",
 	"fonts/glyphicons-halflings-regular.ttf", "fonts/glyphicons-halflings-regular.woff",
 	"fonts/glyphicons-halflings-regular.woff2", "favicon.ico"]
+
 	for f in files:
 		s3.Object(S3_BUCKET_NAME, 'static/' + f).put(Body=open("no8am/static/" + f, 'rb'))
 
-	# invalidate CloudFront cache
-	response = cloudfront.create_invalidation(
-		DistributionId=CLOUDFRONT_DISTRIBUTION_ID,
-		InvalidationBatch={
-			'Paths': {
-				'Quantity': 1,
-				'Items': ['/*']
-			},
-			'CallerReference': str(int(time.time()))
-		}
-	)
+	return True
 
-	print response

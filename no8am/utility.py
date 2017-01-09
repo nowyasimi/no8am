@@ -60,7 +60,7 @@ def get_user_format_semester():
 def get_course_numbers_in_department(department_name):
 	"""
 	Gets course numbers in a department for the current term. This is used to filter out descriptions for
-	courses not being offered in the current term.
+	courses not being offered in the current term. Will use cache if cache is enabled.
 
 	:param department_name: A department such as CSCI or ECON
 	:return: A list of course numbers in the department
@@ -69,7 +69,7 @@ def get_course_numbers_in_department(department_name):
 	from no8am.scraper import Department
 
 	try:
-		all_courses = Department.process_department_request(department_name)
+		cache_time, all_courses = Department.process_department_request(department_name)
 	except:
 		return []
 
