@@ -28,7 +28,8 @@ def update_static_files_wrapper():
         invalidate_cache()
 
 
-# TODO - improve workaround to get multiple scheduled events for the same function - check for pull requests to Zappa
+# TODO - improve workaround to get multiple scheduled events for the same function
+#        https://github.com/Miserlou/Zappa/issues/506 - check for PR to Zappa
 
 
 def update_metadata_wrapper_a():

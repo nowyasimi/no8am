@@ -21,9 +21,10 @@
   </script>
 
   <script type="text/javascript">
-    var savedSchedule = {{ session.pop('saved_schedule', '{}')|safe }};
+    savedSchedule = {{ session.pop('saved_schedule', '{}')|safe }};
     APP_ROOT = "{{ APP_ROOT }}";
     METADATA_URL = "{{ url_for('static', filename='metadata.json') }}";
+    CURRENT_SEMESTER = "{{ CURRENT_SEMESTER }}";
   </script>
 
   {% assets "app-js" %}

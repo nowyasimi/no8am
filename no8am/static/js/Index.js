@@ -1,5 +1,7 @@
 $ = require('jquery');
 
+let ReactDOM = require('react-dom');
+
 require('bootstrap');
 
 import {
@@ -27,8 +29,6 @@ $(function() {
     $.getJSON(METADATA_URL, function(metadata) {
        initializeTypeahead(metadata)
     });
-
-    console.log(savedSchedule);
 
     // add courses if saved schedule from custom link if schedule exists
     if (!$.isEmptyObject(savedSchedule)) {

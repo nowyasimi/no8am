@@ -208,26 +208,27 @@
   </div>
 
 {# Calendar #}
-  <div class="col-sm-6 page2bg" id="calendar-col" style="height:100%">
-    <div style="height:10px"></div>
-    <div id="calendar" class="list-group calendar">
-      <div class="panel-heading calendar-titles">
-        <div class="dayweek">Mon<span class="hidden-xs hidden-sm hidden-md">day</span></div>
-        <div class="dayweek">Tue<span class="hidden-xs hidden-sm hidden-md">sday</span></div>
-        <div class="dayweek">Wed<span class="hidden-xs hidden-sm hidden-md">nesday</span></div>
-        <div class="dayweek">Thu<span class="hidden-xs hidden-sm hidden-md">rsday</span></div>
-        <div class="dayweek">Fri<span class="hidden-xs hidden-sm hidden-md">day</span></div>
-      </div>
-      <div id="daysmonth" class="list-group-item course-data">
-        <div class="week">
-          {% for dayWeek in ['M', 'T', 'W', 'R', 'F'] %}
-            <div class="day" id="{{ dayWeek }}">
-              <div class="open">
-                <ul class="list-unstyled">
-                </ul>
+  <div class="col-sm-6 page2bg" id="calendar-col">
+    <div>
+      <div id="calendar" class="list-group">
+        <div id="calendar-titles" class="panel-heading">
+          <div class="dayweek">Mon<span class="hidden-xs hidden-sm hidden-md">day</span></div>
+          <div class="dayweek">Tue<span class="hidden-xs hidden-sm hidden-md">sday</span></div>
+          <div class="dayweek">Wed<span class="hidden-xs hidden-sm hidden-md">nesday</span></div>
+          <div class="dayweek">Thu<span class="hidden-xs hidden-sm hidden-md">rsday</span></div>
+          <div class="dayweek">Fri<span class="hidden-xs hidden-sm hidden-md">day</span></div>
+        </div>
+        <div id="course-data" class="list-group-item">
+          <div class="week">
+            {% for dayWeek in ['M', 'T', 'W', 'R', 'F'] %}
+              <div class="day" id="{{ dayWeek }}">
+                <div class="open">
+                  <ul class="list-unstyled">
+                  </ul>
+                </div>
               </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>

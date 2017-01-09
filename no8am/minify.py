@@ -8,7 +8,7 @@ from webassets.filter import register_filter
 from webassets_browserify import Browserify
 
 from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, \
-	CLOUDFRONT_DISTRIBUTION_ID, assets
+	CLOUDFRONT_DISTRIBUTION_ID, assets, get_user_format_semester
 
 S3_BUCKET_NAME = "no8.am"
 JS_OUTPUT_FILENAME = "app.js"
@@ -50,6 +50,7 @@ def generate_metadata():
 			course_descriptions = json.loads(f.read())
 
 	metadata = {
+		"semester": get_user_format_semester(),
 		"course": course_descriptions,
 		"department": DEPARTMENT_LIST,
 		"ccc": CCC_LIST,
