@@ -30,6 +30,7 @@ app.config.update(
 )
 
 assets = Environment(app)
+assets.auto_build = not use_cdn
 CDN(app)
 
 from no8am.metadata import DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST

@@ -328,7 +328,7 @@ function setSearchBox(value) {
  * @param course The course number (eg 203)
  * @param section An optional specific section (eg 01)
  */
-function addNewCourse(department, course, section) {
+export function addNewCourse(department, course, section) {
     let newCourse = new Course(department + " " + course);
     let courseLength = sched.pushData(newCourse);
 
@@ -348,6 +348,8 @@ function addNewCourse(department, course, section) {
         eventValue: 0
     });
 }
+
+global.addNewCourse = addNewCourse;
 
 /**
  * Submits new course request for all sections of a course.

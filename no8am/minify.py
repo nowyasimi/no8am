@@ -19,6 +19,9 @@ output_stream = StringIO.StringIO()
 
 register_filter(Browserify)
 
+assets.cache = False
+assets.manifest = False
+
 js_files_development = Bundle('js/Index.js', filters=['browserify'], depends='js/*', output=JS_OUTPUT_FILENAME)
 js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], depends='js/*', output=PROD_JS_OUTPUT_FILENAME)
 
@@ -146,9 +149,11 @@ def update_static_files():
 	s3 = boto3.resource('s3')
 
 	# delete old file minified file and generate and upload new minified JS (.urls() method runs file through minifier)
-	os.remove('no8am/static/' + PROD_JS_OUTPUT_FILENAME)
+	prod_js_path = 'no8am/static/' + PROD_JS_OUTPUT_FILENAME
+	if os.path.isfile(prod_js_path):
+		os.remove(prod_js_path)
 	js_files_production.urls()
-	s3.Object(S3_BUCKET_NAME, 'static/' + JS_OUTPUT_FILENAME).put(Body=open("no8am/static/"+PROD_JS_OUTPUT_FILENAME, 'rb'), ContentType='application/javascript', CacheControl='max-age=900')
+	s3.Object(S3_BUCKET_NAME, 'static/' + JS_OUTPUT_FILENAME).put(Body=open(prod_js_path, 'rb'), ContentType='application/javascript', CacheControl='max-age=900')
 
 	# generate and upload minified CSS
 	to_minify = ["home.css", "bucknell.css"]

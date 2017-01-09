@@ -80,6 +80,7 @@ def course_lookup(department=None, course_number=None):
 	if department is None and course_number is None:
 		return jsonify(departments=DEPARTMENT_LIST)
 
+	# TODO - validate department against metadata
 	department = department.upper()
 
 	cache_time, department_data = Department.process_department_request(department)
@@ -94,9 +95,14 @@ def course_lookup(department=None, course_number=None):
 		return jsonify(sections=course_data, cache_time=cache_time)
 
 
+@app.route('/category')
 @app.route('/category/<category>')
 @app.route('/category/<category>/<lookup_val>')
-def other_lookup(category, lookup_val=None):
+def other_lookup(category=None, lookup_val=None):
+
+	# provide category options if a category is not specified
+	if category is None:
+		return jsonify(category=['ccc','credit'])
 
 	category = category.lower()
 
@@ -109,6 +115,8 @@ def other_lookup(category, lookup_val=None):
 
 	# provide course data
 	elif category in ['ccc', 'credit'] and lookup_val is not None:
+		# TODO - validate lookup_val against metadata
+		lookup_val = lookup_val.upper()
 		cache_time, all_courses = CreditOrCCC.process_ccc_or_credit_request(category, lookup_val)
 		return jsonify(courses=all_courses, cache_time=cache_time)
 
