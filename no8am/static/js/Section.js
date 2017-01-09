@@ -5,19 +5,10 @@ import {parseHours, calendarElement} from './base';
 export class Section {
     constructor(object, CRN) {
         this.CRN = CRN;
-        this.courseNum = object["courseNum"];
-        this.courseName = object["courseName"];
-        this.sectionNum = object["sectionNum"];
+        Object.assign(this, object);
         this.timesMet = Section.restructureHours(object["timesMet"]);
         this.roomMet = object["roomMet"] === ", " ? "" : object["roomMet"];
-        this.message = object["message"];
         this.professor = object["professor"] === "; " ? "" : object["professor"];
-        this.freeSeats = object["freeSeats"];
-        this.ccc = object["CCC"];
-        this.resSeats = object["resSeats"];
-        this.waitList = object["waitList"];
-        this.prm = object["prm"];
-        this.main = object["main"];
         this.daysMet = []; // format: {"M": [1,2], "W": [1,3]} so Monday is a class from 8am to 9am and
                            // Wednesday is from 8am to 9:30am
         this.parseTimesMet();

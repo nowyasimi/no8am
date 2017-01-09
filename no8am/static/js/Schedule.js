@@ -229,7 +229,7 @@ export class Schedule {
      * @returns {*[]} An array containing time intervals for each day of the week.
      */
     generateTimeIntervalsPerDay() {
-        let weekDays = [[], [], [], [], []];
+        let weekDays = [[],[],[],[],[]];
 
         for (let section in this.selected) {
             let sectionObject = this.getSelectedSectionForCourse(section);
@@ -733,7 +733,7 @@ export class Schedule {
                 messageTitle: message.slice(0,message_split_index),
                 messageContents: message_contents,
                 title: section.courseName,
-                ccc: section.ccc,
+                ccc: section.CCC,
                 waitList: section.waitList,
                 resSeats: section.resSeats,
                 prm: section.prm,

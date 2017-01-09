@@ -10,7 +10,7 @@
         "aws_region": "us-east-1",
         "remote_env": "s3://no8am-deployment/no8am-environment-variables.json",
         "timeout_seconds": 300,
-        "exclude": ["no8am/static"]
+        "exclude": ["no8am/static", "node_modules", "browserify-cache.json"]
     },
     "dev": {
        "extends": "common",

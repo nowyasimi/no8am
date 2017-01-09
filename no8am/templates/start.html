@@ -34,9 +34,15 @@
     METADATA_URL = "{{ url_for('static', filename='metadata.json') }}";
   </script>
 
+
+  {% if not STATIC_LOCATION == "local" %}
+  <script type="text/javascript" src="https://static.no8.am/static/app.js"></script>
+  {% else %}
   {% assets "app-js" %}
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
   {% endassets %}
+  {% endif %}
+
 
   <script type="text/javascript">
     {% if customData != None %}

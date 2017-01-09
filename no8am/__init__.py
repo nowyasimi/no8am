@@ -12,7 +12,8 @@ SIMPLE_FORM_TOKEN = os.environ.get("SIMPLE_FORM_TOKEN")
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
 REDIS_PASS = os.environ.get("REDIS_PASS")
 REDIS_SERVER = os.environ.get("REDIS_SERVER")
-use_cdn = not app.debug
+use_cdn = STATIC_LOCATION != "local"
+cdn_debug = not use_cdn
 
 app.config.update(
 	SECRET_KEY=secret_key,
@@ -24,7 +25,8 @@ app.config.update(
 	CLEANCSS_EXTRA_ARGS=['--skip-rebase'],
 	UGLIFYJS_BIN='./node_modules/.bin/uglifyjs',
 	UGLIFYJS_EXTRA_ARGS=['-c', '-m'],
-	FLASK_ASSETS_USE_CDN=use_cdn
+	FLASK_ASSETS_USE_CDN=use_cdn,
+	CDN_DEBUG=cdn_debug
 )
 
 assets = Environment(app)

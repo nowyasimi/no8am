@@ -19,11 +19,8 @@ output_stream = StringIO.StringIO()
 
 register_filter(Browserify)
 
-assets.cache = False
-assets.manifest = None
-
-js_files_development = Bundle('js/Index.js', filters=['browserify'], output=JS_OUTPUT_FILENAME)
-js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], output=PROD_JS_OUTPUT_FILENAME)
+js_files_development = Bundle('js/Index.js', filters=['browserify'], depends='js/*', output=JS_OUTPUT_FILENAME)
+js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], depends='js/*', output=PROD_JS_OUTPUT_FILENAME)
 
 css_home = Bundle('css/bootstrap.min.css', 'css/home.css', filters='cleancss', output='min_css/home.css')
 css_bucknell = Bundle('css/bootstrap.min.css', 'css/calendar.css', filters='cleancss', output='min_css/bucknell.css')
