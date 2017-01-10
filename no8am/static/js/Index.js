@@ -16,6 +16,8 @@ import {
 
 import {Schedule} from './Schedule';
 
+import {Calendar} from './components/Calendar.jsx';
+
 
 // global schedule object
 export let sched = new Schedule();
@@ -23,6 +25,8 @@ global.sched = sched;
 
 // called when page is fully loaded
 $(function() {
+
+    ReactDOM.render(< Calendar schedule={sched} />, document.getElementById('calendar-col'));
 
     initializeHandlebarsTemplates();
 

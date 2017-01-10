@@ -22,6 +22,7 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "bootstrap": "^3.3.7",
     "browserify": "^13.3.0",
@@ -30,6 +31,8 @@
     "clean-css": "^3.4.23",
     "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "typeahead.js": "^0.11.1",
     "uglifyjs": "^2.4.10"
   },
@@ -39,7 +42,8 @@
         "babelify",
         {
           "presets": [
-            "es2015"
+            "es2015",
+            "react"
           ],
           "compact": true
         }
@@ -55,17 +59,25 @@
       "jquery",
       "handlebars",
       "typeahead",
-      "bootstrap"
+      "bootstrap",
+      "react",
+      "react-dom"
     ],
     "noParse": [
-      "jquery"
+      "jquery",
+      "react",
+      "react-dom"
     ],
     "detectGlobals": false
   },
   "browser": {
-    "jquery": "./node_modules/jquery/dist/jquery.js"
+    "jquery": "./node_modules/jquery/dist/jquery.js",
+    "react": "./node_modules/react/dist/react.js",
+    "react-dom": "./node_modules/react-dom/dist/react-dom.js"
   },
   "browserify-shim": {
-    "jquery": "$"
+    "jquery": "$",
+    "react": "React",
+    "react-dom": "ReactDOM"
   }
 }
