@@ -12,7 +12,6 @@ import {CourseGroup} from './CourseGroup';
 export class Schedule {
     constructor() {
         this.course = {};
-        this.selected = {}; // tracks selected section for the course
         this.lastClickedCourseButton = {};
         this.courseLength = 1;
         this.departments = {};
@@ -154,7 +153,7 @@ export class Schedule {
         for (let extra in this.course[courseLength].extra_sections) {
             if (this.course[courseLength].extra_section_independent[extra]) {
                 this.course[courseLength + extra] = this.course[courseLength].extra_section_lists[extra];
-                this.selected[courseLength + extra] = null;
+                this.course[courseLength + extra].selected = null;
             }
         }
 
@@ -198,8 +197,9 @@ export class Schedule {
             $("#buttons-2").append(buttonHTML);
         }
 
+        courseInfo.selected = null;
         this.course[this.courseLength] = courseInfo; // creates a dictionary in form {'1': object, '1R', object}
-        this.selected[this.courseLength] = null;
+
 
         $(".anim" + this.courseLength).slideDown();
 
@@ -213,8 +213,8 @@ export class Schedule {
     calculateClassHours() {
         let totalHours = 0;
 
-        for (let section in this.selected) {
-            if (this.selected[section] !== null){
+        for (let section in this.course) {
+            if (this.course[section].selected !== null) {
                 let daysMet = this.getSelectedSectionForCourse(section).daysMet;
                 for (let i in daysMet) {
                     totalHours += Math.round(daysMet[i][2])/2;
@@ -232,8 +232,8 @@ export class Schedule {
      * @returns Either the selected section or null if a section hasn't been selected
      */
     getSelectedSectionForCourse(courseIndex) {
-        let sectionIndex = this.selected[courseIndex];
         let courseObject = this.course[courseIndex];
+        let sectionIndex = courseObject.selected;
 
         return sectionIndex === null ? null : courseObject.sections[sectionIndex];
     };
@@ -246,7 +246,7 @@ export class Schedule {
     generateTimeIntervalsPerDay() {
         let weekDays = [[],[],[],[],[]];
 
-        for (let section in this.selected) {
+        for (let section in this.course) {
             let sectionObject = this.getSelectedSectionForCourse(section);
             if (sectionObject !== null) {
                 let daysMet = sectionObject.daysMet;
@@ -361,7 +361,7 @@ export class Schedule {
                 this.course[clickedCourse + extra] = new ExtraCourse(sections_to_add, this.course[clickedCourse].extra_sections[extra]);
                 $("a[data-course='"+ clickedCourse + extra +"']" + " .course-success").hide();
                 setNumberOfSections(clickedCourse + extra, this.course[clickedCourse + extra].sections.length);
-                this.selected[clickedCourse + extra] = null;
+                this.course[clickedCourse + extra].selected = null;
             }
         }
     }
@@ -378,7 +378,6 @@ export class Schedule {
                 $("a[data-course='"+ clickedCourse + extra +"']").addClass('disabled');
                 $("a[data-course='"+ clickedCourse + extra +"']" + " .course-success").hide();
                 delete this.course[clickedCourse + extra]; // recitations for the section are no longer valid
-                delete this.selected[clickedCourse + extra];
             }
         }
     };
@@ -397,25 +396,25 @@ export class Schedule {
         let isMainSection = Number(lastChar) == lastChar;
 
         // No section was previously chosen for this course
-        if (this.selected[clickedCourse] === null) {
+        if (this.course[clickedCourse].selected === null) {
             $("a[data-course='"+ clickedCourse +"']" + " .course-success").show();
             if (isMainSection) { // for '1', '2', '3', etc
                 this.updateExtraSectionsAfterMainSelect(clickedCourse, clickedSection, convertFromDept);
             }
-            this.selected[clickedCourse] = clickedSection;
+            this.course[clickedCourse].selected = clickedSection;
         }
 
         // Update selected section for this course
-        else if (this.selected[clickedCourse] != clickedSection) {
+        else if (this.course[clickedCourse].selected != clickedSection) {
             if (isMainSection) { // for '1', '2', '3', etc
                 this.updateExtraSectionsAfterMainSelect(clickedCourse, clickedSection, convertFromDept);
             }
-            this.selected[clickedCourse] = clickedSection;
+            this.course[clickedCourse].selected = clickedSection;
         }
 
         // Remove previously chosen section for this course
         else {
-            this.selected[clickedCourse] = null;
+            this.course[clickedCourse].selected = null;
             $("a[data-course='"+ clickedCourse +"']" + " .course-success").hide();
             if (isMainSection) { // for '1', '2', '3', etc
                 this.removeExtraSectionsAfterMainSelect(clickedCourse);
@@ -523,13 +522,13 @@ export class Schedule {
             if (courseInfo.extra_section_independent[extra]) {
                 courseInfo.extra_section_lists[extra] = new ExtraCourse(testSection.extra_section_lists[extra], current_color);
                 this.course[this.courseLength + extra] = courseInfo.extra_section_lists[extra];
-                this.selected[this.courseLength + extra] = null;
+                this.course[this.courseLength + extra].selected = null;
             }
         }
 
         courseInfo.fromDeptButton = dept;
         this.course[this.courseLength] = courseInfo;
-        this.selected[this.courseLength] = null;
+        this.course[this.courseLength].selected = null;
 
 
         let clickedSectionNew = null;
@@ -609,7 +608,7 @@ export class Schedule {
 
         // draws all sections for current course, and only selected sections for other courses
         for (let y in this.course) {
-            let course_elements = this.course[y].courseDrawToScreen(y, this.selected[y], y!=this.lastClickedCourseButton.id);
+            let course_elements = this.course[y].courseDrawToScreen(y, this.course[y].selected, y!=this.lastClickedCourseButton.id);
         }
 
         this.updateCRNList();
@@ -630,7 +629,7 @@ export class Schedule {
 
         // draw selected sections for each course
         for (let y in this.course) {
-            this.course[y].courseDrawToScreen(y, this.selected[y], true);
+            this.course[y].courseDrawToScreen(y, this.course[y].selected, true);
         }
 
         // draw courses for the currently selected department
@@ -658,17 +657,17 @@ export class Schedule {
         });
 
         for (let extra in this.course[parent].extra_sections) {
-            if (this.selected[parent + extra] !== null) {
+            if (this.course[parent + extra].selected !== null) {
                 $(".course" + parent + extra).remove();
             }
-            delete this.course[parent + extra]; delete this.selected[parent + extra];
+            delete this.course[parent + extra];
         }
 
-        if (this.selected[parent] !== null) {
+        if (this.course[parent].selected !== null) {
             $(".course" + parent).remove();
         }
 
-        delete this.course[parent]; delete this.selected[parent];
+        delete this.course[parent];
 
         this.redrawData();
     }
@@ -688,8 +687,8 @@ export class Schedule {
         let $crnPanel = $("#crnlist .panel-body");
         let crnListData = [];
 
-        for (let course in this.selected) {
-            if (this.selected[course] === null) {
+        for (let course in this.course) {
+            if (this.course[course].selected === null) {
                 continue;
             }
             let current = this.getSelectedSectionForCourse(course);

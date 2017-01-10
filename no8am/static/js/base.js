@@ -253,8 +253,8 @@ function generateCourseDataToStore() {
 
             // do the same for extra sections
             for (let extra in currentCourse.extra_sections) {
-                if (sched.selected.hasOwnProperty(x + extra) && sched.selected[x + extra] !== null) {
-                    let tempExtra= sched.course[x + extra].sections[sched.selected[x + extra]];
+                if (sched.course.hasOwnProperty(x + extra) && sched.course[x + extra].selected !== null) {
+                    let tempExtra= sched.course[x + extra].sections[sched.course[x + extra].selected];
                     tempCourseObj[extra] = [tempExtra.CRN, tempExtra.sectionNum];
                 }
                 else {
@@ -578,13 +578,13 @@ export function sectionSelectionHandler() {
     else {
         clickedCourse = sched.lastClickedCourseButton.id;
         if (row.length == 0) {
-            let schedClickedSection = sched.selected[clickedCourse];
+            let schedClickedSection = sched.course[clickedCourse].selected;
             if (schedClickedSection != null) { // set to self to reset
                 sched.handleSelect(clickedCourse, schedClickedSection);
                 sched.redrawData();
             }
         }
-        else if (sched.selected[clickedCourse] == clickedSection) { // no change
+        else if (sched.course[clickedCourse].selected == clickedSection) { // no change
         }
         else { // set to new
             sched.handleSelect(clickedCourse, clickedSection);
