@@ -14,9 +14,9 @@ export class Calendar extends React.Component {
         );
     }
 
-    static generate_course_data_divs() {
+    generate_course_data_divs() {
         return DAYS_OF_WEEK.map((day) =>
-            <DayOfWeek key={day} day={day} />
+            <DayOfWeek key={day} day={day} {...this.props} />
         );
     }
 
@@ -29,7 +29,7 @@ export class Calendar extends React.Component {
                     </div>
                     <div id="course-data" className="list-group-item">
                         <div className="week">
-                            { Calendar.generate_course_data_divs() }
+                            { this.generate_course_data_divs() }
                         </div>
                     </div>
                 </div>

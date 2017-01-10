@@ -11,7 +11,6 @@ import {
 
 import {Course, ExtraCourse} from './Course';
 import {Schedule} from './Schedule';
-import {Department} from './Department';
 
 // handlebars templates
 export let calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
@@ -329,8 +328,8 @@ function setSearchBox(value) {
  * @param section Select a specific section (eg 01) when all sections load in
  */
 function addNewCourse(department, course, section) {
-    let newCourse = new Course(department + " " + course);
-    let courseLength = sched.pushData(newCourse);
+
+    let courseLength = sched.pushData(department + " " + course);
 
     submitCourseRequest(courseLength, department, course, section);
 
@@ -385,8 +384,8 @@ function submitCourseRequest(courseLength, department, course, section) {
  * @param dept The department (eg CSCI)
  */
 function submitDeptRequest(dept) {
-    let newDept = new Department(dept, "dept");
-    let deptNum = sched.pushDept(newDept);
+
+    let deptNum = sched.createCourseGroup(dept, "dept");
 
     $.ajax({
         url: DEPT_LOOKUP_URL + dept,
@@ -403,24 +402,23 @@ function submitDeptRequest(dept) {
 
 /**
  * Submit new request for all other lookup types.
- * @param type The type of lookup (eg credit)
+ * @param type The type of lookup (eg ccc, credit)
  * @param val The nickname for the type (eg Half Credit)
  * @param long The actual name for the type (eg .5)
  */
 function submitOtherRequest(type, val, long) {
-    let newDept = type == 'ccc' ? new Department(val,type) : new Department(long, type);
-    let deptNum = sched.pushDept(newDept);
+
+    let courseGroupName = type == 'ccc' ? val : long;
+    let deptNum = sched.createCourseGroup(courseGroupName, type);
 
     $.ajax({
         url: OTHER_LOOKUP_URL + type + '/' + val,
         context: {deptNum: deptNum}
     }).done(deptResponseHandler).fail(courseButtonErrorHandler);
 
-    let eventCat = type == 'ccc' ? type : 'credit';
-
     ga('send', {
         hitType: 'event',
-        eventCategory: eventCat,
+        eventCategory: type,
         eventAction: 'add',
         eventLabel: val
     });
@@ -436,7 +434,7 @@ function courseResponseHandler(data) {
 
 /**
  * Handler function for new department data.
- * @param data Department data
+ * @param data CourseGroup data
  */
 function deptResponseHandler(data) {
     sched.streamDept(data.courses, this.deptNum);

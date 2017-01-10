@@ -1,13 +1,13 @@
 import {Course} from './Course';
 
 // TODO - rename class to CourseGroup, since it's used for departments, ccc requirements, etc
-export class Department {
-    constructor(deptName, deptType) {
-        this.deptName = deptName;
+export class CourseGroup {
+    constructor(courseGroupName, courseGroupType) {
+        this.deptName = courseGroupName;
         this.courses = [];
         this.color = null;
         // TODO - make this an enum?
-        this.deptType = deptType; // ccc, cred, or dept
+        this.deptType = courseGroupType; // ccc, cred, or dept
     }
 
     initialRequest(data, color) {

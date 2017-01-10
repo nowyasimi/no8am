@@ -22,8 +22,10 @@ register_filter(Browserify)
 assets.cache = False
 assets.manifest = False
 
-js_files_development = Bundle('js/Index.js', filters=['browserify'], depends='js/**/*.js*', output=JS_OUTPUT_FILENAME)
-js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], depends='js/**/*.js*', output=PROD_JS_OUTPUT_FILENAME)
+depends = ['js/**.js*', 'js/**/*.js*']
+
+js_files_development = Bundle('js/Index.js', filters=['browserify'], depends=depends, output=JS_OUTPUT_FILENAME)
+js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], depends=depends, output=PROD_JS_OUTPUT_FILENAME)
 
 css_home = Bundle('css/bootstrap.min.css', 'css/home.css', filters='cleancss', output='min_css/home.css')
 css_bucknell = Bundle('css/bootstrap.min.css', 'css/calendar.css', filters='cleancss', output='min_css/bucknell.css')

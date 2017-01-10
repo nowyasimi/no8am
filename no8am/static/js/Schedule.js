@@ -7,6 +7,8 @@ import {
 
 import {Course, ExtraCourse} from './Course';
 
+import {CourseGroup} from './CourseGroup';
+
 export class Schedule {
     constructor() {
         this.course = {};
@@ -33,11 +35,16 @@ export class Schedule {
 
 
     /**
-     *
-     * @param data
+     * Adds new course group button the GUI and creates a new course group object that will be populated with
+     * courses when they load in.
+     * @param courseGroupName The name of a CourseGroup like CSCI or ccc requirement like NSMC, etc
+     * @param courseGroupType Course group types include department, ccc, or credit
      * @returns {number}
      */
-    pushDept(data) {
+    createCourseGroup(courseGroupName, courseGroupType) {
+
+        let data = new CourseGroup(courseGroupName, courseGroupType);
+
         removeIntroInfo();
 
         data.color = this.generateColorArray(1)[0];
@@ -162,8 +169,16 @@ export class Schedule {
         setNumberOfSections(courseLength, numSections);
     }
 
-    pushData(courseInfo) { // for initial creation
+    /**
+     * Adds course button to GUI and creates course object that will be populated with sections when they load in.
+     * @param course_name Name of course being added
+     * @return {number}
+     */
+    pushData(course_name) { // for initial creation
+
         removeIntroInfo();
+
+        let courseInfo = new Course(course_name);
 
         let courseNum = courseInfo.courseNum;
         courseInfo.mainColor = this.generateColorArray(1)[0];
@@ -338,7 +353,7 @@ export class Schedule {
             if (this.course[clickedCourse].extra_section_independent[extra]) {
                 continue;
             }
-            // TODO - see if this letiable is necessary
+            // TODO - see if this variable is necessary
             if (convertFromDept !== null) {
                 // enable selection of extra section and update section count in GUI
                 $('a[data-course="'+ clickedCourse + extra +'"]').removeClass('disabled');

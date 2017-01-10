@@ -97,9 +97,9 @@ export class Section {
             }
             let hexColor;
             let selectedCalendarSection;
-            let hiddenStyle = "";
+            let display = true;
             if (hidden) {
-                hiddenStyle = "display:none;";
+                display = false;
                 hexColor = colorDict[color]["n"];
                 selectedCalendarSection = " unselectedCalendarSection ";
             }
@@ -114,7 +114,7 @@ export class Section {
                 selected: selectedCalendarSection,
                 timesMet: this.daysMet[day][3] + "-" + this.daysMet[day][4],
                 courseNum: this.courseNum.slice(0,-3),
-                hidden: hiddenStyle,
+                display: display ? "block" : "none",
                 course: classID,
                 section: sectionNum,
                 day: this.daysMet[day][0]
