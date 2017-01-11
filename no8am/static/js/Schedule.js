@@ -14,6 +14,8 @@ import {Course, ExtraCourse} from './Course';
 
 import {CourseGroup} from './CourseGroup';
 
+import {createCalendar} from './Index';
+
 export class Schedule {
     constructor() {
         this.course = {};
@@ -617,7 +619,7 @@ export class Schedule {
             let course_elements = this.course[y].courseDrawToScreen(y, this.course[y].selected, y!=this.lastClickedCourseButton.id);
         }
 
-        ReactDOM.render(<Calendar schedule={this}/>, document.getElementById('calendar-col'));
+        createCalendar();
 
         this.updateCRNList();
         this.overlapDetection();
@@ -645,7 +647,7 @@ export class Schedule {
             this.courseGroups[dept].courses[y].courseDrawToScreen(y, null, false);
         }
 
-        ReactDOM.render(<Calendar schedule={this}/>, document.getElementById('calendar-col'));
+        createCalendar();
 
         // link the course sections with the currently selected department
         // $("#calendar .unselectedCalendarSection").attr("data-dept-num", dept);

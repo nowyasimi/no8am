@@ -33,6 +33,8 @@
     "jquery": "^3.1.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-redux": "^5.0.2",
+    "redux": "^3.6.0",
     "typeahead.js": "^0.11.1",
     "uglifyjs": "^2.4.10"
   },
@@ -49,10 +51,7 @@
         }
       ],
       [
-        "browserify-shim",
-        {
-          "global": true
-        }
+        "browserify-shim"
       ]
     ],
     "require": [
@@ -61,7 +60,9 @@
       "typeahead",
       "bootstrap",
       "react",
-      "react-dom"
+      "react-dom",
+      "redux",
+      "react-redux"
     ],
     "noParse": [
       "jquery",
@@ -73,11 +74,13 @@
   "browser": {
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "react": "./node_modules/react/dist/react.js",
-    "react-dom": "./node_modules/react-dom/dist/react-dom.js"
+    "react-dom": "./node_modules/react-dom/dist/react-dom.js",
+    "typeahead": "./node_modules/typeahead.js/dist/typeahead.jquery.js"
   },
   "browserify-shim": {
     "jquery": "$",
     "react": "React",
-    "react-dom": "ReactDOM"
+    "react-dom": "ReactDOM",
+    "typeahead": { "exports": "typeahead", "depends": [ "jquery" ] }
   }
 }

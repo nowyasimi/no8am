@@ -1,5 +1,5 @@
 let Handlebars = require('handlebars');
-let typeahead = require('../../../node_modules/typeahead.js/dist/typeahead.jquery.js');
+let typeahead = require('typeahead');
 let Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
 
 require('bootstrap');
@@ -826,17 +826,6 @@ export function viewSectionListButtonHandler() {
 }
 
 /**
- * Called when a section in the calendar is clicked. Opens the course table modal
- * for that course.
- */
-export function viewSectionListFromCalendarHandler() {
-    let clickedCourse = $(this).attr('class').split(' ')[0].substring(6);
-    sched.lastClickedCourseButton = {"type": "course", "id": clickedCourse};
-    sched.redrawData();
-    $("#courseTable").modal();
-}
-
-/**
  * Sends an error report with the values in the modal fields.
  */
 export function sendReport() {
@@ -893,33 +882,18 @@ export function clearReportErrorModal() {
 }
 
 /**
- * Called when a section is hovered over in the calendar. Toggles between times met and the course
- * name for each instance of that section.
- */
-export function calendarSectionHoverHandler(){
-    let stuff = $(this).attr("class").split(" ");
-    let selector = 'li.' + stuff[0] + '.' + stuff[1];
-
-    let courseGroupAttr = $(this).attr('data-dept-num');
-    let courseGroupSelector = courseGroupAttr !== undefined ? `[data-dept-num='${courseGroupAttr}']` : "";
-
-    $(selector + " .timesMet" + courseGroupSelector).toggle();
-    $(selector + " .courseNum" + courseGroupSelector).toggle();
-}
-
-/**
  * Called when a section in the section list is hovered over or unhovered. Toggles the visibility
  * of each instance of that section.
  */
 export function courseTableSectionHoverHandler() {
     if ($(this).parent().is("tbody")) {
         let clickedCourse = $(this).attr('class').split(' ')[0];
-        let id = $(this).attr('id');
+        let clickedSection = $(this).attr('class').split(' ')[1];
         let courseGroupAttr = $(this).parent().attr('data-dept-level');
         let courseGroupSelector = courseGroupAttr !== undefined ? `[data-dept-num='${courseGroupAttr}']` : "";
-        let $calendarSection = $("#calendar ." + clickedCourse + "."+id + courseGroupSelector);
+        let $calendarSection = $("#calendar ." + clickedCourse + "."+clickedSection + courseGroupSelector);
         if (!$calendarSection.hasClass("selectedCalendarSection") && !$(this).hasClass("success")){
-            $("#calendar ." + clickedCourse + "."+id + courseGroupSelector).toggle().css("z-index", "5");
+            $("#calendar ." + clickedCourse + "."+clickedSection + courseGroupSelector).toggle().css("z-index", "5");
         }
     }
 }

@@ -8,8 +8,8 @@ import {
     generateAndStoreJSON, removeFromStorage, sectionSelectionHandler, newScheduleFromConfig,
     initializeTypeahead, generateCustomLink, handleNewInput, removeCourseButtonHandler,
     initializeHandlebarsTemplates, revertToCourseGroupButtonHandler, viewSectionListButtonHandler,
-    viewSectionListFromCalendarHandler, sendReport, viewSelectionsButtonHandler, editButtonHandler,
-    clearReportErrorModal, calendarSectionHoverHandler, courseTableSectionHoverHandler, courseTableSectionClickHandler,
+    sendReport, viewSelectionsButtonHandler, editButtonHandler,
+    clearReportErrorModal, courseTableSectionHoverHandler, courseTableSectionClickHandler,
     openSaveModalButtonHandler, retryButtonHandler, updateCourseTableBackdrop, findCourseConfigurations, justDoIt,
     addCoursesInSavedSchedule
 } from './base';
@@ -23,10 +23,15 @@ import {Calendar} from './components/Calendar.jsx';
 export let sched = new Schedule();
 global.sched = sched;
 
+
+export function createCalendar() {
+    ReactDOM.render(<Calendar schedule={sched}/>, document.getElementById('calendar-col'));
+}
+
 // called when page is fully loaded
 $(function() {
 
-    ReactDOM.render(<Calendar schedule={sched}/>, document.getElementById('calendar-col'));
+    createCalendar();
 
     initializeHandlebarsTemplates();
 
@@ -45,8 +50,6 @@ $(function() {
         .on("click", ".removeCourse", removeCourseButtonHandler)
         .on("click", ".course-revert", revertToCourseGroupButtonHandler)
         .on('click', '.toggle', viewSectionListButtonHandler)
-        // .on('click', '.open li', viewSectionListFromCalendarHandler)
-        // .on("mouseenter mouseleave", ".open li", calendarSectionHoverHandler)
         .on("mouseenter mouseleave", "#courseTable tr", courseTableSectionHoverHandler)
         .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
         .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })

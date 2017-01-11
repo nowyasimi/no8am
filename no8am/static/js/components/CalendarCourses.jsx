@@ -1,31 +1,72 @@
 let React = require('react');
 
 import {CalendarSection} from "./CalendarSection.jsx";
+import { createStore } from 'redux'
+import { Provider, connect } from 'react-redux'
 
 const DAYS_OF_WEEK_SHORT = ["M", "T", "W", "R", "F"];
+
+const store = createStore(calendarSectionReducer);
+
+export const mouseEnterSection = (courseId) => {
+    return {
+        type: 'MOUSE_ENTER',
+        courseId
+    }
+};
+
+export const mouseLeaveSection = (courseId) => {
+    return {
+        type: 'MOUSE_LEAVE',
+        courseId
+    };
+};
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        hover: state.hover,
+        hoverCourseId: state.courseId
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch, sectionProps) {
+    return {
+        onMouseEnter: () => dispatch(mouseEnterSection(sectionProps.courseId)),
+        onMouseLeave: () => dispatch(mouseLeaveSection(sectionProps.courseId))
+    }
+}
+
+// Connected Component
+const ConnectedCalendarSection = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CalendarSection);
+
+
+export function calendarSectionReducer(state = {hover: false, hoverCourseId: null}, action) {
+    switch (action.type) {
+        case 'MOUSE_ENTER':
+            return {
+                hover: true,
+                courseId: action.courseId
+            };
+        case 'MOUSE_LEAVE':
+            return {
+                hover: false,
+                courseId: action.courseId
+            };
+        default:
+            return state
+    }
+}
+
 
 export class CalendarCourses extends React.Component {
 
     constructor() {
         super();
-
-        this.state = {};
-    }
-
-    static generateStateKey(courseId, sectionIndex, courseGroupId) {
-        return `courseGroupId${courseGroupId}course${courseId}section${sectionIndex}`;
-    }
-
-    handleMouseEnter(courseId, sectionIndex, courseGroupId) {
-        this.setState({
-            [CalendarCourses.generateStateKey(courseId, sectionIndex, courseGroupId)]: true
-        });
-    }
-
-    handleMouseLeave(courseId, sectionIndex, courseGroupId) {
-        this.setState({
-            [CalendarCourses.generateStateKey(courseId, sectionIndex, courseGroupId)]: false
-        });
     }
 
     // Always draw selected sections
@@ -42,22 +83,15 @@ export class CalendarCourses extends React.Component {
             for (let sectionIndex in course.sections) {
                 let section = course.sections[sectionIndex];
 
-                let eventKey = CalendarCourses.generateStateKey(courseId, sectionIndex, courseGroupId);
-
-                let mouseEnterHandler = this.handleMouseEnter.bind(this, courseId, sectionIndex, courseGroupId);
-                let mouseLeaveHandler = this.handleMouseLeave.bind(this, courseId, sectionIndex, courseGroupId);
-
                 // create calendar section elements and group them by day
                 for (let index in section.daysMet) {
                     let day = section.daysMet[index][0];
                     let key = `courseGroupId${courseGroupId}course${courseId}section${sectionIndex}index${index}`;
-
                     sectionsToDisplay[day].push(
-                        <CalendarSection key={key} {...this.props} {...course} {...section} day={index}
-                                         courseGroupId={courseGroupId} courseId={courseId} sectionId={sectionIndex}
-                                         isHover={this.state[eventKey]}
-                                         mouseEnterHandler={mouseEnterHandler}
-                                         mouseLeaveHandler={mouseLeaveHandler}/>
+                        <Provider key={key} store={store}>
+                            <ConnectedCalendarSection {...this.props} {...course} {...section} day={index}
+                                             courseGroupId={courseGroupId} courseId={courseId} sectionId={sectionIndex}/>
+                        </Provider>
                     )
                 }
             }
@@ -86,7 +120,6 @@ export class CalendarCourses extends React.Component {
                 </div>
             )
         );
-
     }
 
     render() {
