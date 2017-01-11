@@ -58,7 +58,7 @@ export function colorChooser(courseArray, departmentsArray, usedColors) {
             continue;
         }
         // up the counters
-        counters[current.mainColor]++;
+        counters[current.color]++;
         for (let extra in current.extra_sections) {
             if (current.extra_sections[extra] !== null)
                 counters[current.extra_sections[extra]]++;
@@ -355,7 +355,6 @@ function addNewCourse(department, course, section) {
  * @param savedSchedule An object containing saved course data
  */
 export function addCoursesInSavedSchedule(savedSchedule) {
-    console.log(savedSchedule);
     for (let courseNum in savedSchedule) {
         let currentCourse = courseNum.split(" ");
         addNewCourse(currentCourse[0], currentCourse[1], JSON.stringify(savedSchedule[courseNum]));
@@ -547,7 +546,7 @@ export function drawToScreen(y, selected, hidden, color, sections) {
         else {
             hidden2 = false;
         }
-        sections[x].genElement('course' + y, hidden2, x, color);
+
         if (!hidden) {
             generated_list.push(sections[x].listGen('course' + y, !hidden2, x));
         }
@@ -900,8 +899,12 @@ export function clearReportErrorModal() {
 export function calendarSectionHoverHandler(){
     let stuff = $(this).attr("class").split(" ");
     let selector = 'li.' + stuff[0] + '.' + stuff[1];
-    $(selector + " .timesMet").toggle();
-    $(selector + " .courseNum").toggle();
+
+    let courseGroupAttr = $(this).attr('data-dept-num');
+    let courseGroupSelector = courseGroupAttr !== undefined ? `[data-dept-num='${courseGroupAttr}']` : "";
+
+    $(selector + " .timesMet" + courseGroupSelector).toggle();
+    $(selector + " .courseNum" + courseGroupSelector).toggle();
 }
 
 /**
@@ -911,12 +914,12 @@ export function calendarSectionHoverHandler(){
 export function courseTableSectionHoverHandler() {
     if ($(this).parent().is("tbody")) {
         let clickedCourse = $(this).attr('class').split(' ')[0];
-        let clickedCourseNum = clickedCourse.substring(6);
         let id = $(this).attr('id');
-        let idNum = id.substring(7);
-        let $calendarSection = $("#calendar .course" + clickedCourseNum + ".section" + idNum);
+        let courseGroupAttr = $(this).parent().attr('data-dept-level');
+        let courseGroupSelector = courseGroupAttr !== undefined ? `[data-dept-num='${courseGroupAttr}']` : "";
+        let $calendarSection = $("#calendar ." + clickedCourse + "."+id + courseGroupSelector);
         if (!$calendarSection.hasClass("selectedCalendarSection") && !$(this).hasClass("success")){
-            $("#calendar ." + clickedCourse + "."+id).toggle().css("z-index", "5");
+            $("#calendar ." + clickedCourse + "."+id + courseGroupSelector).toggle().css("z-index", "5");
         }
     }
 }
@@ -938,8 +941,8 @@ export function courseTableSectionClickHandler() {
     let idNum = clickedSection.substring(7);
     let isDept = false;
     if ($("#listViewData tbody")[0].hasAttribute("data-dept-level")) {
-        let dept = $(this).parent().attr("data-dept-level");
-        $("#calendar [data-dept-num='" + dept + "'].unselectedCalendarSection").hide();
+        // let dept = $(this).parent().attr("data-dept-level");
+        // $("#calendar [data-dept-num='" + dept + "'].unselectedCalendarSection").hide();
         isDept = true;
     }
     else {

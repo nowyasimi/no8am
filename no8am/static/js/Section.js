@@ -85,46 +85,6 @@ export class Section {
         }
     }
 
-    genElement(classID, hidden, sectionNum, color) { // if selected, no 'N' in front
-        let elements = [];
-        for (let day in this.daysMet) {
-            let visDuration;
-            if (this.daysMet[day][1] + this.daysMet[day][2] > 26) {
-                visDuration = 25.73 - this.daysMet[day][1];
-            }
-            else {
-                visDuration = this.daysMet[day][2];
-            }
-            let hexColor;
-            let selectedCalendarSection;
-            let display = true;
-            if (hidden) {
-                display = false;
-                hexColor = colorDict[color]["n"];
-                selectedCalendarSection = " unselectedCalendarSection ";
-            }
-            else {
-                hexColor = colorDict[color]["s"];
-                selectedCalendarSection = " selectedCalendarSection ";
-            }
-            let options = {
-                height: visDuration*20/5.6,
-                margin: this.daysMet[day][1]*20/5.6,
-                color: hexColor,
-                selected: selectedCalendarSection,
-                timesMet: this.daysMet[day][3] + "-" + this.daysMet[day][4],
-                courseNum: this.courseNum.slice(0,-3),
-                display: display ? "block" : "none",
-                course: classID,
-                section: sectionNum,
-                day: this.daysMet[day][0]
-            };
-            elements.push(options);
-            let generatedHTML = calendarElement(options);
-            $("#" + this.daysMet[day][0] + " .open ul").append(generatedHTML);
-        }
-    }
-
     listGen(classID, selected, sectionNum) {
         return {
             isSelected: selected,

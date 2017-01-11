@@ -14,7 +14,7 @@ export class CourseGroup {
         // create course objects for all courses in course group
         for (let x in data) {
             let newCourse = new Course(data[x].courseNum);
-            newCourse.mainColor = color;
+            newCourse.color = color;
             newCourse.initialRequest(data[x].sections);
             this.courses.push(newCourse);
         }

@@ -1,6 +1,6 @@
 let React = require('react');
 
-import {DayOfWeek} from './DayOfWeek.jsx';
+import {CalendarCourses} from './CalendarCourses.jsx';
 
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
@@ -14,12 +14,6 @@ export class Calendar extends React.Component {
         );
     }
 
-    generate_course_data_divs() {
-        return DAYS_OF_WEEK.map((day) =>
-            <DayOfWeek key={day} day={day} {...this.props} />
-        );
-    }
-
     render() {
         return (
             <div>
@@ -27,11 +21,7 @@ export class Calendar extends React.Component {
                     <div id="calendar-titles" className="panel-heading">
                         { Calendar.generate_calendar_titles() }
                     </div>
-                    <div id="course-data" className="list-group-item">
-                        <div className="week">
-                            { this.generate_course_data_divs() }
-                        </div>
-                    </div>
+                    <CalendarCourses {...this.props} />
                 </div>
             </div>
         );

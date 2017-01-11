@@ -26,7 +26,7 @@ global.sched = sched;
 // called when page is fully loaded
 $(function() {
 
-    ReactDOM.render(< Calendar schedule={sched} />, document.getElementById('calendar-col'));
+    ReactDOM.render(<Calendar schedule={sched}/>, document.getElementById('calendar-col'));
 
     initializeHandlebarsTemplates();
 
@@ -45,8 +45,8 @@ $(function() {
         .on("click", ".removeCourse", removeCourseButtonHandler)
         .on("click", ".course-revert", revertToCourseGroupButtonHandler)
         .on('click', '.toggle', viewSectionListButtonHandler)
-        .on('click', '.open li', viewSectionListFromCalendarHandler)
-        .on("mouseenter mouseleave", ".open li", calendarSectionHoverHandler)
+        // .on('click', '.open li', viewSectionListFromCalendarHandler)
+        // .on("mouseenter mouseleave", ".open li", calendarSectionHoverHandler)
         .on("mouseenter mouseleave", "#courseTable tr", courseTableSectionHoverHandler)
         .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
         .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })

@@ -1,4 +1,9 @@
+let React = require('react');
+let ReactDOM = require('react-dom');
+
 import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL, DAYS_OF_WEEK} from './Constants';
+
+import {Calendar} from './components/Calendar.jsx';
 
 import {
     setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, updateCourseTableBackdrop,
@@ -14,7 +19,7 @@ export class Schedule {
         this.course = {};
         this.lastClickedCourseButton = {};
         this.courseLength = 1;
-        this.departments = {};
+        this.courseGroups = {};
         this.departmentLength = '1';
     }
 
@@ -25,8 +30,8 @@ export class Schedule {
      */
     streamDept(courses, deptNum) {
         // initialize course group with courses
-        let color = this.departments[deptNum].color;
-        let numCourses = this.departments[deptNum].initialRequest(courses, color);
+        let color = this.courseGroups[deptNum].color;
+        let numCourses = this.courseGroups[deptNum].initialRequest(courses, color);
 
         // update GUI with the number of courses
         setNumberOfCourses(deptNum, numCourses);
@@ -48,7 +53,7 @@ export class Schedule {
 
         data.color = this.generateColorArray(1)[0];
 
-        this.departments[this.departmentLength] = data;
+        this.courseGroups[this.departmentLength] = data;
 
         let options = {
             deptNum: this.departmentLength,
@@ -80,7 +85,7 @@ export class Schedule {
     generateColorArray(numColors) {
         let usedColors = [];
         for (let i = 0; i < numColors; i++) {
-            let current_color = colorChooser(this.course, this.departments, usedColors);
+            let current_color = colorChooser(this.course, this.courseGroups, usedColors);
             usedColors.push(current_color);
         }
         return usedColors;
@@ -180,12 +185,12 @@ export class Schedule {
         let courseInfo = new Course(course_name);
 
         let courseNum = courseInfo.courseNum;
-        courseInfo.mainColor = this.generateColorArray(1)[0];
+        courseInfo.color = this.generateColorArray(1)[0];
 
         let options = {
             name: courseNum,
             courseId: this.courseLength,
-            color: colorDict[courseInfo.mainColor]["s"]
+            color: colorDict[courseInfo.color]["s"]
         };
 
         let buttonHTML = buttonGroup(options);
@@ -444,8 +449,9 @@ export class Schedule {
 
     convertCourseToDept(clickedCourse) {
         let courseInfo = this.course[clickedCourse];
+        courseInfo.selected = null;
         let dept_id = courseInfo.fromDeptButton;
-        let dept = this.departments[dept_id];
+        let dept = this.courseGroups[dept_id];
         $("a[data-course='"+ clickedCourse +"']").removeAttr("data-course").attr("data-dept", dept_id);
         $("a[data-dept='" + dept_id + "'] .course-success").hide();
         $("a[data-dept='" + dept_id + "'] .courseNumBox").text(dept.deptName);
@@ -463,13 +469,13 @@ export class Schedule {
 
     convertDeptToCourse(clickedCourse, clickedSection) {
         let dept = this.lastClickedCourseButton.id;
-        let type = this.departments[dept].deptType;
+        let type = this.courseGroups[dept].deptType;
         if (type == "dept") {
-            let courseInfo = this.departments[dept].courses[clickedCourse];
+            let courseInfo = this.courseGroups[dept].courses[clickedCourse];
             this.convertDeptToCourseHelper(dept, courseInfo, clickedSection, null);
         }
         else {
-            let sectionObj = this.departments[dept].courses[clickedCourse].sections[clickedSection];
+            let sectionObj = this.courseGroups[dept].courses[clickedCourse].sections[clickedSection];
             let department = sectionObj.courseNum.split(" ")[0];
             let courseOrig = sectionObj.courseNum.split(" ")[1];
             let section = sectionObj.courseNum.split(" ")[2];
@@ -509,7 +515,7 @@ export class Schedule {
 
         let testSection = courseInfo.sections[0];
 
-        courseInfo.mainColor = this.departments[dept].color;
+        courseInfo.color = this.courseGroups[dept].color;
 
         let colors = this.generateColorArray(Object.keys(courseInfo.extra_sections).length);
         let color_i = 0;
@@ -604,12 +610,14 @@ export class Schedule {
 
         // clear existing section details from the GUI
         $('#listViewData tbody').html("").removeAttr("data-dept-level");
-        $('.open li').remove();
+        // $('.open li').remove();
 
         // draws all sections for current course, and only selected sections for other courses
         for (let y in this.course) {
             let course_elements = this.course[y].courseDrawToScreen(y, this.course[y].selected, y!=this.lastClickedCourseButton.id);
         }
+
+        ReactDOM.render(<Calendar schedule={this}/>, document.getElementById('calendar-col'));
 
         this.updateCRNList();
         this.overlapDetection();
@@ -625,7 +633,7 @@ export class Schedule {
 
         // clear existing section details from the GUI
         $('#listViewData tbody').html("").attr("data-dept-level",dept);
-        $('.open li').remove();
+        // $('.open li').remove();
 
         // draw selected sections for each course
         for (let y in this.course) {
@@ -633,12 +641,14 @@ export class Schedule {
         }
 
         // draw courses for the currently selected department
-        for (let y in this.departments[dept].courses) {
-            this.departments[dept].courses[y].courseDrawToScreen(y, null, false);
+        for (let y in this.courseGroups[dept].courses) {
+            this.courseGroups[dept].courses[y].courseDrawToScreen(y, null, false);
         }
 
+        ReactDOM.render(<Calendar schedule={this}/>, document.getElementById('calendar-col'));
+
         // link the course sections with the currently selected department
-        $("#calendar .unselectedCalendarSection").attr("data-dept-num", dept);
+        // $("#calendar .unselectedCalendarSection").attr("data-dept-num", dept);
 
         this.updateCRNList();
         this.overlapDetection();
@@ -658,13 +668,13 @@ export class Schedule {
 
         for (let extra in this.course[parent].extra_sections) {
             if (this.course[parent + extra].selected !== null) {
-                $(".course" + parent + extra).remove();
+                // $(".course" + parent + extra).remove();
             }
             delete this.course[parent + extra];
         }
 
         if (this.course[parent].selected !== null) {
-            $(".course" + parent).remove();
+            // $(".course" + parent).remove();
         }
 
         delete this.course[parent];
@@ -677,7 +687,7 @@ export class Schedule {
      * @param id The department ID
      */
     removeDept(id) {
-        delete this.departments[id];
+        delete this.courseGroups[id];
     }
 
     /**
@@ -709,7 +719,7 @@ export class Schedule {
     getSectionDetails(dept_id, course, sectionNum) {
         let section;
         if (dept_id)
-            section = this.departments[this.lastClickedCourseButton.id].courses[course].sections[sectionNum];
+            section = this.courseGroups[this.lastClickedCourseButton.id].courses[course].sections[sectionNum];
         else
             section = this.course[course].sections[sectionNum];
 

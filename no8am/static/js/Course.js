@@ -5,9 +5,10 @@ export class Course {
     constructor (courseNum) {
         this.courseNum = courseNum == null ? "" : courseNum;
         this.extra_sections = {}; // eg {"r": "blue"} // recitation with color blue
-        this.mainColor = null;
+        this.color = null;
         this.sections = [];
         this.fromDeptButton = null; // changes during conversion method
+        this.selected = null;
         this.extra_section_independent = {};
         this.extra_section_lists = {};
     }
@@ -35,7 +36,7 @@ export class Course {
     };
 
     courseDrawToScreen(y, selected, hidden) {
-        drawToScreen(y, selected, hidden, this.mainColor, this.sections);
+        drawToScreen(y, selected, hidden, this.color, this.sections);
     }
 }
 
@@ -43,6 +44,7 @@ export class ExtraCourse {
     constructor(data, color) {
         this.sections = data;
         this.color = color;
+        this.selected = null;
         this.courseNum = this.sections[0].courseNum.split(" ").slice(0,2).join(" ");
     }
 

@@ -320,11 +320,10 @@ body,html{height: 100%;}
 }
 
 /**************************** Event Columns and Bubbles ****************************/
-.open{height:100%;float:center;clear:both; padding-top: 0}
-.open li{-webkit-border-radius:10px;border-radius:10px;width:18.5%;position:absolute;}
-.open li p{margin-top:5px;margin-left:10px;margin-right:10px;line-height:12px;font-size:11pt;color:#ffffff;overflow:hidden;font-family:Trebuchet MS}
-.open li:hover{cursor:pointer;}
-.open ul {padding: 0 0 0 0; height: 100%}
+.day ul{height:100%;float:center;clear:both; padding: 0 0 0 0;}
+.day li{-webkit-border-radius:10px;border-radius:10px;width:18.5%;position:absolute;}
+.day li:hover{cursor:pointer;}
+.day li p{margin-top:5px;margin-left:10px;margin-right:10px;line-height:12px;font-size:11pt;color:#ffffff;overflow:hidden;font-family:Trebuchet MS}
 
 .blue{background:#5496dd;} /* selected */
 .blue.hover{background:#5c9ef9;} /* selected + hover */
