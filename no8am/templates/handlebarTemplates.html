@@ -29,13 +29,6 @@
     {{/if}}
 </script>
 
-<script id="calendarElement" type="x-handlebars-template">
-    <li style="display:{{display}}; height: {{height}}%; margin-top: {{margin}}%;background:{{color}}" id="section{{section}}" class="{{course}} section{{section}} {{selected}} ">
-        <p class="courseNum" style="display: block;">{{courseNum}}</p>
-        <p style="display: none;" class="timesMet">{{timesMet}}</p>
-    </li>
-</script>
-
 <script id="buttonGroupTemplate" type="x-handlebars-template">
     <div class="list-group {{#if courseId}}anim{{courseId}}{{/if}}" style="display:none">
         {{> courseButton}}
@@ -47,7 +40,6 @@
         {{> courseButton}}
     {{/each}}
 </script>
-
 
 <script id="courseButtonPartialTemplate" type="x-handlebars-template">
     <a {{#if deptNum}}data-dept="{{deptNum}}"{{else}}data-course="{{courseId}}"{{/if}} style="border-left-width: 10px; padding-left: 5px; border-left-style: solid; border-left-color:{{color}}; {{#if isExtra}}display:none{{/if}}" {{#if courseId}}id='toggle{{courseId}}'{{/if}} class="list-group-item toggle course-button {{#if isDisabled}}disabled{{/if}}">
@@ -85,18 +77,6 @@
             </span>
         </p>
     </a>
-</script>
-
-<script id="sectionTableTemplate" type="x-handlebars-template">
-    {{#each this}}
-        <tr id='section{{sectionNum}}' class='{{classId}} section{{sectionNum}} {{#if isSelected}}success{{/if}}'>
-            <td> {{courseNum}} </td>
-            <td> {{timesMet}} </td>
-            <td> {{roomMet}} </td>
-            <td> {{professor}} </td>
-            <td> {{freeSeats}} </td>
-        </tr>
-    {{/each}}
 </script>
 
 <script id="sectionDetailsTemplate" type="x-handlebars-template">

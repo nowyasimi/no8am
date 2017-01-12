@@ -548,11 +548,11 @@ export function drawToScreen(y, selected, hidden, color, sections) {
         }
 
         if (!hidden) {
-            generated_list.push(sections[x].listGen('course' + y, !hidden2, x));
+            // generated_list.push(sections[x].listGen('course' + y, !hidden2, x));
         }
     }
-    let sectionListHTML = sectionList(generated_list);
-    $("#listViewData tbody").append(sectionListHTML);
+    // let sectionListHTML = sectionList(generated_list);
+    // $("#listViewData tbody").append(sectionListHTML);
 }
 
 /**
@@ -903,26 +903,17 @@ export function courseTableSectionHoverHandler() {
  */
 export function courseTableSectionClickHandler() {
     if ($(this).hasClass("success")) {
-        $(this).removeClass("success");
         $("#sectionDetails").html("");
         return;
     }
-    $("#listViewData .success").removeClass("success");
-    $(this).addClass("success");
     let clickedCourse = $(this).attr('class').split(' ')[0];
     let clickedCourseNum = clickedCourse.substring(6);
     let clickedSection = $(this).attr('class').split(' ')[1];
     let idNum = clickedSection.substring(7);
     let isDept = false;
     if ($("#listViewData tbody")[0].hasAttribute("data-dept-level")) {
-        // let dept = $(this).parent().attr("data-dept-level");
-        // $("#calendar [data-dept-num='" + dept + "'].unselectedCalendarSection").hide();
         isDept = true;
     }
-    else {
-        $("#calendar ." + clickedCourse + ".unselectedCalendarSection").hide();
-    }
-    $("#calendar ." + clickedCourse + "."+clickedSection).show();
     sched.getSectionDetails(isDept, clickedCourseNum, idNum);
 }
 

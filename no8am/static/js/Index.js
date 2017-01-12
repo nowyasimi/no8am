@@ -9,7 +9,7 @@ import {
     initializeTypeahead, generateCustomLink, handleNewInput, removeCourseButtonHandler,
     initializeHandlebarsTemplates, revertToCourseGroupButtonHandler, viewSectionListButtonHandler,
     sendReport, viewSelectionsButtonHandler, editButtonHandler,
-    clearReportErrorModal, courseTableSectionHoverHandler, courseTableSectionClickHandler,
+    clearReportErrorModal, courseTableSectionClickHandler,
     openSaveModalButtonHandler, retryButtonHandler, updateCourseTableBackdrop, findCourseConfigurations, justDoIt,
     addCoursesInSavedSchedule
 } from './base';
@@ -50,7 +50,6 @@ $(function() {
         .on("click", ".removeCourse", removeCourseButtonHandler)
         .on("click", ".course-revert", revertToCourseGroupButtonHandler)
         .on('click', '.toggle', viewSectionListButtonHandler)
-        .on("mouseenter mouseleave", "#courseTable tr", courseTableSectionHoverHandler)
         .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
         .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })
         .on('shown.bs.modal', '#courseTable', updateCourseTableBackdrop)

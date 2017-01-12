@@ -611,7 +611,7 @@ export class Schedule {
     redrawData() {
 
         // clear existing section details from the GUI
-        $('#listViewData tbody').html("").removeAttr("data-dept-level");
+        // $('#listViewData tbody').html("").removeAttr("data-dept-level");
         // $('.open li').remove();
 
         // draws all sections for current course, and only selected sections for other courses
@@ -634,7 +634,7 @@ export class Schedule {
     redrawDeptData(dept) {
 
         // clear existing section details from the GUI
-        $('#listViewData tbody').html("").attr("data-dept-level",dept);
+        // $('#listViewData tbody').html("").attr("data-dept-level",dept);
         // $('.open li').remove();
 
         // draw selected sections for each course

@@ -1,40 +1,38 @@
 let React = require('react');
 
-import {CalendarSection} from "./CalendarSection.jsx";
+import {CalendarSection} from "./CalendarSection.jsx"
+import {CourseTableSection} from "./CourseTableSection.jsx"
 import { createStore } from 'redux'
 import { Provider, connect } from 'react-redux'
+import { sectionReducer } from "../reducers/sectionReducer"
+import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
+        mouseLeaveCourseTableSection, highlightCourseTableSection} from "../actions/sectionActions"
 
 const DAYS_OF_WEEK_SHORT = ["M", "T", "W", "R", "F"];
 
-const store = createStore(calendarSectionReducer);
-
-export const mouseEnterSection = (courseId) => {
-    return {
-        type: 'MOUSE_ENTER',
-        courseId
-    }
-};
-
-export const mouseLeaveSection = (courseId) => {
-    return {
-        type: 'MOUSE_LEAVE',
-        courseId
-    };
-};
+const store = createStore(sectionReducer);
 
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        hover: state.hover,
-        hoverCourseId: state.courseId
+        hoverCourseId: state.hoverCourseId,
+        courseTableHoverCourseGroupId: state.courseTableHoverCourseGroupId,
+        courseTableHoverCourseId: state.courseTableHoverCourseId,
+        courseTableHoverSectionId: state.courseTableHoverSectionId,
+        highlightCourseGroupId: state.highlightCourseGroupId,
+        highlightCourseId: state.highlightCourseId,
+        highlightSectionId: state.highlightSectionId
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, sectionProps) {
     return {
-        onMouseEnter: () => dispatch(mouseEnterSection(sectionProps.courseId)),
-        onMouseLeave: () => dispatch(mouseLeaveSection(sectionProps.courseId))
+        onMouseEnterCalendar: () => dispatch(mouseEnterCalendarSection(sectionProps.courseId)),
+        onMouseLeaveCalendar: () => dispatch(mouseLeaveCalendarSection()),
+        onMouseEnterCourseTable: () => dispatch(mouseEnterCourseTableSection(sectionProps.courseGroupId, sectionProps.courseId, sectionProps.sectionId)),
+        onMouseLeaveCourseTable: () => dispatch(mouseLeaveCourseTableSection()),
+        onHighlightCourseTable: () => dispatch(highlightCourseTableSection(sectionProps.courseGroupId, sectionProps.courseId, sectionProps.sectionId))
     }
 }
 
@@ -44,24 +42,10 @@ const ConnectedCalendarSection = connect(
     mapDispatchToProps
 )(CalendarSection);
 
-
-export function calendarSectionReducer(state = {hover: false, hoverCourseId: null}, action) {
-    switch (action.type) {
-        case 'MOUSE_ENTER':
-            return {
-                hover: true,
-                courseId: action.courseId
-            };
-        case 'MOUSE_LEAVE':
-            return {
-                hover: false,
-                courseId: action.courseId
-            };
-        default:
-            return state
-    }
-}
-
+const ConnectedCourseTableSection = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CourseTableSection);
 
 export class CalendarCourses extends React.Component {
 
@@ -73,11 +57,19 @@ export class CalendarCourses extends React.Component {
     // Draw potential sections for currently selected course or course group
     // No selected sections to worry about for course groups
 
-    createSections(sectionsToDisplay, courses, courseGroupId) {
+    createSections(sectionsToDisplay, courseTableSections, courses, courseGroupId) {
+
+        console.log(courseGroupId);
+        console.log(this.props.schedule.lastClickedCourseButton);
 
         // loop through all courses
         for (let courseId in courses) {
             let course = courses[courseId];
+
+            let matchesLastClicked =
+                (courseGroupId != undefined && courseGroupId == this.props.schedule.lastClickedCourseButton.id) ||
+                (courseGroupId == undefined &&      courseId == this.props.schedule.lastClickedCourseButton.id);
+            console.log(matchesLastClicked);
 
             // loop through sections
             for (let sectionIndex in course.sections) {
@@ -88,10 +80,17 @@ export class CalendarCourses extends React.Component {
                     let day = section.daysMet[index][0];
                     let key = `courseGroupId${courseGroupId}course${courseId}section${sectionIndex}index${index}`;
                     sectionsToDisplay[day].push(
-                        <Provider key={key} store={store}>
-                            <ConnectedCalendarSection {...this.props} {...course} {...section} day={index}
-                                             courseGroupId={courseGroupId} courseId={courseId} sectionId={sectionIndex}/>
-                        </Provider>
+                        <ConnectedCalendarSection key={key} {...this.props} {...course} {...section} day={index}
+                                         courseGroupId={courseGroupId} courseId={courseId} sectionId={sectionIndex}/>
+                    )
+                }
+
+                if (matchesLastClicked) {
+                    console.log('match');
+                    let key = `coursetablecourseGroupId${courseGroupId}course${courseId}section${sectionIndex}`;
+                    courseTableSections.push(
+                        <ConnectedCourseTableSection key={key} {...section} courseGroupId={courseGroupId} courseId={courseId}
+                                            sectionId={sectionIndex} />
                     )
                 }
             }
@@ -104,32 +103,81 @@ export class CalendarCourses extends React.Component {
             "M": [], "T": [], "W": [], "R": [], "F": []
         };
 
+        let courseTableSections = [];
+
         let courses = this.props.schedule.course;
-        this.createSections(sectionsToDisplay, courses);
+        this.createSections(sectionsToDisplay, courseTableSections, courses);
         for (let courseGroupId in this.props.schedule.courseGroups) {
             let courses = this.props.schedule.courseGroups[courseGroupId].courses;
-            this.createSections(sectionsToDisplay, courses, courseGroupId);
+            this.createSections(sectionsToDisplay, courseTableSections, courses, courseGroupId);
         }
 
-        return DAYS_OF_WEEK_SHORT.map((day) =>
-            (
-                <div className="day" id={day} key={day}>
-                    <ul className="list-unstyled open">
-                        {sectionsToDisplay[day]}
-                    </ul>
-                </div>
+        let calendarSections = DAYS_OF_WEEK_SHORT.map((day) => (
+            <div className="day" id={day} key={day}>
+                <ul className="list-unstyled open">
+                    {sectionsToDisplay[day]}
+                </ul>
+            </div>
             )
         );
+
+
+        return {
+            "calendarSections": calendarSections,
+            "courseTableSections": courseTableSections
+        }
     }
 
     render() {
-        return (
-            <div id="course-data" className="list-group-item">
-                <div className="week">
-                    { this.generateCourseData() }
-                </div>
-            </div>
+        let {calendarSections, courseTableSections} = this.generateCourseData();
+        console.log(calendarSections);
 
+        return (
+            <Provider store={store}>
+                <div id="course-data" className="list-group-item">
+                    <div className="week">
+                        { calendarSections }
+                    </div>
+                    <div className="modal fade" id="courseTable" role="dialog" style={{opacity:.98, textAlign: 'left'}}>
+                        <div className="modal-dialog" style={{position: 'absolute', left: '20px'}}>
+                            <div className="modal-content">
+                                <div className="modal-body" style={{padding: "0 0 0 0"}}>
+                                    <div className="row" style={{overflowY:'auto',marginLeft: '0px', marginRight: '0px'}}>
+                                        <table className="table table-hover table-condensed" id="listViewData">
+                                            <thead>
+                                            <tr>
+                                                <td>Section</td>
+                                                <td>Time</td>
+                                                <td>Room</td>
+                                                <td>Instructor</td>
+                                                <td>Seats</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                { courseTableSections }
+                                            </tbody>
+                                        </table>
+                                        <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
+                                            <button id="selectSection" className="btn btn-primary" style={{marginBottom:'5px', width: '100%', fontSize: '16px'}}>
+                                                Done
+                                            </button>
+                                            <div className="spinner2" style={{display:'none'}}>
+                                                <div className="rect1"></div>
+                                                <div className="rect2"></div>
+                                                <div className="rect3"></div>
+                                                <div className="rect4"></div>
+                                                <div className="rect5"></div>
+                                            </div>
+                                            <div id="sectionDetails">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Provider>
         );
     }
 }
