@@ -16,12 +16,14 @@ export class Calendar extends React.Component {
 
     render() {
         return (
-            <div>
-                <div id="calendar" className="list-group">
-                    <div id="calendar-titles" className="panel-heading">
-                        { Calendar.generate_calendar_titles() }
+            <div className="col-sm-6 page2bg" id="calendar-col">
+                <div>
+                    <div id="calendar" className="list-group">
+                        <div id="calendar-titles" className="panel-heading">
+                            { Calendar.generate_calendar_titles() }
+                        </div>
+                        <CalendarCourses {...this.props} />
                     </div>
-                    <CalendarCourses {...this.props} />
                 </div>
             </div>
         );

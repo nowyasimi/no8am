@@ -1,9 +1,4 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-
 import {colorDict, SECTION_TYPES, COURSE_LOOKUP_URL, SECTION_DETAILS_URL, DAYS_OF_WEEK} from './Constants';
-
-import {Calendar} from './components/Calendar.jsx';
 
 import {
     setNumberOfCourses, setNumberOfSections, colorChooser, removeIntroInfo, customSort, updateCourseTableBackdrop,
@@ -611,7 +606,7 @@ export class Schedule {
     redrawData() {
 
         // clear existing section details from the GUI
-        // $('#listViewData tbody').html("").removeAttr("data-dept-level");
+        $('#listViewData tbody').removeAttr("data-dept-level");
         // $('.open li').remove();
 
         // draws all sections for current course, and only selected sections for other courses
@@ -634,7 +629,7 @@ export class Schedule {
     redrawDeptData(dept) {
 
         // clear existing section details from the GUI
-        // $('#listViewData tbody').html("").attr("data-dept-level",dept);
+        $('#listViewData tbody').attr("data-dept-level",dept);
         // $('.open li').remove();
 
         // draw selected sections for each course
@@ -728,14 +723,14 @@ export class Schedule {
         let crn = section.CRN;
         let dept = section.courseNum.split(" ")[0];
 
-        $(".spinner2").show();
+        $(".spinner").show();
 
         $.ajax({
             url: SECTION_DETAILS_URL,
             data: {department: dept, crn: crn},
             context: {section: section}
         }).done(function(data) {
-            $(".spinner2").hide();
+            $(".spinner").hide();
             let section = this.section;
             let $page = $($.parseHTML(data.section_details));
             let rows = $page.find("tr");

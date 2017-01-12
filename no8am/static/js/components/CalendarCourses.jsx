@@ -4,6 +4,7 @@ import {CalendarSection} from "./CalendarSection.jsx"
 import {CourseTableSection} from "./CourseTableSection.jsx"
 import { createStore } from 'redux'
 import { Provider, connect } from 'react-redux'
+import { Modal } from 'react-bootstrap';
 import { sectionReducer } from "../reducers/sectionReducer"
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
         mouseLeaveCourseTableSection, highlightCourseTableSection} from "../actions/sectionActions"
@@ -51,6 +52,10 @@ export class CalendarCourses extends React.Component {
 
     constructor() {
         super();
+
+        this.state = {
+            showModal: true
+        }
     }
 
     // Always draw selected sections
@@ -66,9 +71,10 @@ export class CalendarCourses extends React.Component {
         for (let courseId in courses) {
             let course = courses[courseId];
 
+            let lastClicked = this.props.schedule.lastClickedCourseButton;
             let matchesLastClicked =
-                (courseGroupId != undefined && courseGroupId == this.props.schedule.lastClickedCourseButton.id) ||
-                (courseGroupId == undefined &&      courseId == this.props.schedule.lastClickedCourseButton.id);
+                (courseGroupId != undefined && courseGroupId == lastClicked.id && lastClicked.type == "dept") ||
+                (courseGroupId == undefined &&      courseId == lastClicked.id && lastClicked.type == "course");
             console.log(matchesLastClicked);
 
             // loop through sections
@@ -128,6 +134,13 @@ export class CalendarCourses extends React.Component {
         }
     }
 
+
+    hideModal() {
+        this.setState({
+            showModal:false
+        })
+    }
+
     render() {
         let {calendarSections, courseTableSections} = this.generateCourseData();
         console.log(calendarSections);
@@ -138,38 +151,37 @@ export class CalendarCourses extends React.Component {
                     <div className="week">
                         { calendarSections }
                     </div>
-                    <div className="modal fade" id="courseTable" role="dialog" style={{opacity:.98, textAlign: 'left'}}>
-                        <div className="modal-dialog" style={{position: 'absolute', left: '20px'}}>
+
+                    <div className="modal fade" id="courseTable" role="dialog">
+                        <div className="modal-dialog">
                             <div className="modal-content">
-                                <div className="modal-body" style={{padding: "0 0 0 0"}}>
-                                    <div className="row" style={{overflowY:'auto',marginLeft: '0px', marginRight: '0px'}}>
-                                        <table className="table table-hover table-condensed" id="listViewData">
-                                            <thead>
-                                            <tr>
-                                                <td>Section</td>
-                                                <td>Time</td>
-                                                <td>Room</td>
-                                                <td>Instructor</td>
-                                                <td>Seats</td>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                { courseTableSections }
-                                            </tbody>
-                                        </table>
-                                        <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
-                                            <button id="selectSection" className="btn btn-primary" style={{marginBottom:'5px', width: '100%', fontSize: '16px'}}>
-                                                Done
-                                            </button>
-                                            <div className="spinner2" style={{display:'none'}}>
-                                                <div className="rect1"></div>
-                                                <div className="rect2"></div>
-                                                <div className="rect3"></div>
-                                                <div className="rect4"></div>
-                                                <div className="rect5"></div>
-                                            </div>
-                                            <div id="sectionDetails">
-                                            </div>
+                                <div className="modal-body">
+                                    <table className="table table-hover table-condensed" id="listViewData">
+                                        <thead>
+                                        <tr>
+                                            <td>Section</td>
+                                            <td>Time</td>
+                                            <td>Room</td>
+                                            <td>Instructor</td>
+                                            <td>Seats</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        { courseTableSections }
+                                        </tbody>
+                                    </table>
+                                    <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
+                                        <button id="selectSection" className="btn btn-primary">
+                                            Done
+                                        </button>
+                                        <div className="spinner" style={{display:'none'}}>
+                                            <div className="rect1"></div>
+                                            <div className="rect2"></div>
+                                            <div className="rect3"></div>
+                                            <div className="rect4"></div>
+                                            <div className="rect5"></div>
+                                        </div>
+                                        <div id="sectionDetails">
                                         </div>
                                     </div>
                                 </div>
@@ -181,3 +193,38 @@ export class CalendarCourses extends React.Component {
         );
     }
 }
+
+// <Modal show={this.state.showModal} id="courseTable" dialogClassName="courseTable" onHide={this.hideModal()}>
+//     <Modal.Dialog>
+//         <Modal.Body>
+//             <table className="table table-hover table-condensed" id="listViewData">
+//                 <thead>
+//                 <tr>
+//                     <td>Section</td>
+//                     <td>Time</td>
+//                     <td>Room</td>
+//                     <td>Instructor</td>
+//                     <td>Seats</td>
+//                 </tr>
+//                 </thead>
+//                 <tbody>
+//                 { courseTableSections }
+//                 </tbody>
+//             </table>
+//             <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
+//                 <button id="selectSection" className="btn btn-primary">
+//                     Done
+//                 </button>
+//                 <div className="spinner" style={{display:'none'}}>
+//                     <div className="rect1"></div>
+//                     <div className="rect2"></div>
+//                     <div className="rect3"></div>
+//                     <div className="rect4"></div>
+//                     <div className="rect5"></div>
+//                 </div>
+//                 <div id="sectionDetails">
+//                 </div>
+//             </div>
+//         </Modal.Body>
+//     </Modal.Dialog>
+// </Modal>

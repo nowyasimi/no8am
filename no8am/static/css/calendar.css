@@ -39,6 +39,75 @@ body,html{height: 100%;}
 }
 
 /**************************** Page 1 ****************************/
+#mainReactContainer > div {
+	height: 100%;
+}
+
+.viewToggleButtonContainer {
+	margin-bottom:20px;
+}
+
+#remote {
+	padding-bottom:10px;
+}
+
+#welcomeWell {
+	margin-top: 10px; display: block; background: rgb(239, 239, 239);
+}
+
+#welcomeWell h3 {
+	margin-top:0; font-size:22pt
+}
+
+#welcomeWell span {
+	font-size:14pt;
+}
+
+.openModalButton {
+	font-size:13pt;
+}
+
+#hasOverlap {
+	display:none;
+}
+
+#courseButtons {
+	padding-top:20px
+}
+
+#viewSelections {
+	display:none; padding-top:20px;
+}
+
+#viewSelections > .row {
+	margin-right: 0px; margin-left:0px;
+}
+
+#crnlist {
+	margin-right:15px; margin-left:15px;font-size:12pt;
+}
+
+#openSaveButtons {
+	cursor:pointer;
+}
+
+#openGenerateLinkModal {
+	cursor:pointer;
+}
+
+#generatedLink {
+	display: none;
+}
+
+#generatedLink > .glyphicon {
+	display:none;color:orange;
+}
+
+.under-courses {
+	display:none;
+}
+
+
 #courseSubmit{
 	font-size:24px;
 	padding:14px 24px;
@@ -188,12 +257,6 @@ body,html{height: 100%;}
 	cursor: pointer;
 }
 
-@media (min-width:768px) {
-	#courseTable .modal-dialog {
-		width: calc(50% - 10px);
-	}
-}
-
 .btn-group-vertical button {
 	font-size:14pt;
 }
@@ -260,13 +323,43 @@ body,html{height: 100%;}
     height: calc(100% - 45px);
 }
 
-/**************************** Book Info ****************************/
-#resultBookBody a {
-	color: #158E0D;
+/**************************** Course table modal ****************************/
+/*#courseTable {*/
+    /*opacity:.98;*/
+    /*text-align: left;*/
+/*}*/
+
+/*#courseTable .modal-dialog {*/
+    /*position: absolute;*/
+    /*left: 20px;*/
+/*}*/
+
+/*#courseTable .modal-body {*/
+    /*padding: 0 0 0 0;*/
+    /*overflow-y: auto;*/
+    /*margin-left: 0px;*/
+    /*margin-right: 0px*/
+/*}*/
+
+/*@media (min-width:768px) {*/
+    /*#courseTable .modal-dialog {*/
+        /*width: calc(50% - 10px);*/
+    /*}*/
+/*}*/
+
+.courseTable {
+    height: 100%;
 }
 
-/*spinner*/
-.spinner,.spinner2 {
+#selectSection {
+    margin-bottom: 5px;
+    width: 100%;
+    font-size: 16px;
+}
+
+/**************************** Section details spinner ****************************/
+
+.spinner {
   margin: 20px auto;
   width: 50px;
   height: 40px;
@@ -274,32 +367,33 @@ body,html{height: 100%;}
   font-size: 10px;
 }
 
-.spinner > div,.spinner2 > div {
+.spinner > div {
   background-color: #333;
   height: 100%;
   width: 6px;
   display: inline-block;
+  margin-right: 2px;
 
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
-.spinner .rect2,.spinner2 .rect2 {
+.spinner .rect2 {
   -webkit-animation-delay: -1.1s;
   animation-delay: -1.1s;
 }
 
-.spinner .rect3,.spinner2 .rect3 {
+.spinner .rect3 {
   -webkit-animation-delay: -1.0s;
   animation-delay: -1.0s;
 }
 
-.spinner .rect4,.spinner2 .rect4 {
+.spinner .rect4 {
   -webkit-animation-delay: -0.9s;
   animation-delay: -0.9s;
 }
 
-.spinner .rect5,.spinner2 .rect5 {
+.spinner .rect5 {
   -webkit-animation-delay: -0.8s;
   animation-delay: -0.8s;
 }
@@ -320,7 +414,7 @@ body,html{height: 100%;}
 }
 
 /**************************** Event Columns and Bubbles ****************************/
-.day ul{height:100%;float:center;clear:both; padding: 0 0 0 0;}
+.day ul{height:100%;clear:both; padding: 0 0 0 0;}
 .day li{-webkit-border-radius:10px;border-radius:10px;width:18.5%;position:absolute;}
 .day li:hover{cursor:pointer;}
 .day li p{margin-top:5px;margin-left:10px;margin-right:10px;line-height:12px;font-size:11pt;color:#ffffff;overflow:hidden;font-family:Trebuchet MS}

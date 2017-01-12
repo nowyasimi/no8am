@@ -1,5 +1,9 @@
-$ = require('jquery');
+import $ from 'jquery'
+global.$ = global.jQuery = $;
 
+console.log($);
+
+let React = require('react');
 let ReactDOM = require('react-dom');
 
 require('bootstrap');
@@ -16,7 +20,7 @@ import {
 
 import {Schedule} from './Schedule';
 
-import {Calendar} from './components/Calendar.jsx';
+import {Main} from './components/Main.jsx';
 
 
 // global schedule object
@@ -25,7 +29,7 @@ global.sched = sched;
 
 
 export function createCalendar() {
-    ReactDOM.render(<Calendar schedule={sched}/>, document.getElementById('calendar-col'));
+    ReactDOM.render(<Main schedule={sched}/>, document.getElementById('mainReactContainer'));
 }
 
 // called when page is fully loaded
@@ -52,8 +56,8 @@ $(function() {
         .on('click', '.toggle', viewSectionListButtonHandler)
         .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
         .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })
-        .on('shown.bs.modal', '#courseTable', updateCourseTableBackdrop)
-        .on('hidden.bs.modal', "#courseTable", sectionSelectionHandler)
+        // .on('shown.bs.modal', '#courseTable', updateCourseTableBackdrop)
+        // .on('hidden.bs.modal', "#courseTable", sectionSelectionHandler)
         .on("click", ".selectCourseConfig", newScheduleFromConfig)
         .on("click", ".removeCourseConfig", removeFromStorage)
         .on("click", ".openModalButton", function(){ findCourseConfigurations(); $("#openModal").modal();})

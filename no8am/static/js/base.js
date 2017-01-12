@@ -1,8 +1,7 @@
 let Handlebars = require('handlebars');
-let typeahead = require('typeahead');
-let Bloodhound = require('../../../node_modules/typeahead.js/dist/bloodhound.js');
-
-require('bootstrap');
+let typeahead = require("typeahead.js-browserify");
+typeahead.loadjQueryPlugin();
+let Bloodhound = require("typeahead.js-browserify").Bloodhound;
 
 import {
     colorDict, SECTION_TYPES, OTHER_LOOKUP_URL, DEPT_LOOKUP_URL, COURSE_LOOKUP_URL, STORE_CONFIG_URL,
@@ -13,8 +12,7 @@ import {Course, ExtraCourse} from './Course';
 import {Schedule} from './Schedule';
 
 // handlebars templates
-export let calendarElement, buttonGroup, extraSectionsButton, sectionList, sectionDetails, courseOverlap, savedSchedule,
-    crnTable;
+export let buttonGroup, extraSectionsButton, sectionDetails, courseOverlap, savedSchedule, crnTable;
 
 // for adding tooltip to custom link button
 let showTooltip = false;
@@ -784,10 +782,8 @@ export function removeCourseButtonHandler(e) {
  * Initialize templates for dynamically generating and inserting HTML.
  */
 export function initializeHandlebarsTemplates() {
-    calendarElement = Handlebars.compile($("#calendarElement").html());
     buttonGroup = Handlebars.compile($("#buttonGroupTemplate").html());
     extraSectionsButton = Handlebars.compile($("#extraSectionsButtonTemplate").html());
-    sectionList = Handlebars.compile($("#sectionTableTemplate").html());
     sectionDetails = Handlebars.compile($("#sectionDetailsTemplate").html());
     courseOverlap = Handlebars.compile($("#overlapTemplate").html());
     savedSchedule = Handlebars.compile($("#savedScheduleTemplate").html());
