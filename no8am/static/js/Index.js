@@ -1,3 +1,6 @@
+import "babel-polyfill";
+
+
 import $ from 'jquery'
 global.$ = global.jQuery = $;
 
@@ -9,12 +12,12 @@ let ReactDOM = require('react-dom');
 require('bootstrap');
 
 import {
-    generateAndStoreJSON, removeFromStorage, sectionSelectionHandler, newScheduleFromConfig,
+    generateAndStoreJSON, removeFromStorage, newScheduleFromConfig,
     initializeTypeahead, generateCustomLink, handleNewInput, removeCourseButtonHandler,
     initializeHandlebarsTemplates, revertToCourseGroupButtonHandler, viewSectionListButtonHandler,
     sendReport, viewSelectionsButtonHandler, editButtonHandler,
-    clearReportErrorModal, courseTableSectionClickHandler,
-    openSaveModalButtonHandler, retryButtonHandler, updateCourseTableBackdrop, findCourseConfigurations, justDoIt,
+    clearReportErrorModal,
+    openSaveModalButtonHandler, retryButtonHandler, findCourseConfigurations, justDoIt,
     addCoursesInSavedSchedule
 } from './base';
 
@@ -54,7 +57,7 @@ $(function() {
         .on("click", ".removeCourse", removeCourseButtonHandler)
         .on("click", ".course-revert", revertToCourseGroupButtonHandler)
         .on('click', '.toggle', viewSectionListButtonHandler)
-        .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
+        // .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
         .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })
         // .on('shown.bs.modal', '#courseTable', updateCourseTableBackdrop)
         // .on('hidden.bs.modal', "#courseTable", sectionSelectionHandler)

@@ -1,7 +1,7 @@
 let React = require('react');
 
 import {Modal} from "react-bootstrap"
-import {ConnectedCourseTableSection} from "./Main.jsx"
+import {ConnectedCourseTableSection, ConnectedSectionDetails} from "./Main.jsx"
 
 
 export class SectionListModal extends React.Component {
@@ -12,6 +12,8 @@ export class SectionListModal extends React.Component {
         this.state = {
             showModal: false
         };
+
+        this.handleClose = this.handleClose.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -24,13 +26,21 @@ export class SectionListModal extends React.Component {
         }
     }
 
-    createSections() {
+    handleClose() {
+        this.setState({
+            showModal:false
+        })
+    }
 
+    render() {
         let courseTableSections = [];
+
+        let course = null;
 
         if (this.state.courseId !== undefined) {
             let courseId = this.state.courseId;
-            let sections = this.props.schedule.course[courseId].sections;
+            course = this.props.schedule.course[courseId];
+            let sections = course.sections;
             // loop through sections
             for (let sectionIndex in sections) {
                 let section = sections[sectionIndex];
@@ -41,14 +51,8 @@ export class SectionListModal extends React.Component {
             }
         }
 
-        return courseTableSections;
-    }
-
-    render() {
-        let handleClose = () => this.setState({showModal: false});
-
         return (
-            <Modal show={this.state.showModal} onHide={handleClose} dialogClassName="sectionListModal">
+            <Modal show={this.state.showModal} onHide={this.handleClose} dialogClassName="sectionListModal">
                 <Modal.Dialog>
                     <Modal.Body>
                         <table className="table table-hover table-condensed" id="listViewData">
@@ -62,21 +66,15 @@ export class SectionListModal extends React.Component {
                             </tr>
                             </thead>
                             <tbody>
-                            { this.createSections() }
+                            { courseTableSections }
                             </tbody>
                         </table>
                         <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
                             <button id="selectSection" className="btn btn-primary">
                                 Done
                             </button>
-                            <div className="spinner" style={{display:'none'}}>
-                                <div className="rect1"></div>
-                                <div className="rect2"></div>
-                                <div className="rect3"></div>
-                                <div className="rect4"></div>
-                                <div className="rect5"></div>
-                            </div>
                             <div id="sectionDetails">
+                                <ConnectedSectionDetails {...course}/>
                             </div>
                         </div>
                     </Modal.Body>
@@ -85,42 +83,3 @@ export class SectionListModal extends React.Component {
         );
     }
 }
-
-// <div className="modal fade" id="courseTable" role="dialog">
-//     <div className="modal-dialog">
-//         <div className="modal-content">
-//             <div className="modal-body">
-//                 <table className="table table-hover table-condensed" id="listViewData">
-//                     <thead>
-//                     <tr>
-//                         <td>Section</td>
-//                         <td>Time</td>
-//                         <td>Room</td>
-//                         <td>Instructor</td>
-//                         <td>Seats</td>
-//                     </tr>
-//                     </thead>
-//                     <tbody>
-//                     { this.createSections() }
-//                     </tbody>
-//                 </table>
-//                 <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
-//                     <button id="selectSection" className="btn btn-primary">
-//                         Done
-//                     </button>
-//                     <div className="spinner" style={{display:'none'}}>
-//                         <div className="rect1"></div>
-//                         <div className="rect2"></div>
-//                         <div className="rect3"></div>
-//                         <div className="rect4"></div>
-//                         <div className="rect5"></div>
-//                     </div>
-//                     <div id="sectionDetails">
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-// </div>
-
-

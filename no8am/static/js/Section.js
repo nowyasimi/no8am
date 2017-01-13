@@ -1,6 +1,4 @@
-import {colorDict} from './Constants';
-
-import {parseHours, calendarElement} from './base';
+import {parseHours} from './base';
 
 export class Section {
     constructor(object, CRN) {

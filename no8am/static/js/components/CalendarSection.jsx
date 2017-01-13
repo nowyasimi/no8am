@@ -18,14 +18,14 @@ export class CalendarSection extends React.Component {
         let sectionMatchesSelected = this.props.selected == this.props.sectionId;
 
         let sectionMatchesCourseTableHover =
-            (this.props.courseTableHoverCourseGroupId == this.props.courseGroupId || this.props.courseGroupId == undefined) &&
-            this.props.courseTableHoverCourseId == this.props.courseId &&
-            this.props.courseTableHoverSectionId == this.props.sectionId;
+            (this.props.courseTableHover.courseGroupId == this.props.courseGroupId || this.props.courseGroupId == undefined) &&
+            this.props.courseTableHover.courseId == this.props.courseId &&
+            this.props.courseTableHover.sectionId == this.props.sectionId;
 
         let sectionHighlighted =
-            (this.props.highlightCourseGroupId == this.props.courseGroupId || this.props.courseGroupId == undefined) &&
-            this.props.courseId == this.props.highlightCourseId &&
-            this.props.sectionId == this.props.highlightSectionId;
+            (this.props.highlight.courseGroupId == this.props.courseGroupId || this.props.courseGroupId == undefined) &&
+            this.props.courseId == this.props.highlight.courseId &&
+            this.props.sectionId == this.props.highlight.sectionId;
 
         let displaySection = sectionMatchesSelected || sectionMatchesCourseTableHover || sectionHighlighted;
 

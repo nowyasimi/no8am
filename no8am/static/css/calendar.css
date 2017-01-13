@@ -342,6 +342,7 @@ body,html{height: 100%;}
     left: 10px;
     text-align: left;
     opacity:.98;
+		margin-top: 0;
 }
 /*#courseTable {*/
     /*opacity:.98;*/

@@ -16,19 +16,35 @@ export function sectionReducer(state = {}, action) {
                 courseTableHoverSectionId: action.sectionId,
                 highlightCourseGroupId: state.highlightCourseGroupId,
                 highlightCourseId: state.highlightCourseId,
-                highlightSectionId: state.highlightSectionId
+                highlightSectionId: state.highlightSectionId,
+                sectionDetails: state.sectionDetails
             };
         case 'MOUSE_LEAVE_COURSE_TABLE_SECTION':
             return {
                 highlightCourseGroupId: state.highlightCourseGroupId,
                 highlightCourseId: state.highlightCourseId,
-                highlightSectionId: state.highlightSectionId
+                highlightSectionId: state.highlightSectionId,
+                sectionDetails: state.sectionDetails
             };
-        case 'HIGHLIGHT_COURSE_TABLE_SECTION':
+        case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_REQUEST_SECTION_DETAILS':
             return {
                 highlightCourseGroupId: action.courseGroupId,
                 highlightCourseId: action.courseId,
-                highlightSectionId: state.highlightSectionId == action.sectionId ? null : action.sectionId
+                highlightSectionId: state.highlightSectionId == action.sectionId ? null : action.sectionId,
+                sectionDetails: state.highlightSectionId == action.sectionId ? null : {
+                    state: "loading",
+                    data: null
+                }
+            };
+        case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_RECEIVE_SECTION_DETAILS':
+            return {
+                highlightCourseGroupId: action.courseGroupId,
+                highlightCourseId: action.courseId,
+                highlightSectionId: state.highlightSectionId,
+                sectionDetails: {
+                    state: "loaded",
+                    data: action.sectionDetails
+                }
             };
         case 'CLICK_VIEW_COURSE_TABLE_BUTTON':
             return {

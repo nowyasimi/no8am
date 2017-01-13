@@ -3,8 +3,8 @@ let React = require('react');
 export class CourseTableSection extends React.Component {
     render() {
 
-        let sectionHighlighted = this.props.courseId == this.props.highlightCourseId &&
-            this.props.sectionId == this.props.highlightSectionId;
+        let sectionHighlighted = this.props.courseId == this.props.highlight.courseId &&
+            this.props.sectionId == this.props.highlight.sectionId;
 
         let isSelected = this.props.selected == this.props.sectionId || (sectionHighlighted) ? 'success' : '';
 
