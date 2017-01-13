@@ -31,7 +31,7 @@ export function sectionReducer(state = {}, action) {
                 highlightCourseGroupId: action.courseGroupId,
                 highlightCourseId: action.courseId,
                 highlightSectionId: state.highlightSectionId == action.sectionId ? null : action.sectionId,
-                sectionDetails: state.highlightSectionId == action.sectionId ? null : {
+                sectionDetails: {
                     state: "loading",
                     data: null
                 }

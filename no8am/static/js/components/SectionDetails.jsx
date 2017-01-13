@@ -1,15 +1,29 @@
 let React = require('react');
 
 export class SectionDetails extends React.Component {
+
+    constructor() {
+        super();
+
+        this.state = {
+            sectionId: null
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            sectionId: nextProps.highlight.sectionId
+        });
+    }
+
     render() {
 
-        // $(".spinner").hide();
         let sectionDetailsContainer = this.props.highlight.sectionDetails;
 
         console.log('section details');
         console.log(sectionDetailsContainer);
 
-        if (sectionDetailsContainer == undefined) {
+        if (this.state.sectionId == null) {
             return <div></div>;
         }
 

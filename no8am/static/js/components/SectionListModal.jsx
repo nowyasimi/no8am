@@ -3,7 +3,6 @@ let React = require('react');
 import {Modal} from "react-bootstrap"
 import {ConnectedCourseTableSection, ConnectedSectionDetails} from "./Main.jsx"
 
-
 export class SectionListModal extends React.Component {
 
     constructor() {
@@ -29,7 +28,23 @@ export class SectionListModal extends React.Component {
     handleClose() {
         this.setState({
             showModal:false
-        })
+        });
+
+        let courseId = this.props.highlight.courseId;
+        let sectionId = this.props.highlight.sectionId;
+
+        if (sectionId != undefined && sectionId != null) {
+            sched.handleSelect(courseId, sectionId)
+        }
+
+        // if (isDept && row.length != 0) {
+        //     let dept = $sectionTable.attr("data-dept-level");
+        //     clickedCourse = row.attr("class").split(" ")[0].substring(6);
+        //     sched.convertDeptToCourse(clickedCourse, clickedSection);
+        //     sched.redrawData();
+        // }
+
+
     }
 
     render() {
