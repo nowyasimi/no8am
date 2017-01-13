@@ -116,16 +116,16 @@ export class Schedule {
         }
 
         // initialize course with sections
-        let numSections = this.course[courseLength].initialRequest(sections);
+        this.course[courseLength].initialRequest(sections);
 
         let a = this.course[courseLength].sections[0];
 
         let colors = this.generateColorArray(Object.keys(this.course[courseLength].extra_sections).length);
         let color_i = 0;
 
-        let courseNum = this.course[courseLength].courseNum;
+        // let courseNum = this.course[courseLength].courseNum;
 
-        let templateSections = [];
+        // let templateSections = [];
 
         for (let extra in this.course[courseLength].extra_sections) {
             let current_color = colors[color_i++];
@@ -134,23 +134,23 @@ export class Schedule {
                 this.course[courseLength].extra_section_lists[extra] = new ExtraCourse(a.extra_section_lists[extra], current_color);
             }
 
-            let isIndependent = this.course[courseLength].extra_section_independent[extra];
-            let extra_text = isIndependent ? this.course[courseLength].extra_section_lists[extra].sections.length + " Sections" : "Select Main Section First";
+            // let isIndependent = this.course[courseLength].extra_section_independent[extra];
+            // let extra_text = isIndependent ? this.course[courseLength].extra_section_lists[extra].sections.length + " Sections" : "Select Main Section First";
 
-            let options = {
-                name: courseNum + extra,
-                courseId: courseLength + extra.toUpperCase(),
-                color: colorDict[current_color]["s"],
-                isExtra: true,
-                isDisabled: !this.course[courseLength].extra_section_independent[extra],
-                extra_text: extra_text
-            };
+            // let options = {
+            //     name: courseNum + extra,
+            //     courseId: courseLength + extra.toUpperCase(),
+            //     color: colorDict[current_color]["s"],
+            //     isExtra: true,
+            //     isDisabled: !this.course[courseLength].extra_section_independent[extra],
+            //     extra_text: extra_text
+            // };
 
-            templateSections.push(options);
+            // templateSections.push(options);
         }
 
-        let buttonHTML = extraSectionsButton(templateSections);
-        $("a[data-course='"+ courseLength +"']").parent().append(buttonHTML).children().slideDown();
+        // let buttonHTML = extraSectionsButton(templateSections);
+        // $("a[data-course='"+ courseLength +"']").parent().append(buttonHTML).children().slideDown();
 
         for (let extra in this.course[courseLength].extra_sections) {
             if (this.course[courseLength].extra_section_independent[extra]) {
@@ -167,7 +167,9 @@ export class Schedule {
         this.updateCRNList();
 
         // update GUI with the number of sections
-        setNumberOfSections(courseLength, numSections);
+        // setNumberOfSections(courseLength, numSections);
+
+        createCalendar();
     }
 
     /**
@@ -181,29 +183,31 @@ export class Schedule {
 
         let courseInfo = new Course(course_name);
 
-        let courseNum = courseInfo.courseNum;
+        // let courseNum = courseInfo.courseNum;
         courseInfo.color = this.generateColorArray(1)[0];
 
-        let options = {
-            name: courseNum,
-            courseId: this.courseLength,
-            color: colorDict[courseInfo.color]["s"]
-        };
+        // let options = {
+        //     name: courseNum,
+        //     courseId: this.courseLength,
+        //     color: colorDict[courseInfo.color]["s"]
+        // };
 
-        let buttonHTML = buttonGroup(options);
-
-        if ($("#buttons-1 .list-group-item").length <= $("#buttons-2 .list-group-item").length) {
-            $("#buttons-1").append(buttonHTML);
-        }
-        else {
-            $("#buttons-2").append(buttonHTML);
-        }
+        // let buttonHTML = buttonGroup(options);
+        //
+        // if ($("#buttons-1 .list-group-item").length <= $("#buttons-2 .list-group-item").length) {
+        //     $("#buttons-1").append(buttonHTML);
+        // }
+        // else {
+        //     $("#buttons-2").append(buttonHTML);
+        // }
 
         courseInfo.selected = null;
         this.course[this.courseLength] = courseInfo; // creates a dictionary in form {'1': object, '1R', object}
 
 
-        $(".anim" + this.courseLength).slideDown();
+        // $(".anim" + this.courseLength).slideDown();
+
+        createCalendar();
 
         return this.courseLength++;
     }

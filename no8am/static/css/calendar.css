@@ -261,8 +261,20 @@ body,html{height: 100%;}
 	font-size:14pt;
 }
 
+.toggle {
+	border-left-width: 10px; padding-left: 5px; border-left-style: solid;
+}
+
 .toggle:hover .cache-age {
 	display: inline;
+}
+
+.courseButtonSelectedCheck {
+	font-size:15px; display:none;padding-left:5px
+}
+
+.removeCourse {
+	color:red
 }
 
 .cache-age {
@@ -324,14 +336,26 @@ body,html{height: 100%;}
 }
 
 /**************************** Course table modal ****************************/
+.sectionListModal {
+    height:500px;
+    position: absolute;
+    left: 10px;
+    text-align: left;
+    opacity:.98;
+}
 /*#courseTable {*/
     /*opacity:.98;*/
     /*text-align: left;*/
 /*}*/
 
+/*.courseTable.modal-dialog {*/
+    /*width: 100%;*/
+/*}*/
+
 /*#courseTable .modal-dialog {*/
     /*position: absolute;*/
-    /*left: 20px;*/
+    /*left: 10px;*/
+    /*margin-top: 10px;*/
 /*}*/
 
 /*#courseTable .modal-body {*/
@@ -341,14 +365,15 @@ body,html{height: 100%;}
     /*margin-right: 0px*/
 /*}*/
 
-/*@media (min-width:768px) {*/
-    /*#courseTable .modal-dialog {*/
-        /*width: calc(50% - 10px);*/
-    /*}*/
+/*.courseTable {*/
+    /*height: 100%;*/
 /*}*/
 
-.courseTable {
-    height: 100%;
+.modal-container {
+    position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+    position: absolute;
 }
 
 #selectSection {

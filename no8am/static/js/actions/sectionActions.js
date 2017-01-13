@@ -34,3 +34,11 @@ export const highlightCourseTableSection = (courseGroupId, courseId, sectionId) 
         sectionId
     }
 };
+
+export const clickViewCourseTableButton = (buttonType, id) => {
+    return {
+        type: 'CLICK_VIEW_COURSE_TABLE_BUTTON',
+        buttonType,
+        id
+    }
+};

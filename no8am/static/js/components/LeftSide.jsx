@@ -1,5 +1,7 @@
 let React = require('react');
 
+import {CourseButtons} from './CourseButtons.jsx'
+
 export class LeftSide extends React.Component {
     render() {
         return (
@@ -40,14 +42,7 @@ export class LeftSide extends React.Component {
                         </div>
                     </div>
 
-                    <div className="row editRegion" id="courseButtons">
-                        <div className="col-sm-6" id="buttons-1">
-
-                        </div>
-                        <div className="col-sm-6" id="buttons-2">
-
-                        </div>
-                    </div>
+                    <CourseButtons {...this.props} />
 
                     <div className="row viewRegion" id="viewSelections">
                         <div className="row">

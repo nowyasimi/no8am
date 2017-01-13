@@ -30,6 +30,13 @@ export function sectionReducer(state = {}, action) {
                 highlightCourseId: action.courseId,
                 highlightSectionId: state.highlightSectionId == action.sectionId ? null : action.sectionId
             };
+        case 'CLICK_VIEW_COURSE_TABLE_BUTTON':
+            return {
+                lastClickedViewSectionsButton: {
+                    type: action.buttonType,
+                    id: action.id
+                }
+            };
         default:
             return state
     }

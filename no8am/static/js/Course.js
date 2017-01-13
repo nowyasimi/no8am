@@ -11,9 +11,12 @@ export class Course {
         this.selected = null;
         this.extra_section_independent = {};
         this.extra_section_lists = {};
+        this.dataStatus = "loading";
     }
 
     initialRequest(data) {
+        this.dataStatus = "loaded";
+
         let sections = [];
         let all = data;
 
