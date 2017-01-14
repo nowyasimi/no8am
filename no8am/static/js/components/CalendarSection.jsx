@@ -48,7 +48,7 @@ export class CalendarSection extends React.Component {
             <p className="courseNum">{this.props.courseNum.slice(0,-3)}</p>;
 
         return (
-            <li style={style} className={className} data-dept-num={this.props.courseGroupId}
+            <li style={style} className={className}
                 onClick={this.handleClick.bind(this)}
                 onMouseEnter={() => this.props.onMouseEnterCalendar()}
                 onMouseLeave={() => this.props.onMouseLeaveCalendar()}>

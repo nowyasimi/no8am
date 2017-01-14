@@ -1,4 +1,4 @@
-import {SECTION_DETAILS_URL} from '../Constants'
+import {SECTION_DETAILS_URL, COURSE_LOOKUP_URL} from '../Constants'
 
 export const mouseEnterCalendarSection = (courseId) => {
     return {
@@ -47,33 +47,12 @@ const receiveSectionDetails = (courseId, sectionId, sectionDetails) => {
 export const highlightCourseTableAndFetchSectionDetails = (courseId, sectionId, department, crn) => {
 
      return (dispatch) => {
+         dispatch(requestSectionDetails(courseId, sectionId));
 
-        // First dispatch: the app state is updated to inform
-        // that the API call is starting.
-
-        dispatch(requestSectionDetails(courseId, sectionId));
-
-        // The function called by the thunk middleware can return a value,
-        // that is passed on as the return value of the dispatch method.
-
-        // In this case, we return a promise to wait for.
-        // This is not required by thunk middleware, but it is convenient for us.
-
-        return fetch(`${SECTION_DETAILS_URL}?department=${department}&crn=${crn}`)
-            .then(response => response.json())
-            .then(sectionDetails => {
-                    console.log(sectionDetails);
-
-                    // We can dispatch many times!
-                    // Here, we update the app state with the results of the API call.
-
-                    dispatch(receiveSectionDetails(courseId, sectionId, sectionDetails));
-                }
-            );
-
-        // In a real world app, you also want to
-        // catch any error in the network call.
-    }
+         return fetch(`${SECTION_DETAILS_URL}?department=${department}&crn=${crn}`)
+             .then(response => response.json())
+             .then(sectionDetails => dispatch(receiveSectionDetails(courseId, sectionId, sectionDetails)));
+     }
 };
 
 export const clickViewCourseTableButton = (buttonType, id) => {
@@ -84,3 +63,49 @@ export const clickViewCourseTableButton = (buttonType, id) => {
     }
 };
 
+
+export const requestCourse = (department, course) => {
+    return {
+        type: 'REQUEST_COURSE',
+        department,
+        course
+    }
+};
+
+export const receiveCourse = (department, course, courseData) => {
+    return {
+        type: 'RECEIVE_COURSE',
+        department,
+        course,
+        courseData
+    }
+};
+
+export const errorReceivingCourse = (department, course) => {
+    return {
+        type: 'ERROR_RECEIVING_COURSE',
+        department,
+        course
+    }
+};
+
+export const fetchNewCourse = (department, course) => {
+
+    return (dispatch) => {
+        
+        dispatch(requestCourse(department, course));
+
+        return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
+            .then(response => response.json())
+            .then( jsonResponse => ({
+                // TODO - also convert extra section lists
+                // TODO - update API so this conversion is not necessary
+                ...jsonResponse,
+                sections: convertSectionsToArrayHelper(jsonResponse.sections)
+            }))
+            .then(courseData => dispatch(receiveCourse(department, course, courseData)))
+            .catch(dispatch(errorReceivingCourse(department, course)));
+    }
+};
+
+const convertSectionsToArrayHelper = (sections) => Object.keys(sections).map((key) => sections[key]);

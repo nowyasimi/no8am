@@ -88,31 +88,31 @@ export class SearchBox extends React.Component{
         // initialize typeahead
         $(element).typeahead({highlight: true}, typeaheadConfiguration);
 
-        $(element).on('typeahead:selected', function(_, datum) {
+        $(element).on('typeahead:selected', (_, datum) => {
             // clear input from typeahead
             $(element).typeahead('val', "");
 
             // lookup department
-            if (datum.category === "department") {
-                let dept = datum["abbreviation"];
-                submitDeptRequest(dept);
-            }
-            // lookup CCC requirement
-            else if (datum.category === "ccc") {
-                let ccc = datum["abbreviation"];
-                submitOtherRequest('ccc', ccc, datum["name"]);
-            }
-            // lookup by credit
-            else if (datum.category === "credit") {
-                let cred = datum["abbreviation"];
-                submitOtherRequest('credit', cred, datum["name"]);
-            }
+            // if (datum.category === "department") {
+            //     let dept = datum["abbreviation"];
+            //     submitDeptRequest(dept);
+            // }
+            // // lookup CCC requirement
+            // else if (datum.category === "ccc") {
+            //     let ccc = datum["abbreviation"];
+            //     submitOtherRequest('ccc', ccc, datum["name"]);
+            // }
+            // // lookup by credit
+            // else if (datum.category === "credit") {
+            //     let cred = datum["abbreviation"];
+            //     submitOtherRequest('credit', cred, datum["name"]);
+            // }
             // lookup course number
-            else {
+            // else {
                 let courseNum = datum["courseNum"];
                 let currentCourse = courseNum.split(' ');
-                addNewCourse(currentCourse[0], currentCourse[1], null);
-            }
+                this.props.onAddNewCourse(currentCourse[0], currentCourse[1]);
+            // }
         });
     }
 

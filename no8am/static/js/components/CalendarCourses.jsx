@@ -4,8 +4,6 @@ import { Modal } from 'react-bootstrap';
 
 import { ConnectedCalendarSection, ConnectedSectionListModal } from './Main.jsx'
 
-
-
 const DAYS_OF_WEEK_SHORT = ["M", "T", "W", "R", "F"];
 
 export class CalendarCourses extends React.Component {
@@ -57,7 +55,6 @@ export class CalendarCourses extends React.Component {
 
     render() {
         let calendarSections = this.generateCourseData();
-        console.log(calendarSections);
 
         return (
             <div id="course-data" className="list-group-item">

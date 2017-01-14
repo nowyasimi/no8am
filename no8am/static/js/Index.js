@@ -21,6 +21,12 @@ import {
     addCoursesInSavedSchedule
 } from './base';
 
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import { Provider } from 'react-redux'
+
+import { sectionReducer } from "./reducers/sectionReducer"
+
 import {Schedule} from './Schedule';
 
 import {Main} from './components/Main.jsx';
@@ -31,8 +37,18 @@ export let sched = new Schedule();
 global.sched = sched;
 
 
-export function createCalendar() {
-    ReactDOM.render(<Main schedule={sched}/>, document.getElementById('mainReactContainer'));
+function createCalendar() {
+    const store = createStore(
+        sectionReducer,
+        applyMiddleware(thunkMiddleware) // lets us dispatch() functions
+    );
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <Main schedule={sched}/>
+        </Provider>,
+        document.getElementById('mainReactContainer')
+    );
 }
 
 // called when page is fully loaded

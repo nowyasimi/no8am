@@ -9,8 +9,6 @@ import {Course, ExtraCourse} from './Course';
 
 import {CourseGroup} from './CourseGroup';
 
-import {createCalendar} from './Index';
-
 export class Schedule {
     constructor() {
         this.course = {};
@@ -169,7 +167,6 @@ export class Schedule {
         // update GUI with the number of sections
         // setNumberOfSections(courseLength, numSections);
 
-        createCalendar();
     }
 
     /**
@@ -206,8 +203,6 @@ export class Schedule {
 
 
         // $(".anim" + this.courseLength).slideDown();
-
-        createCalendar();
 
         return this.courseLength++;
     }
@@ -618,8 +613,6 @@ export class Schedule {
             let course_elements = this.course[y].courseDrawToScreen(y, this.course[y].selected, y!=this.lastClickedCourseButton.id);
         }
 
-        createCalendar();
-
         this.updateCRNList();
         this.overlapDetection();
     }
@@ -645,8 +638,6 @@ export class Schedule {
         for (let y in this.courseGroups[dept].courses) {
             this.courseGroups[dept].courses[y].courseDrawToScreen(y, null, false);
         }
-
-        createCalendar();
 
         // link the course sections with the currently selected department
         // $("#calendar .unselectedCalendarSection").attr("data-dept-num", dept);

@@ -1,10 +1,6 @@
 let React = require('react');
 
-import { Provider, connect } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-
-import { sectionReducer } from "../reducers/sectionReducer"
+import { connect } from 'react-redux'
 
 import {Calendar} from './Calendar.jsx';
 import {LeftSide} from './LeftSide.jsx';
@@ -14,14 +10,13 @@ import {CourseTableSection} from "./CourseTableSection.jsx"
 import {CourseButton} from "./CourseButton.jsx"
 import {SectionListModal} from "./SectionListModal.jsx"
 import {SectionDetails} from "./SectionDetails.jsx"
+import {SearchBox} from "./SearchBox.jsx"
+import {CourseButtons} from "./CourseButtons.jsx"
 
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
-    mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails, clickViewCourseTableButton} from "../actions/sectionActions"
+    mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails, clickViewCourseTableButton,
+    fetchNewCourse} from "../actions/sectionActions"
 
-const store = createStore(
-    sectionReducer,
-    applyMiddleware(thunkMiddleware) // lets us dispatch() functions
-);
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -36,7 +31,8 @@ function mapStateToProps(state) {
             sectionId: state.highlightSectionId,
             sectionDetails: state.sectionDetails
         },
-        lastClickedViewSectionsButton: state.lastClickedViewSectionsButton
+        lastClickedViewSectionsButton: state.lastClickedViewSectionsButton,
+        courses: state.courses
     }
 }
 
@@ -78,17 +74,26 @@ export const ConnectedSectionDetails = connect(
     mapDispatchToProps
 )(SectionDetails);
 
+export const ConnectedSearchBox = connect(
+    mapStateToProps,
+    {onAddNewCourse: fetchNewCourse}
+)(SearchBox);
+
+export const ConnectedCourseButtons = connect(
+  mapStateToProps,
+    mapDispatchToProps
+)(CourseButtons);
+
+
 
 export class Main extends React.Component {
 
     render() {
         return (
-            <Provider store={store}>
-                <div>
-                    <LeftSide {...this.props} />
-                    <Calendar {...this.props} />
-                </div>
-            </Provider>
+            <div>
+                <LeftSide {...this.props} />
+                <Calendar {...this.props} />
+            </div>
         );
     }
 
