@@ -1,7 +1,4 @@
 let Handlebars = require('handlebars');
-let typeahead = require("typeahead.js-browserify");
-typeahead.loadjQueryPlugin();
-let Bloodhound = require("typeahead.js-browserify").Bloodhound;
 
 import {
     colorDict, SECTION_TYPES, OTHER_LOOKUP_URL, DEPT_LOOKUP_URL, COURSE_LOOKUP_URL, STORE_CONFIG_URL,
@@ -325,7 +322,7 @@ function setSearchBox(value) {
  * @param course The course number (eg 203)
  * @param section Select a specific section (eg 01) when all sections load in
  */
-function addNewCourse(department, course, section) {
+export function addNewCourse(department, course, section) {
 
     let courseLength = sched.pushData(department + " " + course);
 
@@ -380,7 +377,7 @@ function submitCourseRequest(courseLength, department, course, section) {
  * Submit new department request for all sections in a department.
  * @param dept The department (eg CSCI)
  */
-function submitDeptRequest(dept) {
+export function submitDeptRequest(dept) {
 
     let deptNum = sched.createCourseGroup(dept, "dept");
 
@@ -403,7 +400,7 @@ function submitDeptRequest(dept) {
  * @param val The nickname for the type (eg Half Credit)
  * @param long The actual name for the type (eg .5)
  */
-function submitOtherRequest(type, val, long) {
+export function submitOtherRequest(type, val, long) {
 
     let courseGroupName = type == 'ccc' ? val : long;
     let deptNum = sched.createCourseGroup(courseGroupName, type);

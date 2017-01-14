@@ -18,12 +18,10 @@ export class CalendarSection extends React.Component {
         let sectionMatchesSelected = this.props.selected == this.props.sectionId;
 
         let sectionMatchesCourseTableHover =
-            (this.props.courseTableHover.courseGroupId == this.props.courseGroupId || this.props.courseGroupId == undefined) &&
             this.props.courseTableHover.courseId == this.props.courseId &&
             this.props.courseTableHover.sectionId == this.props.sectionId;
 
         let sectionHighlighted =
-            (this.props.highlight.courseGroupId == this.props.courseGroupId || this.props.courseGroupId == undefined) &&
             this.props.courseId == this.props.highlight.courseId &&
             this.props.sectionId == this.props.highlight.sectionId;
 

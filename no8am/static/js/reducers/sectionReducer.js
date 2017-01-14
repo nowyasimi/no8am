@@ -1,5 +1,5 @@
 
-export function sectionReducer(state = {}, action) {
+export const sectionReducer = (state = {}, action) => {
     // TODO - reset highlight state when modal is closed
 
     switch (action.type) {
@@ -11,24 +11,20 @@ export function sectionReducer(state = {}, action) {
             return {};
         case 'MOUSE_ENTER_COURSE_TABLE_SECTION':
             return {
-                courseTableHoverCourseGroupId: action.courseGroupId,
                 courseTableHoverCourseId: action.courseId,
                 courseTableHoverSectionId: action.sectionId,
-                highlightCourseGroupId: state.highlightCourseGroupId,
                 highlightCourseId: state.highlightCourseId,
                 highlightSectionId: state.highlightSectionId,
                 sectionDetails: state.sectionDetails
             };
         case 'MOUSE_LEAVE_COURSE_TABLE_SECTION':
             return {
-                highlightCourseGroupId: state.highlightCourseGroupId,
                 highlightCourseId: state.highlightCourseId,
                 highlightSectionId: state.highlightSectionId,
                 sectionDetails: state.sectionDetails
             };
         case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_REQUEST_SECTION_DETAILS':
             return {
-                highlightCourseGroupId: action.courseGroupId,
                 highlightCourseId: action.courseId,
                 highlightSectionId: state.highlightSectionId == action.sectionId ? null : action.sectionId,
                 sectionDetails: {
@@ -38,7 +34,6 @@ export function sectionReducer(state = {}, action) {
             };
         case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_RECEIVE_SECTION_DETAILS':
             return {
-                highlightCourseGroupId: action.courseGroupId,
                 highlightCourseId: action.courseId,
                 highlightSectionId: state.highlightSectionId,
                 sectionDetails: {

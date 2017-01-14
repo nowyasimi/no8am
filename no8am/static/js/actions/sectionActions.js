@@ -13,10 +13,9 @@ export const mouseLeaveCalendarSection = () => {
     };
 };
 
-export const mouseEnterCourseTableSection = (courseGroupId, courseId, sectionId) => {
+export const mouseEnterCourseTableSection = (courseId, sectionId) => {
     return {
         type: 'MOUSE_ENTER_COURSE_TABLE_SECTION',
-        courseGroupId,
         courseId,
         sectionId
     }
@@ -28,33 +27,31 @@ export const mouseLeaveCourseTableSection = () => {
     };
 };
 
-function requestSectionDetails(courseGroupId, courseId, sectionId) {
+const requestSectionDetails = (courseId, sectionId) => {
     return {
         type: 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_REQUEST_SECTION_DETAILS',
-        courseGroupId,
         courseId,
         sectionId
     }
-}
+};
 
-function receiveSectionDetails(courseGroupId, courseId, sectionId, sectionDetails) {
+const receiveSectionDetails = (courseId, sectionId, sectionDetails) => {
     return {
         type: 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_RECEIVE_SECTION_DETAILS',
-        courseGroupId,
         courseId,
         sectionId,
         sectionDetails
     }
-}
+};
 
-export function highlightCourseTableAndFetchSectionDetails(courseGroupId, courseId, sectionId, department, crn) {
+export const highlightCourseTableAndFetchSectionDetails = (courseId, sectionId, department, crn) => {
 
-    return function (dispatch) {
+     return (dispatch) => {
 
         // First dispatch: the app state is updated to inform
         // that the API call is starting.
 
-        dispatch(requestSectionDetails(courseGroupId, courseId, sectionId));
+        dispatch(requestSectionDetails(courseId, sectionId));
 
         // The function called by the thunk middleware can return a value,
         // that is passed on as the return value of the dispatch method.
@@ -70,14 +67,14 @@ export function highlightCourseTableAndFetchSectionDetails(courseGroupId, course
                     // We can dispatch many times!
                     // Here, we update the app state with the results of the API call.
 
-                    dispatch(receiveSectionDetails(courseGroupId, courseId, sectionId, sectionDetails));
+                    dispatch(receiveSectionDetails(courseId, sectionId, sectionDetails));
                 }
             );
 
         // In a real world app, you also want to
         // catch any error in the network call.
     }
-}
+};
 
 export const clickViewCourseTableButton = (buttonType, id) => {
     return {
@@ -86,3 +83,4 @@ export const clickViewCourseTableButton = (buttonType, id) => {
         id
     }
 };
+

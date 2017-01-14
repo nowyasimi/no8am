@@ -28,12 +28,10 @@ function mapStateToProps(state) {
     return {
         hoverCourseId: state.hoverCourseId,
         courseTableHover: {
-            courseGroupId: state.courseTableHoverCourseGroupId,
             courseId: state.courseTableHoverCourseId,
             sectionId: state.courseTableHoverSectionId
         },
         highlight: {
-            courseGroupId: state.highlightCourseGroupId,
             courseId: state.highlightCourseId,
             sectionId: state.highlightSectionId,
             sectionDetails: state.sectionDetails
@@ -47,9 +45,9 @@ function mapDispatchToProps(dispatch, sectionProps) {
     return {
         onMouseEnterCalendar: () => dispatch(mouseEnterCalendarSection(sectionProps.courseId)),
         onMouseLeaveCalendar: () => dispatch(mouseLeaveCalendarSection()),
-        onMouseEnterCourseTable: () => dispatch(mouseEnterCourseTableSection(sectionProps.courseGroupId, sectionProps.courseId, sectionProps.sectionId)),
+        onMouseEnterCourseTable: () => dispatch(mouseEnterCourseTableSection(sectionProps.courseId, sectionProps.sectionId)),
         onMouseLeaveCourseTable: () => dispatch(mouseLeaveCourseTableSection()),
-        onHighlightCourseTable: () => dispatch(highlightCourseTableAndFetchSectionDetails(sectionProps.courseGroupId, sectionProps.courseId, sectionProps.sectionId, sectionProps.department, sectionProps.CRN)),
+        onHighlightCourseTable: () => dispatch(highlightCourseTableAndFetchSectionDetails(sectionProps.courseId, sectionProps.sectionId, sectionProps.department, sectionProps.CRN)),
         onClickViewCourseTable: () => dispatch(clickViewCourseTableButton("course", sectionProps.courseId))
     }
 }

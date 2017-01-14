@@ -42,9 +42,9 @@ $(function() {
 
     initializeHandlebarsTemplates();
 
-    $.getJSON(METADATA_URL, function(metadata) {
-       initializeTypeahead(metadata)
-    });
+    // $.getJSON(METADATA_URL, function(metadata) {
+    //    initializeTypeahead(metadata)
+    // });
 
     // add courses if saved schedule from custom link if schedule exists
     if (!$.isEmptyObject(savedSchedule)) {
@@ -53,26 +53,26 @@ $(function() {
     }
 
 
-    $(document)
-        .on("click", ".removeCourse", removeCourseButtonHandler)
-        .on("click", ".course-revert", revertToCourseGroupButtonHandler)
-        .on('click', '.toggle', viewSectionListButtonHandler)
+    // $(document)
+        // .on("click", ".removeCourse", removeCourseButtonHandler)
+        // .on("click", ".course-revert", revertToCourseGroupButtonHandler)
+        // .on('click', '.toggle', viewSectionListButtonHandler)
         // .on("click", "#listViewData tbody tr", courseTableSectionClickHandler)
-        .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })
+        // .on("click", "#selectSection", function() { $("#courseTable").modal('hide'); })
         // .on('shown.bs.modal', '#courseTable', updateCourseTableBackdrop)
         // .on('hidden.bs.modal', "#courseTable", sectionSelectionHandler)
-        .on("click", ".selectCourseConfig", newScheduleFromConfig)
-        .on("click", ".removeCourseConfig", removeFromStorage)
-        .on("click", ".openModalButton", function(){ findCourseConfigurations(); $("#openModal").modal();})
-        .on("click", "#saveSchedule", generateAndStoreJSON)
-        .on("click", "#openSaveDialog", openSaveModalButtonHandler)
-        .on("click", "#openReportDialog", function() { $("#reportErrorModal").modal(); })
-        .on("click", "#sendReport", sendReport)
-        .on('hidden.bs.modal', "#reportErrorModal", clearReportErrorModal)
-        .on("click", "#openGenerateLinkModal", generateCustomLink)
-        .on("click", "#viewSelectionsButton", viewSelectionsButtonHandler)
-        .on("click", "#editButton", editButtonHandler)
-        .on("click", ".retryButton", retryButtonHandler)
-        .on("input", ".typeahead", justDoIt)
-        .on('typeahead:selected', ".typeahead", handleNewInput);
+        // .on("click", ".selectCourseConfig", newScheduleFromConfig)
+        // .on("click", ".removeCourseConfig", removeFromStorage)
+        // .on("click", ".openModalButton", function(){ findCourseConfigurations(); $("#openModal").modal();})
+        // .on("click", "#saveSchedule", generateAndStoreJSON)
+        // .on("click", "#openSaveDialog", openSaveModalButtonHandler)
+        // .on("click", "#openReportDialog", function() { $("#reportErrorModal").modal(); })
+        // .on("click", "#sendReport", sendReport)
+        // .on('hidden.bs.modal', "#reportErrorModal", clearReportErrorModal)
+        // .on("click", "#openGenerateLinkModal", generateCustomLink)
+        // .on("click", "#viewSelectionsButton", viewSelectionsButtonHandler)
+        // .on("click", "#editButton", editButtonHandler)
+        // .on("click", ".retryButton", retryButtonHandler)
+        // .on("input", ".typeahead", justDoIt)
+        // .on('typeahead:selected', ".typeahead", handleNewInput);
 });

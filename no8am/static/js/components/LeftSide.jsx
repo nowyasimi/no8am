@@ -1,6 +1,7 @@
 let React = require('react');
 
 import {CourseButtons} from './CourseButtons.jsx'
+import {SearchBox} from './SearchBox.jsx'
 
 export class LeftSide extends React.Component {
     render() {
@@ -16,8 +17,9 @@ export class LeftSide extends React.Component {
                             <input type="radio" name="options" defaultChecked /> Edit
                         </label>
                     </div>
+
                     <div id="remote" className="editRegion">
-                        <input id="typeaheadInput" className="typeahead" type="text" placeholder="Course Number, Department, CCC, or Credits" />
+                        <SearchBox />
                     </div>
 
                     <div id="welcomeWell" className="well editRegion">

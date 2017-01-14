@@ -14,7 +14,13 @@ export class CalendarCourses extends React.Component {
     // Draw potential sections for currently selected course or course group
     // No selected sections to worry about for course groups
 
-    createSections(sectionsToDisplay, courses, courseGroupId) {
+    generateCourseData() {
+
+        let sectionsToDisplay = {
+            "M": [], "T": [], "W": [], "R": [], "F": []
+        };
+
+        let courses = this.props.schedule.course;
 
         // loop through all courses
         for (let courseId in courses) {
@@ -27,27 +33,13 @@ export class CalendarCourses extends React.Component {
                 // create calendar section elements and group them by day
                 for (let index in section.daysMet) {
                     let day = section.daysMet[index][0];
-                    let key = `courseGroupId${courseGroupId}course${courseId}section${sectionIndex}index${index}`;
+                    let key = `course${courseId}section${sectionIndex}index${index}`;
                     sectionsToDisplay[day].push(
                         <ConnectedCalendarSection key={key} {...this.props} {...course} {...section} day={index}
-                                         courseGroupId={courseGroupId} courseId={courseId} sectionId={sectionIndex}/>
+                                                  courseId={courseId} sectionId={sectionIndex}/>
                     )
                 }
             }
-        }
-    }
-
-    generateCourseData() {
-
-        let sectionsToDisplay = {
-            "M": [], "T": [], "W": [], "R": [], "F": []
-        };
-
-        let courses = this.props.schedule.course;
-        this.createSections(sectionsToDisplay, courses);
-        for (let courseGroupId in this.props.schedule.courseGroups) {
-            let courses = this.props.schedule.courseGroups[courseGroupId].courses;
-            this.createSections(sectionsToDisplay, courses, courseGroupId);
         }
 
         let calendarSections = DAYS_OF_WEEK_SHORT.map((day) => (
