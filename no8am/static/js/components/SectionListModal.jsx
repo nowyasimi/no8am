@@ -9,18 +9,19 @@ export class SectionListModal extends React.Component {
         super();
 
         this.state = {
-            showModal: false
+            showModal: false,
+            clickedCourseButtonId: undefined
         };
 
         this.handleClose = this.handleClose.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.lastClickedViewSectionsButton !== undefined) {
+        if (nextProps.clickedCourseButtonId !== undefined) {
             console.log(nextProps);
             this.setState({
                 showModal: true,
-                courseId: nextProps.lastClickedViewSectionsButton.id
+                clickedCourseButtonId: nextProps.clickedCourseButtonId
             });
         }
     }
@@ -30,41 +31,20 @@ export class SectionListModal extends React.Component {
             showModal:false
         });
 
-        let courseId = this.props.highlight.courseId;
-        let sectionId = this.props.highlight.sectionId;
-
-        if (sectionId != undefined && sectionId != null) {
-            sched.handleSelect(courseId, sectionId)
-        }
-
-        // if (isDept && row.length != 0) {
-        //     let dept = $sectionTable.attr("data-dept-level");
-        //     clickedCourse = row.attr("class").split(" ")[0].substring(6);
-        //     sched.convertDeptToCourse(clickedCourse, clickedSection);
-        //     sched.redrawData();
-        // }
-
-
+        this.props.onSectionListModalClose();
     }
 
     render() {
-        let courseTableSections = [];
 
-        let course = null;
+        console.log('modal');
 
-        if (this.state.courseId !== undefined) {
-            let courseId = this.state.courseId;
-            course = this.props.schedule.course[courseId];
-            let sections = course.sections;
-            // loop through sections
-            for (let sectionIndex in sections) {
-                let section = sections[sectionIndex];
-                let key = `coursetablecourse${courseId}section${sectionIndex}`;
-                courseTableSections.push(
-                    <ConnectedCourseTableSection key={key} {...section} courseId={courseId} sectionId={sectionIndex} />
-                )
-            }
-        }
+        let courseId = this.state.clickedCourseButtonId;
+        let course = this.props.courses.find((x) => x.courseId == courseId);
+
+        let courseTableSections = course === undefined ? [] : course.sections.map((section, sectionIndex) =>
+                <ConnectedCourseTableSection key={`coursetablecourse${courseId}section${sectionIndex}`}
+                                             {...section} courseId={courseId} sectionId={sectionIndex} />
+            );
 
         return (
             <Modal show={this.state.showModal} onHide={this.handleClose} dialogClassName="sectionListModal">
@@ -89,7 +69,7 @@ export class SectionListModal extends React.Component {
                                 Done
                             </button>
                             <div id="sectionDetails">
-                                <ConnectedSectionDetails {...course}/>
+                                <ConnectedSectionDetails />
                             </div>
                         </div>
                     </Modal.Body>

@@ -25,14 +25,20 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 courseTableHoverSectionId: undefined
             };
         case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_REQUEST_SECTION_DETAILS':
+            let selectedSectionId = state.highlightSectionId == action.sectionId ? null : action.sectionId;
             return {
                 ...state,
                 highlightCourseId: action.courseId,
-                highlightSectionId: state.highlightSectionId == action.sectionId ? null : action.sectionId,
+                highlightSectionId: selectedSectionId,
                 sectionDetails: {
                     state: "loading",
                     data: null
-                }
+                },
+                courses: state.courses.map((x) => x.courseId === action.courseId ? {
+                        ...x,
+                        selected: selectedSectionId
+                    } : x
+                )
             };
         case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_RECEIVE_SECTION_DETAILS':
             return {
@@ -47,10 +53,17 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
         case 'CLICK_VIEW_COURSE_TABLE_BUTTON':
             return {
                 ...state,
-                lastClickedViewSectionsButton: {
-                    type: action.buttonType,
-                    id: action.id
-                }
+                clickedCourseButtonId: action.id,
+                highlightCourseId: action.id,
+                highlightSectionId: state.courses.find((x) => x.courseId == action.id).selected
+            };
+        case 'CLOSE_SECTION_LIST_MODAL':
+            return {
+                ...state,
+                highlightCourseId: null,
+                highlightSectionId: selectedSectionId,
+                sectionDetails: undefined,
+                clickedCourseButtonId: undefined
             };
         case 'REQUEST_COURSE':
             return {

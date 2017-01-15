@@ -40,8 +40,11 @@ export class SectionDetails extends React.Component {
             )
         }
         else if (state == "loaded") {
+            let courseId = this.props.highlight.courseId;
+            let sectionId = this.props.highlight.sectionId;
+
             let data = sectionDetailsContainer.data;
-            let section = this.props.sections[this.props.highlight.sectionId];
+            let section = this.props.courses.find((x) => x.courseId == courseId).sections[sectionId];
 
             let $page = $($.parseHTML(data.section_details));
             let rows = $page.find("tr");
@@ -53,7 +56,7 @@ export class SectionDetails extends React.Component {
             for (let x = 5; x < 10; x++) {
                 if ($.trim(rows[x].children[1].innerText) != "") {
                     details.push(
-                        <div key={`section${this.props.highlight.sectionId}sectiondetail${x}`}>
+                        <div key={`section${sectionId}sectiondetail${x}`}>
                             <b>{rows[x].children[0].innerText}</b> {rows[x].children[1].innerText}
                         </div>
                     );

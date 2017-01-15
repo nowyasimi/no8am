@@ -27,15 +27,8 @@ import { Provider } from 'react-redux'
 
 import { sectionReducer } from "./reducers/sectionReducer"
 
-import {Schedule} from './Schedule';
 
 import {Main} from './components/Main.jsx';
-
-
-// global schedule object
-export let sched = new Schedule();
-global.sched = sched;
-
 
 function createCalendar() {
     const store = createStore(
@@ -45,7 +38,7 @@ function createCalendar() {
 
     ReactDOM.render(
         <Provider store={store}>
-            <Main schedule={sched}/>
+            <Main/>
         </Provider>,
         document.getElementById('mainReactContainer')
     );
@@ -56,17 +49,17 @@ $(function() {
 
     createCalendar();
 
-    initializeHandlebarsTemplates();
+    // initializeHandlebarsTemplates();
 
     // $.getJSON(METADATA_URL, function(metadata) {
     //    initializeTypeahead(metadata)
     // });
 
     // add courses if saved schedule from custom link if schedule exists
-    if (!$.isEmptyObject(savedSchedule)) {
-        $("#welcomeWell").slideUp();
-        addCoursesInSavedSchedule(savedSchedule);
-    }
+    // if (!$.isEmptyObject(savedSchedule)) {
+    //     $("#welcomeWell").slideUp();
+    //     addCoursesInSavedSchedule(savedSchedule);
+    // }
 
 
     // $(document)

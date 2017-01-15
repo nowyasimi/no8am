@@ -18,11 +18,10 @@ export class CalendarCourses extends React.Component {
             "M": [], "T": [], "W": [], "R": [], "F": []
         };
 
-        let courses = this.props.schedule.course;
-
         // loop through all courses
-        for (let courseId in courses) {
-            let course = courses[courseId];
+        for (let courseIndex in this.props.courses) {
+            let course = this.props.courses[courseIndex];
+            let courseId = course.courseId;
 
             // loop through sections
             for (let sectionIndex in course.sections) {
@@ -31,7 +30,7 @@ export class CalendarCourses extends React.Component {
                 // create calendar section elements and group them by day
                 for (let index in section.daysMet) {
                     let day = section.daysMet[index][0];
-                    let key = `course${courseId}section${sectionIndex}index${index}`;
+                    let key = `course${courseId}section${sectionIndex}dayindex${index}`;
                     sectionsToDisplay[day].push(
                         <ConnectedCalendarSection key={key} {...this.props} {...course} {...section} day={index}
                                                   courseId={courseId} sectionId={sectionIndex}/>

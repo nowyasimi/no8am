@@ -45,7 +45,6 @@ const receiveSectionDetails = (courseId, sectionId, sectionDetails) => {
 };
 
 export const highlightCourseTableAndFetchSectionDetails = (courseId, sectionId, department, crn) => {
-
      return (dispatch) => {
          dispatch(requestSectionDetails(courseId, sectionId));
 
@@ -55,14 +54,18 @@ export const highlightCourseTableAndFetchSectionDetails = (courseId, sectionId, 
      }
 };
 
-export const clickViewCourseTableButton = (buttonType, id) => {
+export const clickViewCourseTableButton = (id) => {
     return {
         type: 'CLICK_VIEW_COURSE_TABLE_BUTTON',
-        buttonType,
         id
     }
 };
 
+export const closeSectionListModal = () => {
+    return {
+        type: 'CLOSE_SECTION_LIST_MODAL'
+    };
+};
 
 export const requestCourse = (department, course) => {
     return {
@@ -90,14 +93,11 @@ export const errorReceivingCourse = (department, course) => {
 };
 
 export const fetchNewCourse = (department, course) => {
-
     return (dispatch) => {
-        
         dispatch(requestCourse(department, course));
-
         return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
             .then(response => response.json())
-            .then( jsonResponse => ({
+            .then(jsonResponse => ({
                 // TODO - also convert extra section lists
                 // TODO - update API so this conversion is not necessary
                 ...jsonResponse,
@@ -108,4 +108,95 @@ export const fetchNewCourse = (department, course) => {
     }
 };
 
-const convertSectionsToArrayHelper = (sections) => Object.keys(sections).map((key) => sections[key]);
+const convertSectionsToArrayHelper = (sections) => Object
+    // convert to array and parse times met
+    .keys(sections)
+    .map((key) => ({
+        ...sections[key],
+        daysMet: parseTimesMet(restructureHours(sections[key].timesMet))
+    }))
+    // sort sections by course number
+    .sort((a, b) => a.courseNum > b.courseNum);
+
+// TODO - add these here or in python API
+// this.roomMet = object["roomMet"] === ", " ? "" : object["roomMet"];
+// this.professor = object["professor"] === "; " ? "" : object["professor"];
+
+const restructureHours = (hours) => {
+    let timesMet = [];
+    while (hours != '') {
+        if (hours.includes("TBA")) {
+            return timesMet;
+        }
+        let mIndex = hours.indexOf('m');
+
+        let tempTimes = hours.substring(0, mIndex+1);
+        hours = hours.substring(mIndex+1);
+
+        let tempHours = tempTimes.split(" ")[1];
+        let startTime = tempHours.split("-")[0];
+        let endTime = tempHours.split("-")[1];
+
+        let cI1 = startTime.indexOf(":");
+        let cI2 = endTime.indexOf(":");
+
+        let startHour = parseInt(startTime.slice(0, cI1));
+        let endHour = parseInt(endTime.slice(0, cI2));
+        let amOrPm = endTime.slice(cI2 + 3);
+
+        if (amOrPm == 'am' || (startHour != 12 && endHour == 12) || startHour > endHour) {
+            tempTimes = tempTimes.split("-").join("am-");
+        }
+
+        else {
+            tempTimes = tempTimes.split("-").join("pm-");
+        }
+
+        timesMet.push(tempTimes);
+    }
+    return timesMet;
+};
+
+const parseTimesMet = (timesMet) => {
+    let daysMet = [];
+
+    for (let x of timesMet) {
+        let dayAndTime = x.split(" ");
+        let days = dayAndTime[0];
+        let duration = dayAndTime[1];
+
+        let time = duration.split("-");
+        let start = time[0];
+        let end = time[1];
+        let parsedStart = parseHours(start);
+        let parsedEnd = parseHours(end) - parsedStart;
+
+        for (let day of days){
+            if (day === "S") {
+                continue;
+            }
+            daysMet.push( [day, parsedStart, parsedEnd, start.slice(0,-2), end.slice(0,-2)] );
+        }
+    }
+
+    return daysMet
+};
+
+/**
+ * Convert a time in the format (HH:MMam|pm).
+ * @param time The time being converted (it can be either the start or end time for a section).
+ * @return {number} Integer representing the number of 30 minute intervals past 8am for the provided time.
+ */
+export function parseHours(time) {
+    let splitHoursAndMinutes = time.split(":");
+    let hour = parseInt(splitHoursAndMinutes[0]);
+    let minutes = parseInt(splitHoursAndMinutes[1].slice(0,2));
+    let amOrPm = splitHoursAndMinutes[1].slice(2);
+
+    if (amOrPm == "pm" && hour != 12) {
+        hour += 12;
+    }
+    hour += -8 + minutes/60;
+
+    return hour*2;
+}

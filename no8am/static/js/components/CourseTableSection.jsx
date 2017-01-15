@@ -8,10 +8,8 @@ export class CourseTableSection extends React.Component {
 
         let isSelected = this.props.selected == this.props.sectionId || (sectionHighlighted) ? 'success' : '';
 
-        let className = `course${this.props.courseId} section${this.props.sectionId} ${isSelected}`;
-
         return (
-            <tr id={`section${this.props.sectionId}`} className={className}
+            <tr className={isSelected}
                 onClick={() => this.props.onHighlightCourseTable()}
                 onMouseEnter={() => this.props.onMouseEnterCourseTable()}
                 onMouseLeave={() => this.props.onMouseLeaveCourseTable()}>

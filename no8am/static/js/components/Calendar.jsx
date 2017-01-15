@@ -1,8 +1,8 @@
 let React = require('react');
 
-import {CalendarCourses} from './CalendarCourses.jsx';
-
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+import {ConnectedCalendarCourses} from './Main.jsx'
 
 export class Calendar extends React.Component {
 
@@ -22,7 +22,7 @@ export class Calendar extends React.Component {
                         <div id="calendar-titles" className="panel-heading">
                             { Calendar.generate_calendar_titles() }
                         </div>
-                        <CalendarCourses {...this.props} />
+                        <ConnectedCalendarCourses {...this.props} />
                     </div>
                 </div>
             </div>

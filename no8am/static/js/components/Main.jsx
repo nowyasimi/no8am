@@ -12,10 +12,11 @@ import {SectionListModal} from "./SectionListModal.jsx"
 import {SectionDetails} from "./SectionDetails.jsx"
 import {SearchBox} from "./SearchBox.jsx"
 import {CourseButtons} from "./CourseButtons.jsx"
+import {CalendarCourses} from './CalendarCourses.jsx';
 
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
     mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails, clickViewCourseTableButton,
-    fetchNewCourse} from "../actions/sectionActions"
+    fetchNewCourse, closeSectionListModal} from "../actions/sectionActions"
 
 
 // Map Redux state to component props
@@ -31,7 +32,7 @@ function mapStateToProps(state) {
             sectionId: state.highlightSectionId,
             sectionDetails: state.sectionDetails
         },
-        lastClickedViewSectionsButton: state.lastClickedViewSectionsButton,
+        clickedCourseButtonId: state.clickedCourseButtonId,
         courses: state.courses
     }
 }
@@ -44,7 +45,8 @@ function mapDispatchToProps(dispatch, sectionProps) {
         onMouseEnterCourseTable: () => dispatch(mouseEnterCourseTableSection(sectionProps.courseId, sectionProps.sectionId)),
         onMouseLeaveCourseTable: () => dispatch(mouseLeaveCourseTableSection()),
         onHighlightCourseTable: () => dispatch(highlightCourseTableAndFetchSectionDetails(sectionProps.courseId, sectionProps.sectionId, sectionProps.department, sectionProps.CRN)),
-        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton("course", sectionProps.courseId))
+        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId)),
+        onSectionListModalClose: () => dispatch(closeSectionListModal())
     }
 }
 
@@ -83,6 +85,11 @@ export const ConnectedCourseButtons = connect(
   mapStateToProps,
     mapDispatchToProps
 )(CourseButtons);
+
+export const ConnectedCalendarCourses = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CalendarCourses);
 
 
 

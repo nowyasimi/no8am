@@ -4,16 +4,6 @@ import {colorDict} from '../Constants'
 
 export class CalendarSection extends React.Component {
 
-    /**
-     * Called when a section in the calendar is clicked. Opens the course table modal
-     * for that course.
-     */
-    handleClick() {
-        sched.lastClickedCourseButton = {"type": "course", "id": this.props.courseId};
-        sched.redrawData();
-        $("#courseTable").modal();
-    }
-
     render() {
         let sectionMatchesSelected = this.props.selected == this.props.sectionId;
 
@@ -49,7 +39,7 @@ export class CalendarSection extends React.Component {
 
         return (
             <li style={style} className={className}
-                onClick={this.handleClick.bind(this)}
+                onClick={() => this.props.onClickViewCourseTable()}
                 onMouseEnter={() => this.props.onMouseEnterCalendar()}
                 onMouseLeave={() => this.props.onMouseLeaveCalendar()}>
                 {innerDetails}
