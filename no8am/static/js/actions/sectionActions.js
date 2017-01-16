@@ -67,6 +67,13 @@ export const closeSectionListModal = () => {
     };
 };
 
+export const clickRemoveCourseButton = (courseId) => {
+    return {
+        type: 'REMOVE_COURSE',
+        courseId
+    };
+};
+
 export const requestCourse = (department, course) => {
     return {
         type: 'REQUEST_COURSE',

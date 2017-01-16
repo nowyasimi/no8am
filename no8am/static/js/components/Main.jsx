@@ -16,7 +16,7 @@ import {CalendarCourses} from './CalendarCourses.jsx';
 
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
     mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails, clickViewCourseTableButton,
-    fetchNewCourse, closeSectionListModal} from "../actions/sectionActions"
+    fetchNewCourse, closeSectionListModal, clickRemoveCourseButton} from "../actions/sectionActions"
 
 
 // Map Redux state to component props
@@ -46,7 +46,8 @@ function mapDispatchToProps(dispatch, sectionProps) {
         onMouseLeaveCourseTable: () => dispatch(mouseLeaveCourseTableSection()),
         onHighlightCourseTable: () => dispatch(highlightCourseTableAndFetchSectionDetails(sectionProps.courseId, sectionProps.sectionId, sectionProps.department, sectionProps.CRN)),
         onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId)),
-        onSectionListModalClose: () => dispatch(closeSectionListModal())
+        onSectionListModalClose: () => dispatch(closeSectionListModal()),
+        onClickRemoveCourseButton: () => dispatch(clickRemoveCourseButton())
     }
 }
 
@@ -90,8 +91,6 @@ export const ConnectedCalendarCourses = connect(
     mapStateToProps,
     mapDispatchToProps
 )(CalendarCourses);
-
-
 
 export class Main extends React.Component {
 

@@ -23,12 +23,11 @@ export class SectionDetails extends React.Component {
         console.log('section details');
         console.log(sectionDetailsContainer);
 
-        if (this.state.sectionId == null) {
+        let state = sectionDetailsContainer.state;
+        if (state == "no selection") {
             return <div></div>;
         }
-
-        let state = sectionDetailsContainer.state;
-        if (state == "loading") {
+        else if (state == "loading") {
             return (
                 <div className="spinner">
                     <div className="rect1"></div>

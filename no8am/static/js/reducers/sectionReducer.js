@@ -55,15 +55,22 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 ...state,
                 clickedCourseButtonId: action.id,
                 highlightCourseId: action.id,
-                highlightSectionId: state.courses.find((x) => x.courseId == action.id).selected
+                highlightSectionId: state.courses.find((x) => x.courseId == action.id).selected,
+                sectionDetails: {state: "no selection"}
             };
         case 'CLOSE_SECTION_LIST_MODAL':
             return {
                 ...state,
                 highlightCourseId: null,
                 highlightSectionId: selectedSectionId,
-                sectionDetails: undefined,
-                clickedCourseButtonId: undefined
+                clickedCourseButtonId: undefined,
+                sectionDetails: {state: "no selection"}
+            };
+        case 'REMOVE_COURSE':
+            let index_to_remove = state.courses.find((x) => x.courseId == action.courseId);
+            return {
+                ...state,
+                courses: state.courses.filter((_, i) => i !== index_to_remove)
             };
         case 'REQUEST_COURSE':
             return {
