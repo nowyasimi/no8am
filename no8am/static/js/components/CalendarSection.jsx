@@ -1,6 +1,10 @@
 let React = require('react');
 
+import { connect } from 'react-redux'
+
 import {colorDict} from '../Constants'
+import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTableButton} from '../actions/sectionActions.jsx'
+
 
 export class CalendarSection extends React.Component {
 
@@ -47,3 +51,22 @@ export class CalendarSection extends React.Component {
         );
     }
 }
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        hoverCourseId: state.hoverCourseId,
+        courses: state.courses
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch, sectionProps) {
+    return {
+        onMouseEnterCalendar: () => dispatch(mouseEnterCalendarSection(sectionProps.courseId)),
+        onMouseLeaveCalendar: () => dispatch(mouseLeaveCalendarSection()),
+        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId))
+    }
+}
+
+export const ConnectedCourseButton = connect(mapStateToProps, mapDispatchToProps)(CourseButton);

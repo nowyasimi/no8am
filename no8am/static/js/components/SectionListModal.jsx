@@ -1,7 +1,11 @@
 let React = require('react');
 
 import {Modal} from "react-bootstrap"
-import {ConnectedCourseTableSection, ConnectedSectionDetails} from "./Main.jsx"
+import {connect} from 'react-redux'
+
+import {closeSectionListModal} from '../actions/sectionActions'
+import {ConnectedCourseTableSection} from "./Main.jsx"
+import {ConnectedSectionDetails} from './SectionDetails.jsx'
 
 export class SectionListModal extends React.Component {
 
@@ -78,3 +82,20 @@ export class SectionListModal extends React.Component {
         );
     }
 }
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        clickedCourseButtonId: state.clickedCourseButtonId,
+        courses: state.courses
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch) {
+    return {
+        onSectionListModalClose: () => dispatch(closeSectionListModal())
+    }
+}
+
+export const ConnectedSectionListModal = connect(mapStateToProps, mapDispatchToProps)(SectionListModal);

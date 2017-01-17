@@ -1,8 +1,7 @@
 let React = require('react');
 
-import { Modal } from 'react-bootstrap';
-
-import { ConnectedCalendarSection, ConnectedSectionListModal } from './Main.jsx'
+import {ConnectedCalendarSection} from './Main.jsx'
+import {ConnectedSectionListModal} from './SectionListModal.jsx'
 
 const DAYS_OF_WEEK_SHORT = ["M", "T", "W", "R", "F"];
 
@@ -47,7 +46,6 @@ export class CalendarCourses extends React.Component {
             </div>
             )
         );
-
 
         return calendarSections;
     }

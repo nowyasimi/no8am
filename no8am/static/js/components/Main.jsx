@@ -7,9 +7,6 @@ import {LeftSide} from './LeftSide.jsx';
 
 import {CalendarSection} from "./CalendarSection.jsx"
 import {CourseTableSection} from "./CourseTableSection.jsx"
-import {CourseButton} from "./CourseButton.jsx"
-import {SectionListModal} from "./SectionListModal.jsx"
-import {SectionDetails} from "./SectionDetails.jsx"
 import {SearchBox} from "./SearchBox.jsx"
 import {CourseButtons} from "./CourseButtons.jsx"
 import {CalendarCourses} from './CalendarCourses.jsx';
@@ -61,21 +58,6 @@ export const ConnectedCourseTableSection = connect(
     mapStateToProps,
     mapDispatchToProps
 )(CourseTableSection);
-
-export const ConnectedCourseButton = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(CourseButton);
-
-export const ConnectedSectionListModal = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SectionListModal);
-
-export const ConnectedSectionDetails = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SectionDetails);
 
 export const ConnectedSearchBox = connect(
     mapStateToProps,

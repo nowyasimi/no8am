@@ -1,6 +1,6 @@
 let React = require('react');
 
-import {ConnectedCourseButton} from './main.jsx'
+import {ConnectedCourseButton} from './CalendarSection.jsx'
 
 export class CourseButtons extends React.Component {
     render() {

@@ -1,5 +1,8 @@
 let React = require('react');
 
+import {connect} from 'react-redux'
+
+
 export class SectionDetails extends React.Component {
 
     constructor() {
@@ -111,3 +114,17 @@ export class SectionDetails extends React.Component {
         }
     }
 }
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        highlight: {
+            courseId: state.highlightCourseId,
+            sectionId: state.highlightSectionId,
+            sectionDetails: state.sectionDetails
+        },
+        courses: state.courses
+    }
+}
+
+export const ConnectedSectionDetails = connect(mapStateToProps)(SectionDetails);
