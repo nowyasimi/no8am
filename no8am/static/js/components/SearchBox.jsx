@@ -1,27 +1,17 @@
 let React = require('react');
-
 let Handlebars = require('handlebars');
-
 let typeahead = require("typeahead.js-browserify");
 typeahead.loadjQueryPlugin();
 let Bloodhound = require("typeahead.js-browserify").Bloodhound;
-
-
 import {TYPEAHEAD_OPTIONS} from '../Constants'
-
 import {findDOMNode} from 'react-dom'
-
 import { connect } from 'react-redux'
 
-import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
-    mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails, clickViewCourseTableButton,
-    fetchNewCourse, closeSectionListModal, clickRemoveCourseButton} from "../actions/sectionActions"
+import {fetchNewCourse} from "../actions/sectionActions"
 
 export class SearchBox extends React.Component{
 
-
     initializeTypeahead() {
-
         let typeaheadConfiguration = [];
 
         // create typeahead objects for each lookup type (CCC, credit, department, course)

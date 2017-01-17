@@ -1,6 +1,4 @@
 export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) => {
-    // TODO - reset highlight state when modal is closed
-
     switch (action.type) {
         case 'MOUSE_ENTER_CALENDAR_SECTION':
             return {
@@ -78,7 +76,7 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 courses: [
                     ...state.courses,
                     {
-                        courseId: state.courseCounter + 1,
+                        courseId: state.courseCounter,
                         department: action.department,
                         course: action.course,
                         color: 'blue',

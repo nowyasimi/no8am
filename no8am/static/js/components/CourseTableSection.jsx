@@ -1,5 +1,5 @@
 let React = require('react');
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 import {mouseEnterCourseTableSection, mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails}
 from "../actions/sectionActions"
@@ -7,7 +7,6 @@ from "../actions/sectionActions"
 
 export class CourseTableSection extends React.Component {
     render() {
-
         let sectionHighlighted = this.props.courseId == this.props.highlight.courseId &&
             this.props.sectionId == this.props.highlight.sectionId;
 
