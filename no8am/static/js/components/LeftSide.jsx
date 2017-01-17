@@ -1,6 +1,7 @@
 let React = require('react');
 
-import {ConnectedSearchBox, ConnectedCourseButtons} from './main.jsx'
+import {ConnectedSearchBox} from './SearchBox.jsx'
+import {ConnectedCourseButtons} from './CourseButtons.jsx'
 
 export class LeftSide extends React.Component {
     render() {

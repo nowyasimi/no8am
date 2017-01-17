@@ -1,4 +1,7 @@
 let React = require('react');
+import {connect} from 'react-redux'
+
+import {clickViewCourseTableButton, clickRemoveCourseButton} from '../actions/sectionActions'
 
 export class CourseButton extends React.Component {
 
@@ -45,5 +48,15 @@ export class CourseButton extends React.Component {
             </div>
         );
     }
-
 }
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch, sectionProps) {
+    return {
+        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId)),
+        onClickRemoveCourseButton: () => dispatch(clickRemoveCourseButton())
+    }
+}
+
+export const ConnectedCourseButton = connect(() => {return {}}, mapDispatchToProps)(CourseButton);
+

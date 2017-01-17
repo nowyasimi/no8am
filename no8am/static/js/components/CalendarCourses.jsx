@@ -1,9 +1,11 @@
 let React = require('react');
+import {connect} from 'react-redux'
 
-import {ConnectedCalendarSection} from './Main.jsx'
+import {ConnectedCalendarSection} from './CalendarSection.jsx'
 import {ConnectedSectionListModal} from './SectionListModal.jsx'
 
 const DAYS_OF_WEEK_SHORT = ["M", "T", "W", "R", "F"];
+
 
 export class CalendarCourses extends React.Component {
 
@@ -63,3 +65,13 @@ export class CalendarCourses extends React.Component {
         );
     }
 }
+
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        courses: state.courses
+    }
+}
+
+export const ConnectedCalendarCourses = connect(mapStateToProps)(CalendarCourses);

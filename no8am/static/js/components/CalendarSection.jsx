@@ -3,7 +3,7 @@ let React = require('react');
 import { connect } from 'react-redux'
 
 import {colorDict} from '../Constants'
-import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTableButton} from '../actions/sectionActions.jsx'
+import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTableButton} from '../actions/sectionActions.js'
 
 
 export class CalendarSection extends React.Component {
@@ -56,7 +56,15 @@ export class CalendarSection extends React.Component {
 function mapStateToProps(state) {
     return {
         hoverCourseId: state.hoverCourseId,
-        courses: state.courses
+        courses: state.courses,
+        highlight: {
+            courseId: state.highlightCourseId,
+            sectionId: state.highlightSectionId
+        },
+        courseTableHover: {
+            courseId: state.courseTableHoverCourseId,
+            sectionId: state.courseTableHoverSectionId
+        }
     }
 }
 
@@ -69,4 +77,4 @@ function mapDispatchToProps(dispatch, sectionProps) {
     }
 }
 
-export const ConnectedCourseButton = connect(mapStateToProps, mapDispatchToProps)(CourseButton);
+export const ConnectedCalendarSection = connect(mapStateToProps, mapDispatchToProps)(CalendarSection);

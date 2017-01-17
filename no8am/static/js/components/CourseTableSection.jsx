@@ -1,4 +1,9 @@
 let React = require('react');
+import { connect } from 'react-redux'
+
+import {mouseEnterCourseTableSection, mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails}
+from "../actions/sectionActions"
+
 
 export class CourseTableSection extends React.Component {
     render() {
@@ -22,3 +27,27 @@ export class CourseTableSection extends React.Component {
         );
     }
 }
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        highlight: {
+            courseId: state.highlightCourseId,
+            sectionId: state.highlightSectionId
+        }
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch, sectionProps) {
+    return {
+        onMouseEnterCourseTable: () => dispatch(mouseEnterCourseTableSection(sectionProps.courseId, sectionProps.sectionId)),
+        onMouseLeaveCourseTable: () => dispatch(mouseLeaveCourseTableSection()),
+        onHighlightCourseTable: () => dispatch(highlightCourseTableAndFetchSectionDetails(sectionProps.courseId, sectionProps.sectionId, sectionProps.department, sectionProps.CRN))
+    }
+}
+
+export const ConnectedCourseTableSection = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CourseTableSection);

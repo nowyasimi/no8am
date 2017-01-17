@@ -2,7 +2,7 @@ let React = require('react');
 
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-import {ConnectedCalendarCourses} from './Main.jsx'
+import {ConnectedCalendarCourses} from './CalendarCourses.jsx'
 
 export class Calendar extends React.Component {
 

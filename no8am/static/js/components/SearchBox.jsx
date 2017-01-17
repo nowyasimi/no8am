@@ -11,8 +11,11 @@ import {TYPEAHEAD_OPTIONS} from '../Constants'
 
 import {findDOMNode} from 'react-dom'
 
-import {addNewCourse, submitDeptRequest, submitOtherRequest} from '../base'
+import { connect } from 'react-redux'
 
+import {mouseEnterCalendarSection, mouseLeaveCalendarSection, mouseEnterCourseTableSection,
+    mouseLeaveCourseTableSection, highlightCourseTableAndFetchSectionDetails, clickViewCourseTableButton,
+    fetchNewCourse, closeSectionListModal, clickRemoveCourseButton} from "../actions/sectionActions"
 
 export class SearchBox extends React.Component{
 
@@ -139,3 +142,5 @@ export class SearchBox extends React.Component{
         );
     }
 }
+
+export const ConnectedSearchBox = connect(() => {return {}}, {onAddNewCourse: fetchNewCourse})(SearchBox);

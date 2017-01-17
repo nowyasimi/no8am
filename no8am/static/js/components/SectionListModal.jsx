@@ -4,7 +4,7 @@ import {Modal} from "react-bootstrap"
 import {connect} from 'react-redux'
 
 import {closeSectionListModal} from '../actions/sectionActions'
-import {ConnectedCourseTableSection} from "./Main.jsx"
+import {ConnectedCourseTableSection} from "./CourseTableSection.jsx"
 import {ConnectedSectionDetails} from './SectionDetails.jsx'
 
 export class SectionListModal extends React.Component {
