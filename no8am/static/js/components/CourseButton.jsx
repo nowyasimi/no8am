@@ -5,6 +5,11 @@ import {clickViewCourseTableButton, clickRemoveCourseButton} from '../actions/se
 
 export class CourseButton extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.removeCourse = this.removeCourse.bind(this);
+    }
+
     removeCourse(event) {
         console.log('remove');
         event.stopPropagation();
@@ -23,7 +28,7 @@ export class CourseButton extends React.Component {
             <span> </span> :
             <span className="glyphicon glyphicon-ok course-success courseButtonSelectedCheck"> </span>;
 
-        let removeCourse = <span className="close removeCourse" onClick={() => this.removeCourse}>×</span>;
+        let removeCourse = <span className="close removeCourse" onClick={this.removeCourse}>×</span>;
 
 
         // TODO - add course revert button (from department button attribute), add remove button, disable extra sections
@@ -54,7 +59,7 @@ export class CourseButton extends React.Component {
 function mapDispatchToProps(dispatch, sectionProps) {
     return {
         onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId)),
-        onClickRemoveCourseButton: () => dispatch(clickRemoveCourseButton())
+        onClickRemoveCourseButton: () => dispatch(clickRemoveCourseButton(sectionProps.courseId))
     }
 }
 

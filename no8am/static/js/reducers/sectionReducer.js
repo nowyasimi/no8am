@@ -65,7 +65,9 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 sectionDetails: {state: "no selection"}
             };
         case 'REMOVE_COURSE':
-            let index_to_remove = state.courses.find((x) => x.courseId == action.courseId);
+            let index_to_remove = state.courses.findIndex((x) => x.courseId == action.courseId);
+            console.log(index_to_remove);
+            console.log(action);
             return {
                 ...state,
                 courses: state.courses.filter((_, i) => i !== index_to_remove)
