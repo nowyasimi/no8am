@@ -115,19 +115,34 @@ export const fetchNewCourse = (department, course) => {
     }
 };
 
-const convertSectionsToArrayHelper = (sections) => Object
-    // convert to array and parse times met
-    .keys(sections)
-    .map((key) => ({
-        ...sections[key],
-        daysMet: parseTimesMet(restructureHours(sections[key].timesMet))
-    }))
-    // sort sections by course number
-    .sort((a, b) => a.courseNum > b.courseNum);
+const convertSectionsToArrayHelper = (sections) => {
+    let mainSections = Object
+        // convert to array and parse times met
+        .keys(sections)
+        .map((key) => ({
+            ...sections[key],
+            daysMet: parseTimesMet(restructureHours(sections[key].timesMet)),
+            roomMet: sections[key].roomMet === ", " ? "" : sections[key].roomMet,
+            professor: sections[key].professor === "; " ? "" : sections[key].professor
+        }))
+        // sort sections by course number
+        .sort((a, b) => a.courseNum > b.courseNum);
 
-// TODO - add these here or in python API
-// this.roomMet = object["roomMet"] === ", " ? "" : object["roomMet"];
-// this.professor = object["professor"] === "; " ? "" : object["professor"];
+    for (let section of mainSections) {
+        let newExtraSections = {};
+        for (let extraSectionType in section.extra_section_lists) {
+            newExtraSections[extraSectionType] = Object
+                .keys(section.extra_section_lists[extraSectionType])
+                .map((extra_key) => ({
+                    ...section.extra_section_lists[extraSectionType][extra_key]
+                }))
+                .sort((a, b) => a.courseNum > b.courseNum)
+        }
+        section.extra_section_lists = newExtraSections;
+    }
+
+    return mainSections;
+};
 
 const restructureHours = (hours) => {
     let timesMet = [];
