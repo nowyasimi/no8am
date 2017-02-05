@@ -129,6 +129,7 @@ class Section(object):
 		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
 		department, course_number, section_number = course_number_with_section.split(" ")
 
+        # TODO - fix issue with indexing the section. some values are off by one.
 		self.bare_course_number = bare_course_number 	    # DEPT 000
 		self.courseNum = course_number_with_section  	    # DEPT 000X 00
 		self.department = department  					    # DEPT

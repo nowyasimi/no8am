@@ -14,7 +14,8 @@ export class SectionListModal extends React.Component {
 
         this.state = {
             showModal: false,
-            clickedCourseButtonId: undefined
+            clickedCourseButtonId: null,
+            clickedCourseButtonExtraSectionType: null
         };
 
         this.handleClose = this.handleClose.bind(this);
@@ -25,7 +26,8 @@ export class SectionListModal extends React.Component {
             console.log(nextProps);
             this.setState({
                 showModal: true,
-                clickedCourseButtonId: nextProps.clickedCourseButtonId
+                clickedCourseButtonId: nextProps.clickedCourseButtonId,
+                clickedCourseButtonExtraSectionType: nextProps.clickedCourseButtonExtraSectionType
             });
         }
     }
@@ -43,7 +45,10 @@ export class SectionListModal extends React.Component {
         console.log('modal');
 
         let courseId = this.state.clickedCourseButtonId;
-        let course = this.props.courses.find((x) => x.courseId == courseId);
+        let extraSectionType = this.state.clickedCourseButtonExtraSectionType;
+        let mainCourse = this.props.courses.find((x) => x.courseId == courseId);
+        console.log(mainCourse);
+        let course = extraSectionType == null ? mainCourse : mainCourse.extra_section_lists[extraSectionType];
 
         let courseTableSections = course === undefined ? [] : course.sections.map((section, sectionIndex) =>
                 <ConnectedCourseTableSection key={`coursetablecourse${courseId}section${sectionIndex}`}
@@ -87,6 +92,7 @@ export class SectionListModal extends React.Component {
 function mapStateToProps(state) {
     return {
         clickedCourseButtonId: state.clickedCourseButtonId,
+        clickedCourseButtonExtraSectionType: state.clickedCourseButtonExtraSectionType,
         courses: state.courses
     }
 }

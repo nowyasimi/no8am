@@ -122,7 +122,7 @@ export class SearchBox extends React.Component{
     }
 
     componentWillUnmount(){
-        var element = findDOMNode(this);
+        let element = findDOMNode(this);
         $(element).typeahead('destroy');
     }
 

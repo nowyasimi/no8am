@@ -52,6 +52,7 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
             return {
                 ...state,
                 clickedCourseButtonId: action.id,
+                clickedCourseButtonExtraSectionType: action.extraSectionType,
                 highlightCourseId: action.id,
                 highlightSectionId: state.courses.find((x) => x.courseId == action.id).selected,
                 sectionDetails: {state: "no selection"}

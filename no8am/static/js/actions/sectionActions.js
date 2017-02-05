@@ -54,10 +54,12 @@ export const highlightCourseTableAndFetchSectionDetails = (courseId, sectionId, 
      }
 };
 
-export const clickViewCourseTableButton = (id) => {
+export const clickViewCourseTableButton = (id, extraSectionType) => {
+    // TODO - add optional extra section flag to action
     return {
         type: 'CLICK_VIEW_COURSE_TABLE_BUTTON',
-        id
+        id,
+        extraSectionType
     }
 };
 
@@ -105,14 +107,45 @@ export const fetchNewCourse = (department, course) => {
         return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
             .then(response => response.json())
             .then(jsonResponse => ({
-                // TODO - also convert extra section lists
-                // TODO - update API so this conversion is not necessary
                 ...jsonResponse,
-                sections: convertSectionsToArrayHelper(jsonResponse.sections)
+                sections: convertSectionsToArrayHelper(jsonResponse.sections),
+                selectedExtraSections: createEmptySelectedExtraSections(jsonResponse.sections),
+                extraSectionIndependent: createExtraSectionIndependent(jsonResponse.sections),
+                // TODO - move independent extra section types here in API
+                selected: null
             }))
             .then(courseData => dispatch(receiveCourse(department, course, courseData)))
             .catch(dispatch(errorReceivingCourse(department, course)));
     }
+};
+
+const createEmptySelectedExtraSections = (jsonSections) => {
+    let emptySelectedExtraSections = {};
+    let sections = convertSectionsToArrayHelper(jsonSections);
+
+    if (sections.length > 0) {
+        for (let extra_section_type in sections[0].extra_section_lists) {
+            emptySelectedExtraSections[extra_section_type] = null;
+        }
+    }
+
+    return emptySelectedExtraSections;
+};
+
+const createExtraSectionIndependent = (jsonSections) => {
+    // TODO - move this to the API
+    let extraSectionIndependent = {};
+    let sections = convertSectionsToArrayHelper(jsonSections);
+
+    if (sections.length > 0) {
+        for (let extra_section_type in sections[0].extra_section_independent) {
+            extraSectionIndependent[extra_section_type] = sections[0].extra_section_independent[extra_section_type];
+        }
+    }
+
+    console.log(extraSectionIndependent);
+
+    return extraSectionIndependent;
 };
 
 const convertSectionsToArrayHelper = (sections) => {
@@ -122,12 +155,14 @@ const convertSectionsToArrayHelper = (sections) => {
         .map((key) => ({
             ...sections[key],
             daysMet: parseTimesMet(restructureHours(sections[key].timesMet)),
+            // TODO - update API so this conversion is not necessary
             roomMet: sections[key].roomMet === ", " ? "" : sections[key].roomMet,
             professor: sections[key].professor === "; " ? "" : sections[key].professor
         }))
         // sort sections by course number
         .sort((a, b) => a.courseNum > b.courseNum);
 
+    // TODO - update API so this conversion is not necessary
     for (let section of mainSections) {
         let newExtraSections = {};
         for (let extraSectionType in section.extra_section_lists) {
