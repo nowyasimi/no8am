@@ -15,6 +15,8 @@ Features
 * Custom links to course schedules using Amazon DynamoDB
 * One-line deployment to AWS
 * API to support external applications
+* Modern interface using React, Redux, and Material Design (coming soon!)
+
 
 
 Develop
@@ -66,8 +68,7 @@ No8am is currently deployed on Amazon Web Services. Full deployment guide coming
 Contributing
 -------
 
-This project has features that can be developed by students at any level of
-CS experience. See the [issues](https://github.com/nowyasimi/no8am/issues)
+This project has features that can be developed by students with any level of CS experience. See the [issues](https://github.com/nowyasimi/no8am/issues)
 page for features that are tagged as `easy`.
 
 License
