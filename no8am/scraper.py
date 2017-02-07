@@ -159,15 +159,23 @@ class Section(object):
 		:return: A dictionary of relevant section data
 		"""
 
+		new_extra_section_lists = {"L": [], "R": [], "P": []}
+
 		# replace extra section objects with dictionaries
 		for extra_section_type, extra_section_list in self.extra_section_lists.iteritems():
+			new_extra_section_list = []
 			for crn, extra_section in extra_section_list.iteritems():
+				# only convert sections that haven't been converted yet
 				if type(extra_section) is not dict:
 					export_extra_section = extra_section.__dict__
 					if 'extra_section_lists' in export_extra_section.keys():
 						del export_extra_section['extra_section_lists']
 						del export_extra_section['extra_section_independent']
-					extra_section_list[crn] = export_extra_section
+					new_extra_section_list.append(export_extra_section)
+			sort_list = sorted(new_extra_section_list, key=lambda k: k['courseNum'])
+			new_extra_section_lists[extra_section_type] = sort_list
+
+		self.extra_section_lists = new_extra_section_lists
 
 		return self.__dict__
 
@@ -280,7 +288,7 @@ class Course:
 		"""
 
 		return {
-			"sections": {crn: self.main_sections[crn].export() for crn in self.main_sections},
+			"sections": [self.main_sections[crn].export() for crn in self.main_sections],
 			"deptName": self.main_sections[self.main_sections.keys()[0]].department,
 			"courseNum": self.main_sections[self.main_sections.keys()[0]].course_number
 		}
