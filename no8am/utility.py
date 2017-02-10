@@ -57,6 +57,19 @@ def get_user_format_semester():
 	return "{0} {1}-{2}".format(user_format_semester, bucknell_format_year - 1, bucknell_format_year)
 
 
+def is_valid_department(dept):
+        """
+        Checks whether a department is in the list of valid department codes.
+
+        :param dept: department code
+        :return: True if dept is a valid department 
+        """
+        for dept_dic in DEPARTMENT_LIST:
+                if dept_dic["abbreviation"] == dept:
+                        return True
+        return False
+
+
 def get_course_numbers_in_department(department_name):
 	"""
 	Gets course numbers in a department for the current term. This is used to filter out descriptions for

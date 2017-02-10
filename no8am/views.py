@@ -9,6 +9,9 @@ from no8am import app, store_link, get_link, generate_short_link, Department, Cr
 	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
 	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, STATIC_LOCATION, SIMPLE_FORM_TOKEN
 
+from no8am.utility import is_valid_department
+
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -76,8 +79,11 @@ def course_lookup(department=None, course_number=None):
 	if department is None and course_number is None:
 		return jsonify(departments=DEPARTMENT_LIST)
 
-	# TODO - validate department against metadata
 	department = department.upper()
+        
+        if not is_valid_department(department):
+                error = "{0} is not a valid department".format(department)
+                return jsonify(error=error), httplib.NOT_FOUND
 
 	cache_time, department_data = Department.process_department_request(department)
 
