@@ -1,6 +1,6 @@
 no8am
 ==================
-[![Build Status](https://travis-ci.com/nowyasimi/no8am.svg?token=xptabDthiPrFvZ5xLTzX&branch=master)](https://travis-ci.com/nowyasimi/no8am)
+[![Build Status](https://travis-ci.org/nowyasimi/no8am.svg?branch=master)](https://travis-ci.org/nowyasimi/no8am)
 [![Website](https://img.shields.io/website/https/no8.am.svg)](https://no8.am)
 
 Help students easily create their course schedules each semester.
@@ -68,8 +68,10 @@ No8am is currently deployed on Amazon Web Services. Full deployment guide coming
 Contributing
 -------
 
-This project has features that can be developed by students with any level of CS experience. See the [issues](https://github.com/nowyasimi/no8am/issues)
-page for features that are tagged as `goodfirstbug`.
+This project has features that can be developed by students with any level of CS experience. Look for the `good first bug` label on the [issues](https://github.com/nowyasimi/no8am/issues) page to get started.
+
+Please create an issue for discussion before submitting pull requests. Pull
+requests should target `master` and leave it in a deployable state.
 
 License
 -------
