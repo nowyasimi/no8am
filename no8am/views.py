@@ -7,9 +7,8 @@ import json
 
 from no8am import app, store_link, get_link, generate_short_link, Department, CreditOrCCC, \
 	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
-	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, STATIC_LOCATION, SIMPLE_FORM_TOKEN
-
-from no8am.utility import is_valid_department, is_valid_ccc_req
+	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, \
+        STATIC_LOCATION, SIMPLE_FORM_TOKEN, is_valid_department, is_valid_ccc_req
 
 
 reload(sys)

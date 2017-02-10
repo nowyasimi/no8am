@@ -74,7 +74,7 @@ def is_valid_department(dept):
 def is_valid_ccc_req(req):
         """
         Checks whether a requirement code is in the list of valid CCC
-        requiremenets.
+        requirements.
 
         :param req: CCC requirement code
         :return: True if req is a valid CCC requirement 
