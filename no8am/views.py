@@ -9,7 +9,7 @@ from no8am import app, store_link, get_link, generate_short_link, Department, Cr
 	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
 	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, STATIC_LOCATION, SIMPLE_FORM_TOKEN
 
-from no8am.utility import is_valid_department
+from no8am.utility import is_valid_department, is_valid_ccc_req
 
 
 reload(sys)
@@ -117,8 +117,12 @@ def other_lookup(category=None, lookup_val=None):
 
 	# provide course data
 	elif category in ['ccc', 'credit'] and lookup_val is not None:
-		# TODO - validate lookup_val against metadata
 		lookup_val = lookup_val.upper()
+
+                if not is_valid_ccc_req(lookup_val):
+                    error = "{0} is not a valid CCC requirement".format(lookup_val)
+                    return jsonify(error=error), httplib.NOT_FOUND
+
 		cache_time, all_courses = CreditOrCCC.process_ccc_or_credit_request(category, lookup_val)
 		return jsonify(courses=all_courses, cache_time=cache_time)
 
