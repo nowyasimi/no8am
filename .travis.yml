@@ -2,4 +2,6 @@ language: python
 python:
   - "2.7"
 install: "pip install -r requirements.txt"
-script: pytest
+script:
+   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then pytest --ignore=no8am/tests/test_database.py; fi'
+   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then pytest; fi'
