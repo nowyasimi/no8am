@@ -39,5 +39,6 @@ from no8am.database import store_link, get_link, generate_short_link
 from no8am.utility import get_bucknell_format_semester, generate_course_descriptions, get_user_format_semester
 from no8am.minify import update_static_files, generate_metadata, JS_OUTPUT_FILENAME
 from no8am.scraper import Department, CreditOrCCC, find_course_in_department, fetch_section_details
+from no8am.utility import is_valid_department, is_valid_ccc_req
 
 import no8am.views

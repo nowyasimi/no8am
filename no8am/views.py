@@ -7,7 +7,9 @@ import json
 
 from no8am import app, store_link, get_link, generate_short_link, Department, CreditOrCCC, \
 	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
-	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, STATIC_LOCATION, SIMPLE_FORM_TOKEN
+	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, \
+        STATIC_LOCATION, SIMPLE_FORM_TOKEN, is_valid_department, is_valid_ccc_req
+
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -76,8 +78,11 @@ def course_lookup(department=None, course_number=None):
 	if department is None and course_number is None:
 		return jsonify(departments=DEPARTMENT_LIST)
 
-	# TODO - validate department against metadata
 	department = department.upper()
+        
+        if not is_valid_department(department):
+                error = "{0} is not a valid department".format(department)
+                return jsonify(error=error), httplib.NOT_FOUND
 
 	cache_time, department_data = Department.process_department_request(department)
 
@@ -111,8 +116,12 @@ def other_lookup(category=None, lookup_val=None):
 
 	# provide course data
 	elif category in ['ccc', 'credit'] and lookup_val is not None:
-		# TODO - validate lookup_val against metadata
 		lookup_val = lookup_val.upper()
+
+                if not is_valid_ccc_req(lookup_val):
+                    error = "{0} is not a valid CCC requirement".format(lookup_val)
+                    return jsonify(error=error), httplib.NOT_FOUND
+
 		cache_time, all_courses = CreditOrCCC.process_ccc_or_credit_request(category, lookup_val)
 		return jsonify(courses=all_courses, cache_time=cache_time)
 

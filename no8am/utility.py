@@ -6,7 +6,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-from no8am import DEPARTMENT_LIST
+from no8am import DEPARTMENT_LIST, CCC_LIST
 
 BUCKNELL_COURSE_DESCRIPTIONS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/bwckctlg.p_display_courses"
 
@@ -55,6 +55,34 @@ def get_user_format_semester():
 	user_format_semester = 'Fall' if bucknell_format_semester == '01' else 'Spring'
 
 	return "{0} {1}-{2}".format(user_format_semester, bucknell_format_year - 1, bucknell_format_year)
+
+
+
+def is_valid_department(dept):
+        """
+        Checks whether a department is in the list of valid department codes.
+
+        :param dept: department code
+        :return: True if dept is a valid department 
+        """
+        for dept_dic in DEPARTMENT_LIST:
+                if dept_dic["abbreviation"] == dept:
+                        return True
+        return False
+
+
+def is_valid_ccc_req(req):
+        """
+        Checks whether a requirement code is in the list of valid CCC
+        requirements.
+
+        :param req: CCC requirement code
+        :return: True if req is a valid CCC requirement 
+        """
+        for req_dic in CCC_LIST:
+                if req_dic["abbreviation"] == req:
+                        return True
+        return False
 
 
 def get_course_numbers_in_department(department_name):
