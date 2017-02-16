@@ -142,13 +142,14 @@ class Section(object):
 		self.professor = str('; '.join(section[5].strings))
 		self.freeSeats = str(''.join(section[6].strings).replace(u'\xa0', " "))
 
-		if str(''.join(section[9].strings)).isdigit():			# 10th col is Prm
+		if str(''.join(section[10].strings)) != 'Desc':			# Index 10 col is CCC
 			self.waitList = str(''.join(section[7].strings))
 			self.resSeats = str(''.join(section[8].strings))
 			self.prm = str(''.join(section[9].strings))
 			self.CCC = str(''.join(section[10].strings)).strip()
-		else:													# 10th col is CCC Req
+		else:													# Index 10 col is Course Desc
 			self.waitList = ""
+			print ("Number 2")
 			self.resSeats = str(''.join(section[7].strings))
 			self.prm = str(''.join(section[8].strings))
 			self.CCC = str(''.join(section[9].strings)).strip()
