@@ -129,21 +129,31 @@ class Section(object):
 		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
 		department, course_number, section_number = course_number_with_section.split(" ")
 
-		self.bare_course_number = bare_course_number 	    # DEPT 000
-		self.courseNum = course_number_with_section  	    # DEPT 000X 00
-		self.department = department  					    # DEPT
-		self.course_number = course_number  			    # 	   000X
-		self.sectionNum = section_number  				    # 			00
+		self.bare_course_number = bare_course_number		# DEPT 000
+		self.courseNum = course_number_with_section 		# DEPT 000X 00
+		self.department = department  						# DEPT
+		self.course_number = course_number 					# 	   000X
+		self.sectionNum = section_number 					# 			00
+
+		self.CRN = str(section[0].string)
 		self.courseName = str(''.join(section[2].strings))
 		self.timesMet = str(''.join(section[3].strings))
 		self.roomMet = str(', '.join(section[4].strings))
 		self.professor = str('; '.join(section[5].strings))
 		self.freeSeats = str(''.join(section[6].strings).replace(u'\xa0', " "))
-		self.waitList = str(''.join(section[7].strings))
-		self.resSeats = str(''.join(section[8].strings))
-		self.prm = str(''.join(section[9].strings))
-		self.CCC = str(''.join(section[10].strings)).strip()
-		self.CRN = str(section[0].string)
+
+		if str(''.join(section[10].strings)) != 'Desc':			# Index 10 col is CCC
+			self.waitList = str(''.join(section[7].strings))
+			self.resSeats = str(''.join(section[8].strings))
+			self.prm = str(''.join(section[9].strings))
+			self.CCC = str(''.join(section[10].strings)).strip()
+		else:													# Index 10 col is Course Desc
+			self.waitList = ""
+			print ("Number 2")
+			self.resSeats = str(''.join(section[7].strings))
+			self.prm = str(''.join(section[8].strings))
+			self.CCC = str(''.join(section[9].strings)).strip()
+		
 		self.message = str(''.join(message[0].strings).replace(u'\u2019', "")) if message is not None else None
 		self.main = False 	# assume section is not main
 
