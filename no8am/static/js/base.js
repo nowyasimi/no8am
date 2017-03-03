@@ -316,10 +316,12 @@ export function removeFromStorage() {
  * Called from GUI to set search box to sample values.
  * @param value An example value for the search box.
  */
-function setSearchBox(value) {
+export function setSearchBox(value) {
     $(".typeahead").typeahead('val', '');
     $(".typeahead").focus().typeahead('val', value);
 }
+
+global.setSearchBox = setSearchBox;
 
 /**
  * Submits new course request for all sections of a course.
