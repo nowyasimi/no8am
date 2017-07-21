@@ -1,7 +1,5 @@
 $ = require('jquery');
 
-let ReactDOM = require('react-dom');
-
 require('bootstrap');
 
 import {
