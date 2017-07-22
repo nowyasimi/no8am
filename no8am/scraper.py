@@ -152,14 +152,15 @@ class Section(object):
 		self.extra_section_lists = {"L": {}, "R": {}, "P": {}}
 		self.extra_section_independent = {"L": True, "R": True, "P": True}
 
-	def export(self):
-		"""
-		Generates section data for main sections or extra sections.
+	def convert(self):
+		'''
+		Convert extra section objects to dictionaries.
+		'''
 
-		:return: A dictionary of relevant section data
-		"""
+		# remove empty extra_section_types
+		self.extra_section_lists = {k:v for k,v in self.extra_section_lists.iteritems() if v != {}}
 
-		new_extra_section_lists = {"L": [], "R": [], "P": []}
+		new_extra_section_lists = {k: [] for k in self.extra_section_lists.keys()}
 
 		# replace extra section objects with dictionaries
 		for extra_section_type, extra_section_list in self.extra_section_lists.iteritems():
@@ -177,7 +178,28 @@ class Section(object):
 
 		self.extra_section_lists = new_extra_section_lists
 
+		self.extra_section_independent = {k: v for k,v in self.extra_section_independent.iteritems() if k in self.extra_section_lists.keys()}
+
+	def export(self):
+		"""
+		Generates section data for main sections or extra sections.
+
+		:return: A dictionary of relevant section data
+		"""
+
+		self.extra_section_lists = {k:v for k,v in self.extra_section_lists.iteritems() if not self.extra_section_independent[k]}
+
+		del self.extra_section_independent
+
 		return self.__dict__
+
+	def get_independent_extra_section_lists(self):
+		'''
+		Get independent extra section lists so they can be the property of a
+		course instead of a section.
+		'''
+
+		return {k:v for k,v in self.extra_section_lists.iteritems() if self.extra_section_independent[k] and v != {}}
 
 
 class Course:
@@ -287,10 +309,18 @@ class Course:
 		:return: A dictionary of course data that can be read by the client
 		"""
 
+		for crn in self.main_sections:
+			self.main_sections[crn].convert()
+
+		keys = self.main_sections.keys()
+
+		independent_extra_section_lists = {} if len(keys) == 0 else self.main_sections[keys[0]].get_independent_extra_section_lists()
+
 		return {
 			"sections": [self.main_sections[crn].export() for crn in self.main_sections],
 			"deptName": self.main_sections[self.main_sections.keys()[0]].department,
-			"courseNum": self.main_sections[self.main_sections.keys()[0]].course_number
+			"courseNum": self.main_sections[self.main_sections.keys()[0]].course_number,
+			"independent_extra_section_lists": independent_extra_section_lists
 		}
 
 
@@ -429,4 +459,4 @@ def find_course_in_department(parsed_data, department_name, course_number):
 
 	for course in parsed_data:
 		if course["courseNum"] == course_number and course["deptName"] == department_name:
-			return course["sections"]
+			return course
