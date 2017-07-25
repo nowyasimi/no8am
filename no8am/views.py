@@ -88,7 +88,7 @@ def course_lookup(department=None, course_number=None):
 	# return data on specified course
 	else:
 		course_data = find_course_in_department(department_data, department, course_number)
-		return jsonify(sections=course_data, cache_time=cache_time)
+		return jsonify(course=course_data, cache_time=cache_time)
 
 
 @app.route('/category')

@@ -1,3 +1,5 @@
+import {EXTRA_SECTION_TYPES} from '../Constants'
+
 export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) => {
     switch (action.type) {
         case 'MOUSE_ENTER_CALENDAR_SECTION':
@@ -83,23 +85,35 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                         department: action.department,
                         course: action.course,
                         color: 'blue',
-                        dataStatus: 'loading'
+                        dataStatus: 'loading',
+                        isMain: true
                     }
                 ],
                 courseCounter: state.courseCounter + 1
             };
         case 'RECEIVE_COURSE':
+            let courseId = state.courses.find(x => action.department && x.course === action.course && x.dataStatus === 'loading').courseId;
+
             return {
                 ...state,
-                courses: state.courses.map((x) =>
-                    action.department && x.course === action.course && x.dataStatus === 'loading' ?
+                courses: state.courses.map(x => x.courseId !== courseId ? x :
                         {
                             ...x,
-                            sections:
-                            action.courseData.sections,
+                            sections: action.courseData.sections,
                             cacheTime: action.courseData.cache_time,
                             dataStatus: 'loaded'
-                        } : x
+                        }
+                ).concat(
+                    EXTRA_SECTION_TYPES
+                        .filter(x => action.courseData.course.independent_extra_section_lists.hasOwnProperty(x))
+                        .map(x => ({
+                            color: 'red',
+                            department: action.department,
+                            course: action.course + x,
+                            courseId: courseId + x,
+                            sections: action.courseData.course.independent_extra_section_lists[x],
+                            dataStatus: 'loaded'
+                        }))
                 )
             };
         default:

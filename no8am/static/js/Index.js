@@ -33,6 +33,7 @@ import {Main} from './components/Main.jsx';
 function createCalendar() {
     const store = createStore(
         sectionReducer,
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
         applyMiddleware(thunkMiddleware) // lets us dispatch() functions
     );
 

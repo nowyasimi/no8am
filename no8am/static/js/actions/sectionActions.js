@@ -108,7 +108,7 @@ export const fetchNewCourse = (department, course) => {
             .then(response => response.json())
             .then(jsonResponse => ({
                 ...jsonResponse,
-                sections: initializeSections(jsonResponse.sections),
+                sections: initializeSections(jsonResponse.course.sections),
                 // TODO - extract independent extra sections from specific sections in API
                 // selectedExtraSections: createEmptySelectedExtraSections(jsonResponse.sections),
                 // extraSectionIndependent: createExtraSectionIndependent(jsonResponse.sections),
