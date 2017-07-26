@@ -42,15 +42,20 @@ export class SectionListModal extends React.Component {
 
     render() {
 
-        console.log('modal');
-
         let courseId = this.state.clickedCourseButtonId;
         let extraSectionType = this.state.clickedCourseButtonExtraSectionType;
         let mainCourse = this.props.courses.find((x) => x.courseId == courseId);
-        console.log(mainCourse);
-        let course = extraSectionType == null ? mainCourse : mainCourse.extra_section_lists[extraSectionType];
 
-        let courseTableSections = course === undefined ? [] : course.sections.map((section, sectionIndex) =>
+        if (mainCourse === undefined) {
+            return null;
+        }
+
+        console.log(mainCourse);
+
+        let sections = extraSectionType == null ?
+            mainCourse.sections : mainCourse.sections[mainCourse.selected].extra_section_lists[extraSectionType];
+
+        let courseTableSections = sections.map((section, sectionIndex) =>
                 <ConnectedCourseTableSection key={`coursetablecourse${courseId}section${sectionIndex}`}
                                              {...section} courseId={courseId} sectionId={sectionIndex} />
             );

@@ -14,15 +14,9 @@ class CourseButtonExtraSection extends React.Component {
         let courseButtonCheck = this.props.selected != null ?
             <span className="glyphicon glyphicon-ok course-success courseButtonSelectedCheck"> </span> : null;
 
-        // TODO - disable extra sections if dependent
-
         let courseNum = `${this.props.department} ${this.props.course}${this.props.extraSectionType || ""}`;
         let sectionCountString = `${this.props.numSections} Sections`;
         let disabled = this.props.isDependent && this.props.mainSelection === undefined ? "disabled" : "";
-
-        if (this.props.numSections == 0) {
-            return null;
-        }
 
         return (
             <a onClick={this.props.onClickViewCourseTable}
