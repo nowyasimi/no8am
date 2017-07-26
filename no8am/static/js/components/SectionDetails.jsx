@@ -3,7 +3,8 @@ let React = require('react');
 import {connect} from 'react-redux'
 
 
-export class SectionDetails extends React.Component {
+@connect(mapStateToProps)
+export default class SectionDetails extends React.Component {
 
     constructor() {
         super();
@@ -127,4 +128,3 @@ function mapStateToProps(state) {
     }
 }
 
-export const ConnectedSectionDetails = connect(mapStateToProps)(SectionDetails);

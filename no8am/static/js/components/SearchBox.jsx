@@ -9,7 +9,9 @@ import { connect } from 'react-redux'
 
 import {fetchNewCourse} from "../actions/sectionActions"
 
-export class SearchBox extends React.Component{
+
+@connect(() => {return {}}, {onAddNewCourse: fetchNewCourse})
+export default class SearchBox extends React.Component{
 
     initializeTypeahead() {
         let typeaheadConfiguration = [];
@@ -132,5 +134,3 @@ export class SearchBox extends React.Component{
         );
     }
 }
-
-export const ConnectedSearchBox = connect(() => {return {}}, {onAddNewCourse: fetchNewCourse})(SearchBox);

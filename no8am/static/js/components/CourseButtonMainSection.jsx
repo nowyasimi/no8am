@@ -3,7 +3,9 @@ import {connect} from 'react-redux'
 
 import {clickViewCourseTableButton, clickRemoveCourseButton} from '../actions/sectionActions'
 
-class CourseButtonMainSection extends React.Component {
+
+@connect(() => {return {}}, mapDispatchToProps)
+export default class CourseButtonMainSection extends React.Component {
 
     constructor(props) {
         super(props);
@@ -68,5 +70,4 @@ function mapDispatchToProps(dispatch, sectionProps) {
     }
 }
 
-export const ConnectedCourseButtonMainSection = connect(() => {return {}}, mapDispatchToProps)(CourseButtonMainSection);
 

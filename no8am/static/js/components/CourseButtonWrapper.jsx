@@ -1,11 +1,12 @@
 let React = require('react');
 import {connect} from 'react-redux'
-import {ConnectedCourseButtonMainSection} from './CourseButtonMainSection.jsx';
-import {ConnectedCourseButtonExtraSection} from './CourseButtonExtraSection.jsx';
+import CourseButtonMainSection from './CourseButtonMainSection.jsx';
+import CourseButtonExtraSection from './CourseButtonExtraSection.jsx';
 import {EXTRA_SECTION_TYPES} from '../Constants';
 
 
-export class CourseButtonWrapper extends React.Component {
+@connect(mapStateToProps)
+export default class CourseButtonWrapper extends React.Component {
 
     render() {
 
@@ -21,7 +22,7 @@ export class CourseButtonWrapper extends React.Component {
 
             extraSectionButtons = this.props.courses
                 .filter(course => independentExtraSections.includes(course.courseId))
-                .map(x => <ConnectedCourseButtonExtraSection
+                .map(x => <CourseButtonExtraSection
                         key={`courseId${x.courseId}`}
                         {...x}
                         numSections={x.sections.length}
@@ -32,7 +33,7 @@ export class CourseButtonWrapper extends React.Component {
                 let numSectionsOfType = firstSection.extra_section_lists[extra_section_type].length;
                 if (numSectionsOfType > 0) {
                     extraSectionButtons.push(
-                        <ConnectedCourseButtonExtraSection
+                        <CourseButtonExtraSection
                             key={`courseId${this.props.courseId}${extra_section_type}`}
                             courseId={this.props.courseId}
                             course={this.props.course}
@@ -51,7 +52,7 @@ export class CourseButtonWrapper extends React.Component {
 
         return (
             <div className="list-group">
-                <ConnectedCourseButtonMainSection {...this.props} />
+                <CourseButtonMainSection {...this.props} />
 
                 {extraSectionButtons}
             </div>
@@ -66,5 +67,3 @@ function mapStateToProps(state) {
     }
 }
 
-
-export const ConnectedCourseButtonWrapper = connect(mapStateToProps)(CourseButtonWrapper);

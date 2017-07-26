@@ -21,6 +21,7 @@
   "homepage": "https://github.com/nowyasimi/no8am#readme",
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
@@ -48,7 +49,8 @@
         "babelify",
         {
           "plugins": [
-            "transform-object-rest-spread"
+            "transform-object-rest-spread",
+            "transform-decorators-legacy"
           ],
           "presets": [
             "es2015",

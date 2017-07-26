@@ -5,7 +5,8 @@ import {mouseEnterCourseTableSection, mouseLeaveCourseTableSection, highlightCou
 from "../actions/sectionActions"
 
 
-export class CourseTableSection extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CourseTableSection extends React.Component {
     render() {
         let sectionHighlighted = this.props.courseId == this.props.highlight.courseId &&
             this.props.sectionId == this.props.highlight.sectionId;
@@ -45,8 +46,3 @@ function mapDispatchToProps(dispatch, sectionProps) {
         onHighlightCourseTable: () => dispatch(highlightCourseTableAndFetchSectionDetails(sectionProps.courseId, sectionProps.sectionId, sectionProps.department, sectionProps.CRN))
     }
 }
-
-export const ConnectedCourseTableSection = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(CourseTableSection);

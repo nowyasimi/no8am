@@ -4,10 +4,12 @@ import {Modal} from "react-bootstrap"
 import {connect} from 'react-redux'
 
 import {closeSectionListModal} from '../actions/sectionActions'
-import {ConnectedCourseTableSection} from "./CourseTableSection.jsx"
-import {ConnectedSectionDetails} from './SectionDetails.jsx'
+import CourseTableSection from "./CourseTableSection.jsx"
+import SectionDetails from './SectionDetails.jsx'
 
-export class SectionListModal extends React.Component {
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class SectionListModal extends React.Component {
 
     constructor() {
         super();
@@ -56,7 +58,7 @@ export class SectionListModal extends React.Component {
             mainCourse.sections : mainCourse.sections[mainCourse.selected].extra_section_lists[extraSectionType];
 
         let courseTableSections = sections.map((section, sectionIndex) =>
-                <ConnectedCourseTableSection key={`coursetablecourse${courseId}section${sectionIndex}`}
+                <CourseTableSection key={`coursetablecourse${courseId}section${sectionIndex}`}
                                              {...section} courseId={courseId} sectionId={sectionIndex} />
             );
 
@@ -83,7 +85,7 @@ export class SectionListModal extends React.Component {
                                 Done
                             </button>
                             <div id="sectionDetails">
-                                <ConnectedSectionDetails />
+                                <SectionDetails />
                             </div>
                         </div>
                     </Modal.Body>
@@ -109,4 +111,3 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export const ConnectedSectionListModal = connect(mapStateToProps, mapDispatchToProps)(SectionListModal);

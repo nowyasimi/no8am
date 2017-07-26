@@ -6,7 +6,8 @@ import {colorDict} from '../Constants'
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTableButton} from '../actions/sectionActions.js'
 
 
-export class CalendarSection extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CalendarSection extends React.Component {
 
     render() {
         let sectionMatchesSelected = this.props.selected == this.props.sectionId;
@@ -77,4 +78,4 @@ function mapDispatchToProps(dispatch, sectionProps) {
     }
 }
 
-export const ConnectedCalendarSection = connect(mapStateToProps, mapDispatchToProps)(CalendarSection);
+

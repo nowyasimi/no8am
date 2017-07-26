@@ -1,12 +1,13 @@
 let React = require('react');
 import {connect} from 'react-redux'
 
-import {ConnectedCalendarSection} from './CalendarSection.jsx'
-import {ConnectedSectionListModal} from './SectionListModal.jsx'
+import CalendarSection from './CalendarSection.jsx'
+import SectionListModal from './SectionListModal.jsx'
 import {DAYS_OF_WEEK} from '../Constants'
 
 
-export class CalendarCourses extends React.Component {
+@connect(mapStateToProps)
+export default class CalendarCourses extends React.Component {
 
     // Always draw selected sections
     // Draw potential sections for currently selected course or course group
@@ -30,7 +31,7 @@ export class CalendarCourses extends React.Component {
                     let day = section.daysMet[index][0];
                     let key = `course${courseId}section${sectionIndex}dayindex${index}`;
                     sectionsToDisplay.push({ day: day, section:
-                        <ConnectedCalendarSection
+                        <CalendarSection
                             key={key} {...this.props} {...course} {...section} day={index}
                             courseId={courseId} sectionId={sectionIndex}/>
                     });
@@ -64,7 +65,7 @@ export class CalendarCourses extends React.Component {
                 <div className="week">
                     { calendarSections }
                 </div>
-                <ConnectedSectionListModal {...this.props} />
+                <SectionListModal {...this.props} />
             </div>
         );
     }
@@ -81,5 +82,3 @@ function mapStateToProps(state) {
         courses: state.courses
     }
 }
-
-export const ConnectedCalendarCourses = connect(mapStateToProps)(CalendarCourses);

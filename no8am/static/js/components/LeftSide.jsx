@@ -1,9 +1,9 @@
 let React = require('react');
 
-import {ConnectedSearchBox} from './SearchBox.jsx'
-import {ConnectedCourseButtons} from './CourseButtons.jsx'
+import SearchBox from './SearchBox.jsx'
+import CourseButtons from './CourseButtons.jsx'
 
-export class LeftSide extends React.Component {
+export default class LeftSide extends React.Component {
     render() {
         return (
             <div className="col-sm-6 page2bg" id="filters">
@@ -19,7 +19,7 @@ export class LeftSide extends React.Component {
                     </div>
 
                     <div id="remote" className="editRegion">
-                        <ConnectedSearchBox />
+                        <SearchBox />
                     </div>
 
                     <div id="welcomeWell" className="well editRegion">
@@ -44,7 +44,7 @@ export class LeftSide extends React.Component {
                         </div>
                     </div>
 
-                    <ConnectedCourseButtons />
+                    <CourseButtons />
 
                     <div className="row viewRegion" id="viewSelections">
                         <div className="row">
