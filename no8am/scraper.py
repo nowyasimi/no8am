@@ -146,39 +146,13 @@ class Section(object):
 		self.CCC = str(''.join(section[10].strings)).strip()
 		self.CRN = str(section[0].string)
 		self.message = str(''.join(message[0].strings).replace(u'\u2019', "")) if message is not None else None
-		self.main = False 	# assume section is not main
 
-		# to be used if main section
-		self.extra_section_lists = {"L": {}, "R": {}, "P": {}}
-		self.extra_section_independent = {"L": True, "R": True, "P": True}
+	def setup_main_section(self):
+		self.main = True
 
-	def convert(self):
-		'''
-		Convert extra section objects to dictionaries.
-		'''
-
-		# remove empty extra_section_types
-		self.extra_section_lists = {k:v for k,v in self.extra_section_lists.iteritems() if v != {}}
-
-		new_extra_section_lists = {k: [] for k in self.extra_section_lists.keys()}
-
-		# replace extra section objects with dictionaries
-		for extra_section_type, extra_section_list in self.extra_section_lists.iteritems():
-			new_extra_section_list = []
-			for crn, extra_section in extra_section_list.iteritems():
-				# only convert sections that haven't been converted yet
-				if type(extra_section) is not dict:
-					export_extra_section = extra_section.__dict__
-					if 'extra_section_lists' in export_extra_section.keys():
-						del export_extra_section['extra_section_lists']
-						del export_extra_section['extra_section_independent']
-					new_extra_section_list.append(export_extra_section)
-			sort_list = sorted(new_extra_section_list, key=lambda k: k['courseNum'])
-			new_extra_section_lists[extra_section_type] = sort_list
-
-		self.extra_section_lists = new_extra_section_lists
-
-		self.extra_section_independent = {k: v for k,v in self.extra_section_independent.iteritems() if k in self.extra_section_lists.keys()}
+	def setup_extra_section(self):
+		self.main = False
+		self.dependent_main_sections = []
 
 	def export(self):
 		"""
@@ -187,19 +161,7 @@ class Section(object):
 		:return: A dictionary of relevant section data
 		"""
 
-		self.extra_section_lists = {k:v for k,v in self.extra_section_lists.iteritems() if not self.extra_section_independent[k]}
-
-		del self.extra_section_independent
-
 		return self.__dict__
-
-	def get_independent_extra_section_lists(self):
-		'''
-		Get independent extra section lists so they can be the property of a
-		course instead of a section.
-		'''
-
-		return {k:v for k,v in self.extra_section_lists.iteritems() if self.extra_section_independent[k] and v != {}}
 
 
 class Course:
@@ -211,12 +173,9 @@ class Course:
 		self.all_sections = sections
 		# sections is actually a single extra section if set_to_main
 		self.main_sections = {} if not set_to_main else {sections.CRN: sections}
-		self.extra_sections = {
-			"L": {}, "R": {}, "P": {}
-		}
-		self.extra_section_numbers = {
-			"L": {}, "R": {}, "P": {}
-		}
+		self.extra_sections = {}
+		self.extra_section_numbers = {}
+		self.is_extra_section_independent = {}
 
 		if not set_to_main:
 			self.divide_into_section_types()
@@ -237,14 +196,19 @@ class Course:
 			course_number = section.course_number
 
 			if len(course_number) > MAIN_COURSE_NUMBER_LENGTH and course_number[-1] in EXTRA_SECTIONS:
-				section.main = False
+				section.setup_extra_section()
 				extra_section_type = EXTRA_SECTIONS[EXTRA_SECTIONS.index(course_number[-1])]
+
+				if extra_section_type not in self.extra_sections:
+					self.extra_sections[extra_section_type] = {}
+					self.extra_section_numbers[extra_section_type] = {}
+					self.is_extra_section_independent[extra_section_type] = True
 
 				# remove message from extra section
 				self.extra_sections[extra_section_type][crn] = section
 				self.extra_section_numbers[extra_section_type][section_number] = crn
 			else:
-				section.main = True
+				section.setup_main_section()
 				self.main_sections[crn] = section
 
 	def link_extra_sections_to_main_sections(self):
@@ -275,32 +239,26 @@ class Course:
 				x: len(self.extra_section_numbers[x]) > 0 for x in self.extra_section_numbers
 			}
 
-			# now it's time to see what the sections correspond to
 			for legalSection in legal_sections:
-				for extra_section_type in EXTRA_SECTIONS:
-					# found match, now merge
+				for extra_section_type in self.extra_sections:
 					if legalSection in self.extra_section_numbers[extra_section_type]:
-						extra_section_crn = self.extra_section_numbers[extra_section_type][legalSection]
-						extra_section = self.extra_sections[extra_section_type][extra_section_crn]
-						section.extra_section_lists[extra_section_type][extra_section_crn] = extra_section
 						has_extra_section[extra_section_type] = False
 
-			for extra_section_type in EXTRA_SECTIONS:
+			for extra_section_type in self.extra_sections:
 				extra_sections = [x for x in legal_sections if x in self.extra_section_numbers[extra_section_type]]
 
 				if len(self.extra_section_numbers[extra_section_type]) > len(extra_sections) > 0:
-					section.extra_section_independent[extra_section_type] = False
+					self.is_extra_section_independent[extra_section_type] = False
+					for section_number in extra_sections:
+						extra_section_crn = self.extra_section_numbers[extra_section_type][section_number]
+						self.extra_sections[extra_section_type][extra_section_crn].dependent_main_sections.append(section.sectionNum)
 
-			# if message didn't link section to a specific extra section
+			# if message didn't link section to a specific extra section, link all extra sections to this one
 			for extra_section_type in has_extra_section:
 				if has_extra_section[extra_section_type]:
-					section.extra_section_lists[extra_section_type] = self.extra_sections[extra_section_type]
-
-		# if extra sections exist and a main isn't tied to any
-		for extra_section_type in self.extra_sections:
-			for crn, section in self.main_sections.iteritems():
-				if len(section.extra_section_lists[extra_section_type]) == 0:
-					section.extra_section_lists[extra_section_type] = self.extra_sections[extra_section_type]
+					for section_number in self.extra_section_numbers[extra_section_type]:
+						extra_section_crn = self.extra_section_numbers[extra_section_type][section_number]
+						self.extra_sections[extra_section_type][extra_section_crn].dependent_main_sections.append(section.sectionNum)
 
 	def export(self):
 		"""
@@ -309,18 +267,12 @@ class Course:
 		:return: A dictionary of course data that can be read by the client
 		"""
 
-		for crn in self.main_sections:
-			self.main_sections[crn].convert()
-
-		keys = self.main_sections.keys()
-
-		independent_extra_section_lists = {} if len(keys) == 0 else self.main_sections[keys[0]].get_independent_extra_section_lists()
-
 		return {
-			"sections": [self.main_sections[crn].export() for crn in self.main_sections],
+			"sections": sorted([self.main_sections[crn].export() for crn in self.main_sections], key=lambda x:x["sectionNum"]),
 			"deptName": self.main_sections[self.main_sections.keys()[0]].department,
 			"courseNum": self.main_sections[self.main_sections.keys()[0]].course_number,
-			"independent_extra_section_lists": independent_extra_section_lists
+			"isExtraSectionIndependent": self.is_extra_section_independent,
+			"extraSectionsByType": {section_type: [section.export() for section in sorted(section_list.values(), key=lambda x:x.sectionNum)] for section_type, section_list in self.extra_sections.iteritems()}
 		}
 
 

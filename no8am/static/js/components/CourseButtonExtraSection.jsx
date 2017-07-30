@@ -8,7 +8,6 @@ import {clickViewCourseTableButton} from '../actions/sectionActions'
 export default class CourseButtonExtraSection extends React.Component {
 
     render() {
-        console.log(this.props);
         const style = {
             borderLeftColor: this.props.color
         };
@@ -17,8 +16,12 @@ export default class CourseButtonExtraSection extends React.Component {
             <span className="glyphicon glyphicon-ok course-success courseButtonSelectedCheck"> </span> : null;
 
         let courseNum = `${this.props.department} ${this.props.course}${this.props.extraSectionType || ""}`;
-        let sectionCountString = `${this.props.numSections} Sections`;
-        let disabled = this.props.isDependent && this.props.mainSelection === undefined ? "disabled" : "";
+
+        let numSections = this.props.parentSectionNum === undefined ? this.props.sections.length : this.props.sections
+                .filter(section => section.dependent_main_sections.includes(this.props.parentSectionNum)).length;
+        let sectionCountString = this.props.isDisabled ? "Select Main Section First" : `${numSections} Sections`;
+
+        let disabled = this.props.isDisabled ? "disabled" : "";
 
         return (
             <a onClick={this.props.onClickViewCourseTable}

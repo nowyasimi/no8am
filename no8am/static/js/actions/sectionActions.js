@@ -1,4 +1,5 @@
 import {SECTION_DETAILS_URL, COURSE_LOOKUP_URL} from '../Constants'
+import {EXTRA_SECTION_TYPES} from '../Constants'
 
 export const mouseEnterCalendarSection = (courseId) => {
     return {
@@ -108,10 +109,6 @@ export const fetchNewCourse = (department, course) => {
             .then(response => response.json())
             .then(jsonResponse => ({
                 ...jsonResponse,
-                sections: initializeSections(jsonResponse.course.sections),
-                // TODO - extract independent extra sections from specific sections in API
-                // selectedExtraSections: createEmptySelectedExtraSections(jsonResponse.sections),
-                // extraSectionIndependent: createExtraSectionIndependent(jsonResponse.sections),
                 selected: null
             }))
             .then(courseData => dispatch(receiveCourse(department, course, courseData)))
@@ -119,9 +116,9 @@ export const fetchNewCourse = (department, course) => {
     }
 };
 
-const initializeSections = (sections) => {
+export const initializeSections = (sections) => {
     // convert to array and parse times met
-    return sections.map((section) => ({
+    return sections.map(section => ({
         ...section,
         // TODO - update API so these conversions are not necessary
         daysMet: parseTimesMet(restructureHours(section.timesMet)),

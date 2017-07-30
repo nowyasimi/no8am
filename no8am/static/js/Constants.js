@@ -52,6 +52,7 @@ export const colorDict = {
 };
 
 export const DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
+export const DAYS_OF_WEEK_LONG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 export const SECTION_TYPES = ["main", "R", "L", "P"];
 export const EXTRA_SECTION_TYPES = ["R", "L", "P"];
 

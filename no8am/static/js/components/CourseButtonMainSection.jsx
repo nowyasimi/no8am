@@ -13,7 +13,6 @@ export default class CourseButtonMainSection extends React.Component {
     }
 
     removeCourse(event) {
-        console.log('remove');
         event.stopPropagation();
         this.props.onClickRemoveCourseButton();
     }

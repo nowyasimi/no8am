@@ -57,7 +57,6 @@ export default class CalendarSection extends React.Component {
 function mapStateToProps(state) {
     return {
         hoverCourseId: state.hoverCourseId,
-        courses: state.courses,
         highlight: {
             courseId: state.highlightCourseId,
             sectionId: state.highlightSectionId

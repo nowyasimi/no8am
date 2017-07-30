@@ -1,4 +1,5 @@
 import {EXTRA_SECTION_TYPES} from '../Constants'
+import {initializeSections} from '../actions/SectionActions'
 
 export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) => {
     switch (action.type) {
@@ -68,12 +69,9 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 sectionDetails: {state: "no selection"}
             };
         case 'REMOVE_COURSE':
-            let index_to_remove = state.courses.findIndex((x) => x.courseId == action.courseId);
-            console.log(index_to_remove);
-            console.log(action);
             return {
                 ...state,
-                courses: state.courses.filter((_, i) => i !== index_to_remove)
+                courses: state.courses.filter(course => !(course.courseId == action.courseId || course.parentCourseId == action.courseId))
             };
         case 'REQUEST_COURSE':
             return {
@@ -99,19 +97,21 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 courses: state.courses.map(x => x.courseId !== courseId ? x :
                         {
                             ...x,
-                            sections: action.courseData.sections,
+                            sections: initializeSections(action.courseData.course.sections),
                             cacheTime: action.courseData.cache_time,
                             dataStatus: 'loaded'
                         }
                 ).concat(
                     EXTRA_SECTION_TYPES
-                        .filter(x => action.courseData.course.independent_extra_section_lists.hasOwnProperty(x))
+                        .filter(x => action.courseData.course.extraSectionsByType.hasOwnProperty(x))
                         .map(x => ({
                             color: 'red',
                             department: action.department,
                             course: action.course + x,
                             courseId: courseId + x,
-                            sections: action.courseData.course.independent_extra_section_lists[x],
+                            sections: initializeSections(action.courseData.course.extraSectionsByType[x]),
+                            isIndependent: action.courseData.course.isExtraSectionIndependent[x],
+                            parentCourseId: courseId,
                             dataStatus: 'loaded'
                         }))
                 )

@@ -52,8 +52,6 @@ export default class SectionListModal extends React.Component {
             return null;
         }
 
-        console.log(mainCourse);
-
         let sections = extraSectionType == null ?
             mainCourse.sections : mainCourse.sections[mainCourse.selected].extra_section_lists[extraSectionType];
 
