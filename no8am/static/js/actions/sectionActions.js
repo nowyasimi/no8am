@@ -55,12 +55,10 @@ export const highlightCourseTableAndFetchSectionDetails = (courseId, sectionId, 
      }
 };
 
-export const clickViewCourseTableButton = (id, extraSectionType) => {
-    // TODO - add optional extra section flag to action
+export const clickViewCourseTableButton = (courseId) => {
     return {
         type: 'CLICK_VIEW_COURSE_TABLE_BUTTON',
-        id,
-        extraSectionType
+        courseId
     }
 };
 

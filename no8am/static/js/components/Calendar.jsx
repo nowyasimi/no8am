@@ -67,7 +67,7 @@ export default class Calendar extends React.Component {
                                     </div>
                                 )}
                             </div>
-                            <SectionListModal {...this.props} />
+                            <SectionListModal />
                         </div>
                     </div>
                 </div>

@@ -32,14 +32,9 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 highlightCourseId: action.courseId,
                 highlightSectionId: selectedSectionId,
                 sectionDetails: {
-                    state: "loading",
+                    state: selectedSectionId == null ? "no selection" : "loading",
                     data: null
-                },
-                courses: state.courses.map((x) => x.courseId === action.courseId ? {
-                        ...x,
-                        selected: selectedSectionId
-                    } : x
-                )
+                }
             };
         case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_RECEIVE_SECTION_DETAILS':
             return {
@@ -54,19 +49,26 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
         case 'CLICK_VIEW_COURSE_TABLE_BUTTON':
             return {
                 ...state,
-                clickedCourseButtonId: action.id,
-                clickedCourseButtonExtraSectionType: action.extraSectionType,
-                highlightCourseId: action.id,
-                highlightSectionId: state.courses.find((x) => x.courseId == action.id).selected,
+                clickedCourseButtonId: action.courseId,
+                highlightCourseId: action.courseId,
+                highlightSectionId: state.courses.find((x) => x.courseId == action.courseId).selected,
                 sectionDetails: {state: "no selection"}
             };
         case 'CLOSE_SECTION_LIST_MODAL':
             return {
                 ...state,
                 highlightCourseId: null,
-                highlightSectionId: selectedSectionId,
+                highlightSectionId: null,
                 clickedCourseButtonId: undefined,
-                sectionDetails: {state: "no selection"}
+                sectionDetails: {state: "no selection"},
+                courses: state.courses.map(x => {
+                    let isParent = x.courseId === state.highlightCourseId;
+                    let isDependent = x.parentCourseId === state.highlightCourseId && !x.isIndependent;
+                    return isParent || isDependent ? {
+                        ...x,
+                        selected: isDependent ? null : state.highlightSectionId
+                    } : x
+                })
             };
         case 'REMOVE_COURSE':
             return {

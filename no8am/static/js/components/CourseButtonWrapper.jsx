@@ -16,8 +16,9 @@ export default class CourseButtonWrapper extends React.Component {
 
         if (this.props.dataStatus == "loaded" && this.props.sections.length > 0) {
 
-            let isParentSelected = this.props.selected;
+            let isParentSelected = this.props.selected != null;
             let extraSections = EXTRA_SECTION_TYPES.map(x => this.props.courseId + x);
+            let parentSectionNum = this.props.selected != null ? this.props.sections[this.props.selected].sectionNum : null
 
             extraSectionButtons = this.props.courses
                 .filter(course => extraSections.includes(course.courseId))
@@ -25,7 +26,7 @@ export default class CourseButtonWrapper extends React.Component {
                         key={`courseId${x.courseId}`}
                         {...x}
                         isDisabled={!x.isIndependent && !isParentSelected}
-                        parentSectionNum={this.props.selected && this.props.sections[this.props.selected].sectionNum}
+                        parentSectionNum={parentSectionNum}
                     />
                 );
         }

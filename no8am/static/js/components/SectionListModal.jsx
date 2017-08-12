@@ -17,7 +17,6 @@ export default class SectionListModal extends React.Component {
         this.state = {
             showModal: false,
             clickedCourseButtonId: null,
-            clickedCourseButtonExtraSectionType: null
         };
 
         this.handleClose = this.handleClose.bind(this);
@@ -28,8 +27,7 @@ export default class SectionListModal extends React.Component {
             console.log(nextProps);
             this.setState({
                 showModal: true,
-                clickedCourseButtonId: nextProps.clickedCourseButtonId,
-                clickedCourseButtonExtraSectionType: nextProps.clickedCourseButtonExtraSectionType
+                clickedCourseButtonId: nextProps.clickedCourseButtonId
             });
         }
     }
@@ -44,21 +42,23 @@ export default class SectionListModal extends React.Component {
 
     render() {
 
-        let courseId = this.state.clickedCourseButtonId;
-        let extraSectionType = this.state.clickedCourseButtonExtraSectionType;
-        let mainCourse = this.props.courses.find((x) => x.courseId == courseId);
+        let course = this.props.courses.find(x => x.courseId == this.state.clickedCourseButtonId);
 
-        if (mainCourse === undefined) {
-            return null;
+        let parentCourse = course != null ? this.props.courses.find(x => x.courseId == course.parentCourseId) : null;
+        let parentSectionNum = parentCourse != null && parentCourse.selected != null ? parentCourse.sections[parentCourse.selected].sectionNum : null;
+
+        let tableSections = null;
+
+        if (course != null && parentSectionNum != null) {
+            tableSections = course.sections.filter(section => section.dependent_main_sections.includes(parentSectionNum));
+        } else if (course != null && parentSectionNum == null ) {
+            tableSections = course.sections;
         }
 
-        let sections = extraSectionType == null ?
-            mainCourse.sections : mainCourse.sections[mainCourse.selected].extra_section_lists[extraSectionType];
-
-        let courseTableSections = sections.map((section, sectionIndex) =>
-                <CourseTableSection key={`coursetablecourse${courseId}section${sectionIndex}`}
-                                             {...section} courseId={courseId} sectionId={sectionIndex} />
-            );
+        let reactTableSections = tableSections != null ?
+            tableSections.map((section, sectionIndex) => <CourseTableSection {...section}
+                key={`coursetablecourse${course.courseId}section${sectionIndex}`}
+                courseId={course.courseId} sectionId={sectionIndex} />) : null;
 
         return (
             <Modal show={this.state.showModal} onHide={this.handleClose} dialogClassName="sectionListModal">
@@ -75,7 +75,7 @@ export default class SectionListModal extends React.Component {
                             </tr>
                             </thead>
                             <tbody>
-                            { courseTableSections }
+                            { reactTableSections }
                             </tbody>
                         </table>
                         <div id="additionalInfo" style={{margin: '5px 5px 5px 5px'}}>
@@ -97,7 +97,6 @@ export default class SectionListModal extends React.Component {
 function mapStateToProps(state) {
     return {
         clickedCourseButtonId: state.clickedCourseButtonId,
-        clickedCourseButtonExtraSectionType: state.clickedCourseButtonExtraSectionType,
         courses: state.courses
     }
 }

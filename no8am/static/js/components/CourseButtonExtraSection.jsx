@@ -17,7 +17,7 @@ export default class CourseButtonExtraSection extends React.Component {
 
         let courseNum = `${this.props.department} ${this.props.course}${this.props.extraSectionType || ""}`;
 
-        let numSections = this.props.parentSectionNum === undefined ? this.props.sections.length : this.props.sections
+        let numSections = this.props.parentSectionNum === null ? this.props.sections.length : this.props.sections
                 .filter(section => section.dependent_main_sections.includes(this.props.parentSectionNum)).length;
         let sectionCountString = this.props.isDisabled ? "Select Main Section First" : `${numSections} Sections`;
 
@@ -48,7 +48,7 @@ export default class CourseButtonExtraSection extends React.Component {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, sectionProps) {
     return {
-        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId, sectionProps.extraSectionType))
+        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId))
     }
 }
 

@@ -64,7 +64,7 @@ export default class CourseButtonMainSection extends React.Component {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, sectionProps) {
     return {
-        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId, null)),
+        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId)),
         onClickRemoveCourseButton: () => dispatch(clickRemoveCourseButton(sectionProps.courseId))
     }
 }
