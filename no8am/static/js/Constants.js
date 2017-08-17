@@ -1,3 +1,5 @@
+import Enum from "es6-enum"
+
 export const colorDict = {
   "blue":{
     "s": "#5496dd", // selected
@@ -50,6 +52,8 @@ export const colorDict = {
     "n": "#b1e6b0"
   }
 };
+
+export const SECTION_DETAILS_STATUS = Enum("NO_SELECTION", "LOADING", "LOADED");
 
 export const DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
 export const DAYS_OF_WEEK_LONG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];

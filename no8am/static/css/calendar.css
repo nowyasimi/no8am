@@ -12,30 +12,12 @@ body,html{height: 100%;}
 
 /************************ Background Colors ************************/
 
-@media (max-width: 768px) {
-	.page2bg {
-		background-color: #0f316d;
-		background: -webkit-gradient(radial, center center, 0, center center, 460, from(#478ac5), to(#0f316d));
-		background: -webkit-radial-gradient(circle, #478ac5, #0f316d);
-		background: -moz-radial-gradient(circle, #478ac5, #0f316d);
-		background: -ms-radial-gradient(circle, #478ac5, #0f316d);
-	}
-}
-
 @media (min-width: 768px) {
-	.fullpage2bg {
-		background-color: #0f316d;
-		background: -webkit-gradient(radial, center center, 0, center center, 460, from(#478ac5), to(#0f316d));
-		background: -webkit-radial-gradient(circle, #478ac5, #0f316d);
-		background: -moz-radial-gradient(circle, #478ac5, #0f316d);
-		background: -ms-radial-gradient(circle, #478ac5, #0f316d);
-	}
 	#filters {
 		height: 100%;
 		max-height: 100%;
 		overflow-y: auto;
 	}
-
 }
 
 /**************************** Page 1 ****************************/
@@ -121,6 +103,53 @@ body,html{height: 100%;}
 
 #sectionDetails div {
 	margin-bottom: 5px;
+}
+
+#filters .pt-button-group {
+    padding-top: 15px;
+}
+
+#startMessage {
+    padding-top: 50px;
+}
+
+#startMessage .pt-non-ideal-state-title {
+    font-size: 26px;
+}
+
+#startMessage .pt-non-ideal-state-description {
+    font-size: 16px;
+}
+
+.pt-omnibox {
+    z-index: 21;
+    width: 600px;
+    left: calc(50% - 300px);
+    top: 30px;
+    height: 100%
+}
+
+.pt-menu-item-label {
+    padding-top: 18px;
+    width: 100%;
+    white-space: normal;
+}
+
+.pt-menu {
+    max-height: 75%;
+    overflow-y: auto;
+}
+
+.searchOmniboxKeyCombo {
+    padding-left: 10px;
+}
+
+.OmniboxTitle {
+    margin-left: -5px;
+}
+
+.OmniboxTitle h6 {
+    font-size: 20px;
 }
 
 .twitter-typeahead {

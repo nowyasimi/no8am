@@ -1,34 +1,44 @@
 let React = require('react');
 
+import {connect} from 'react-redux'
+
 import SearchBox from './SearchBox.jsx'
 import CourseButtons from './CourseButtons.jsx'
+import SearchOmnibox from './SearchOmnibox.jsx'
+import {openSearchOmnibox} from '../actions/sectionActions'
 
+
+@connect(() => {return {}}, mapDispatchToProps)
 export default class LeftSide extends React.Component {
     render() {
         return (
-            <div className="col-sm-6 page2bg" id="filters">
+            <div className="col-sm-6" id="filters">
+                <SearchOmnibox/>
+
                 <div>
-                    <br />
-                    <div className="btn-group btn-group-lg btn-group-justified viewToggleButtonContainer" data-toggle="buttons">
-                        <label className="btn btn-default" id="viewSelectionsButton">
-                            <input type="radio" name="options" /> View
-                        </label>
-                        <label className="btn btn-default active" id="editButton">
-                            <input type="radio" name="options" defaultChecked /> Edit
-                        </label>
+
+                    <div className="pt-button-group pt-fill pt-large">
+                        <a className="pt-button pt-icon-folder-open" tabIndex="0" role="button">Open</a>
+                        <a className="pt-button pt-icon-floppy-disk" tabIndex="0" role="button">Review/Save</a>
+                        <a className="pt-button pt-icon-search" onClick={() => this.props.onOpenSearchOmnibox()} tabIndex="0" role="button">Search</a>
+                        <a className="pt-button pt-icon-floppy-disk pt-disabled" tabIndex="0" role="button">Course Options</a>
                     </div>
 
-                    <div id="remote" className="editRegion">
-                        <SearchBox />
-                    </div>
-
-                    <div id="welcomeWell" className="well editRegion">
-                        <h3> Welcome to no8am!</h3>
-                        <span>
-                          You can now lookup courses by <a href="javascript:setSearchBox('W1');">CCC Requirement</a>, <a href="javascript:setSearchBox('CSCI');">Department</a>, or <a href="javascript:setSearchBox('Half Credit');">Number of Credits</a>!
-                        </span>
-                        <br /> <br />
-                            <a className="openModalButton" href="javascript:">Open From Browser</a>
+                    <div className="pt-non-ideal-state" id="startMessage">
+                        <div className="pt-non-ideal-state-visual pt-non-ideal-state-icon">
+                            <span className="pt-icon pt-icon-info-sign"></span>
+                        </div>
+                        <h4 className="pt-non-ideal-state-title">Welcome to No8am!</h4>
+                        <div className="pt-non-ideal-state-description">
+                            Use the search button to start or press
+                            <span className="pt-key-combo searchOmniboxKeyCombo">
+                                <kbd className="pt-key pt-modifier-key">
+                                    <span className="pt-icon-standard pt-icon-key-command" />
+                                    cmd
+                                </kbd>
+                                <kbd className="pt-key">K</kbd>
+                            </span>
+                        </div>
                     </div>
 
                     <div id="alertRegion">
@@ -84,5 +94,12 @@ export default class LeftSide extends React.Component {
                 </div>
             </div>
         );
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch) {
+    return {
+        onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
     }
 }

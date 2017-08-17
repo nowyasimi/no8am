@@ -1,5 +1,22 @@
 import {SECTION_DETAILS_URL, COURSE_LOOKUP_URL} from '../Constants'
-import {EXTRA_SECTION_TYPES} from '../Constants'
+
+export const toggleSearchOmnibox = () => {
+    return {
+        type: 'TOGGLE_SEARCH_OMNIBOX'
+    }
+};
+
+export const closeSearchOmnibox = () => {
+    return {
+        type: 'CLOSE_SEARCH_OMNIBOX'
+    }
+};
+
+export const openSearchOmnibox = () => {
+    return {
+        type: 'OPEN_SEARCH_OMNIBOX'
+    }
+};
 
 export const mouseEnterCalendarSection = (courseId) => {
     return {

@@ -1,8 +1,23 @@
-import {EXTRA_SECTION_TYPES} from '../Constants'
+import {EXTRA_SECTION_TYPES, SECTION_DETAILS_STATUS} from '../Constants'
 import {initializeSections} from '../actions/SectionActions'
 
-export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) => {
+export const sectionReducer = (state = {courses:[], courseCounter: 1, isSearchOmniboxOpen: false}, action) => {
     switch (action.type) {
+        case 'TOGGLE_SEARCH_OMNIBOX':
+            return {
+                ...state,
+                isSearchOmniboxOpen: !state.isSearchOmniboxOpen
+            };
+        case 'CLOSE_SEARCH_OMNIBOX':
+            return {
+                ...state,
+                isSearchOmniboxOpen: false
+            };
+        case 'OPEN_SEARCH_OMNIBOX':
+            return {
+                ...state,
+                isSearchOmniboxOpen: true
+            };
         case 'MOUSE_ENTER_CALENDAR_SECTION':
             return {
                 ...state,
@@ -32,7 +47,7 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 highlightCourseId: action.courseId,
                 highlightSectionId: selectedSectionId,
                 sectionDetails: {
-                    state: selectedSectionId == null ? "no selection" : "loading",
+                    state: selectedSectionId == null ? SECTION_DETAILS_STATUS.NO_SELECTION : SECTION_DETAILS_STATUS.LOADING,
                     data: null
                 }
             };
@@ -42,7 +57,7 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 highlightCourseId: action.courseId,
                 highlightSectionId: state.highlightSectionId,
                 sectionDetails: {
-                    state: "loaded",
+                    state: SECTION_DETAILS_STATUS.LOADED,
                     data: action.sectionDetails
                 }
             };
@@ -52,7 +67,7 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 clickedCourseButtonId: action.courseId,
                 highlightCourseId: action.courseId,
                 highlightSectionId: state.courses.find((x) => x.courseId == action.courseId).selected,
-                sectionDetails: {state: "no selection"}
+                sectionDetails: {state: SECTION_DETAILS_STATUS.NO_SELECTION}
             };
         case 'CLOSE_SECTION_LIST_MODAL':
             return {
@@ -60,7 +75,7 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1}, action) =
                 highlightCourseId: null,
                 highlightSectionId: null,
                 clickedCourseButtonId: undefined,
-                sectionDetails: {state: "no selection"},
+                sectionDetails: {state: SECTION_DETAILS_STATUS.NO_SELECTION},
                 courses: state.courses.map(x => {
                     let isParent = x.courseId === state.highlightCourseId;
                     let isDependent = x.parentCourseId === state.highlightCourseId && !x.isIndependent;

@@ -11,6 +11,8 @@ let ReactDOM = require('react-dom');
 
 require('bootstrap');
 
+import Perf from 'react-addons-perf'; // ES6
+
 import {
     generateAndStoreJSON, removeFromStorage, newScheduleFromConfig,
     initializeTypeahead, generateCustomLink, handleNewInput, removeCourseButtonHandler,
@@ -29,6 +31,8 @@ import { sectionReducer } from "./reducers/sectionReducer"
 
 
 import {Main} from './components/Main.jsx';
+
+global.Perf = Perf;
 
 function createCalendar() {
     const store = createStore(

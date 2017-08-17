@@ -1,24 +1,10 @@
 let React = require('react');
 
 import {connect} from 'react-redux'
-
+import {SECTION_DETAILS_STATUS} from '../Constants'
 
 @connect(mapStateToProps)
 export default class SectionDetails extends React.Component {
-
-    constructor() {
-        super();
-
-        this.state = {
-            sectionId: null
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            sectionId: nextProps.highlight.sectionId
-        });
-    }
 
     render() {
 
@@ -28,10 +14,10 @@ export default class SectionDetails extends React.Component {
         console.log(sectionDetailsContainer);
 
         let state = sectionDetailsContainer.state;
-        if (state == "no selection") {
+        if (state == SECTION_DETAILS_STATUS.NO_SELECTION) {
             return <div></div>;
         }
-        else if (state == "loading") {
+        else if (state == SECTION_DETAILS_STATUS.LOADING) {
             return (
                 <div className="spinner">
                     <div className="rect1"></div>
@@ -42,7 +28,7 @@ export default class SectionDetails extends React.Component {
                 </div>
             )
         }
-        else if (state == "loaded") {
+        else if (state == SECTION_DETAILS_STATUS.LOADED) {
             let courseId = this.props.highlight.courseId;
             let sectionId = this.props.highlight.sectionId;
 
