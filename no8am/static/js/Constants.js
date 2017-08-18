@@ -101,3 +101,5 @@ export const TYPEAHEAD_OPTIONS = {
         suggestion: COURSE_SUGGESTION
     }
 };
+
+export const SEARCH_ITEM_TYPE = Enum("HEADER", "Credit", "CCC", "Department", "Course");

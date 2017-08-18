@@ -1,7 +1,7 @@
 import {EXTRA_SECTION_TYPES, SECTION_DETAILS_STATUS} from '../Constants'
 import {initializeSections} from '../actions/SectionActions'
 
-export const sectionReducer = (state = {courses:[], courseCounter: 1, isSearchOmniboxOpen: false}, action) => {
+export const sectionReducer = (state = {courses:[], courseCounter: 1, isSearchOmniboxOpen: false, searchHistory: []}, action) => {
     switch (action.type) {
         case 'TOGGLE_SEARCH_OMNIBOX':
             return {
@@ -17,6 +17,11 @@ export const sectionReducer = (state = {courses:[], courseCounter: 1, isSearchOm
             return {
                 ...state,
                 isSearchOmniboxOpen: true
+            };
+        case 'REQUEST_ITEM':
+            return {
+                ...state,
+                searchHistory:  [action.item, ...state.searchHistory]
             };
         case 'MOUSE_ENTER_CALENDAR_SECTION':
             return {

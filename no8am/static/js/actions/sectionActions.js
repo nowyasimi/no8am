@@ -18,6 +18,27 @@ export const openSearchOmnibox = () => {
     }
 };
 
+export const requestItem = (item) => {
+    return {
+        type: 'REQUEST_ITEM',
+        item
+    }
+};
+
+export const searchItem = (item) => {
+    return (dispatch) => {
+        dispatch(requestItem(item));
+        // return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
+        //     .then(response => response.json())
+        //     .then(jsonResponse => ({
+        //         ...jsonResponse,
+        //         selected: null
+        //     }))
+        //     .then(courseData => dispatch(receiveCourse(department, course, courseData)))
+        //     .catch(dispatch(errorReceivingCourse(department, course)));
+    }
+};
+
 export const mouseEnterCalendarSection = (courseId) => {
     return {
         type: 'MOUSE_ENTER_CALENDAR_SECTION',

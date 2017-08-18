@@ -129,15 +129,21 @@ body,html{height: 100%;}
     height: 100%
 }
 
-.pt-menu-item-label {
+.pt-omnibox .pt-menu-item-label {
     padding-top: 18px;
     width: 100%;
     white-space: normal;
 }
 
-.pt-menu {
+.pt-omnibox .pt-menu {
     max-height: 75%;
     overflow-y: auto;
+}
+
+.pt-omnibox .pt-menu-item.pt-disabled {
+    font-weight: 500;
+    font-size: 14pt;
+    color: #403b3b!important;
 }
 
 .searchOmniboxKeyCombo {
