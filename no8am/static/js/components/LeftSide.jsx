@@ -2,32 +2,27 @@ let React = require('react');
 
 import {connect} from 'react-redux'
 
-import SearchBox from './SearchBox.jsx'
+import {Button, Menu, MenuItem, Position, Popover} from '@blueprintjs/core'
+
 import CourseButtons from './CourseButtons.jsx'
 import SearchOmnibox from './SearchOmnibox.jsx'
-import {openSearchOmnibox} from '../actions/sectionActions'
+import SectionList from './SectionList.jsx'
+
+import {openSearchOmnibox, clickDoneSelecting} from '../actions/sectionActions'
+import {DATA_LOADING_STATE} from '../Constants'
 
 
-@connect(() => {return {}}, mapDispatchToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 export default class LeftSide extends React.Component {
+
     render() {
-        return (
-            <div className="col-sm-6" id="filters">
-                <SearchOmnibox/>
 
-                <div>
+        let mainContent = null;
 
-                    <div className="pt-button-group pt-fill pt-large">
-                        <a className="pt-button pt-icon-folder-open" tabIndex="0" role="button">Open</a>
-                        <a className="pt-button pt-icon-floppy-disk" tabIndex="0" role="button">Review/Save</a>
-                        <a className="pt-button pt-icon-search" onClick={() => this.props.onOpenSearchOmnibox()} tabIndex="0" role="button">Search</a>
-                        <a className="pt-button pt-icon-floppy-disk pt-disabled" tabIndex="0" role="button">Course Options</a>
-                    </div>
-
+        switch (this.props.currentSearch.state) {
+            case DATA_LOADING_STATE.NO_SELECTION:
+                mainContent = (
                     <div className="pt-non-ideal-state" id="startMessage">
-                        <div className="pt-non-ideal-state-visual pt-non-ideal-state-icon">
-                            <span className="pt-icon pt-icon-info-sign"></span>
-                        </div>
                         <h4 className="pt-non-ideal-state-title">Welcome to No8am!</h4>
                         <div className="pt-non-ideal-state-description">
                             Use the search button to start or press
@@ -40,66 +35,62 @@ export default class LeftSide extends React.Component {
                             </span>
                         </div>
                     </div>
-
-                    <div id="alertRegion">
-                        <div className="alert alert-warning visible-xs" role="alert">
-                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <b>Heads up:</b> This interface works best on larger screens. To improve your experience, expand your browser
-                            window or use another device.
-                        </div>
-                        <div className="alert alert-warning" id="hasOverlap" role="alert">
-
-                        </div>
+                );
+                break;
+            case DATA_LOADING_STATE.LOADING:
+                mainContent = (
+                    <div>
+                        {`Loading data for ${this.props.currentSearch.item.userFriendlyFormat}`}
                     </div>
+                );
+                break;
+            case DATA_LOADING_STATE.LOADED:
+                mainContent = <SectionList {...this.props.currentSearch} />;
+        }
 
-                    <CourseButtons />
 
-                    <div className="row viewRegion" id="viewSelections">
-                        <div className="row">
-                            <div className="panel panel-default" id="crnlist">
-                                <div className="panel-body">
+        return (
+            <div className="col-sm-6" id="filters">
+                <SearchOmnibox/>
 
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="list-group" id="openSaveButtons">
-                                    <a className="list-group-item openModalButton">
-                                        <h4 className="list-group-item-heading">Open from Browser<span className="glyphicon glyphicon-folder-open pull-right"> </span></h4>
-                                    </a>
-                                    <a className="list-group-item" id="openSaveDialog">
-                                        <h4 className="list-group-item-heading">Save to Browser<span className="glyphicon glyphicon-hdd pull-right"> </span></h4>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="list-group">
-                                    <a className="list-group-item" id="openGenerateLinkModal">
-                                        <h4 className="list-group-item-heading">Generate Link<span className="glyphicon glyphicon-cloud pull-right"> </span></h4>
-                                    </a>
-                                    <a className="list-group-item" id="generatedLink">
-                                        <span id="generatedLinkHolder"></span>
-                                        <span className="glyphicon glyphicon-exclamation-sign pull-right"></span>
-
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="under-courses">
-
-                    </div>
+                <div className="pt-button-group pt-fill pt-large">
+                    <Button iconName="folder-open" text="Open" />
+                    <Button iconName="floppy-disk" text="Review/Save" />
+                    <Button iconName="search" text="Search" onClick={this.props.onOpenSearchOmnibox} />
+                    <Popover content={<Menu>
+                                        <MenuItem
+                                            iconName="pt-icon-confirm"
+                                            text="Done selecting sections"
+                                            onClick={this.props.onClickDoneSelecting}
+                                        />
+                                        <MenuItem
+                                            iconName="pt-icon-cross"
+                                            text="Remove selections"
+                                        />
+                                     </Menu>}
+                             position={Position.BOTTOM}>
+                        <Button iconName="cog" text="Course Options" rightIconName="caret-down"
+                                disabled={this.props.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION} />
+                    </Popover>
                 </div>
+
+                {mainContent}
             </div>
         );
     }
 }
 
-// Map Redux actions to component props
+
+function mapStateToProps(state) {
+    return {
+        currentSearch: state.currentSearch
+    }
+}
+
+
 function mapDispatchToProps(dispatch) {
     return {
         onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
+        onClickDoneSelecting: () => dispatch(clickDoneSelecting())
     }
 }

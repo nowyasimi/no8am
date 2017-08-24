@@ -1,7 +1,7 @@
 let React = require('react');
 
 import {connect} from 'react-redux'
-import {SECTION_DETAILS_STATUS} from '../Constants'
+import {DATA_LOADING_STATE} from '../Constants'
 
 @connect(mapStateToProps)
 export default class SectionDetails extends React.Component {
@@ -14,10 +14,10 @@ export default class SectionDetails extends React.Component {
         console.log(sectionDetailsContainer);
 
         let state = sectionDetailsContainer.state;
-        if (state == SECTION_DETAILS_STATUS.NO_SELECTION) {
+        if (state == DATA_LOADING_STATE.NO_SELECTION) {
             return <div></div>;
         }
-        else if (state == SECTION_DETAILS_STATUS.LOADING) {
+        else if (state == DATA_LOADING_STATE.LOADING) {
             return (
                 <div className="spinner">
                     <div className="rect1"></div>
@@ -28,7 +28,7 @@ export default class SectionDetails extends React.Component {
                 </div>
             )
         }
-        else if (state == SECTION_DETAILS_STATUS.LOADED) {
+        else if (state == DATA_LOADING_STATE.LOADED) {
             let courseId = this.props.highlight.courseId;
             let sectionId = this.props.highlight.sectionId;
 

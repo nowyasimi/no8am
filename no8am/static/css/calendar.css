@@ -15,8 +15,6 @@ body,html{height: 100%;}
 @media (min-width: 768px) {
 	#filters {
 		height: 100%;
-		max-height: 100%;
-		overflow-y: auto;
 	}
 }
 
@@ -107,10 +105,12 @@ body,html{height: 100%;}
 
 #filters .pt-button-group {
     padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 #startMessage {
     padding-top: 50px;
+    height: auto;
 }
 
 #startMessage .pt-non-ideal-state-title {
@@ -119,6 +119,58 @@ body,html{height: 100%;}
 
 #startMessage .pt-non-ideal-state-description {
     font-size: 16px;
+}
+
+.sectionList {
+    overflow-y: auto;
+    height: 85%;
+    padding: 3px;
+}
+
+.sectionList .pt-popover-target {
+    width: 100%;
+}
+
+.sectionCard {
+    padding: 0;
+}
+
+.sectionCardItemContainer {
+    padding: 20px 5px;
+    margin: 0;
+    list-style: none;
+
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+.sectionCardItem {
+    width: 20%;
+    text-align: center;
+}
+
+.unavailableSection {
+    background-color: lightgrey;
+    opacity: 0.75;
+}
+
+.selectedSection {
+    background-color: lawngreen;
+}
+
+.violationSection {
+    background-color: indianred;
+    opacity: 1;
+}
+
+.lastOfType {
+    margin-bottom: 20px;
 }
 
 .pt-omnibox {
@@ -142,7 +194,7 @@ body,html{height: 100%;}
 
 .pt-omnibox .pt-menu-item.pt-disabled {
     font-weight: 500;
-    font-size: 14pt;
+    font-size: 15pt;
     color: #403b3b!important;
 }
 

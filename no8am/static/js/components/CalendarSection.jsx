@@ -10,20 +10,8 @@ import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTab
 export default class CalendarSection extends React.Component {
 
     render() {
-        let sectionMatchesSelected = this.props.selected == this.props.sectionId;
 
-        let sectionMatchesCourseTableHover =
-            this.props.courseTableHover.courseId == this.props.courseId &&
-            this.props.courseTableHover.sectionId == this.props.sectionId;
-
-        let sectionHighlighted =
-            this.props.courseId == this.props.highlight.courseId &&
-            this.props.sectionId == this.props.highlight.sectionId;
-
-        let displaySection = sectionMatchesSelected || sectionMatchesCourseTableHover || sectionHighlighted;
-
-        let hexColor = colorDict[this.props.color][sectionMatchesSelected ? "s" : "n"];
-        let selectedCalendarSection = sectionMatchesSelected ?  "selectedCalendarSection" : "unselectedCalendarSection";
+        let hexColor = colorDict["blue"][this.props.isSelected ? "s" : "n"];
 
         let day = this.props.day;
         let daysMet = this.props.daysMet;
@@ -31,14 +19,14 @@ export default class CalendarSection extends React.Component {
         let style = {
             height: (daysMet[day][1] + daysMet[day][2] > 26 ? 25.73 - daysMet[day][1] : daysMet[day][2])*20/5.6 + "%",
             marginTop: daysMet[day][1]*20/5.6 + "%",
-            display: displaySection ? 'block' : 'none',
+            display:  'block',
             background: hexColor,
-            zIndex: sectionHighlighted || sectionMatchesCourseTableHover ? 5 : 1
+            zIndex: this.props.isSelected ? 1 : 5
         };
 
-        let className = `course${this.props.courseId} section${this.props.sectionId} ${selectedCalendarSection}`;
+        let className = this.props.isSelected ?  "selectedCalendarSection" : "unselectedCalendarSection";
 
-        let innerDetails = this.props.hoverCourseId == this.props.courseId ?
+        let innerDetails = this.props.hoverCRN == this.props.CRN ?
             <p className="timesMet">{this.props.daysMet[day][3] + "-" + this.props.daysMet[day][4]}</p> :
             <p className="courseNum">{this.props.courseNum.slice(0,-3)}</p>;
 
@@ -56,14 +44,10 @@ export default class CalendarSection extends React.Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        hoverCourseId: state.hoverCourseId,
+        hoverCRN: state.hoverCRN,
         highlight: {
             courseId: state.highlightCourseId,
             sectionId: state.highlightSectionId
-        },
-        courseTableHover: {
-            courseId: state.courseTableHoverCourseId,
-            sectionId: state.courseTableHoverSectionId
         }
     }
 }
@@ -71,7 +55,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, sectionProps) {
     return {
-        onMouseEnterCalendar: () => dispatch(mouseEnterCalendarSection(sectionProps.courseId)),
+        onMouseEnterCalendar: () => dispatch(mouseEnterCalendarSection(sectionProps.CRN)),
         onMouseLeaveCalendar: () => dispatch(mouseLeaveCalendarSection()),
         onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId))
     }

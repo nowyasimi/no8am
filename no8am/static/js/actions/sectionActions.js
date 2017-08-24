@@ -1,4 +1,4 @@
-import {SECTION_DETAILS_URL, COURSE_LOOKUP_URL} from '../Constants'
+import {SECTION_DETAILS_URL, COURSE_LOOKUP_URL, EXTRA_SECTION_TYPES, SEARCH_ITEM_TYPE} from '../Constants'
 
 export const toggleSearchOmnibox = () => {
     return {
@@ -25,24 +25,65 @@ export const requestItem = (item) => {
     }
 };
 
-export const searchItem = (item) => {
-    return (dispatch) => {
-        dispatch(requestItem(item));
-        // return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
-        //     .then(response => response.json())
-        //     .then(jsonResponse => ({
-        //         ...jsonResponse,
-        //         selected: null
-        //     }))
-        //     .then(courseData => dispatch(receiveCourse(department, course, courseData)))
-        //     .catch(dispatch(errorReceivingCourse(department, course)));
+export const receiveItem = (item, data) => {
+    return {
+        type: 'RECEIVE_ITEM',
+        item,
+        data
     }
 };
 
-export const mouseEnterCalendarSection = (courseId) => {
+export const searchItem = (item) => {
+    switch (item.itemType) {
+        case SEARCH_ITEM_TYPE.HEADER:
+            return null;
+        default:
+            return (dispatch) => {
+                dispatch(requestItem(item));
+
+                let splitCourseNum = item.courseNum.split(' ');
+                let department = splitCourseNum[0];
+                let course = splitCourseNum[1];
+
+                return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
+                    .then(response => response.json())
+                    .then(rawData => initializeCourse(rawData))
+                    .then(data => dispatch(receiveItem(item, data)))
+                    .catch(dispatch(errorReceivingCourse(item)));
+            }
+    }
+};
+
+export const mouseEnterSectionListCard = (section) => {
+    return {
+        type: 'MOUSE_ENTER_SECTION_LIST_CARD',
+        section
+    }
+};
+
+export const mouseLeaveSectionListCard = () => {
+    return {
+        type: 'MOUSE_LEAVE_SECTION_LIST_CARD'
+    }
+};
+
+export const clickSectionListCard = (section) => {
+    return {
+        type: 'CLICK_SECTION_LIST_CARD',
+        section
+    }
+};
+
+export const clickDoneSelecting = () => {
+    return {
+        type: 'CLICK_DONE_SELECTING'
+    }
+};
+
+export const mouseEnterCalendarSection = (crn) => {
     return {
         type: 'MOUSE_ENTER_CALENDAR_SECTION',
-        courseId
+        crn
     }
 };
 
@@ -152,8 +193,16 @@ export const fetchNewCourse = (department, course) => {
     }
 };
 
-export const initializeSections = (sections) => {
-    // convert to array and parse times met
+const initializeCourse = (rawData) => {
+    return {
+        ...rawData,
+        sections: initializeSections(rawData.course.sections).concat(
+        ...EXTRA_SECTION_TYPES.filter(x => rawData.course.extraSectionsByType.hasOwnProperty(x))
+            .map(x => initializeSections(rawData.course.extraSectionsByType[x])))
+    }
+};
+
+const initializeSections = (sections) => {
     return sections.map(section => ({
         ...section,
         // TODO - update API so these conversions are not necessary
@@ -162,6 +211,7 @@ export const initializeSections = (sections) => {
         professor: section.professor === "; " ? "" : section.professor
     }));
 };
+
 
 const restructureHours = (hours) => {
     let timesMet = [];
@@ -228,7 +278,7 @@ const parseTimesMet = (timesMet) => {
  * @param time The time being converted (it can be either the start or end time for a section).
  * @return {number} Integer representing the number of 30 minute intervals past 8am for the provided time.
  */
-export function parseHours(time) {
+function parseHours(time) {
     let splitHoursAndMinutes = time.split(":");
     let hour = parseInt(splitHoursAndMinutes[0]);
     let minutes = parseInt(splitHoursAndMinutes[1].slice(0,2));

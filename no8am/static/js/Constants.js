@@ -53,7 +53,7 @@ export const colorDict = {
   }
 };
 
-export const SECTION_DETAILS_STATUS = Enum("NO_SELECTION", "LOADING", "LOADED");
+export const DATA_LOADING_STATE = Enum("NO_SELECTION", "LOADING", "LOADED");
 
 export const DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
 export const DAYS_OF_WEEK_LONG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];

@@ -3,7 +3,6 @@ import {connect} from 'react-redux'
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from '../Constants'
 import CalendarSection from './CalendarSection.jsx'
-import SectionListModal from './SectionListModal.jsx'
 
 @connect(mapStateToProps)
 export default class Calendar extends React.Component {
@@ -16,36 +15,41 @@ export default class Calendar extends React.Component {
         );
     }
 
-    getSectionsByDay() {
-        let sectionsToDisplay = [];
+    getCalendarSectionsByDay(section, isSelected = true) {
 
-        for (let courseIndex in this.props.courses) {
-            let course = this.props.courses[courseIndex];
-            let courseId = course.courseId;
+        let calendarSections = [];
 
-            // loop through sections
-            for (let sectionIndex in course.sections) {
-                let section = course.sections[sectionIndex];
-
-                // create calendar section elements and group them by day
-                for (let index in section.daysMet) {
-                    let day = section.daysMet[index][0];
-                    let key = `course${courseId}section${sectionIndex}dayIndex${index}`;
-                    sectionsToDisplay.push({ day: day, section:
-                        <CalendarSection
-                            key={key} {...this.props} {...course} {...section} day={index}
-                            courseId={courseId} sectionId={sectionIndex} />
-                    });
-                }
-            }
+        // create calendar section elements and group them by day
+        for (let index in section.daysMet) {
+            let day = section.daysMet[index][0];
+            let key = `calendarSection${section.CRN}dayIndex${index}isSelected${isSelected}`;
+            calendarSections.push({ day: day, section:
+                <CalendarSection
+                    key={key}
+                    day={index}
+                    {...section}
+                    isSelected={isSelected}
+                />
+            });
         }
 
-        return sectionsToDisplay;
+        return calendarSections;
     }
 
 
     render() {
-        let sectionsByDay = this.getSectionsByDay();
+        let sectionsByDay = [];
+
+        for (let section of this.props.selectedSections) {
+            sectionsByDay = sectionsByDay.concat(this.getCalendarSectionsByDay(section));
+        }
+
+        if (this.props.sectionListHoverSection) {
+            sectionsByDay = sectionsByDay.concat(
+                this.getCalendarSectionsByDay(this.props.sectionListHoverSection, false)
+            );
+        }
+
 
         return (
             <div className="col-sm-6 page2bg" id="calendar-col">
@@ -67,7 +71,6 @@ export default class Calendar extends React.Component {
                                     </div>
                                 )}
                             </div>
-                            <SectionListModal />
                         </div>
                     </div>
                 </div>
@@ -80,6 +83,8 @@ export default class Calendar extends React.Component {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        courses: state.courses
+        courses: state.courses,
+        sectionListHoverSection: state.sectionListHoverSection,
+        selectedSections: state.selectedSections
     }
 }

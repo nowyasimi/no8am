@@ -27,11 +27,15 @@ export default class SearchOmnibox extends React.Component {
 
             for (let type in SEARCH_ITEM_TYPE)  {
                 if (type != "HEADER") {
-                    metadataList = metadataList.concat(metadata[type.toLowerCase()].map(x => ({
-                        ...x,
-                        itemType: type,
-                        token: (type == "Course" ? `${x.courseNum} ${x.courseName}` : `${x.abbreviation} ${x.name}`).toLowerCase()
-                    })));
+                    metadataList = metadataList.concat(metadata[type.toLowerCase()].map(x => {
+                        let userFriendlyFormat = type == "Course" ? `${x.courseNum} - ${x.courseName}` : `${x.abbreviation} - ${x.name}`;
+                        return {
+                            ...x,
+                            itemType: type,
+                            userFriendlyFormat: userFriendlyFormat,
+                            token: userFriendlyFormat.toLowerCase()
+                        };
+                    }));
                 }
             }
 
@@ -84,10 +88,12 @@ export default class SearchOmnibox extends React.Component {
         let noResults = filteredList.length == 0;
         let noQuery = query == "";
 
-        if ((noResults || noQuery) && this.props.searchHistory.length > 0) {
+        if (this.state.loading) {
+            return [{text: 'Loading course information', itemType: SEARCH_ITEM_TYPE.HEADER}];
+        } else if ((noResults || noQuery) && this.props.searchHistory.length > 0) {
             return [{text: 'Recent Searches (No results)', itemType: SEARCH_ITEM_TYPE.HEADER}].concat(this.props.searchHistory);
         } else if ((noResults || noQuery) && this.props.searchHistory.length == 0) {
-            return [{text: 'Search for CCC requirements, courses, or number of credits', itemType: SEARCH_ITEM_TYPE.HEADER}];
+            return [{text: 'Search by CCC, course, or number of credits', itemType: SEARCH_ITEM_TYPE.HEADER}];
         }
 
         let filteredListWithHeaders = [];
@@ -119,20 +125,13 @@ export default class SearchOmnibox extends React.Component {
                     key={item.text} text={item.text}
                     onClick={handleClick}
                 />;
-            case "Course":
-                return <MenuItem
-                    className={classes}
-                    key={item.courseNum} text={`${item.courseNum} - ${item.courseName}`}
-                    label={item.info}
-                    onClick={handleClick}
-                />;
             default:
                 return <MenuItem
                     className={classes}
-                    key={item.abbreviation} text={`${item.abbreviation} - ${item.name}`}
+                    key={item.token} text={item.userFriendlyFormat}
+                    label={item.info}
                     onClick={handleClick}
                 />;
-
         }
     }
 
