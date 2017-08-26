@@ -4,11 +4,12 @@ import {connect} from 'react-redux'
 
 import {Button, Menu, MenuItem, Position, Popover} from '@blueprintjs/core'
 
-import CourseButtons from './CourseButtons.jsx'
 import SearchOmnibox from './SearchOmnibox.jsx'
 import SectionList from './SectionList.jsx'
+import OpenDialog from './OpenDialog.jsx'
+import SaveDialog from './SaveDialog.jsx'
 
-import {openSearchOmnibox, clickDoneSelecting} from '../actions/sectionActions'
+import {openSearchOmnibox, clickDoneSelecting, clickAdvancedSectionSelection} from '../actions/sectionActions'
 import {DATA_LOADING_STATE} from '../Constants'
 
 
@@ -48,29 +49,41 @@ export default class LeftSide extends React.Component {
                 mainContent = <SectionList {...this.props.currentSearch} />;
         }
 
+        let isNoCurrentSearch = this.props.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION;
 
         return (
             <div className="col-sm-6" id="filters">
                 <SearchOmnibox/>
 
                 <div className="pt-button-group pt-fill pt-large">
-                    <Button iconName="folder-open" text="Open" />
-                    <Button iconName="floppy-disk" text="Review/Save" />
+                    <OpenDialog />
+                    <SaveDialog />
                     <Button iconName="search" text="Search" onClick={this.props.onOpenSearchOmnibox} />
                     <Popover content={<Menu>
+                                        <MenuItem
+                                            iconName={this.props.isAdvanced ? "pt-icon-tick" : "pt-icon-cross"}
+                                            text="Advanced section selection"
+                                            onClick={this.props.onClickAdvancedSectionSelection}
+                                        />
                                         <MenuItem
                                             iconName="pt-icon-confirm"
                                             text="Done selecting sections"
                                             onClick={this.props.onClickDoneSelecting}
+                                            disabled={isNoCurrentSearch}
                                         />
                                         <MenuItem
                                             iconName="pt-icon-cross"
-                                            text="Remove selections"
+                                            text="Remove current selections"
+                                            disabled={isNoCurrentSearch}
+                                        />
+                                        <MenuItem
+                                            iconName="pt-icon-cross"
+                                            text="Remove all selections"
+                                            disabled={isNoCurrentSearch}
                                         />
                                      </Menu>}
                              position={Position.BOTTOM}>
-                        <Button iconName="cog" text="Course Options" rightIconName="caret-down"
-                                disabled={this.props.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION} />
+                        <Button iconName="cog" text="Course Options" rightIconName="caret-down" />
                     </Popover>
                 </div>
 
@@ -83,7 +96,8 @@ export default class LeftSide extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        currentSearch: state.currentSearch
+        currentSearch: state.currentSearch,
+        isAdvanced: state.isAdvanced
     }
 }
 
@@ -91,6 +105,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
-        onClickDoneSelecting: () => dispatch(clickDoneSelecting())
+        onClickDoneSelecting: () => dispatch(clickDoneSelecting()),
+        onClickAdvancedSectionSelection: () => dispatch(clickAdvancedSectionSelection())
     }
 }

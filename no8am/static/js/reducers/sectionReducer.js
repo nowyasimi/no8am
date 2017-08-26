@@ -9,7 +9,8 @@ const initialState = {
         item: null,
         state: DATA_LOADING_STATE.NO_SELECTION
     },
-    selectedSections: []
+    selectedSections: [],
+    isAdvanced: false
 };
 
 
@@ -47,6 +48,11 @@ export const sectionReducer = (state = initialState, action) => {
                     state: DATA_LOADING_STATE.LOADED,
                     data: action.data
                 }
+            };
+        case 'CLICK_ADVANCED_SECTION_SELECTION':
+            return {
+                ...state,
+                isAdvanced: !state.isAdvanced
             };
         case 'CLICK_DONE_SELECTING':
             return {

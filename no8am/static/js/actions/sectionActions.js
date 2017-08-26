@@ -74,6 +74,12 @@ export const clickSectionListCard = (section) => {
     }
 };
 
+export const clickAdvancedSectionSelection = () => {
+    return {
+        type: 'CLICK_ADVANCED_SECTION_SELECTION'
+    }
+};
+
 export const clickDoneSelecting = () => {
     return {
         type: 'CLICK_DONE_SELECTING'

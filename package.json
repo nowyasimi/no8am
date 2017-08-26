@@ -45,6 +45,7 @@
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",
+    "react-transition-group": "^2.2.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "typeahead.js-browserify": "^1.0.7"
