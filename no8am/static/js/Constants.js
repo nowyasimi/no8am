@@ -1,4 +1,4 @@
-import Enum from "es6-enum"
+import {Enum} from 'enumify';
 
 export const colorDict = {
   "blue":{
@@ -53,14 +53,16 @@ export const colorDict = {
   }
 };
 
-export const DATA_LOADING_STATE = Enum("NO_SELECTION", "LOADING", "LOADED");
+export class DATA_LOADING_STATE extends Enum {}
+DATA_LOADING_STATE.initEnum(["NO_SELECTION", "LOADING", "LOADED"]);
 
 export const DAYS_OF_WEEK = ["M", "T", "W", "R", "F"];
 export const DAYS_OF_WEEK_LONG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 export const SECTION_TYPES = ["main", "R", "L", "P"];
 export const EXTRA_SECTION_TYPES = ["R", "L", "P"];
 
-export const OTHER_LOOKUP_URL = APP_ROOT + "/category/";
+export const CCC_LOOKUP_URL = APP_ROOT + "/category/ccc/";
+export const CREDIT_LOOKUP_URL = APP_ROOT + "/category/credit/";
 export const DEPT_LOOKUP_URL = APP_ROOT + "/course/";
 export const COURSE_LOOKUP_URL = APP_ROOT + "/course/";
 export const SECTION_DETAILS_URL = APP_ROOT + "/sectiondetails/";
@@ -102,4 +104,5 @@ export const TYPEAHEAD_OPTIONS = {
     }
 };
 
-export const SEARCH_ITEM_TYPE = Enum("HEADER", "Credit", "CCC", "Department", "Course");
+export class SEARCH_ITEM_TYPE extends Enum {}
+SEARCH_ITEM_TYPE.initEnum(["HEADER", "Credit", "CCC", "Department", "Course"]);

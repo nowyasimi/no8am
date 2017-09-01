@@ -1,4 +1,10 @@
-import {DATA_LOADING_STATE} from '../Constants'
+import {DATA_LOADING_STATE, SEARCH_ITEM_TYPE} from '../Constants'
+
+export const defaultFilters = {
+    filterTime: [0, 28],
+    askShowSingleCourse: null,
+    showSingleCourse: null
+};
 
 const initialState = {
     courses:[],
@@ -10,12 +16,22 @@ const initialState = {
         state: DATA_LOADING_STATE.NO_SELECTION
     },
     selectedSections: [],
-    isAdvanced: false
+    isAdvanced: false,
+    metadata: {
+        loading: true,
+        items: []
+    },
+    ...defaultFilters
 };
 
 
 export const sectionReducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'RECEIVE_METADATA':
+            return {
+                ...state,
+                metadata: action.metadata
+            };
         case 'TOGGLE_SEARCH_OMNIBOX':
             return {
                 ...state,
@@ -34,20 +50,27 @@ export const sectionReducer = (state = initialState, action) => {
         case 'REQUEST_ITEM':
             return {
                 ...state,
-                searchHistory:  [action.item, ...state.searchHistory],
                 currentSearch: {
                     item: action.item,
                     state: DATA_LOADING_STATE.LOADING
-                }
+                },
+                ...defaultFilters
             };
         case 'RECEIVE_ITEM':
+            let isFromCategorySearch = state.currentSearch.item.itemType != SEARCH_ITEM_TYPE.Course &&
+                                       state.currentSearch.item.itemType != SEARCH_ITEM_TYPE.Department;
+
             return {
                 ...state,
-                currentSearch: state.currentSearch.item.token != action.item.token ? state.currentSearch : {
+                searchHistory: state.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION ? state.searchHistory :
+                    [state.currentSearch, ...state.searchHistory],
+                currentSearch: {
                     ...state.currentSearch,
                     state: DATA_LOADING_STATE.LOADED,
-                    data: action.data
-                }
+                    data: action.data,
+                    isFromCategorySearch: isFromCategorySearch
+                },
+                showSingleCourse: isFromCategorySearch ? state.currentSearch.item.courseNum : null
             };
         case 'CLICK_ADVANCED_SECTION_SELECTION':
             return {
@@ -60,7 +83,8 @@ export const sectionReducer = (state = initialState, action) => {
                 currentSearch: {
                     item: null,
                     state: DATA_LOADING_STATE.NO_SELECTION
-                }
+                },
+                ...defaultFilters
             };
         case 'MOUSE_ENTER_SECTION_LIST_CARD':
             return {
@@ -73,19 +97,36 @@ export const sectionReducer = (state = initialState, action) => {
                 sectionListHoverSection: null
             };
         case 'CLICK_SECTION_LIST_CARD':
-            let isReset = state.selectedSections.find(section => section.CRN == action.section.CRN);
+            let filteredSections = state.selectedSections.filter(section => section.CRN != action.section.CRN);
 
-            let filteredSections = state.selectedSections.filter(section =>
-                section.department != action.section.department ||
-                section.course_number != action.section.course_number
-            );
+            let isReset = filteredSections.length != state.selectedSections.length;
+
+            let shouldAskShowSingleCourse = state.currentSearch.item.itemType == SEARCH_ITEM_TYPE.Department &&
+                !isReset && state.showSingleCourse == null;
 
             return {
                 ...state,
                 selectedSections: isReset ? filteredSections : [
                     ...filteredSections,
                     action.section
-                ]
+                ],
+                askShowSingleCourse: shouldAskShowSingleCourse ? action.section.departmentAndCourse : null
+            };
+        case 'CLICK_SHOW_SINGLE_COURSE':
+            return {
+                ...state,
+                showSingleCourse: action.departmentAndBareCourse,
+                askShowSingleCourse: null
+            };
+        case 'UPDATE_FILTER_TIME':
+            return {
+                ...state,
+                filterTime: action.filterTime
+            };
+        case 'CLICK_REMOVE_SHOW_SINGLE_COURSE':
+            return {
+                ...state,
+                showSingleCourse: null
             };
         case 'MOUSE_ENTER_CALENDAR_SECTION':
             return {

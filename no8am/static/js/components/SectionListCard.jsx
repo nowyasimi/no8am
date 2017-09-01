@@ -4,22 +4,21 @@ import {Icon} from '@blueprintjs/core'
 import {Tooltip2} from '@blueprintjs/labs'
 import Transition from 'react-transition-group/Transition'
 
+import {clickShowSingleCourse} from '../actions/sectionActions'
+import {mouseEnterSectionListCard, mouseLeaveSectionListCard, clickSectionListCard} from "../actions/sectionActions"
+
 const duration = 300;
 
 const defaultStyle = {
-    transition: `max-height ${duration}ms ease-in-out, opacity ${duration}ms ease-in-out, transform ${duration}ms steps(1, end)`,
+    transition: `max-height ${duration}ms ease-in-out, opacity ${duration}ms ease-in-out`,
     maxHeight: 0,
-    opacity: 0,
-    transform: 'translate(9999px)'
+    opacity: 0
 };
 
 const transitionStyles = {
-    entering: { maxHeight: '100px', opacity: 1, display: 'block', transform: 'translate(0)' },
-    entered:  { maxHeight: '100px', opacity: 1, display: 'block', transform: 'translate(0)' },
+    entering: { maxHeight: '100px', opacity: 1 },
+    entered:  { maxHeight: '100px', opacity: 1 },
 };
-
-import {mouseEnterSectionListCard, mouseLeaveSectionListCard, clickSectionListCard}
-from "../actions/sectionActions"
 
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -35,39 +34,48 @@ export default class SectionListCard extends React.Component {
 
         let classes = `${this.props.isSelected ? 'selectedSection' : ''} ${this.props.isUnavailable ? 'unavailableSection' : ''} ${isViolation ? 'violationSection' : ''} `;
 
+        let showSingleCourse = this.props.shouldAskShowSingleCourse ? <a onClick={this.props.onClickShowSingleCourse} className="askShowSingleCourse">{`Only show sections for ${this.props.departmentAndBareCourse}?`}</a> : '';
+
         let sectionListCard = (
-            <Transition in={this.props.isVisible} timeout={duration}>
+            <Transition
+                in={this.props.isVisible}
+                timeout={duration}
+                mountOnEnter={true}
+                unmountOnExit={true}>
                 {(state) => (
-                    <div className={`pt-card pt-interactive sectionCard ${this.props.isLastOfType ? 'lastOfType' : ''}`}
-                     onMouseEnter={this.props.onMouseEnterSectionListCard}
-                     onMouseLeave={this.props.onMouseLeaveSectionListCard}
-                     style={{
-                         ...defaultStyle,
-                         ...transitionStyles[state]
-                     }}>
-                    <ul className={`sectionCardItemContainer ${classes}`}
-                        onClick={this.props.onClickSectionListCard}>
-                        <li className="sectionCardItem">
-                            {this.props.courseNum}
-                        </li>
-                        <li className="sectionCardItem">
-                            {this.props.timesMet}
-                        </li>
-                        <li className="sectionCardItem">
-                            {this.props.roomMet}
-                        </li>
-                        <li className="sectionCardItem">
-                            {this.props.professor}
-                        </li>
-                        <li className="sectionCardItem"
-                            style={{width: '10%'}}>
-                            {this.props.freeSeats}
-                        </li>
-                        <li className="sectionCardItem" style={{width: '7%'}}>
-                            <Icon iconName="more" />
-                        </li>
-                    </ul>
-                </div>
+                    <div>
+                        <div className={`pt-card pt-interactive sectionCard ${this.props.isLastOfType ? 'lastOfType' : ''}`}
+                         onMouseEnter={this.props.onMouseEnterSectionListCard}
+                         onMouseLeave={this.props.onMouseLeaveSectionListCard}
+                         style={{
+                             ...defaultStyle,
+                             ...transitionStyles[state]
+                         }}>
+                            <ul className={`sectionCardItemContainer ${classes}`}
+                                onClick={this.props.onClickSectionListCard}>
+                                <li className="sectionCardItem">
+                                    {this.props.departmentAndCourseAndSection}
+                                </li>
+                                <li className="sectionCardItem">
+                                    {this.props.timesMet}
+                                </li>
+                                <li className="sectionCardItem">
+                                    {this.props.roomMet}
+                                </li>
+                                <li className="sectionCardItem">
+                                    {this.props.professor}
+                                </li>
+                                <li className="sectionCardItem"
+                                    style={{width: '10%'}}>
+                                    {this.props.freeSeats}
+                                </li>
+                                <li className="sectionCardItem" style={{width: '7%'}}>
+                                    <Icon iconName="more" />
+                                </li>
+                            </ul>
+                        </div>
+                        {showSingleCourse}
+                    </div>
                 )}
             </Transition>
         );
@@ -98,6 +106,7 @@ function mapDispatchToProps(dispatch, props) {
     return {
         onMouseEnterSectionListCard: () => dispatch(mouseEnterSectionListCard(props)),
         onMouseLeaveSectionListCard: () => dispatch(mouseLeaveSectionListCard()),
-        onClickSectionListCard: () => dispatch(clickSectionListCard(props))
+        onClickSectionListCard: () => dispatch(clickSectionListCard(props)),
+        onClickShowSingleCourse: () => dispatch(clickShowSingleCourse(props))
     }
 }

@@ -108,17 +108,27 @@ body,html{height: 100%;}
     padding-bottom: 15px;
 }
 
-#startMessage {
+.nonIdealState {
     padding-top: 50px;
     height: auto;
 }
 
-#startMessage .pt-non-ideal-state-title {
+.nonIdealState .pt-non-ideal-state-title {
     font-size: 26px;
 }
 
-#startMessage .pt-non-ideal-state-description {
+.nonIdealState .pt-non-ideal-state-description {
     font-size: 16px;
+}
+
+.filterTimeButton {
+    min-width: 160px;
+}
+
+.rangeSliderContainer {
+    min-width: 200px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .sectionList {
@@ -171,6 +181,11 @@ body,html{height: 100%;}
 
 .lastOfType {
     margin-bottom: 20px;
+}
+
+.askShowSingleCourse {
+    margin-bottom: 20px;
+    display: block;
 }
 
 .pt-omnibox {

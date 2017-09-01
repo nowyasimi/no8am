@@ -7,42 +7,16 @@ import {connect} from 'react-redux'
 import {MenuItem, Hotkey, Hotkeys, HotkeysTarget, Classes} from '@blueprintjs/core'
 import {Omnibox} from '@blueprintjs/labs'
 
-import {toggleSearchOmnibox, closeSearchOmnibox, openSearchOmnibox, searchItem} from '../actions/sectionActions'
+import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleSearchOmnibox} from '../actions/sectionActions'
 import {SEARCH_ITEM_TYPE} from '../Constants'
 
 @connect(mapStateToProps, mapDispatchToProps)
 @HotkeysTarget
 export default class SearchOmnibox extends React.Component {
 
-    constructor() {
-        super();
-
-        this.state = {
-            loading: true,
-            metadata: []
-        };
-
-        $.getJSON(METADATA_URL, (metadata) => {
-            let metadataList = [];
-
-            for (let type in SEARCH_ITEM_TYPE)  {
-                if (type != "HEADER") {
-                    metadataList = metadataList.concat(metadata[type.toLowerCase()].map(x => {
-                        let userFriendlyFormat = type == "Course" ? `${x.courseNum} - ${x.courseName}` : `${x.abbreviation} - ${x.name}`;
-                        return {
-                            ...x,
-                            itemType: type,
-                            userFriendlyFormat: userFriendlyFormat,
-                            token: userFriendlyFormat.toLowerCase()
-                        };
-                    }));
-                }
-            }
-
-            this.setState({loading: false, metadata: metadataList});
-        });
+    componentDidMount() {
+        this.props.onLoadMetadata();
     }
-
 
     renderHotkeys() {
         return (
@@ -66,14 +40,13 @@ export default class SearchOmnibox extends React.Component {
         );
     }
 
-
     render() {
         return (
             <Omnibox
                 isOpen={this.props.isOpen}
                 itemListPredicate={this.itemListPredicate}
                 itemRenderer={this.itemRenderer}
-                items={this.state.metadata}
+                items={this.props.metadata.items}
                 onItemSelect={this.onItemSelect}
                 inputProps={{ onBlur: this.onItemSelect }}
                 resetOnSelect={true}
@@ -88,23 +61,24 @@ export default class SearchOmnibox extends React.Component {
         let noResults = filteredList.length == 0;
         let noQuery = query == "";
 
-        if (this.state.loading) {
+        if (this.props.metadata.loading) {
             return [{text: 'Loading course information', itemType: SEARCH_ITEM_TYPE.HEADER}];
         } else if ((noResults || noQuery) && this.props.searchHistory.length > 0) {
-            return [{text: 'Recent Searches (No results)', itemType: SEARCH_ITEM_TYPE.HEADER}].concat(this.props.searchHistory);
+            return [{text: 'Recent Searches (No results)', itemType: SEARCH_ITEM_TYPE.HEADER}]
+                .concat(this.props.searchHistory.map(history => history.item));
         } else if ((noResults || noQuery) && this.props.searchHistory.length == 0) {
             return [{text: 'Search by CCC, course, or number of credits', itemType: SEARCH_ITEM_TYPE.HEADER}];
         }
 
         let filteredListWithHeaders = [];
 
-        for (let type in SEARCH_ITEM_TYPE) {
+        for (const type of SEARCH_ITEM_TYPE.enumValues) {
             let itemsOfType = filteredList.filter(x => x.itemType == type);
 
-            itemsOfType = type == "Course" ? itemsOfType.sort(courseSort(query)) : itemsOfType;
+            itemsOfType = type == SEARCH_ITEM_TYPE.Course ? itemsOfType.sort(courseSort(query)) : itemsOfType;
 
             filteredListWithHeaders = itemsOfType.length == 0 ? filteredListWithHeaders :
-                filteredListWithHeaders.concat([{text: type, itemType: SEARCH_ITEM_TYPE.HEADER}]).concat(itemsOfType);
+                filteredListWithHeaders.concat([{text: type.name, itemType: SEARCH_ITEM_TYPE.HEADER}]).concat(itemsOfType);
         }
 
         return filteredListWithHeaders.slice(0, 50);
@@ -180,7 +154,8 @@ const courseSort = (query) => (a, b) => {
 function mapStateToProps(state) {
     return {
         isOpen: state.isSearchOmniboxOpen,
-        searchHistory: state.searchHistory
+        searchHistory: state.searchHistory,
+        metadata: state.metadata
     }
 }
 
@@ -190,7 +165,8 @@ function mapDispatchToProps(dispatch) {
         onToggleSearchOmnibox: () => dispatch(toggleSearchOmnibox()),
         onCloseSearchOmnibox: () => dispatch(closeSearchOmnibox()),
         onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
-        onSearchItem: (item) => dispatch(searchItem(item))
+        onSearchItem: (item) => dispatch(searchItem(item)),
+        onLoadMetadata: () => dispatch(loadMetadata())
     }
 }
 

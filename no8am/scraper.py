@@ -130,11 +130,12 @@ class Section(object):
 		department, course_number, section_number = course_number_with_section.split(" ")
 
         # TODO - fix issue with indexing the section. some values are off by one.
-		self.bare_course_number = bare_course_number 	    # DEPT 000
-		self.courseNum = course_number_with_section  	    # DEPT 000X 00
-		self.department = department  					    # DEPT
-		self.course_number = course_number  			    # 	   000X
-		self.sectionNum = section_number  				    # 			00
+		self.department = department # DEPT
+		self.course = course_number # 000X
+		self.sectionNum = section_number # 00
+		self.departmentAndCourse = department + " " + course_number # DEPT 000X
+		self.departmentAndBareCourse = bare_course_number # DEPT 000
+		self.departmentAndCourseAndSection = course_number_with_section # DEPT 000X 00
 		self.courseName = str(''.join(section[2].strings))
 		self.timesMet = str(''.join(section[3].strings))
 		self.roomMet = str(', '.join(section[4].strings))
@@ -175,7 +176,6 @@ class Course:
 		self.main_sections = {} if not set_to_main else {sections.CRN: sections}
 		self.extra_sections = {}
 		self.extra_section_numbers = {}
-		self.is_extra_section_independent = {}
 
 		if not set_to_main:
 			self.divide_into_section_types()
@@ -193,7 +193,7 @@ class Course:
 		for index, section in enumerate(self.all_sections):
 			crn = section.CRN
 			section_number = section.sectionNum
-			course_number = section.course_number
+			course_number = section.course
 
 			if len(course_number) > MAIN_COURSE_NUMBER_LENGTH and course_number[-1] in EXTRA_SECTIONS:
 				section.setup_extra_section()
@@ -202,7 +202,6 @@ class Course:
 				if extra_section_type not in self.extra_sections:
 					self.extra_sections[extra_section_type] = {}
 					self.extra_section_numbers[extra_section_type] = {}
-					self.is_extra_section_independent[extra_section_type] = True
 
 				# remove message from extra section
 				self.extra_sections[extra_section_type][crn] = section
@@ -217,38 +216,41 @@ class Course:
 		"""
 
 		for index, section in enumerate(self.all_sections):
+
 			message = section.message
 
 			# Makes sure section is DEPT 101 00, not DEPT 101R 00 or DEPT 101L 00
-			if message is None or len(re.findall(courseNumFull_regex, message)) == 0 or not section.main:
+			if (message is not None and len(re.findall(courseNumFull_regex, message)) == 0) or not section.main:
 				continue
 
-			message_text = message.split(': ')[1].lower()
-
-			# find ranges of sections like "labs 60-69"
-			legal_sections = [x[1] for x in re.findall(message_regex, message_text)]
-			for x in re.findall(section_range_regex, message_text):
-				# convert range of sections to list and convert to string
-				legal_sections += [str(y) for y in range(int(x[0]), int(x[1]) + 1)]
-
-			# remove duplicates
-			legal_sections = list(set(legal_sections))
-
-			# checks if section has been linked to a recitation using number of lab sections in pre-collected list
+			# identify which extra section types exist for this course
 			has_extra_section = {
 				x: len(self.extra_section_numbers[x]) > 0 for x in self.extra_section_numbers
 			}
 
-			for legalSection in legal_sections:
+			if message is not None:
+
+				message_text = message.split(': ')[1].lower()
+
+				# find ranges of sections like "labs 60-69"
+				legal_sections = [x[1] for x in re.findall(message_regex, message_text)]
+				for x in re.findall(section_range_regex, message_text):
+					# convert range of sections to list and convert to string
+					legal_sections += [str(y) for y in range(int(x[0]), int(x[1]) + 1)]
+
+				# remove duplicates
+				legal_sections = list(set(legal_sections))
+
+				# ignore extra section types that have listed specific section numbers
+				for legalSection in legal_sections:
+					for extra_section_type in self.extra_sections:
+						if legalSection in self.extra_section_numbers[extra_section_type]:
+							has_extra_section[extra_section_type] = False
+
+				# group legal sections by extra section type
 				for extra_section_type in self.extra_sections:
-					if legalSection in self.extra_section_numbers[extra_section_type]:
-						has_extra_section[extra_section_type] = False
+					extra_sections = [x for x in legal_sections if x in self.extra_section_numbers[extra_section_type]]
 
-			for extra_section_type in self.extra_sections:
-				extra_sections = [x for x in legal_sections if x in self.extra_section_numbers[extra_section_type]]
-
-				if len(self.extra_section_numbers[extra_section_type]) > len(extra_sections) > 0:
-					self.is_extra_section_independent[extra_section_type] = False
 					for section_number in extra_sections:
 						extra_section_crn = self.extra_section_numbers[extra_section_type][section_number]
 						self.extra_sections[extra_section_type][extra_section_crn].dependent_main_sections.append(section.sectionNum)
@@ -264,16 +266,14 @@ class Course:
 		"""
 		Exports the course object.
 
-		:return: A dictionary of course data that can be read by the client
+		:return: A list of sections that can be read by the client
 		"""
 
-		return {
-			"sections": sorted([self.main_sections[crn].export() for crn in self.main_sections], key=lambda x:x["sectionNum"]),
-			"deptName": self.main_sections[self.main_sections.keys()[0]].department,
-			"courseNum": self.main_sections[self.main_sections.keys()[0]].course_number,
-			"isExtraSectionIndependent": self.is_extra_section_independent,
-			"extraSectionsByType": {section_type: [section.export() for section in sorted(section_list.values(), key=lambda x:x.sectionNum)] for section_type, section_list in self.extra_sections.iteritems()}
-		}
+		extra_sections = [[section.export() for section in sorted(section_list.values(), key=lambda x:x.sectionNum)] for section_type, section_list in self.extra_sections.iteritems()]
+
+		flattened_extra_sections = [item for sublist in extra_sections for item in sublist]
+
+		return sorted([self.main_sections[crn].export() for crn in self.main_sections] + flattened_extra_sections, key=lambda x:x["sectionNum"])
 
 
 class CreditOrCCC:
@@ -308,12 +308,12 @@ class CreditOrCCC:
 		filtered_sections = filter(lambda x: len(x) > 5, sections)
 
 		# generate a list of dictionaries to organize data for each section
-		all_courses = map(CreditOrCCC.handle_ccc_or_credit_section, filtered_sections)
+		all_sections = map(CreditOrCCC.handle_ccc_or_credit_section, filtered_sections)
 
 		# store in cache and return data
-		cache_time = course_data_set(lookup_value, all_courses)
+		cache_time = course_data_set(lookup_value, all_sections)
 
-		return cache_time, all_courses
+		return cache_time, all_sections
 
 	@staticmethod
 	def handle_ccc_or_credit_section(section):
@@ -329,9 +329,7 @@ class CreditOrCCC:
 
 		section = Section(data)
 
-		course = Course(section, True)
-
-		return course.export()
+		return section.export()
 
 
 class Department:
@@ -375,9 +373,12 @@ class Department:
 		# create format that can be stored in cache or returned to user
 		formatted_results = [course.export() for course in parsed_courses]
 
-		cache_time = course_data_set(department_name, formatted_results)
+		# flatten results
+		flattened_results = [item for sublist in formatted_results for item in sublist]
 
-		return cache_time, formatted_results
+		cache_time = course_data_set(department_name, flattened_results)
+
+		return cache_time, flattened_results
 
 	@staticmethod
 	def group_sections_by_course(sections):
@@ -393,7 +394,7 @@ class Department:
 			sections_with_message.append(Section(section, message))
 
 		# group sections by course
-		for key, group in groupby(sections_with_message, lambda x: x.bare_course_number):
+		for key, group in groupby(sections_with_message, lambda x: x.departmentAndBareCourse):
 			grouped_sections.append(list(group))
 
 		return grouped_sections
@@ -409,6 +410,6 @@ def find_course_in_department(parsed_data, department_name, course_number):
 	:return: The sections of the course being searched for
 	"""
 
-	for course in parsed_data:
-		if course["courseNum"] == course_number and course["deptName"] == department_name:
-			return course
+	bare_course_number = department_name + " " + course_number
+
+	return filter(lambda x: x["departmentAndBareCourse"] == bare_course_number, parsed_data)

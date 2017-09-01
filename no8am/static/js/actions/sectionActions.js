@@ -1,4 +1,47 @@
-import {SECTION_DETAILS_URL, COURSE_LOOKUP_URL, EXTRA_SECTION_TYPES, SEARCH_ITEM_TYPE} from '../Constants'
+import {SECTION_DETAILS_URL, CCC_LOOKUP_URL, COURSE_LOOKUP_URL, CREDIT_LOOKUP_URL, SEARCH_ITEM_TYPE} from '../Constants'
+
+
+export const receiveMetadata = (metadata) => {
+    return {
+        type: 'RECEIVE_METADATA',
+        metadata
+    }
+};
+
+export const errorReceivingMetadata = () => {
+    return {
+        type: 'ERROR_RECEIVING_METADATA'
+    }
+};
+
+
+export const loadMetadata = () => {
+    return (dispatch) => {
+        return fetch(METADATA_URL)
+            .then(response => response.json())
+            .then(rawMetadata => {
+                let metadataList = [];
+
+                for (const type of SEARCH_ITEM_TYPE.enumValues) {
+                    if (type != SEARCH_ITEM_TYPE.HEADER) {
+                        metadataList = metadataList.concat(rawMetadata[type.name.toLowerCase()].map(x => {
+                            let userFriendlyFormat = type == SEARCH_ITEM_TYPE.Course ? `${x.courseNum} - ${x.courseName}` : `${x.abbreviation} - ${x.name}`;
+                            return {
+                                ...x,
+                                itemType: type,
+                                userFriendlyFormat: userFriendlyFormat,
+                                token: userFriendlyFormat.toLowerCase()
+                            };
+                        }));
+                    }
+                }
+
+                return ({loading: false, items: metadataList});
+            })
+            .then(metadata => dispatch(receiveMetadata(metadata)))
+            .catch(dispatch(errorReceivingMetadata()));
+    }
+};
 
 export const toggleSearchOmnibox = () => {
     return {
@@ -34,24 +77,40 @@ export const receiveItem = (item, data) => {
 };
 
 export const searchItem = (item) => {
-    switch (item.itemType) {
-        case SEARCH_ITEM_TYPE.HEADER:
-            return null;
-        default:
-            return (dispatch) => {
-                dispatch(requestItem(item));
 
+    return (dispatch) => {
+        let url = null;
+
+        switch (item.itemType) {
+            case SEARCH_ITEM_TYPE.Course:
                 let splitCourseNum = item.courseNum.split(' ');
-                let department = splitCourseNum[0];
-                let course = splitCourseNum[1];
+                url = `${COURSE_LOOKUP_URL}${splitCourseNum[0]}/${splitCourseNum[1]}`;
+                break;
 
-                return fetch(`${COURSE_LOOKUP_URL}${department}/${course}`)
-                    .then(response => response.json())
-                    .then(rawData => initializeCourse(rawData))
-                    .then(data => dispatch(receiveItem(item, data)))
-                    .catch(dispatch(errorReceivingCourse(item)));
-            }
-    }
+            case SEARCH_ITEM_TYPE.Department:
+                url = `${COURSE_LOOKUP_URL}${item.abbreviation}`;
+                break;
+
+            case SEARCH_ITEM_TYPE.CCC:
+                url = `${CCC_LOOKUP_URL}${item.abbreviation}`;
+                break;
+
+            case SEARCH_ITEM_TYPE.Credit:
+                url = `${CREDIT_LOOKUP_URL}${item.abbreviation}`;
+                break;
+
+            default:
+                return null;
+        }
+
+        dispatch(requestItem(item));
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(rawData => ({...rawData, sections: initializeSections(rawData.sections)}))
+            .then(data => dispatch(receiveItem(item, data)))
+            .catch(dispatch(errorReceivingCourse(item)));
+    };
 };
 
 export const mouseEnterSectionListCard = (section) => {
@@ -68,9 +127,43 @@ export const mouseLeaveSectionListCard = () => {
 };
 
 export const clickSectionListCard = (section) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'CLICK_SECTION_LIST_CARD',
+            section
+        });
+
+        // TODO - find a way to avoid triggering a new search for courses
+
+        // let item = {
+        //     itemType: SEARCH_ITEM_TYPE.Course,
+        //     courseNum: section.departmentAndBareCourse,
+        //     courseName: section.courseName,
+        //     userFriendlyName: `${section.departmentAndBareCourse} - ${section.courseName}`,
+        //     token: null
+        // };
+        //
+        // dispatch(searchItem(item));
+    };
+};
+
+export const clickShowSingleCourse = (section) => {
     return {
-        type: 'CLICK_SECTION_LIST_CARD',
-        section
+        type: 'CLICK_SHOW_SINGLE_COURSE',
+        departmentAndBareCourse: section.departmentAndBareCourse
+    };
+};
+
+export const updateFilterTime = (filterTime) => {
+    return {
+        type: 'UPDATE_FILTER_TIME',
+        filterTime
+    }
+};
+
+export const clickRemoveShowSingleCourse = () => {
+    return {
+        type: 'CLICK_REMOVE_SHOW_SINGLE_COURSE'
     }
 };
 
@@ -199,14 +292,6 @@ export const fetchNewCourse = (department, course) => {
     }
 };
 
-const initializeCourse = (rawData) => {
-    return {
-        ...rawData,
-        sections: initializeSections(rawData.course.sections).concat(
-        ...EXTRA_SECTION_TYPES.filter(x => rawData.course.extraSectionsByType.hasOwnProperty(x))
-            .map(x => initializeSections(rawData.course.extraSectionsByType[x])))
-    }
-};
 
 const initializeSections = (sections) => {
     return sections.map(section => ({

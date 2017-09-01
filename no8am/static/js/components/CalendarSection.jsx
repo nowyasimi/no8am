@@ -28,7 +28,7 @@ export default class CalendarSection extends React.Component {
 
         let innerDetails = this.props.hoverCRN == this.props.CRN ?
             <p className="timesMet">{this.props.daysMet[day][3] + "-" + this.props.daysMet[day][4]}</p> :
-            <p className="courseNum">{this.props.courseNum.slice(0,-3)}</p>;
+            <p className="courseNum">{this.props.departmentAndCourseAndSection.slice(0,-3)}</p>;
 
         return (
             <li style={style} className={className}
