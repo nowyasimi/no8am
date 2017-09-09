@@ -1,9 +1,8 @@
 from no8am.scraper import *
 import pytest
 
-SUCCESS_FILES = ["department", "ccc", "credit"]
-ERROR_FILES = ["error"]
-FILENAMES = SUCCESS_FILES + ERROR_FILES
+# ERROR_FILES = ["error"]
+# FILENAMES = SUCCESS_FILES + ERROR_FILES
 
 
 def import_file(filename):
@@ -28,27 +27,27 @@ def import_html_files():
     :return: A dictionary containing filenames and file text
     """
 
-    return {filename: import_file("no8am/tests/webpages/" + filename + ".txt") for filename in FILENAMES}
+    return {CreditType[credit_type].value: import_file("no8am/tests/webpages/" + credit_type.lower() + "_credit.txt") for credit_type in CreditType.__members__}
 
 
-def test_extract_sections_cached_data(import_html_files):
-    """
-    Tests finding rows of section data using test course data.
+# def test_extract_sections_cached_data(import_html_files):
+#     """
+#     Tests finding rows of section data using test course data.
+#
+#     :param import_html_files: Local HTML pages used for testing
+#     """
+#
+#     # test finding sections in HTML pages with valid data
+#     for success_file in SUCCESS_FILES:
+#         assert len(extract_sections(import_html_files[success_file])) > 0
+#
+#     # test error being raised when an HTML page has no sections
+#     for error_file in ERROR_FILES:
+#         with pytest.raises(RuntimeError):
+#             extract_sections(import_html_files[error_file])
 
-    :param import_html_files: Local HTML pages used for testing
-    """
 
-    # test finding sections in HTML pages with valid data
-    for success_file in SUCCESS_FILES:
-        assert len(extract_sections(import_html_files[success_file])) > 0
-
-    # test error being raised when an HTML page has no sections
-    for error_file in ERROR_FILES:
-        with pytest.raises(RuntimeError):
-            extract_sections(import_html_files[error_file])
-
-
-def test_department_lookup(import_html_files, monkeypatch):
+def test_get_course_information(import_html_files, monkeypatch):
     """
     Tests parsing department data into a list of courses.
     Uses monkeypatched department data, so specifying actual name is not necessary.
@@ -57,43 +56,34 @@ def test_department_lookup(import_html_files, monkeypatch):
     :param monkeypatch: Used to mock html fetching function
     """
 
-    monkeypatch.setattr('no8am.scraper.fetch_course_html', lambda name, _: import_html_files[name])
+    monkeypatch.setattr('no8am.scraper.fetch_course_html', lambda name: import_html_files[name])
     monkeypatch.setattr('no8am.scraper.course_data_get', lambda _: None)
     monkeypatch.setattr('no8am.scraper.course_data_set', lambda _, __: None)
 
-    _, processed_department_data = Department.process_department_request('department')
+    all_sections_with_message = get_sections_with_message()
 
-    # verify courses exist
-    assert len(processed_department_data) > 0
+    for section in all_sections_with_message:
+        if section.departmentAndCourse == "CHEM 201":
+            assert section.message != None
 
-    # verify first course has sections
-    first_course_sections = processed_department_data[0]['sections']
-    assert len(first_course_sections) > 0
+    grouped_sections_by_course = group_sections_by_course(all_sections_with_message)
 
-    # verify first section has extra sections
-    first_section = first_course_sections.itervalues().next()
-    assert len(first_section['extra_section_lists']['L']) > 0
+    for course in grouped_sections_by_course:
+        if course[0].departmentAndBareCourse == "CHEM 201":
+            assert len(course) == 17
 
+    parsed_courses = map(Course, grouped_sections_by_course)
 
-def test_ccc_and_credit_lookup(import_html_files, monkeypatch):
-    """
-    Tests parsing ccc and credit data into a list of courses.
-    Uses monkeypatched data, so specifying actual names is not necessary.
+    for course in parsed_courses:
+        if course.departmentAndCourse == "CHEM 201":
+            assert len(course.main_sections.keys()) == 3
+            assert len(course.extra_sections['L'].keys()) == 8
+            assert len(course.extra_sections['R'].keys()) == 6
 
-    :param import_html_files: Local HTML pages used for testing
-    :param monkeypatch: Used to mock html fetching function
-    """
+            exported_course = course.export()
 
-    monkeypatch.setattr('no8am.scraper.fetch_course_html', lambda name, _: import_html_files[name])
-    monkeypatch.setattr('no8am.scraper.course_data_get', lambda _: None)
-    monkeypatch.setattr('no8am.scraper.course_data_set', lambda _, __: None)
-
-    for course_type in ['ccc', 'credit']:
-        _, processed_data = Department.process_department_request(course_type)
-
-        # verify courses exist
-        assert len(processed_data) > 0
-
-        # verify first course has sections
-        first_course_sections = processed_data[0]['sections']
-        assert len(first_course_sections) > 0
+            for section in exported_course:
+                if section["departmentAndCourse"] == "CHEM 201R":
+                    assert len(section["dependent_main_sections"]) == 1
+                elif section["departmentAndCourse"] == "CHEM 201L":
+                    assert len(section["dependent_main_sections"]) == 3

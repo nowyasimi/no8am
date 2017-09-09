@@ -21,6 +21,8 @@ const initialState = {
         loading: true,
         items: []
     },
+    sectionsLoading: true,
+    sections: [],
     ...defaultFilters
 };
 
@@ -31,6 +33,12 @@ export const sectionReducer = (state = initialState, action) => {
             return {
                 ...state,
                 metadata: action.metadata
+            };
+        case 'RECEIVE_SECTIONS':
+            return {
+                ...state,
+                sectionLoading: false,
+                sections: action.sections
             };
         case 'TOGGLE_SEARCH_OMNIBOX':
             return {
@@ -47,30 +55,42 @@ export const sectionReducer = (state = initialState, action) => {
                 ...state,
                 isSearchOmniboxOpen: true
             };
-        case 'REQUEST_ITEM':
-            return {
-                ...state,
-                currentSearch: {
-                    item: action.item,
-                    state: DATA_LOADING_STATE.LOADING
-                },
-                ...defaultFilters
-            };
-        case 'RECEIVE_ITEM':
-            let isFromCategorySearch = state.currentSearch.item.itemType != SEARCH_ITEM_TYPE.Course &&
-                                       state.currentSearch.item.itemType != SEARCH_ITEM_TYPE.Department;
+        case 'SEARCH_ITEM':
+            let sections;
+
+            switch (action.item.itemType) {
+                case SEARCH_ITEM_TYPE.Course:
+                    sections = state.sections.filter(section => section.departmentAndBareCourse == action.item.courseNum);
+                    break;
+
+                case SEARCH_ITEM_TYPE.Department:
+                    sections = state.sections.filter(section => section.department == action.item.abbreviation);
+                    break;
+
+                case SEARCH_ITEM_TYPE.CCC:
+                    sections = state.sections.filter(section => section.CCC.find(ccc => ccc == action.item.abbreviation));
+                    break;
+
+                case SEARCH_ITEM_TYPE.Credit:
+                    sections = state.sections.filter(section => section.credits == action.item.abbreviation);
+                    break;
+
+                default:
+                    sections = [];
+                    break;
+            }
 
             return {
                 ...state,
+                showSingleCourse: action.isFromCategorySearch ? action.item.courseNum : null,
+                isFromCategorySearch: action.isFromCategorySearch,
                 searchHistory: state.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION ? state.searchHistory :
                     [state.currentSearch, ...state.searchHistory],
                 currentSearch: {
-                    ...state.currentSearch,
                     state: DATA_LOADING_STATE.LOADED,
-                    data: action.data,
-                    isFromCategorySearch: isFromCategorySearch
-                },
-                showSingleCourse: isFromCategorySearch ? state.currentSearch.item.courseNum : null
+                    item: action.item,
+                    data: sections
+                }
             };
         case 'CLICK_ADVANCED_SECTION_SELECTION':
             return {
@@ -126,7 +146,10 @@ export const sectionReducer = (state = initialState, action) => {
         case 'CLICK_REMOVE_SHOW_SINGLE_COURSE':
             return {
                 ...state,
-                showSingleCourse: null
+                showSingleCourse: null,
+                isFromCategorySearch: false,
+                searchHistory: state.isFromCategorySearch ? state.searchHistory.splice(1, ) : state.searchHistory,
+                currentSearch: state.isFromCategorySearch ? state.searchHistory[0] : state.currentSearch
             };
         case 'MOUSE_ENTER_CALENDAR_SECTION':
             return {
@@ -182,54 +205,6 @@ export const sectionReducer = (state = initialState, action) => {
                         selected: isDependent ? null : state.highlightSectionId
                     } : x
                 })
-            };
-        case 'REMOVE_COURSE':
-            return {
-                ...state,
-                courses: state.courses.filter(course => !(course.courseId == action.courseId || course.parentCourseId == action.courseId))
-            };
-        case 'REQUEST_COURSE':
-            return {
-                ...state,
-                courses: [
-                    ...state.courses,
-                    {
-                        courseId: state.courseCounter,
-                        department: action.department,
-                        course: action.course,
-                        color: 'blue',
-                        dataStatus: 'loading',
-                        isMain: true
-                    }
-                ],
-                courseCounter: state.courseCounter + 1
-            };
-        case 'RECEIVE_COURSE':
-            let courseId = state.courses.find(x => action.department && x.course === action.course && x.dataStatus === 'loading').courseId;
-
-            return {
-                ...state,
-                // courses: state.courses.map(x => x.courseId !== courseId ? x :
-                //         {
-                //             ...x,
-                //             sections: initializeSections(action.courseData.course.sections),
-                //             cacheTime: action.courseData.cache_time,
-                //             dataStatus: 'loaded'
-                //         }
-                // ).concat(
-                //     EXTRA_SECTION_TYPES
-                //         .filter(x => action.courseData.course.extraSectionsByType.hasOwnProperty(x))
-                //         .map(x => ({
-                //             color: 'red',
-                //             department: action.department,
-                //             course: action.course + x,
-                //             courseId: courseId + x,
-                //             sections: initializeSections(action.courseData.course.extraSectionsByType[x]),
-                //             isIndependent: action.courseData.course.isExtraSectionIndependent[x],
-                //             parentCourseId: courseId,
-                //             dataStatus: 'loaded'
-                //         }))
-                // )
             };
         default:
             return state

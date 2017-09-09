@@ -14,7 +14,6 @@ export const errorReceivingMetadata = () => {
     }
 };
 
-
 export const loadMetadata = () => {
     return (dispatch) => {
         return fetch(METADATA_URL)
@@ -40,6 +39,29 @@ export const loadMetadata = () => {
             })
             .then(metadata => dispatch(receiveMetadata(metadata)))
             .catch(dispatch(errorReceivingMetadata()));
+    }
+};
+
+export const receiveSections = (sections) => {
+    return {
+        type: 'RECEIVE_SECTIONS',
+        sections
+    }
+};
+
+export const errorReceivingSections = () => {
+    return {
+        type: 'ERROR_RECEIVING_SECTIONS'
+    }
+};
+
+export const loadSections = () => {
+    return (dispatch) => {
+        return fetch(SECTIONS_URL)
+            .then(response => response.json())
+            .then(jsonResponse => initializeSections(jsonResponse.sections))
+            .then(sections => dispatch(receiveSections(sections)))
+            .catch(dispatch(errorReceivingSections()));
     }
 };
 
@@ -76,41 +98,47 @@ export const receiveItem = (item, data) => {
     }
 };
 
-export const searchItem = (item) => {
+export const searchItem = (item, isFromCategorySearch = false) => {
 
-    return (dispatch) => {
-        let url = null;
-
-        switch (item.itemType) {
-            case SEARCH_ITEM_TYPE.Course:
-                let splitCourseNum = item.courseNum.split(' ');
-                url = `${COURSE_LOOKUP_URL}${splitCourseNum[0]}/${splitCourseNum[1]}`;
-                break;
-
-            case SEARCH_ITEM_TYPE.Department:
-                url = `${COURSE_LOOKUP_URL}${item.abbreviation}`;
-                break;
-
-            case SEARCH_ITEM_TYPE.CCC:
-                url = `${CCC_LOOKUP_URL}${item.abbreviation}`;
-                break;
-
-            case SEARCH_ITEM_TYPE.Credit:
-                url = `${CREDIT_LOOKUP_URL}${item.abbreviation}`;
-                break;
-
-            default:
-                return null;
-        }
-
-        dispatch(requestItem(item));
-
-        return fetch(url)
-            .then(response => response.json())
-            .then(rawData => ({...rawData, sections: initializeSections(rawData.sections)}))
-            .then(data => dispatch(receiveItem(item, data)))
-            .catch(dispatch(errorReceivingCourse(item)));
+    return {
+        type: 'SEARCH_ITEM',
+        item,
+        isFromCategorySearch
     };
+
+    // return (dispatch) => {
+    //     let url = null;
+    //
+    //     switch (item.itemType) {
+    //         case SEARCH_ITEM_TYPE.Course:
+    //             let splitCourseNum = item.courseNum.split(' ');
+    //             url = `${COURSE_LOOKUP_URL}${splitCourseNum[0]}/${splitCourseNum[1]}`;
+    //             break;
+    //
+    //         case SEARCH_ITEM_TYPE.Department:
+    //             url = `${COURSE_LOOKUP_URL}${item.abbreviation}`;
+    //             break;
+    //
+    //         case SEARCH_ITEM_TYPE.CCC:
+    //             url = `${CCC_LOOKUP_URL}${item.abbreviation}`;
+    //             break;
+    //
+    //         case SEARCH_ITEM_TYPE.Credit:
+    //             url = `${CREDIT_LOOKUP_URL}${item.abbreviation}`;
+    //             break;
+    //
+    //         default:
+    //             return null;
+    //     }
+    //
+    //     dispatch(requestItem(item, isFromCategorySearch));
+    //
+    //     return fetch(url)
+    //         .then(response => response.json())
+    //         .then(rawData => ({...rawData, sections: initializeSections(rawData.sections)}))
+    //         .then(data => dispatch(receiveItem(item, data)))
+    //         .catch(dispatch(errorReceivingCourse(item)));
+    // };
 };
 
 export const mouseEnterSectionListCard = (section) => {
@@ -133,17 +161,17 @@ export const clickSectionListCard = (section) => {
             section
         });
 
-        // TODO - find a way to avoid triggering a new search for courses
+        if (section.isFromCategorySearch) {
+            let item = {
+                itemType: SEARCH_ITEM_TYPE.Course,
+                courseNum: section.departmentAndBareCourse,
+                courseName: section.courseName,
+                userFriendlyFormat: `${section.departmentAndBareCourse} - ${section.courseName}`,
+                token: null
+            };
 
-        // let item = {
-        //     itemType: SEARCH_ITEM_TYPE.Course,
-        //     courseNum: section.departmentAndBareCourse,
-        //     courseName: section.courseName,
-        //     userFriendlyName: `${section.departmentAndBareCourse} - ${section.courseName}`,
-        //     token: null
-        // };
-        //
-        // dispatch(searchItem(item));
+            dispatch(searchItem(item, true));
+        }
     };
 };
 
@@ -296,26 +324,17 @@ export const fetchNewCourse = (department, course) => {
 const initializeSections = (sections) => {
     return sections.map(section => ({
         ...section,
-        // TODO - update API so these conversions are not necessary
-        daysMet: parseTimesMet(restructureHours(section.timesMet)),
-        roomMet: section.roomMet === ", " ? "" : section.roomMet,
-        professor: section.professor === "; " ? "" : section.professor
+        daysMet: parseTimesMet(restructureHours(section.timesMet))
     }));
 };
 
 
-const restructureHours = (hours) => {
-    let timesMet = [];
-    while (hours != '') {
-        if (hours.includes("TBA")) {
-            return timesMet;
-        }
-        let mIndex = hours.indexOf('m');
+const restructureHours = (timesMet) => {
 
-        let tempTimes = hours.substring(0, mIndex+1);
-        hours = hours.substring(mIndex+1);
+    let newTimesMet = [];
+    for (let timeMet of timesMet) {
 
-        let tempHours = tempTimes.split(" ")[1];
+        let tempHours = timeMet.split(" ")[1];
         let startTime = tempHours.split("-")[0];
         let endTime = tempHours.split("-")[1];
 
@@ -327,19 +346,19 @@ const restructureHours = (hours) => {
         let amOrPm = endTime.slice(cI2 + 3);
 
         if (amOrPm == 'am' || (startHour != 12 && endHour == 12) || startHour > endHour) {
-            tempTimes = tempTimes.split("-").join("am-");
+            newTimesMet.push(timeMet.split("-").join("am-"));
         }
 
         else {
-            tempTimes = tempTimes.split("-").join("pm-");
+            newTimesMet.push(timeMet.split("-").join("pm-"));
         }
 
-        timesMet.push(tempTimes);
     }
-    return timesMet;
+    return newTimesMet;
 };
 
 const parseTimesMet = (timesMet) => {
+
     let daysMet = [];
 
     for (let x of timesMet) {
@@ -361,7 +380,7 @@ const parseTimesMet = (timesMet) => {
         }
     }
 
-    return daysMet
+    return daysMet;
 };
 
 /**

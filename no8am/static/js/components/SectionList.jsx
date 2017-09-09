@@ -7,6 +7,7 @@ import englishStrings from 'react-timeago/lib/language-strings/en'
 import {Tag} from '@blueprintjs/core'
 
 import {clickRemoveShowSingleCourse} from '../actions/sectionActions'
+import {SEARCH_ITEM_TYPE} from '../Constants'
 
 import SectionListCard from './SectionListCard.jsx'
 import FilterTime from './FilterTime.jsx'
@@ -20,7 +21,9 @@ export default class SectionList extends React.Component {
 
         let cacheTime = this.props.data.cache_time || new Date();
         let searchItem= this.props.item;
-        let sections = this.props.data.sections;
+        let sections = this.props.data;
+        let isFromCategorySearch = this.props.item.itemType != SEARCH_ITEM_TYPE.Course &&
+                               this.props.item.itemType != SEARCH_ITEM_TYPE.Department;
 
         let showSingleCourseTag = this.props.showSingleCourse == null ? null :
             (<Tag className="pt-large" onRemove={this.props.onClickRemoveShowSingleCourse}>
@@ -43,7 +46,8 @@ export default class SectionList extends React.Component {
                         isSelected={this.props.selectedSections.find(selectedSection => selectedSection.CRN == section.CRN)}
                         isUnavailable={this.isUnavailable(section)}
                         isVisible={isVisible}
-                        shouldAskShowSingleCourse={section.departmentAndCourse == this.props.askShowSingleCourse && isLastOfType} />
+                        shouldAskShowSingleCourse={section.departmentAndCourse == this.props.askShowSingleCourse && isLastOfType}
+                        isFromCategorySearch={isFromCategorySearch} />
                    );
         });
 

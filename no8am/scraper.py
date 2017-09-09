@@ -17,14 +17,18 @@ BUCKNELL_SECTION_DETAILS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/hwzkdp
 # Types of extra sections L (lab), R (recitation), P (problem session)
 EXTRA_SECTIONS = "LRP"
 
-
 class LookupType(Enum):
-	DEPARTMENT = 'DPT'
-	CCC = 'REQ2'
-	CREDIT = 'CRD'
+	DEPARTMENT = 'department'
+	CCC = 'CCC'
+	CREDIT = 'credit'
 
+class CreditType(Enum):
+	ZERO = '0'
+	QUARTER = '.25'
+	HALF = '.5'
+	FULL = '1'
 
-def fetch_course_html(payload_value, lookup_type):
+def fetch_course_html(credit_type):
 	"""
 	Helper function for retrieving course data from Bucknell servers.
 
@@ -33,10 +37,12 @@ def fetch_course_html(payload_value, lookup_type):
 	:return: Sections as raw HTML
 	"""
 
+	CREDIT_LOOKUP = 'CRD'
+
 	payload = {
 		'term': TERM,
-		'param1': payload_value,
-		'lookopt': lookup_type.value,
+		'param1': credit_type,
+		'lookopt': CREDIT_LOOKUP,
 		'openopt': 'ALL'
 	}
 
@@ -86,7 +92,7 @@ def fetch_section_details(crn, department):
 	return cache_time, details
 
 
-def extract_sections(html):
+def extract_table_rows(html):
 	"""
 	Helper function that creates a Beautiful Soup object from the course data and groups sections.
 
@@ -116,7 +122,7 @@ class Section(object):
 	Stores data for an individual section.
 	"""
 
-	def __init__(self, section, message=None):
+	def __init__(self, section, credits, message=None):
 		"""
 		Parses HTML for an individual section and stores extra sections (labs, etc) if it
 		is a main section.
@@ -129,23 +135,31 @@ class Section(object):
 		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
 		department, course_number, section_number = course_number_with_section.split(" ")
 
-        # TODO - fix issue with indexing the section. some values are off by one.
+		self.credits = credits
 		self.department = department # DEPT
 		self.course = course_number # 000X
 		self.sectionNum = section_number # 00
 		self.departmentAndCourse = department + " " + course_number # DEPT 000X
 		self.departmentAndBareCourse = bare_course_number # DEPT 000
 		self.departmentAndCourseAndSection = course_number_with_section # DEPT 000X 00
-		self.courseName = str(''.join(section[2].strings))
-		self.timesMet = str(''.join(section[3].strings))
-		self.roomMet = str(', '.join(section[4].strings))
-		self.professor = str('; '.join(section[5].strings))
-		self.freeSeats = str(''.join(section[6].strings).replace(u'\xa0', " "))
-		self.waitList = str(''.join(section[7].strings))
-		self.resSeats = str(''.join(section[8].strings))
-		self.prm = str(''.join(section[9].strings))
-		self.CCC = str(''.join(section[10].strings)).strip()
 		self.CRN = str(section[0].string)
+		self.courseName = str(''.join(section[2].strings))
+		self.timesMet = filter(lambda x: "TBA" not in x, list(section[3].strings))
+		self.roomMet = list(section[4].strings)
+		self.professor = list(section[5].strings)
+		self.freeSeats = str(''.join(section[6].strings).replace(u'\xa0', " "))
+
+		if str(''.join(section[10].strings)) == 'Desc': # Index 10 col is Course Desc
+			self.waitList = ""
+			self.resSeats = str(''.join(section[7].strings))
+			self.prm = str(''.join(section[8].strings))
+			self.CCC = str(''.join(section[9].strings)).strip().split()
+		else: # Index 10 col is CCC
+			self.waitList = str(''.join(section[7].strings))
+			self.resSeats = str(''.join(section[8].strings))
+			self.prm = str(''.join(section[9].strings))
+			self.CCC = str(''.join(section[10].strings)).strip().split()
+
 		self.message = str(''.join(message[0].strings).replace(u'\u2019', "")) if message is not None else None
 
 	def setup_main_section(self):
@@ -170,16 +184,15 @@ class Course:
 	Parses course data by dividing into sections and grouping sections together.
 	"""
 
-	def __init__(self, sections, set_to_main=False):
-		self.all_sections = sections
-		# sections is actually a single extra section if set_to_main
-		self.main_sections = {} if not set_to_main else {sections.CRN: sections}
+	def __init__(self, sections):
+		self.all_sections = sorted(sections, key=lambda x: x.sectionNum)
+		self.main_sections = {}
 		self.extra_sections = {}
 		self.extra_section_numbers = {}
+		self.departmentAndCourse = sections[0].departmentAndBareCourse if len(sections) > 0 else None
 
-		if not set_to_main:
-			self.divide_into_section_types()
-			self.link_extra_sections_to_main_sections()
+		self.divide_into_section_types()
+		self.link_extra_sections_to_main_sections()
 
 	def divide_into_section_types(self):
 		"""
@@ -276,128 +289,57 @@ class Course:
 		return sorted([self.main_sections[crn].export() for crn in self.main_sections] + flattened_extra_sections, key=lambda x:x["sectionNum"])
 
 
-class CreditOrCCC:
-	"""
-	Groups together static methods that are used to process CCC or credit requests.
-	"""
+def get_course_information():
 
-	@staticmethod
-	def process_ccc_or_credit_request(lookup_type, lookup_value):
-		"""
-		Fetches course data table in HTML, extracts sections, and generates list of courses.
+	all_sections_with_message = get_sections_with_message()
+	grouped_sections_by_course = group_sections_by_course(all_sections_with_message)
+	parsed_courses = map(Course, grouped_sections_by_course)
+	sorted_courses = sorted(parsed_courses, key=lambda x: x.departmentAndCourse)
+	formatted_results = [course.export() for course in sorted_courses]
+	flattened_sections = [item for sublist in formatted_results for item in sublist]
 
-		:param lookup_type: Type of data being requested (CCC requirement or credit level)
-		:param lookup_value: Value of data requested (W1, EGSS, half credit, etc.)
-		:return: List of parsed course data
-		"""
+	return flattened_sections
 
-		# return cached data, if it exists
-		cache_data = course_data_get(lookup_value)
+def get_sections_with_message():
+	department_message = re.compile("Department: .*")
 
-		if cache_data is not None:
-			return cache_data["set_time"], cache_data["data"]
+	# TODO - switch to grequests
 
-		# fetch the HTML
-		lookup_type_enum = LookupType[lookup_type.upper()]
-		html = fetch_course_html(lookup_value, lookup_type_enum)
+	all_sections_with_message = []
 
-		# extract section data from html
-		sections = extract_sections(html)
+	for credit_type in CreditType:
+		html = fetch_course_html(credit_type.value)
+		table_rows = extract_table_rows(html)
+		filtered_table_rows = filter(lambda x: len(re.findall(department_message, x.text)) == 0, table_rows)
+		all_sections_with_message += group_sections_with_message(filtered_table_rows, credit_type.value)
 
-		# ignore elements that don't contain course data
-		filtered_sections = filter(lambda x: len(x) > 5, sections)
+	return all_sections_with_message
 
-		# generate a list of dictionaries to organize data for each section
-		all_sections = map(CreditOrCCC.handle_ccc_or_credit_section, filtered_sections)
+def group_sections_with_message(table_rows, credits):
+	split_table_rows = map(lambda x: x.find_all('td'), table_rows)
+	sections_with_message = []
 
-		# store in cache and return data
-		cache_time = course_data_set(lookup_value, all_sections)
+	# group section with its message, if it has one
+	for index, split_table_row in enumerate(split_table_rows):
+		if len(split_table_row) > 1:
+			has_message = index < len(split_table_rows) - 1 and len(split_table_rows[index + 1]) == 1
+			message = split_table_rows[index + 1] if has_message else None
+			sections_with_message.append(Section(split_table_row, credits, message))
 
-		return cache_time, all_sections
-
-	@staticmethod
-	def handle_ccc_or_credit_section(section):
-		"""
-		Parse the data for an individual section by treating it like an entire course.
-
-		:param section: A Beautiful Soup object for one section
-		:return: A course object for that section
-		"""
-
-		# divide a row of section data into its individual columns
-		data = section.find_all("td")
-
-		section = Section(data)
-
-		return section.export()
+	# return sorted section list
+	return sections_with_message
 
 
-class Department:
-	"""
-	Groups together static methods that are used to process department requests.
-	"""
+def group_sections_by_course(sections_with_message):
+	grouped_sections = []
 
-	@staticmethod
-	def process_department_request(department_name):
-		"""
-		Fetches course data table in HTML, extracts sections, and generates list of courses.
+	sorted_sections_with_message = sorted(sections_with_message, key=lambda x: x.departmentAndBareCourse)
 
-		:param department_name: The department being requested (CSCI, ECON, etc)
-		:return: List of parsed course data
-		"""
+	# group sections by course
+	for key, group in groupby(sorted_sections_with_message, lambda x: x.departmentAndBareCourse):
+		grouped_sections.append(list(group))
 
-		# return cached data, if it exists
-		cache_data = course_data_get(department_name)
-
-		if cache_data is not None:
-			return cache_data["set_time"], cache_data["data"]
-
-		# fetch the HTML
-		html = fetch_course_html(department_name, LookupType.DEPARTMENT)
-
-		# extract sections from HTML
-		sections = extract_sections(html)
-
-		# ignore first row of section data if it is a department message
-		sections = sections[1:] if len(sections[0].find_all("td")) == 1 else sections
-
-		# divide a row of section data into its individual columns
-		section_split = map(lambda current_section: current_section.find_all("td"), sections)
-
-		# group sections by course
-		grouped_sections = Department.group_sections_by_course(section_split)
-
-		# parse courses to group sections with their labs, recitations, etc.
-		parsed_courses = map(Course, grouped_sections)
-
-		# create format that can be stored in cache or returned to user
-		formatted_results = [course.export() for course in parsed_courses]
-
-		# flatten results
-		flattened_results = [item for sublist in formatted_results for item in sublist]
-
-		cache_time = course_data_set(department_name, flattened_results)
-
-		return cache_time, flattened_results
-
-	@staticmethod
-	def group_sections_by_course(sections):
-		sections_with_message = []
-		grouped_sections = []
-
-		# group section with its message, if it has one
-		for index, section in enumerate(sections):
-			if len(section) == 1:
-				continue
-
-			message = sections[index + 1] if index < len(sections) - 1 and len(sections[index + 1]) == 1 else None
-			sections_with_message.append(Section(section, message))
-
-		# group sections by course
-		for key, group in groupby(sections_with_message, lambda x: x.departmentAndBareCourse):
-			grouped_sections.append(list(group))
-
-		return grouped_sections
+	return grouped_sections
 
 
 def find_course_in_department(parsed_data, department_name, course_number):
