@@ -1,8 +1,8 @@
-let React = require('react');
+import * as React from 'react'
 import {connect} from 'react-redux'
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from '../Constants'
-import CalendarSection from './CalendarSection.jsx'
+import CalendarSection from './CalendarSection'
 
 @connect(mapStateToProps)
 export default class Calendar extends React.Component {

@@ -1,4 +1,4 @@
-let React = require('react');
+import * as React from 'react'
 
 import {connect} from 'react-redux'
 import TimeAgo from 'react-timeago'
@@ -9,8 +9,8 @@ import {Tag} from '@blueprintjs/core'
 import {clickRemoveShowSingleCourse} from '../actions/sectionActions'
 import {SEARCH_ITEM_TYPE} from '../Constants'
 
-import SectionListCard from './SectionListCard.jsx'
-import FilterTime from './FilterTime.jsx'
+import SectionListCard from './SectionListCard'
+import FilterTime from './FilterTime'
 
 
 @connect(mapStateToProps, mapDispatchToProps)

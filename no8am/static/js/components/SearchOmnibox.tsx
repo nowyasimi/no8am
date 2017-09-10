@@ -1,6 +1,5 @@
-let React = require('react');
-
-let classNames = require('classnames');
+import * as React from 'react'
+import * as classNames from 'classnames'
 
 import {connect} from 'react-redux'
 

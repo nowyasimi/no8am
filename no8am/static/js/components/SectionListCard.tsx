@@ -1,4 +1,4 @@
-let React = require('react');
+import * as React from 'react'
 import {connect} from 'react-redux'
 import {Icon} from '@blueprintjs/core'
 import {Tooltip2} from '@blueprintjs/labs'

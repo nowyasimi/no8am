@@ -1,14 +1,18 @@
-let React = require('react');
+import * as React from 'react'
 
 import {connect} from 'react-redux'
 
 import {loadSections} from '../actions/sectionActions'
 
-import LeftSide from './LeftSide.jsx';
-import Calendar from './Calendar.jsx';
+import LeftSide from './LeftSide';
+import Calendar from './Calendar';
+
+interface MainProps {
+    onLoadSections: () => Promise<void>
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
-export class Main extends React.Component {
+export class Main extends React.Component<MainProps, undefined> {
 
     componentDidMount() {
         this.props.onLoadSections()

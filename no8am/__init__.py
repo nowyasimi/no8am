@@ -20,7 +20,7 @@ app.config.update(
 	CDN_DOMAIN="static.no8.am",
 	CDN_HTTPS=True,
 	CDN_TIMESTAMP=False,
-	BROWSERIFY_BIN='./node_modules/.bin/browserifyinc',
+	BROWSERIFY_BIN='./no8am/static/js/node_modules/.bin/browserify',
 	CLEANCSS_BIN='./node_modules/.bin/cleancss',
 	CLEANCSS_EXTRA_ARGS=['--skip-rebase'],
 	UGLIFYJS_BIN='./node_modules/.bin/uglifyjs',

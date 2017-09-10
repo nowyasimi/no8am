@@ -1,4 +1,4 @@
-let React = require('react');
+import * as React from 'react'
 import {connect} from 'react-redux'
 
 import {Button, Dialog, Icon} from '@blueprintjs/core'
@@ -7,7 +7,7 @@ import {} from "../actions/sectionActions"
 
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class SaveDialog extends React.Component {
+export default class OpenDialog extends React.Component {
 
     constructor() {
         super();
@@ -19,9 +19,9 @@ export default class SaveDialog extends React.Component {
 
     render() {
         return (<div>
-            <Button onClick={this.toggleDialog} iconName="floppy-disk" text="Review/Save" />
+            <Button onClick={this.toggleDialog} iconName="folder-open" text="Open" />
             <Dialog
-                iconName="floppy-disk"
+                iconName="folder-open"
                 isOpen={this.state.isOpen}
                 onClose={this.toggleDialog}
                 title="Dialog header"

@@ -1,21 +1,28 @@
-let React = require('react');
+import * as React from 'react'
 
 import {connect} from 'react-redux'
 
 import {Button, Menu, MenuItem, NonIdealState, Position, Popover, Spinner} from '@blueprintjs/core'
 
-import OpenDialog from './OpenDialog.jsx'
-import SaveDialog from './SaveDialog.jsx'
-import SearchOmnibox from './SearchOmnibox.jsx'
-import SectionList from './SectionList.jsx'
+import OpenDialog from './OpenDialog'
+import SaveDialog from './SaveDialog'
+import SearchOmnibox from './SearchOmnibox'
+import SectionList from './SectionList'
 
 
 import {openSearchOmnibox, clickDoneSelecting, clickAdvancedSectionSelection} from '../actions/sectionActions'
 import {DATA_LOADING_STATE} from '../Constants'
 
+interface LeftSideProps {
+    currentSearch: any,
+    isAdvanced: boolean,
+    onOpenSearchOmnibox: () => Promise<void>,
+    onClickDoneSelecting: () => Promise<void>,
+    onClickAdvancedSectionSelection: () => Promise<void>
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class LeftSide extends React.Component {
+export default class LeftSide extends React.Component<LeftSideProps, undefined>  {
 
     render() {
 
