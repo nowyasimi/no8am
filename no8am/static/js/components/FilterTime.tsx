@@ -73,7 +73,7 @@ export default class FilterTime extends React.Component {
 }
 
 const renderLabel = (value) => {
-    let hour = value + 8;
+    let hour = value/2 + 8;
     let amOrPmString = hour < 12 ? "am" : "pm";
     let hourString = hour > 12 ? hour - 12 : hour;
     return hourString + amOrPmString;

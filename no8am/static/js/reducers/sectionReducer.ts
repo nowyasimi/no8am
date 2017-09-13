@@ -3,7 +3,8 @@ import {DATA_LOADING_STATE, SEARCH_ITEM_TYPE} from '../Constants'
 export const defaultFilters = {
     filterTime: [0, 28],
     askShowSingleCourse: null,
-    showSingleCourse: null
+    showSingleCourse: null,
+    singleCourseOrigin: null
 };
 
 const initialState = {
@@ -60,7 +61,7 @@ export const sectionReducer = (state = initialState, action) => {
 
             switch (action.item.itemType) {
                 case SEARCH_ITEM_TYPE.Course:
-                    sections = state.sections.filter(section => section.departmentAndBareCourse == action.item.courseNum);
+                    sections = state.sections.filter(section => section.departmentAndBareCourse == action.item.abbreviation);
                     break;
 
                 case SEARCH_ITEM_TYPE.Department:
@@ -82,7 +83,8 @@ export const sectionReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                showSingleCourse: action.isFromCategorySearch ? action.item.courseNum : null,
+                showSingleCourse: action.isFromCategorySearch ? action.item.abbreviation : null,
+                singleCourseOrigin: action.isFromCategorySearch ? state.currentSearch.item.abbreviation : null,
                 isFromCategorySearch: action.isFromCategorySearch,
                 searchHistory: state.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION ? state.searchHistory :
                     [state.currentSearch, ...state.searchHistory],
@@ -117,9 +119,10 @@ export const sectionReducer = (state = initialState, action) => {
                 sectionListHoverSection: null
             };
         case 'CLICK_SECTION_LIST_CARD':
-            let filteredSections = state.selectedSections.filter(section => section.CRN != action.section.CRN);
+            let filteredSections = state.selectedSections.filter(section => 
+                section.departmentAndCourse != action.section.departmentAndCourse);
 
-            let isReset = filteredSections.length != state.selectedSections.length;
+            let isReset = state.selectedSections.length != state.selectedSections.filter(section => section.CRN != action.section.CRN).length;
 
             let shouldAskShowSingleCourse = state.currentSearch.item.itemType == SEARCH_ITEM_TYPE.Department &&
                 !isReset && state.showSingleCourse == null;
@@ -136,6 +139,7 @@ export const sectionReducer = (state = initialState, action) => {
             return {
                 ...state,
                 showSingleCourse: action.departmentAndBareCourse,
+                singleCourseOrigin: state.currentSearch.item.abbreviation,
                 askShowSingleCourse: null
             };
         case 'UPDATE_FILTER_TIME':
@@ -147,6 +151,7 @@ export const sectionReducer = (state = initialState, action) => {
             return {
                 ...state,
                 showSingleCourse: null,
+                singleCourseOrigin: null,
                 isFromCategorySearch: false,
                 searchHistory: state.isFromCategorySearch ? state.searchHistory.splice(1, ) : state.searchHistory,
                 currentSearch: state.isFromCategorySearch ? state.searchHistory[0] : state.currentSearch

@@ -1,7 +1,18 @@
 import {SECTION_DETAILS_URL, CCC_LOOKUP_URL, COURSE_LOOKUP_URL, CREDIT_LOOKUP_URL, SEARCH_ITEM_TYPE} from '../Constants'
 
+interface IMetadataUnparsed {
+    abbreviation: string,
+    name: string,
+    info?: string
+}
 
-export const receiveMetadata = (metadata) => {
+export interface IMetadata extends IMetadataUnparsed {
+    userFriendlyFormat: string,
+    token: string,
+    itemType: any
+}
+
+export const receiveMetadata = (metadata: IMetadata[]) => {
     return {
         type: 'RECEIVE_METADATA',
         metadata
@@ -19,12 +30,12 @@ export const loadMetadata = () => {
         return fetch(METADATA_URL)
             .then(response => response.json())
             .then(rawMetadata => {
-                let metadataList = [];
+                let metadataList: IMetadata[] = [];
 
                 for (const type of SEARCH_ITEM_TYPE.enumValues) {
                     if (type != SEARCH_ITEM_TYPE.HEADER) {
-                        metadataList = metadataList.concat(rawMetadata[type.name.toLowerCase()].map(x => {
-                            let userFriendlyFormat = type == SEARCH_ITEM_TYPE.Course ? `${x.courseNum} - ${x.courseName}` : `${x.abbreviation} - ${x.name}`;
+                        metadataList = metadataList.concat(rawMetadata[type.name.toLowerCase()].map((x: IMetadataUnparsed) => {
+                            let userFriendlyFormat = `${x.abbreviation} - ${x.name}`;
                             return {
                                 ...x,
                                 itemType: type,
@@ -99,46 +110,11 @@ export const receiveItem = (item, data) => {
 };
 
 export const searchItem = (item, isFromCategorySearch = false) => {
-
     return {
         type: 'SEARCH_ITEM',
         item,
         isFromCategorySearch
     };
-
-    // return (dispatch) => {
-    //     let url = null;
-    //
-    //     switch (item.itemType) {
-    //         case SEARCH_ITEM_TYPE.Course:
-    //             let splitCourseNum = item.courseNum.split(' ');
-    //             url = `${COURSE_LOOKUP_URL}${splitCourseNum[0]}/${splitCourseNum[1]}`;
-    //             break;
-    //
-    //         case SEARCH_ITEM_TYPE.Department:
-    //             url = `${COURSE_LOOKUP_URL}${item.abbreviation}`;
-    //             break;
-    //
-    //         case SEARCH_ITEM_TYPE.CCC:
-    //             url = `${CCC_LOOKUP_URL}${item.abbreviation}`;
-    //             break;
-    //
-    //         case SEARCH_ITEM_TYPE.Credit:
-    //             url = `${CREDIT_LOOKUP_URL}${item.abbreviation}`;
-    //             break;
-    //
-    //         default:
-    //             return null;
-    //     }
-    //
-    //     dispatch(requestItem(item, isFromCategorySearch));
-    //
-    //     return fetch(url)
-    //         .then(response => response.json())
-    //         .then(rawData => ({...rawData, sections: initializeSections(rawData.sections)}))
-    //         .then(data => dispatch(receiveItem(item, data)))
-    //         .catch(dispatch(errorReceivingCourse(item)));
-    // };
 };
 
 export const mouseEnterSectionListCard = (section) => {
@@ -162,10 +138,10 @@ export const clickSectionListCard = (section) => {
         });
 
         if (section.isFromCategorySearch) {
-            let item = {
+            let item: IMetadata = {
                 itemType: SEARCH_ITEM_TYPE.Course,
-                courseNum: section.departmentAndBareCourse,
-                courseName: section.courseName,
+                abbreviation: section.departmentAndBareCourse,
+                name: section.courseName,
                 userFriendlyFormat: `${section.departmentAndBareCourse} - ${section.courseName}`,
                 token: null
             };

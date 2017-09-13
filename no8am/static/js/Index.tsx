@@ -1,8 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-import Perf from 'react-addons-perf'; // ES6
-
+import Perf from 'react-addons-perf'
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { Provider } from 'react-redux'
@@ -12,7 +11,7 @@ import { sectionReducer } from "./reducers/sectionReducer"
 
 import { Main } from './components/Main';
 
-global.Perf = Perf; 
+global.Perf = Perf
 
 const store = createStore(
     sectionReducer,

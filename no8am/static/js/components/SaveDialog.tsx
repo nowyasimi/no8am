@@ -18,24 +18,25 @@ export default class SaveDialog extends React.Component {
     }
 
     render() {
-        return (<div>
-            <Button onClick={this.toggleDialog} iconName="floppy-disk" text="Review/Save" />
-            <Dialog
-                iconName="floppy-disk"
-                isOpen={this.state.isOpen}
-                onClose={this.toggleDialog}
-                title="Dialog header"
-            >
-                <div className="pt-dialog-body">
-                    Some content
-                </div>
-                <div className="pt-dialog-footer">
-                    <div className="pt-dialog-footer-actions">
-                        <Button text="Secondary" />
+        return (
+            <Button onClick={this.toggleDialog} iconName="floppy-disk" text="Review/Save">
+                <Dialog
+                    iconName="floppy-disk"
+                    isOpen={this.state.isOpen}
+                    onClose={this.toggleDialog}
+                    title="Dialog header"
+                >
+                    <div className="pt-dialog-body">
+                        Some content
                     </div>
-                </div>
-            </Dialog>
-        </div>);
+                    <div className="pt-dialog-footer">
+                        <div className="pt-dialog-footer-actions">
+                            <Button text="Secondary" />
+                        </div>
+                    </div>
+                </Dialog>
+            </Button>
+        );
     }
 
     toggleDialog = () => this.setState({ isOpen: !this.state.isOpen });

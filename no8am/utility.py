@@ -14,6 +14,7 @@ COURSE_DESCRIPTION_FILENAME = "bucknellCourseDescriptions.json"
 
 DEPARTMENTS = None
 
+# TODO - update utility to use new scraper
 
 def get_bucknell_format_semester():
 	"""
@@ -107,8 +108,8 @@ def parseAndCurate():
 					realInfo = x.strip().replace("\n", " ")
 					break
 			final.append({
-				'courseNum': courseNum,
-				'courseName': courseName,
+				'abbreviation': courseNum,
+				'name': courseName,
 				'info': realInfo
 			})
 

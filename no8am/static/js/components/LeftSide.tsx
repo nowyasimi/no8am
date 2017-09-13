@@ -58,6 +58,7 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
                 break;
             case DATA_LOADING_STATE.LOADED:
                 mainContent = <SectionList {...this.props.currentSearch} />;
+                break;
         }
 
         let isNoCurrentSearch = this.props.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION;

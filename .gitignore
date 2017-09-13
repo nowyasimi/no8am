@@ -7,8 +7,7 @@ browserify-cache.json
 app.js
 prod-app.js
 min_css
-no8am/static/js/*.js
-*.js.map
+no8am/static/js/**/*.js*
 
 ### macOS ###
 *.DS_Store

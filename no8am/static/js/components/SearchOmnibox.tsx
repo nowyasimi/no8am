@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import {MenuItem, Hotkey, Hotkeys, HotkeysTarget, Classes} from '@blueprintjs/core'
 import {Omnibox} from '@blueprintjs/labs'
 
-import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleSearchOmnibox} from '../actions/sectionActions'
+import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleSearchOmnibox, IMetadata} from '../actions/sectionActions'
 import {SEARCH_ITEM_TYPE} from '../Constants'
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -118,20 +118,20 @@ export default class SearchOmnibox extends React.Component {
 
 }
 
-const courseSort = (query) => (a, b) => {
+const courseSort = (query) => (a: IMetadata, b: IMetadata) => {
     //get input text
     let InputString = query;
 
     let inputLen = InputString.length;
 
     // get shortened courseNum, look at first len(InputString) letters
-    let shortA = a.courseNum.substring(0,inputLen).toLowerCase();
-    let shortB = b.courseNum.substring(0,inputLen).toLowerCase();
+    let shortA = a.abbreviation.substring(0,inputLen).toLowerCase();
+    let shortB = b.abbreviation.substring(0,inputLen).toLowerCase();
 
     // case 1: a and b are in same dept:
     // compare the letter ordering (eg MATH 120 vs MATH 200)
     if (InputString === shortA && InputString === shortB) {
-        return a.courseNum.localeCompare(b.courseNum);
+        return a.abbreviation.localeCompare(b.abbreviation);
     }
     // case 2: a is in dept, b isn't:
     else if (InputString === shortA && InputString !== shortB) {
@@ -144,7 +144,7 @@ const courseSort = (query) => (a, b) => {
     // case 3: neither are in depts
     // compare the letter ordering (eg CSCI 200 vs ENGR 340)
     else {
-        return a.courseNum.localeCompare(b.courseNum);
+        return a.abbreviation.localeCompare(b.abbreviation);
     }
 };
 

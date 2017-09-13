@@ -103,11 +103,6 @@ body,html{height: 100%;}
 	margin-bottom: 5px;
 }
 
-#filters .pt-button-group {
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-
 .nonIdealState {
     padding-top: 50px;
     height: auto;
@@ -119,6 +114,10 @@ body,html{height: 100%;}
 
 .nonIdealState .pt-non-ideal-state-description {
     font-size: 16px;
+}
+
+.filters {
+	margin-bottom: 20px;
 }
 
 .filterTimeButton {
@@ -135,10 +134,6 @@ body,html{height: 100%;}
     overflow-y: auto;
     height: 85%;
     padding: 3px;
-}
-
-.sectionList .pt-popover-target {
-    width: 100%;
 }
 
 .sectionCard {
