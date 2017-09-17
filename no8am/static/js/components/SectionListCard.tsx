@@ -4,10 +4,10 @@ import {Icon} from '@blueprintjs/core'
 import {Tooltip2} from '@blueprintjs/labs'
 import Transition from 'react-transition-group/Transition'
 
-import {clickShowSingleCourse} from '../actions/sectionActions'
-import {mouseEnterSectionListCard, mouseLeaveSectionListCard, clickSectionListCard} from "../actions/sectionActions"
+import {mouseEnterSectionListCard, mouseLeaveSectionListCard, clickSectionListCard, clickShowSingleCourse} from "../actions/sectionActions"
+import {ISection} from '../Interfaces'
 
-const duration = 300;
+const duration: number = 300;
 
 const defaultStyle = {
     transition: `max-height ${duration}ms ease-in-out, opacity ${duration}ms ease-in-out`,
@@ -20,9 +20,17 @@ const transitionStyles = {
     entered:  { maxHeight: '100px', opacity: 1 },
 };
 
+interface SectionListCardProps extends ISection {
+    isSelected: boolean
+    isUnavailable: boolean
+    isVisible: boolean
+    shouldAskShowSingleCourse: boolean
+    isLastOfType: boolean
+    isFromCategorySearch: boolean
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class SectionListCard extends React.Component {
+export default class SectionListCard extends React.Component<SectionListCardProps, undefined> {
     render() {
 
         // identify if section is selected and violates selection rules based on other selections
@@ -34,7 +42,7 @@ export default class SectionListCard extends React.Component {
 
         let classes = `${this.props.isSelected ? 'selectedSection' : ''} ${this.props.isUnavailable ? 'unavailableSection' : ''} ${isViolation ? 'violationSection' : ''} `;
 
-        let showSingleCourse = this.props.shouldAskShowSingleCourse ? <a onClick={this.props.onClickShowSingleCourse} className="askShowSingleCourse">{`Only show sections for ${this.props.departmentAndBareCourse}?`}</a> : '';
+        let showSingleCourse = this.props.shouldAskShowSingleCourse ? <a onClick={this.props.onClickShowSingleCourse} className="askShowSingleCourse">{`Only show sections for ${this.props.departmentAndBareCourse}?`}</a> : null;
 
         let sectionListCard = (
             <Transition
@@ -57,13 +65,13 @@ export default class SectionListCard extends React.Component {
                                     {this.props.departmentAndCourseAndSection}
                                 </li>
                                 <li className="sectionCardItem">
-                                    {this.props.timesMet}
+                                    {this.props.timesMet.join(', ')}
                                 </li>
                                 <li className="sectionCardItem">
-                                    {this.props.roomMet}
+                                    {this.props.roomMet.join(', ')}
                                 </li>
                                 <li className="sectionCardItem">
-                                    {this.props.professor}
+                                    {this.props.professor.join(' ')}
                                 </li>
                                 <li className="sectionCardItem"
                                     style={{width: '10%'}}>
@@ -81,10 +89,11 @@ export default class SectionListCard extends React.Component {
         );
 
         return this.props.isAdvanced ? (<Tooltip2
+                className={this.props.isVisible ? "sectionListCardTooltip" : ""}
                 content={<span>{unavailableMessage}</span>}
                 isOpen={this.props.sectionListHoverSection != undefined &&
                         this.props.sectionListHoverSection.CRN == this.props.CRN &&
-                        this.props.isUnavailable != undefined}
+                        this.props.isUnavailable}
                 openOnTargetFocus={false}
                 placement="right">
                 {sectionListCard}
@@ -102,7 +111,7 @@ function mapStateToProps(state) {
 }
 
 // Map Redux actions to component props
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch, props: SectionListCardProps) {
     return {
         onMouseEnterSectionListCard: () => dispatch(mouseEnterSectionListCard(props)),
         onMouseLeaveSectionListCard: () => dispatch(mouseLeaveSectionListCard()),

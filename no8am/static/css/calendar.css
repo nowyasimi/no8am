@@ -131,9 +131,11 @@ body,html{height: 100%;}
 }
 
 .sectionList {
-    overflow-y: auto;
-    height: 85%;
     padding: 3px;
+}
+
+.sectionListCardTooltip{
+    width: 100%
 }
 
 .sectionCard {
@@ -379,6 +381,8 @@ body,html{height: 100%;}
 }
 /**************************** Calendar ****************************/
 #calendar-col {
+    position: fixed;
+    left: 50%;
     height:100%;
     padding-top:1%;
 }

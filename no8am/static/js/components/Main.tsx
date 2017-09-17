@@ -8,7 +8,7 @@ import LeftSide from './LeftSide';
 import Calendar from './Calendar';
 
 interface MainProps {
-    onLoadSections: () => Promise<void>
+    onLoadSections?: () => Promise<void>
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -21,8 +21,8 @@ export class Main extends React.Component<MainProps, undefined> {
     render() {
         return (
             <div>
-                <LeftSide {...this.props} />
-                <Calendar {...this.props} />
+                <LeftSide />
+                <Calendar />
             </div>
         );
     }

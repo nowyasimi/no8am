@@ -1,16 +1,5 @@
 import {SECTION_DETAILS_URL, CCC_LOOKUP_URL, COURSE_LOOKUP_URL, CREDIT_LOOKUP_URL, SEARCH_ITEM_TYPE} from '../Constants'
-
-interface IMetadataUnparsed {
-    abbreviation: string,
-    name: string,
-    info?: string
-}
-
-export interface IMetadata extends IMetadataUnparsed {
-    userFriendlyFormat: string,
-    token: string,
-    itemType: any
-}
+import {IMetadata, IMetadataUnparsed, ISection, ISectionUnparsed} from '../Interfaces'
 
 export const receiveMetadata = (metadata: IMetadata[]) => {
     return {
@@ -71,7 +60,7 @@ export const loadSections = () => {
         return fetch(SECTIONS_URL)
             .then(response => response.json())
             .then(jsonResponse => initializeSections(jsonResponse.sections))
-            .then(sections => dispatch(receiveSections(sections)))
+            .then((sections: ISection[]) => dispatch(receiveSections(sections)))
             .catch(dispatch(errorReceivingSections()));
     }
 };
@@ -297,7 +286,7 @@ export const fetchNewCourse = (department, course) => {
 };
 
 
-const initializeSections = (sections) => {
+const initializeSections = (sections: ISectionUnparsed[]) => {
     return sections.map(section => ({
         ...section,
         daysMet: parseTimesMet(restructureHours(section.timesMet))

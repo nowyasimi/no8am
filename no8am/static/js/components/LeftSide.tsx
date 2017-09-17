@@ -9,16 +9,14 @@ import SaveDialog from './SaveDialog'
 import SearchOmnibox from './SearchOmnibox'
 import SectionList from './SectionList'
 
-
 import {openSearchOmnibox, clickDoneSelecting, clickAdvancedSectionSelection} from '../actions/sectionActions'
 import {DATA_LOADING_STATE} from '../Constants'
 
 interface LeftSideProps {
-    currentSearch: any,
-    isAdvanced: boolean,
-    onOpenSearchOmnibox: () => Promise<void>,
-    onClickDoneSelecting: () => Promise<void>,
-    onClickAdvancedSectionSelection: () => Promise<void>
+    currentSearch?: any,
+    onOpenSearchOmnibox?: () => Promise<void>,
+    onClickDoneSelecting?: () => Promise<void>,
+    onClickAdvancedSectionSelection?: () => Promise<void>
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -71,32 +69,6 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
                     <OpenDialog />
                     <SaveDialog />
                     <Button iconName="search" text="Search" onClick={this.props.onOpenSearchOmnibox} />
-                    <Popover content={<Menu>
-                                        <MenuItem
-                                            iconName={this.props.isAdvanced ? "pt-icon-tick" : "pt-icon-disable"}
-                                            text="Advanced section selection"
-                                            onClick={this.props.onClickAdvancedSectionSelection}
-                                        />
-                                        <MenuItem
-                                            iconName="pt-icon-confirm"
-                                            text="Done selecting sections"
-                                            onClick={this.props.onClickDoneSelecting}
-                                            disabled={isNoCurrentSearch}
-                                        />
-                                        <MenuItem
-                                            iconName="pt-icon-remove"
-                                            text="Remove current selections"
-                                            disabled={isNoCurrentSearch}
-                                        />
-                                        <MenuItem
-                                            iconName="pt-icon-delete"
-                                            text="Remove all selections"
-                                            disabled={isNoCurrentSearch}
-                                        />
-                                     </Menu>}
-                             position={Position.BOTTOM}>
-                        <Button iconName="cog" text="Course Options" rightIconName="caret-down" />
-                    </Popover>
                 </div>
 
                 {mainContent}
@@ -108,8 +80,7 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
 
 function mapStateToProps(state) {
     return {
-        currentSearch: state.currentSearch,
-        isAdvanced: state.isAdvanced
+        currentSearch: state.currentSearch
     }
 }
 

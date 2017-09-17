@@ -7,9 +7,13 @@ import {Button, Menu, MenuItem, Popover, Position, RangeSlider} from '@blueprint
 import {updateFilterTime} from '../actions/sectionActions'
 import {defaultFilters} from '../reducers/sectionReducer'
 
+interface FilterTimeProps {
+    filterTime: any
+    onUpdateFilterTime?: (any) => Promise<void>
+}
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class FilterTime extends React.Component {
+@(connect(mapStateToProps, mapDispatchToProps) as any)
+export default class FilterTime extends React.Component<FilterTimeProps, undefined> {
 
     render() {
        return (

@@ -4,10 +4,19 @@ import { connect } from 'react-redux'
 
 import {colorDict} from '../Constants'
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTableButton} from '../actions/sectionActions.js'
+import {ISection} from '../Interfaces'
 
+interface CalendarSectionProps extends ISection {
+    isSelected: boolean
+    day: string
+    hoverCRN: string
+    onMouseEnterCalendar: () => Promise<void>
+    onMouseLeaveCalendar: () => Promise<void>
+    onClickViewCourseTable: () => Promise<void>
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class CalendarSection extends React.Component {
+export default class CalendarSection extends React.Component<CalendarSectionProps, undefined> {
 
     render() {
 

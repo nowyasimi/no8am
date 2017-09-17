@@ -6,7 +6,8 @@ import {connect} from 'react-redux'
 import {MenuItem, Hotkey, Hotkeys, HotkeysTarget, Classes} from '@blueprintjs/core'
 import {Omnibox} from '@blueprintjs/labs'
 
-import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleSearchOmnibox, IMetadata} from '../actions/sectionActions'
+import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleSearchOmnibox} from '../actions/sectionActions'
+import {IMetadata} from '../Interfaces'
 import {SEARCH_ITEM_TYPE} from '../Constants'
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -101,7 +102,7 @@ export default class SearchOmnibox extends React.Component {
             default:
                 return <MenuItem
                     className={classes}
-                    key={item.token} text={item.userFriendlyFormat}
+                    key={`${item.itemType}${item.token}`} text={item.userFriendlyFormat}
                     label={item.info}
                     onClick={handleClick}
                 />;

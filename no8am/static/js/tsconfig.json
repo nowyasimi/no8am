@@ -3,11 +3,16 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
+    "lib": [
+      "dom",
+      "es6",
+      "dom.iterable",
+      "scripthost",
+      "es7"
+    ],    
     "jsx": "react",
-    "allowJs": true,
     "experimentalDecorators": true,
-    "watch": true,
-    "preserveConstEnums": true
+    "watch": true
   },
   "exclude": [
     "./node_modules"
