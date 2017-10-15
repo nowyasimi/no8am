@@ -11,7 +11,7 @@ interface MainProps {
     onLoadSections?: () => Promise<void>
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
+@(connect(mapStateToProps, mapDispatchToProps) as any)
 export class Main extends React.Component<MainProps, undefined> {
 
     componentDidMount() {

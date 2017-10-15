@@ -1,16 +1,41 @@
 import {SECTION_DETAILS_URL, CCC_LOOKUP_URL, COURSE_LOOKUP_URL, CREDIT_LOOKUP_URL, SEARCH_ITEM_TYPE} from '../Constants'
 import {IMetadata, IMetadataUnparsed, ISection, ISectionUnparsed} from '../Interfaces'
 
+export enum ActionType {
+    RECEIVE_METADATA = "RECEIVE_METADATA",
+    ERROR_RECEIVING_METADATA = "ERROR_RECEIVING_METADATA",
+    RECEIVE_SECTIONS = "RECEIVE_SECTIONS",
+    ERROR_RECEIVING_SECTIONS = "ERROR_RECEIVING_SECTIONS",
+    TOGGLE_SEARCH_OMNIBOX = "TOGGLE_SEARCH_OMNIBOX",
+    CLOSE_SEARCH_OMNIBOX = "CLOSE_SEARCH_OMNIBOX",
+    OPEN_SEARCH_OMNIBOX = "OPEN_SEARCH_OMNIBOX",
+    REQUEST_ITEM = "REQUEST_ITEM",
+    RECEIVE_ITEM = "RECEIVE_ITEM",
+    SEARCH_ITEM = "SEARCH_ITEM",
+    MOUSE_ENTER_SECTION_LIST_CARD = "MOUSE_ENTER_SECTION_LIST_CARD",
+    MOUSE_LEAVE_SECTION_LIST_CARD = "MOUSE_LEAVE_SECTION_LIST_CARD",
+    CLICK_SECTION_LIST_CARD = "CLICK_SECTION_LIST_CARD",
+    CLICK_SHOW_SINGLE_COURSE = "CLICK_SHOW_SINGLE_COURSE",
+    UPDATE_FILTER_TIME = "UPDATE_FILTER_TIME",
+    CLICK_REMOVE_SHOW_SINGLE_COURSE = "CLICK_REMOVE_SHOW_SINGLE_COURSE",
+    CLICK_ADVANCED_SECTION_SELECTION = "CLICK_ADVANCED_SECTION_SELECTION",
+    CLICK_DONE_SELECTING = "CLICK_DONE_SELECTING",
+    MOUSE_ENTER_CALENDAR_SECTION = "MOUSE_ENTER_CALENDAR_SECTION",
+    MOUSE_LEAVE_CALENDAR_SECTION = "MOUSE_LEAVE_CALENDAR_SECTION",
+    MOUSE_ENTER_COURSE_TABLE_SECTION = "MOUSE_ENTER_COURSE_TABLE_SECTION",
+    MOUSE_LEAVE_COURSE_TABLE_SECTION = "MOUSE_LEAVE_COURSE_TABLE_SECTION"
+};
+
 export const receiveMetadata = (metadata: IMetadata[]) => {
     return {
-        type: 'RECEIVE_METADATA',
+        type: ActionType.RECEIVE_METADATA,
         metadata
     }
 };
 
 export const errorReceivingMetadata = () => {
     return {
-        type: 'ERROR_RECEIVING_METADATA'
+        type: ActionType.ERROR_RECEIVING_METADATA
     }
 };
 
@@ -44,14 +69,14 @@ export const loadMetadata = () => {
 
 export const receiveSections = (sections) => {
     return {
-        type: 'RECEIVE_SECTIONS',
+        type: ActionType.RECEIVE_SECTIONS,
         sections
     }
 };
 
 export const errorReceivingSections = () => {
     return {
-        type: 'ERROR_RECEIVING_SECTIONS'
+        type: ActionType.ERROR_RECEIVING_SECTIONS
     }
 };
 
@@ -67,32 +92,32 @@ export const loadSections = () => {
 
 export const toggleSearchOmnibox = () => {
     return {
-        type: 'TOGGLE_SEARCH_OMNIBOX'
+        type: ActionType.TOGGLE_SEARCH_OMNIBOX
     }
 };
 
 export const closeSearchOmnibox = () => {
     return {
-        type: 'CLOSE_SEARCH_OMNIBOX'
+        type: ActionType.CLOSE_SEARCH_OMNIBOX
     }
 };
 
 export const openSearchOmnibox = () => {
     return {
-        type: 'OPEN_SEARCH_OMNIBOX'
+        type: ActionType.OPEN_SEARCH_OMNIBOX
     }
 };
 
 export const requestItem = (item) => {
     return {
-        type: 'REQUEST_ITEM',
+        type: ActionType.REQUEST_ITEM,
         item
     }
 };
 
 export const receiveItem = (item, data) => {
     return {
-        type: 'RECEIVE_ITEM',
+        type: ActionType.RECEIVE_ITEM,
         item,
         data
     }
@@ -100,7 +125,7 @@ export const receiveItem = (item, data) => {
 
 export const searchItem = (item, isFromCategorySearch = false) => {
     return {
-        type: 'SEARCH_ITEM',
+        type: ActionType.SEARCH_ITEM,
         item,
         isFromCategorySearch
     };
@@ -108,21 +133,21 @@ export const searchItem = (item, isFromCategorySearch = false) => {
 
 export const mouseEnterSectionListCard = (section) => {
     return {
-        type: 'MOUSE_ENTER_SECTION_LIST_CARD',
+        type: ActionType.MOUSE_ENTER_SECTION_LIST_CARD,
         section
     }
 };
 
 export const mouseLeaveSectionListCard = () => {
     return {
-        type: 'MOUSE_LEAVE_SECTION_LIST_CARD'
+        type: ActionType.MOUSE_LEAVE_SECTION_LIST_CARD
     }
 };
 
-export const clickSectionListCard = (section) => {
+export const clickSectionListCard = (section: ISection) => {
     return (dispatch) => {
         dispatch({
-            type: 'CLICK_SECTION_LIST_CARD',
+            type: ActionType.CLICK_SECTION_LIST_CARD,
             section
         });
 
@@ -142,46 +167,46 @@ export const clickSectionListCard = (section) => {
 
 export const clickShowSingleCourse = (section) => {
     return {
-        type: 'CLICK_SHOW_SINGLE_COURSE',
+        type: ActionType.CLICK_SHOW_SINGLE_COURSE,
         departmentAndBareCourse: section.departmentAndBareCourse
     };
 };
 
 export const updateFilterTime = (filterTime) => {
     return {
-        type: 'UPDATE_FILTER_TIME',
+        type: ActionType.UPDATE_FILTER_TIME,
         filterTime
     }
 };
 
 export const clickRemoveShowSingleCourse = () => {
     return {
-        type: 'CLICK_REMOVE_SHOW_SINGLE_COURSE'
+        type: ActionType.CLICK_REMOVE_SHOW_SINGLE_COURSE
     }
 };
 
 export const clickAdvancedSectionSelection = () => {
     return {
-        type: 'CLICK_ADVANCED_SECTION_SELECTION'
+        type: ActionType.CLICK_ADVANCED_SECTION_SELECTION
     }
 };
 
 export const clickDoneSelecting = () => {
     return {
-        type: 'CLICK_DONE_SELECTING'
+        type: ActionType.CLICK_DONE_SELECTING
     }
 };
 
 export const mouseEnterCalendarSection = (crn) => {
     return {
-        type: 'MOUSE_ENTER_CALENDAR_SECTION',
+        type: ActionType.MOUSE_ENTER_CALENDAR_SECTION,
         crn
     }
 };
 
 export const mouseLeaveCalendarSection = () => {
     return {
-        type: 'MOUSE_LEAVE_CALENDAR_SECTION'
+        type: ActionType.MOUSE_LEAVE_CALENDAR_SECTION
     };
 };
 

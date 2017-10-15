@@ -8,8 +8,8 @@ import {updateFilterTime} from '../actions/sectionActions'
 import {defaultFilters} from '../reducers/sectionReducer'
 
 interface FilterTimeProps {
-    filterTime: any
-    onUpdateFilterTime?: (any) => Promise<void>
+    filterTime: [number, number]
+    onUpdateFilterTime?: (filterTime) => Promise<void>
 }
 
 @(connect(mapStateToProps, mapDispatchToProps) as any)

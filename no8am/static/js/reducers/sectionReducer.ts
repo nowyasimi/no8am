@@ -1,4 +1,5 @@
 import {DATA_LOADING_STATE, SEARCH_ITEM_TYPE} from '../Constants'
+import {ActionType} from '../actions/sectionActions'
 
 export const defaultFilters = {
     filterTime: [0, 28],
@@ -8,8 +9,6 @@ export const defaultFilters = {
 };
 
 const initialState = {
-    courses:[],
-    courseCounter: 1,
     isSearchOmniboxOpen: false,
     searchHistory: [],
     currentSearch: {
@@ -30,33 +29,33 @@ const initialState = {
 
 export const sectionReducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'RECEIVE_METADATA':
+        case ActionType.RECEIVE_METADATA:
             return {
                 ...state,
                 metadata: action.metadata
             };
-        case 'RECEIVE_SECTIONS':
+        case ActionType.RECEIVE_SECTIONS:
             return {
                 ...state,
                 sectionLoading: false,
                 sections: action.sections
             };
-        case 'TOGGLE_SEARCH_OMNIBOX':
+        case ActionType.TOGGLE_SEARCH_OMNIBOX:
             return {
                 ...state,
                 isSearchOmniboxOpen: !state.isSearchOmniboxOpen
             };
-        case 'CLOSE_SEARCH_OMNIBOX':
+        case ActionType.CLOSE_SEARCH_OMNIBOX:
             return {
                 ...state,
                 isSearchOmniboxOpen: false
             };
-        case 'OPEN_SEARCH_OMNIBOX':
+        case ActionType.OPEN_SEARCH_OMNIBOX:
             return {
                 ...state,
                 isSearchOmniboxOpen: true
             };
-        case 'SEARCH_ITEM':
+        case ActionType.SEARCH_ITEM:
             let sections;
 
             switch (action.item.itemType) {
@@ -94,12 +93,12 @@ export const sectionReducer = (state = initialState, action) => {
                     data: sections
                 }
             };
-        case 'CLICK_ADVANCED_SECTION_SELECTION':
+        case ActionType.CLICK_ADVANCED_SECTION_SELECTION:
             return {
                 ...state,
                 isAdvanced: !state.isAdvanced
             };
-        case 'CLICK_DONE_SELECTING':
+        case ActionType.CLICK_DONE_SELECTING:
             return {
                 ...state,
                 currentSearch: {
@@ -108,17 +107,17 @@ export const sectionReducer = (state = initialState, action) => {
                 },
                 ...defaultFilters
             };
-        case 'MOUSE_ENTER_SECTION_LIST_CARD':
+        case ActionType.MOUSE_ENTER_SECTION_LIST_CARD:
             return {
                 ...state,
                 sectionListHoverSection: action.section
             };
-        case 'MOUSE_LEAVE_SECTION_LIST_CARD':
+        case ActionType.MOUSE_LEAVE_SECTION_LIST_CARD:
             return {
                 ...state,
                 sectionListHoverSection: null
             };
-        case 'CLICK_SECTION_LIST_CARD':
+        case ActionType.CLICK_SECTION_LIST_CARD:
             let filteredSections = state.selectedSections.filter(section => 
                 section.departmentAndCourse != action.section.departmentAndCourse);
 
@@ -131,23 +130,23 @@ export const sectionReducer = (state = initialState, action) => {
                 ...state,
                 selectedSections: isReset ? filteredSections : [
                     ...filteredSections,
-                    action.section
+                    [action.section.departmentAndBareCourse, action.section.CRN]
                 ],
                 askShowSingleCourse: shouldAskShowSingleCourse ? action.section.departmentAndCourse : null
             };
-        case 'CLICK_SHOW_SINGLE_COURSE':
+        case ActionType.CLICK_SHOW_SINGLE_COURSE:
             return {
                 ...state,
                 showSingleCourse: action.departmentAndBareCourse,
                 singleCourseOrigin: state.currentSearch.item.abbreviation,
                 askShowSingleCourse: null
             };
-        case 'UPDATE_FILTER_TIME':
+        case ActionType.UPDATE_FILTER_TIME:
             return {
                 ...state,
                 filterTime: action.filterTime
             };
-        case 'CLICK_REMOVE_SHOW_SINGLE_COURSE':
+        case ActionType.CLICK_REMOVE_SHOW_SINGLE_COURSE:
             return {
                 ...state,
                 showSingleCourse: null,
@@ -156,60 +155,15 @@ export const sectionReducer = (state = initialState, action) => {
                 searchHistory: state.isFromCategorySearch ? state.searchHistory.splice(1, ) : state.searchHistory,
                 currentSearch: state.isFromCategorySearch ? state.searchHistory[0] : state.currentSearch
             };
-        case 'MOUSE_ENTER_CALENDAR_SECTION':
+        case ActionType.MOUSE_ENTER_CALENDAR_SECTION:
             return {
                 ...state,
                 hoverCRN: action.crn
             };
-        case 'MOUSE_LEAVE_CALENDAR_SECTION':
+        case ActionType.MOUSE_LEAVE_CALENDAR_SECTION:
             return {
                 ...state,
                 hoverCRN: undefined
-            };
-        case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_REQUEST_SECTION_DETAILS':
-            let selectedSectionId = state.highlightSectionId == action.sectionId ? null : action.sectionId;
-            return {
-                ...state,
-                highlightCourseId: action.courseId,
-                highlightSectionId: selectedSectionId,
-                sectionDetails: {
-                    state: selectedSectionId == null ? DATA_LOADING_STATE.NO_SELECTION : DATA_LOADING_STATE.LOADING,
-                    data: null
-                }
-            };
-        case 'HIGHLIGHT_COURSE_TABLE_SECTION_AND_RECEIVE_SECTION_DETAILS':
-            return {
-                ...state,
-                highlightCourseId: action.courseId,
-                highlightSectionId: state.highlightSectionId,
-                sectionDetails: {
-                    state: DATA_LOADING_STATE.LOADED,
-                    data: action.sectionDetails
-                }
-            };
-        case 'CLICK_VIEW_COURSE_TABLE_BUTTON':
-            return {
-                ...state,
-                clickedCourseButtonId: action.courseId,
-                highlightCourseId: action.courseId,
-                highlightSectionId: state.courses.find((x) => x.courseId == action.courseId).selected,
-                sectionDetails: {state: DATA_LOADING_STATE.NO_SELECTION}
-            };
-        case 'CLOSE_SECTION_LIST_MODAL':
-            return {
-                ...state,
-                highlightCourseId: null,
-                highlightSectionId: null,
-                clickedCourseButtonId: undefined,
-                sectionDetails: {state: DATA_LOADING_STATE.NO_SELECTION},
-                courses: state.courses.map(x => {
-                    let isParent = x.courseId === state.highlightCourseId;
-                    let isDependent = x.parentCourseId === state.highlightCourseId && !x.isIndependent;
-                    return isParent || isDependent ? {
-                        ...x,
-                        selected: isDependent ? null : state.highlightSectionId
-                    } : x
-                })
             };
         default:
             return state

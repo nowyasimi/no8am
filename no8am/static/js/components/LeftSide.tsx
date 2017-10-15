@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 
 import {Button, Menu, MenuItem, NonIdealState, Position, Popover, Spinner} from '@blueprintjs/core'
 
+import CourseCards from './CourseCards'
 import OpenDialog from './OpenDialog'
 import SaveDialog from './SaveDialog'
 import SearchOmnibox from './SearchOmnibox'
@@ -19,7 +20,7 @@ interface LeftSideProps {
     onClickAdvancedSectionSelection?: () => Promise<void>
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
+@(connect(mapStateToProps, mapDispatchToProps) as any)
 export default class LeftSide extends React.Component<LeftSideProps, undefined>  {
 
     render() {
@@ -70,6 +71,8 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
                     <SaveDialog />
                     <Button iconName="search" text="Search" onClick={this.props.onOpenSearchOmnibox} />
                 </div>
+
+                <CourseCards />
 
                 {mainContent}
             </div>

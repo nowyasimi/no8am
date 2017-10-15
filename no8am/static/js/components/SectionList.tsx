@@ -18,7 +18,7 @@ interface SectionListProps {
     showSingleCourse: string
     singleCourseOrigin: string
     isFromCategorySearch: boolean
-    filterTime: number[]
+    filterTime: [number, number]
 }
 
 @(connect(mapStateToProps, mapDispatchToProps) as any)

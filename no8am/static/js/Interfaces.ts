@@ -29,13 +29,18 @@ export interface ISection extends ISectionUnparsed {
 }
 
 export interface IMetadataUnparsed {
-    abbreviation: string,
-    name: string,
+    abbreviation: string
+    name: string
     info?: string
 }
 
 export interface IMetadata extends IMetadataUnparsed {
-    userFriendlyFormat: string,
-    token: string,
+    userFriendlyFormat: string
+    token: string
     itemType: any
+}
+
+export interface ISelectedSection {
+    departmentAndBareCourse: string
+    CRN: string
 }
