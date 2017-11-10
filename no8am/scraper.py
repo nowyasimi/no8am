@@ -132,7 +132,7 @@ class Section(object):
 		"""
 
 		course_number_with_section = str(''.join(section[1].strings))
-		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
+		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(EXTRA_SECTIONS)
 		department, course_number, section_number = course_number_with_section.split(" ")
 
 		self.credits = credits

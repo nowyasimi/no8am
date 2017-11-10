@@ -53,8 +53,11 @@ export const colorDict = {
   }
 };
 
-export class DATA_LOADING_STATE extends Enum {}
-DATA_LOADING_STATE.initEnum(["NO_SELECTION", "LOADING", "LOADED"]);
+export enum DataLoadingState {
+    FAILED,
+    LOADED,
+    LOADING,
+}
 
 export const DAYS_OF_WEEK: string[] = ["M", "T", "W", "R", "F"];
 export const DAYS_OF_WEEK_LONG: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];

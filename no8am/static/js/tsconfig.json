@@ -12,7 +12,9 @@
     ],    
     "jsx": "react",
     "experimentalDecorators": true,
-    "watch": true
+    "watch": true,
+    "strict": true,
+    "downlevelIteration": true  
   },
   "exclude": [
     "./node_modules"

@@ -1,34 +1,32 @@
-import * as React from 'react'
+import * as React from "react";
 
-import {connect} from 'react-redux'
+import {connect} from "react-redux";
 
-import {Button, Menu, MenuItem, NonIdealState, Position, Popover, Spinner} from '@blueprintjs/core'
+import {Button, Menu, MenuItem, NonIdealState, Popover, Position, Spinner} from "@blueprintjs/core";
 
-import CourseCards from './CourseCards'
-import OpenDialog from './OpenDialog'
-import SaveDialog from './SaveDialog'
-import SearchOmnibox from './SearchOmnibox'
-import SectionList from './SectionList'
+import SearchOmnibox from "../search/SearchOmnibox";
+import CourseCards from "./CourseCards";
+import OpenDialog from "./OpenDialog";
+import SaveDialog from "./SaveDialog";
+import SectionList from "./SectionList";
 
-import {openSearchOmnibox, clickDoneSelecting, clickAdvancedSectionSelection} from '../actions/sectionActions'
-import {DATA_LOADING_STATE} from '../Constants'
+import {DataLoadingState} from "../Constants";
+import {clickAdvancedSectionSelection} from "../filters/FiltersActions";
+import {openSearchOmnibox} from "../search/SearchActions";
 
-interface LeftSideProps {
-    currentSearch?: any,
-    onOpenSearchOmnibox?: () => Promise<void>,
-    onClickDoneSelecting?: () => Promise<void>,
-    onClickAdvancedSectionSelection?: () => Promise<void>
+interface ILeftSideProps {
+    currentSearch?: any;
+    onOpenSearchOmnibox?: () => Promise<void>;
 }
 
 @(connect(mapStateToProps, mapDispatchToProps) as any)
-export default class LeftSide extends React.Component<LeftSideProps, undefined>  {
+export default class LeftSide extends React.Component<ILeftSideProps, undefined>  {
 
-    render() {
-
+    public render() {
         let mainContent = null;
 
         switch (this.props.currentSearch.state) {
-            case DATA_LOADING_STATE.NO_SELECTION:
+            case DataLoadingState.NO_SELECTION:
                 mainContent = (
                     <NonIdealState
                         className="nonIdealState"
@@ -46,7 +44,7 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
                     />
                 );
                 break;
-            case DATA_LOADING_STATE.LOADING:
+            case DataLoadingState.LOADING:
                 mainContent = (
                     <NonIdealState
                         visual={<Spinner />}
@@ -55,12 +53,12 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
                     />
                 );
                 break;
-            case DATA_LOADING_STATE.LOADED:
+            case DataLoadingState.LOADED:
                 mainContent = <SectionList {...this.props.currentSearch} />;
                 break;
         }
 
-        let isNoCurrentSearch = this.props.currentSearch.state == DATA_LOADING_STATE.NO_SELECTION;
+        const isNoCurrentSearch = this.props.currentSearch.state === DataLoadingState.NO_SELECTION;
 
         return (
             <div className="col-sm-6" id="filters">
@@ -80,18 +78,15 @@ export default class LeftSide extends React.Component<LeftSideProps, undefined> 
     }
 }
 
-
 function mapStateToProps(state) {
     return {
-        currentSearch: state.currentSearch
-    }
+        currentSearch: state.currentSearch,
+    };
 }
-
 
 function mapDispatchToProps(dispatch) {
     return {
+        onClickAdvancedSectionSelection: () => dispatch(clickAdvancedSectionSelection()),
         onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
-        onClickDoneSelecting: () => dispatch(clickDoneSelecting()),
-        onClickAdvancedSectionSelection: () => dispatch(clickAdvancedSectionSelection())
-    }
+    };
 }

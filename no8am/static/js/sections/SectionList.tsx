@@ -3,7 +3,7 @@ import * as React from 'react'
 import {connect} from 'react-redux'
 
 import {SEARCH_ITEM_TYPE} from '../Constants'
-import {ISection} from '../Interfaces'
+import {IAllReducers, ISection} from '../Interfaces'
 
 import GlobalFilters from './GlobalFilters'
 import LookupFilters from './LookupFilters'
@@ -90,10 +90,11 @@ export default class SectionList extends React.Component<SectionListProps, undef
 }
 
 // Map Redux state to component props
-function mapStateToProps(state) {
+function mapStateToProps(state: IAllReducers) {
     return {
-        selectedSections: state.selectedSections,
-        isAdvanced: state.isAdvanced,
+        allSections: state.sections.allSections,
+        selectedSections: state.sections.selectedSections,
+        isAdvanced: state.filters.isAdvanced,
         askShowSingleCourse: state.askShowSingleCourse,
         showSingleCourse: state.showSingleCourse,
         singleCourseOrigin: state.singleCourseOrigin,
@@ -106,4 +107,3 @@ function mapDispatchToProps(dispatch) {
     return {
     }
 }
-
