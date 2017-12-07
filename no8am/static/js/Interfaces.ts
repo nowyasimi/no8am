@@ -54,33 +54,36 @@ export interface ISelectedSection {
 }
 
 export interface ISearchItem {
-    currentItemBaseAbbreviation: string;
-    currentItemAllAbbreviations: string[];
-    isSelected: boolean;
-    originItemAbbreviation?: string;
-    selectedCrns: string[];
+    readonly currentItemBaseAbbreviation: string;
+    readonly isSelected: boolean;
+    readonly originItemAbbreviation?: string;
+    readonly selectedCrns: string[];
+}
+
+export interface ISearchItemWithAllAbbreviations extends ISearchItem {
+    readonly currentItemAllAbbreviations: string[];
 }
 
 export interface ISearchReducer {
-    isSearchOmniboxOpen: boolean;
-    searchHistory: IMetadata[];
-    status: DataLoadingState;
-    metadata: IMetadata[];
+    readonly isSearchOmniboxOpen: boolean;
+    readonly searchHistory: IMetadata[];
+    readonly status: DataLoadingState;
+    readonly metadata: IMetadata[];
 }
 
 export interface ISectionReducer {
-    allSections: ISection[];
-    searchItems: ISearchItem[];
-    sectionListHoverCrn: string | null;
-    status: DataLoadingState;
+    readonly allSections: ISection[];
+    readonly searchItems: ISearchItem[];
+    readonly sectionListHoverCrn: string | null;
+    readonly status: DataLoadingState;
 }
 
 export interface ICalendarReducer {
-    hoverCRN: string;
+    readonly hoverCRN: string;
 }
 
 export interface IAllReducers {
-    calendar: ICalendarReducer;
-    search: ISearchReducer;
-    sections: ISectionReducer;
+    readonly calendar: ICalendarReducer;
+    readonly search: ISearchReducer;
+    readonly sections: ISectionReducer;
 }

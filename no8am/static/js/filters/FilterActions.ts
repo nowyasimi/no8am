@@ -25,7 +25,7 @@ interface IClickShowSingleCourse {
     type: FilterActionType.CLICK_SHOW_SINGLE_COURSE;
 }
 
-export const clickShowSingleCourse = (section): IClickShowSingleCourse => {
+export const clickShowSingleCourse = (section: ISection): IClickShowSingleCourse => {
     return {
         departmentAndBareCourse: section.departmentAndBareCourse,
         type: FilterActionType.CLICK_SHOW_SINGLE_COURSE,

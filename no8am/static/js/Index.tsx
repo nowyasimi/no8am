@@ -1,29 +1,30 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 // import Perf from 'react-addons-perf'
-import { combineReducers, createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-import { Provider } from 'react-redux'
+import {applyMiddleware, combineReducers, createStore} from "redux";
 
-import { sectionReducer } from "./reducers/sectionReducer"
-import {search} from './search/SearchReducer'
-import {calendar} from './calendar/CalendarReducer'
+import {Provider} from "react-redux";
+import thunkMiddleware from "redux-thunk";
 
+import {calendar} from "./calendar/CalendarReducer";
+import {search} from "./search/SearchReducer";
+import {sections} from "./sections/SectionReducer";
 
-import { Main } from './components/Main'
+import {Main} from "./containers/Main";
 
 // global.Perf = Perf
 
 const store = createStore(
-    combineReducers({search}),
+    combineReducers({calendar, search, sections}),
+    // @ts-ignore
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunkMiddleware), // lets us dispatch() functions
 );
 
 ReactDOM.render(
     <Provider store={store}>
-        <Main/>
+        <Main />
     </Provider>,
-    document.getElementById('mainReactContainer')
+    document.getElementById("mainReactContainer")
 );

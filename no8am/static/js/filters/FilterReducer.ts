@@ -1,11 +1,9 @@
 import {FilterActions, FilterActionType} from "./FilterActions";
 
 export const defaultFilters = {
-    askShowSingleCourse: null,
     filterTime: [0, 28],
-    showSingleCourse: null,
-    singleCourseOrigin: null,
     // TODO - add create function isRevertible, that uses selectedSections.
+    // TODO - have local filters belong to searchItem
 };
 
 const initialState = {
@@ -20,14 +18,6 @@ export const sectionReducer = (state = initialState, action: FilterActions) => {
             return {
                 ...state,
                 isAdvanced: !state.isAdvanced,
-            };
-
-        case FilterActionType.CLICK_SHOW_SINGLE_COURSE:
-            return {
-                ...state,
-                askShowSingleCourse: null,
-                showSingleCourse: action.departmentAndBareCourse,
-                singleCourseOrigin: state.currentSearch.item.abbreviation,
             };
 
         case FilterActionType.UPDATE_FILTER_TIME:

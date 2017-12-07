@@ -14,7 +14,8 @@
     "experimentalDecorators": true,
     "watch": true,
     "strict": true,
-    "downlevelIteration": true  
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true 
   },
   "exclude": [
     "./node_modules"

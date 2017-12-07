@@ -1,54 +1,78 @@
-import * as React from 'react'
+import * as React from "react";
 
-import {connect} from 'react-redux'
+import {MapDispatchToProps, MapStateToProps} from "react-redux";
+import {createSelector} from "reselect";
+
+import {connect} from "../Connect";
 
 import { Classes, Switch, Tab2, Tabs2 } from "@blueprintjs/core";
-import {SEARCH_ITEM_TYPE} from '../Constants'
-import {ISection} from '../Interfaces'
+import {SEARCH_ITEM_TYPE} from "../Constants";
+import {IAllReducers, ISearchItem, ISearchItemWithAllAbbreviations, ISection} from "../Interfaces";
+import {CourseCard} from "./CourseCard";
 
-const cardContainerStyle = {
+const cardContainerStyle: React.CSSProperties = {
     display: "flex",
     flexWrap: "wrap",
 };
 
-const cardStyle = {
-    flex: "1 1 200px",
-    margin: "10px"
-};
+interface ICourseCardStateProps {
+    searchItems: ISearchItemWithAllAbbreviations[];
+}
 
-@(connect(mapStateToProps, mapDispatchToProps) as any)
-export default class CourseCards extends React.Component {
+@connect<ICourseCardStateProps, {}, ICourseCardStateProps>(mapStateToProps)
+export default class CourseCards extends React.Component<ICourseCardStateProps> {
 
-    render() {
+    public render() {
         return (
             <div style={cardContainerStyle}>
-                {/* <div className="pt-card pt-interactive" style={cardStyle}>
-                    <h5><a href="#">Search</a></h5>
-                    <p></p>
-                </div>
-                <div className="pt-card pt-interactive" style={cardStyle}>
-                    <h5><a href="#">Desk Profile</a></h5>
-                    <p>Desk-level summary of trading activity and trading profiles.</p>
-                </div>
-                <div className="pt-card pt-interactive" style={cardStyle}>
-                    <h5><a href="#">Dataset Dashboards</a></h5>
-                    <p>Stats of dataset completeness and reference data join percentages.</p>
-                </div> */}
+                {this.createCourseCards()}
             </div>
         );
     }
-}
 
-// Map Redux state to component props
-function mapStateToProps(state) {
-    return {
-        selectedSections: state.selectedSections
+    private createCourseCards() {
+        return this.props.searchItems.map((currentSearchItem) => (
+            <CourseCard
+                key={`${currentSearchItem.currentItemBaseAbbreviation}${currentSearchItem.originItemAbbreviation}`}
+                searchItem={currentSearchItem}
+            />
+        ));
     }
 }
 
-// Map Redux actions to component props
-function mapDispatchToProps(dispatch) {
-    return {
-    }
-}
+/**
+ * Creates a list of abbreviations that will get grouped together in a single card. The purpose of this is to group
+ * different section types for the same course in a single card.
+ * @param baseAbbreviation Abbreviation to search for in list of all sections
+ */
+const getAllAbbreviations = (baseAbbreviation: string, allSections: ISection[]): string[] => {
+    const sectionsWithBaseAbbreviation = allSections.filter(
+        (section: ISection) => section.departmentAndBareCourse === baseAbbreviation)
+        .map((section) => section.departmentAndCourse);
 
+    if (sectionsWithBaseAbbreviation.length === 0) {
+        return [baseAbbreviation];
+    } else {
+        return [...new Set(sectionsWithBaseAbbreviation)];
+    }
+};
+
+const getSearchItems = (state: IAllReducers): ISearchItem[] => state.sections.searchItems;
+const getAllSections = (state: IAllReducers): ISection[] => state.sections.allSections;
+
+const getSearchItemsWithBaseAbbreviations = createSelector(
+    [getSearchItems, getAllSections],
+    (searchItems, allSections) => (
+        searchItems.map((currentSearchItem) => ({
+            ...currentSearchItem,
+            currentItemAllAbbreviations: getAllAbbreviations(
+                currentSearchItem.currentItemBaseAbbreviation, allSections),
+        }))
+    ),
+);
+
+function mapStateToProps(state: IAllReducers): ICourseCardStateProps {
+    return {
+        searchItems: getSearchItemsWithBaseAbbreviations(state),
+    };
+}

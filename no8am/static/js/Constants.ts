@@ -57,6 +57,7 @@ export enum DataLoadingState {
     FAILED,
     LOADED,
     LOADING,
+    REFRESHING,
 }
 
 export const DAYS_OF_WEEK: string[] = ["M", "T", "W", "R", "F"];

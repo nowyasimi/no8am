@@ -1,34 +1,33 @@
-import * as React from 'react'
+import * as React from "react";
+import {connect} from "react-redux";
 
-import {connect} from 'react-redux'
+import {SEARCH_ITEM_TYPE} from "../Constants";
+import {IAllReducers, ISection} from "../Interfaces";
 
-import {SEARCH_ITEM_TYPE} from '../Constants'
-import {IAllReducers, ISection} from '../Interfaces'
+import GlobalFilters from "../filters/GlobalFilters";
+import LookupFilters from "../filters/LookupFilters";
+import SectionListCard from "./SectionListCard";
 
-import GlobalFilters from './GlobalFilters'
-import LookupFilters from './LookupFilters'
-import SectionListCard from './SectionListCard'
-
-interface SectionListProps {
-    data: any
-    item: any
-    selectedSections: ISection[]
-    isAdvanced: boolean
-    askShowSingleCourse: string
-    showSingleCourse: string
-    singleCourseOrigin: string
-    isFromCategorySearch: boolean
-    filterTime: [number, number]
+interface ISectionListProps {
+    data: any;
+    item: any;
+    selectedSections: ISection[];
+    isAdvanced: boolean;
+    askShowSingleCourse: string;
+    showSingleCourse: string;
+    singleCourseOrigin: string;
+    isFromCategorySearch: boolean;
+    filterTime: [number, number];
 }
 
 @(connect(mapStateToProps, mapDispatchToProps) as any)
-export default class SectionList extends React.Component<SectionListProps, undefined> {
+export default class SectionList extends React.Component<ISectionListProps, undefined> {
 
-    render() {
-        let cacheTime = this.props.data.cache_time || new Date();
-        let searchItem = this.props.item;
-        let sections: ISection[] = this.props.data;
-        let isFromCategorySearch = this.props.item.itemType != SEARCH_ITEM_TYPE.Course &&
+    public render() {
+        const cacheTime = this.props.data.cache_time || new Date();
+        const searchItem = this.props.item;
+        const sections: ISection[] = this.props.data;
+        const isFromCategorySearch = this.props.item.itemType != SEARCH_ITEM_TYPE.Course &&
                                this.props.item.itemType != SEARCH_ITEM_TYPE.Department;
 
         let visibleCount = 0;
@@ -72,20 +71,22 @@ export default class SectionList extends React.Component<SectionListProps, undef
         );
     }
 
-    isUnavailable(section: ISection): boolean {
-        return this.props.selectedSections.find(selectedSection =>
-            section.departmentAndBareCourse == selectedSection.departmentAndBareCourse &&
-            ((section.main && !selectedSection.main && !selectedSection.dependent_main_sections.includes(section.sectionNum)) ||
-            (!section.main && selectedSection.main && !section.dependent_main_sections.includes(selectedSection.sectionNum)))
-        ) != undefined;
+    private isUnavailable(section: ISection): boolean {
+        return this.props.selectedSections.find((selectedSection) =>
+            section.departmentAndBareCourse === selectedSection.departmentAndBareCourse &&
+            ((section.main && !selectedSection.main &&
+                !selectedSection.dependent_main_sections.includes(section.sectionNum)) ||
+            (!section.main && selectedSection.main &&
+                !section.dependent_main_sections.includes(selectedSection.sectionNum)))) !== undefined;
     }
 
-    isVisible(section: ISection): boolean {
+    private isVisible(section: ISection): boolean {
         return ((this.props.isAdvanced || !this.isUnavailable(section)) &&
-               (this.props.showSingleCourse == null || this.props.showSingleCourse == section.departmentAndBareCourse) &&
-               (section.daysMet.every(meetingTime => meetingTime[1] >= this.props.filterTime[0] &&
-                                    meetingTime[2] + meetingTime[1] <= this.props.filterTime[1]))) ||
-                this.props.selectedSections.find(selectedSection => selectedSection.CRN == section.CRN) != undefined;
+                (this.props.showSingleCourse === null ||
+                 this.props.showSingleCourse === section.departmentAndBareCourse) &&
+                (section.daysMet.every((meetingTime) => meetingTime[1] >= this.props.filterTime[0] &&
+                                        meetingTime[2] + meetingTime[1] <= this.props.filterTime[1]))) ||
+               this.props.selectedSections.find((selectedSection) => selectedSection.CRN === section.CRN) !== undefined;
     }
 }
 
@@ -93,12 +94,12 @@ export default class SectionList extends React.Component<SectionListProps, undef
 function mapStateToProps(state: IAllReducers) {
     return {
         allSections: state.sections.allSections,
-        selectedSections: state.sections.selectedSections,
-        isAdvanced: state.filters.isAdvanced,
         askShowSingleCourse: state.askShowSingleCourse,
+        filterTime: state.filter.filterTime,
+        isAdvanced: state.filter.isAdvanced,
+        selectedSections: state.sections.selectedSections,
         showSingleCourse: state.showSingleCourse,
         singleCourseOrigin: state.singleCourseOrigin,
-        filterTime: state.filterTime
     }
 }
 

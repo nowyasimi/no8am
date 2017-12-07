@@ -1,6 +1,9 @@
+import {getType} from "ts-redux-actions";
+
 import {DataLoadingState} from "../Constants";
 import {ISearchReducer} from "../Interfaces";
-import {SearchActions, SearchActionType} from "./SearchActions";
+import {searchItem} from "../sections/SectionActions";
+import * as SearchActions from "./SearchActions";
 
 const initialState: ISearchReducer = {
     isSearchOmniboxOpen: false,
@@ -9,33 +12,34 @@ const initialState: ISearchReducer = {
     status: DataLoadingState.LOADING,
 };
 
-export const search = (state: ISearchReducer = initialState, action: SearchActions): ISearchReducer => {
+export const search = (state: ISearchReducer = initialState, action: SearchActions.IActions): ISearchReducer => {
+
     switch (action.type) {
-        case SearchActionType.RECEIVE_METADATA:
+        case getType(SearchActions.receiveMetadata):
             return {
                 ...state,
                 metadata: action.metadata,
             };
 
-        case SearchActionType.TOGGLE_SEARCH_OMNIBOX:
+        case getType(SearchActions.toggleSearchOmnibox):
             return {
                 ...state,
                 isSearchOmniboxOpen: !state.isSearchOmniboxOpen,
             };
 
-        case SearchActionType.CLOSE_SEARCH_OMNIBOX:
+        case getType(SearchActions.closeSearchOmnibox):
             return {
                 ...state,
                 isSearchOmniboxOpen: false,
             };
 
-        case SearchActionType.OPEN_SEARCH_OMNIBOX:
+        case getType(SearchActions.openSearchOmnibox):
             return {
                 ...state,
                 isSearchOmniboxOpen: true,
             };
 
-        case SearchActionType.SEARCH_ITEM:
+        case getType(searchItem):
             return {
                 ...state,
                 searchHistory: [action.item, ...state.searchHistory],

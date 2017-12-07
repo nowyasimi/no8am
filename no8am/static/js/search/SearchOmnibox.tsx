@@ -10,9 +10,11 @@ import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleS
 import {IMetadata} from '../Interfaces'
 import {SEARCH_ITEM_TYPE} from '../Constants'
 
+export const searchKeyCombo = "mod + k";
+
 @connect(mapStateToProps, mapDispatchToProps)
 @HotkeysTarget
-export default class SearchOmnibox extends React.Component {
+export class SearchOmnibox extends React.Component {
 
     componentDidMount() {
         this.props.onLoadMetadata();
@@ -22,9 +24,9 @@ export default class SearchOmnibox extends React.Component {
         return (
             <Hotkeys>
                 <Hotkey
-                    allowInInput
+                    allowInInput={true}
                     global={true}
-                    combo="meta + k"
+                    combo={searchKeyCombo}
                     label="Toggle Omnibox"
                     onKeyDown={this.props.onToggleSearchOmnibox}
                 />

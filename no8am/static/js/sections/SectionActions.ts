@@ -1,57 +1,28 @@
+import {ActionCreator} from "react-redux";
 import {ThunkAction} from "redux-thunk";
+import {createAction} from "ts-redux-actions";
 
 import {SEARCH_ITEM_TYPE, SECTION_DETAILS_URL} from "../Constants";
-import {IAllReducers, IMetadata, ISection, ISectionUnparsed} from "../Interfaces";
+import {IAllReducers, IMetadata, ISearchItem, ISection, ISectionUnparsed} from "../Interfaces";
 import {SearchActionType} from "../search/SearchActions";
+import {search} from "../search/SearchReducer";
 
-export enum SectionActionType {
-    RECEIVE_SECTIONS = "RECEIVE_SECTIONS",
-    ERROR_RECEIVING_SECTIONS = "ERROR_RECEIVING_SECTIONS",
-    MOUSE_ENTER_SECTION_LIST_CARD = "MOUSE_ENTER_SECTION_LIST_CARD",
-    MOUSE_LEAVE_SECTION_LIST_CARD = "MOUSE_LEAVE_SECTION_LIST_CARD",
-    CLICK_SECTION_LIST_CARD = "CLICK_SECTION_LIST_CARD",
-    SEARCH_ITEM = "SEARCH_ITEM",
-    CLICK_DONE_SELECTING = "CLICK_DONE_SELECTING",
-    OTHER_ACTION = "__any_other_action_type__",
-}
+import { getReturnOfExpression } from "react-redux-typescript";
 
-export type SectionActions =
-    | IReceiveSections
-    | IErrorReceivingSections
-    | IMouseEnterSectionListCard
-    | IMouseLeaveSectionListCard
-    | IClickSectionListCard
-    | ISearchItem
-    | IClickDoneSelecting
-    | IOtherAction;
-
-interface IOtherAction {
-    type: SectionActionType.OTHER_ACTION;
-}
-
-interface IReceiveSections {
-    sections: ISection[];
-    type: SectionActionType.RECEIVE_SECTIONS;
-}
-
-export const receiveSections = (sections: ISection[]): IReceiveSections => {
-    return {
+export const receiveSections = createAction("RECEIVE_SECTIONS",
+    (sections: ISection[]) => ({
         sections,
-        type: SectionActionType.RECEIVE_SECTIONS,
-    };
-};
+        type: "RECEIVE_SECTIONS",
+    }),
+);
 
-interface IErrorReceivingSections {
-    type: SectionActionType.ERROR_RECEIVING_SECTIONS;
-}
+export const errorReceivingSections = createAction("ERROR_RECEIVING_SECTIONS",
+    () => ({
+        type: "ERROR_RECEIVING_SECTIONS",
+    }),
+);
 
-export const errorReceivingSections = (): IErrorReceivingSections => {
-    return {
-        type: SectionActionType.ERROR_RECEIVING_SECTIONS,
-    };
-};
-
-type ILoadSectionsThunk = ThunkAction<void, {}, {}>;
+type ILoadSectionsThunk = ActionCreator<ThunkAction<void, {}, {}>>;
 
 export const loadSections = (): ILoadSectionsThunk => {
     return (dispatch) => {
@@ -63,61 +34,51 @@ export const loadSections = (): ILoadSectionsThunk => {
     };
 };
 
-interface IMouseEnterSectionListCard {
-    section: ISection;
-    type: SectionActionType.MOUSE_ENTER_SECTION_LIST_CARD;
-}
-
-export const mouseEnterSectionListCard = (section: ISection): IMouseEnterSectionListCard => {
-    return {
+export const mouseEnterSectionListCard = createAction("MOUSE_ENTER_SECTION_LIST_CARD",
+    (section: ISection) => ({
         section,
-        type: SectionActionType.MOUSE_ENTER_SECTION_LIST_CARD,
-    };
-};
+        type: "MOUSE_ENTER_SECTION_LIST_CARD",
+    }),
+);
 
-interface IMouseLeaveSectionListCard {
-    type: SectionActionType.MOUSE_LEAVE_SECTION_LIST_CARD;
-}
+export const mouseLeaveSectionListCard = createAction("MOUSE_LEAVE_SECTION_LIST_CARD",
+    () => ({
+        type: "MOUSE_LEAVE_SECTION_LIST_CARD",
+    }),
+);
 
-export const mouseLeaveSectionListCard = (): IMouseLeaveSectionListCard => {
-    return {
-        type: SectionActionType.MOUSE_LEAVE_SECTION_LIST_CARD,
-    };
-};
-
-interface IClickSectionListCard {
-    section: ISection;
-    type: SectionActionType.CLICK_SECTION_LIST_CARD;
-}
-
-export const clickSectionListCard = (section: ISection): IClickSectionListCard => {
-    return {
+export const clickSectionListCard = createAction("CLICK_SECTION_LIST_CARD",
+    (section: ISection) => ({
         section,
-        type: SectionActionType.CLICK_SECTION_LIST_CARD,
-    };
-};
+        type: "CLICK_SECTION_LIST_CARD",
+    }),
+);
 
-export interface ISearchItem {
-    item: IMetadata;
-    type: SectionActionType.SEARCH_ITEM | SearchActionType.SEARCH_ITEM;
-}
+export const clickCourseCard = createAction("CLICK_COURSE_CARD",
+    (clickedSearchItem: ISearchItem) => ({
+        abbreviation: clickedSearchItem.currentItemBaseAbbreviation,
+        type: "CLICK_COURSE_CARD",
+    }),
+);
 
-export const searchItem = (item: IMetadata): ISearchItem => {
-    return {
+export const searchItem = createAction("SEARCH_ITEM",
+    (item: IMetadata) => ({
         item,
-        type: SectionActionType.SEARCH_ITEM,
-    };
-};
+        type: "SEARCH_ITEM",
+    }),
+);
 
-interface IClickDoneSelecting {
-    type: SectionActionType.CLICK_DONE_SELECTING;
-}
+export const clickDoneSelecting = createAction("CLICK_DONE_SELECTING",
+    () => ({
+        type: "CLICK_DONE_SELECTING",
+    }),
+);
 
-export const clickDoneSelecting = () => {
-    return {
-        type: SectionActionType.CLICK_DONE_SELECTING,
-    };
-};
+export const revertToOriginAbbreviation = createAction("REVERT_TO_ORIGIN_ABBREVIATION",
+    () => ({
+        type: "REVERT_TO_ORIGIN_ABBREVIATION",
+    }),
+);
 
 const initializeSections = (sections: ISectionUnparsed[]) => {
     return sections.map((section) => ({
@@ -125,6 +86,39 @@ const initializeSections = (sections: ISectionUnparsed[]) => {
         daysMet: parseTimesMet(restructureHours(section.timesMet)),
     }));
 };
+
+export const actionCreators = {
+    clickCourseCard,
+    clickDoneSelecting,
+    clickSectionListCard,
+    errorReceivingSections,
+    mouseEnterSectionListCard,
+    mouseLeaveSectionListCard,
+    receiveSections,
+    revertToOriginAbbreviation,
+    searchItem,
+};
+
+export const returnOfReceiveSections = getReturnOfExpression(receiveSections);
+export const returnOfErrorReceivingSections = getReturnOfExpression(errorReceivingSections);
+export const returnOfMouseEnterSectionListCard = getReturnOfExpression(mouseEnterSectionListCard);
+export const returnOfMouseLeaveSectionListCard = getReturnOfExpression(mouseLeaveSectionListCard);
+export const returnOfClickSectionListCard = getReturnOfExpression(clickSectionListCard);
+export const returnOfClickCourseCard = getReturnOfExpression(clickCourseCard);
+export const returnOfSearchItem = getReturnOfExpression(searchItem);
+export const returnOfClickDoneSelecting = getReturnOfExpression(clickDoneSelecting);
+export const returnOfRevertToOriginAbbreviation = getReturnOfExpression(revertToOriginAbbreviation);
+
+export type IActions =
+    | typeof returnOfReceiveSections
+    | typeof returnOfErrorReceivingSections
+    | typeof returnOfMouseEnterSectionListCard
+    | typeof returnOfMouseLeaveSectionListCard
+    | typeof returnOfClickSectionListCard
+    | typeof returnOfClickCourseCard
+    | typeof returnOfSearchItem
+    | typeof returnOfClickDoneSelecting
+    | typeof returnOfRevertToOriginAbbreviation;
 
 const restructureHours = (timesMet) => {
 
@@ -169,7 +163,7 @@ const parseTimesMet = (timesMet) => {
         const parsedStart = parseHours(start);
         const parsedEnd = parseHours(end) - parsedStart;
 
-        for (const day of days){
+        for (const day of days) {
             if (day === "S") {
                 continue;
             }

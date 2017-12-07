@@ -1,56 +1,29 @@
+import {ActionCreator} from "react-redux";
 import {ThunkAction} from "redux-thunk";
+import {createAction} from "ts-redux-actions";
 
 import * as Constants from "../Constants";
 import * as Interfaces from "../Interfaces";
 
-import {ISearchItem} from "../sections/SectionActions";
+import { getReturnOfExpression } from "react-redux-typescript";
+import { searchItem } from "../sections/SectionActions";
 
-export enum SearchActionType {
-    RECEIVE_METADATA = "RECEIVE_METADATA",
-    ERROR_RECEIVING_METADATA = "ERROR_RECEIVING_METADATA",
-    TOGGLE_SEARCH_OMNIBOX = "TOGGLE_SEARCH_OMNIBOX",
-    CLOSE_SEARCH_OMNIBOX = "CLOSE_SEARCH_OMNIBOX",
-    OPEN_SEARCH_OMNIBOX = "OPEN_SEARCH_OMNIBOX",
-    SEARCH_ITEM = "SEARCH_ITEM",
-    OTHER_ACTION = "__any_other_action_type__",
-}
+// import {ISearchItemAction} from "../sections/SectionActions";
 
-export type SearchActions =
-    | IReceiveMetadata
-    | IErrorReceivingMetadata
-    | IToggleSearchOmnibox
-    | ICloseSearchOmnibox
-    | IOpenSearchOmnibox
-    | ISearchItem
-    | IOtherAction;
-
-interface IOtherAction {
-    type: SearchActionType.OTHER_ACTION;
-}
-
-interface IReceiveMetadata {
-    type: SearchActionType.RECEIVE_METADATA;
-    metadata: Interfaces.IMetadata[];
-}
-
-export const receiveMetadata = (metadata: Interfaces.IMetadata[]): IReceiveMetadata => {
-    return {
+export const receiveMetadata = createAction("RECEIVE_METADATA",
+    (metadata: Interfaces.IMetadata[]) => ({
         metadata,
-        type: SearchActionType.RECEIVE_METADATA,
-    };
-};
+        type: "RECEIVE_METADATA",
+    }),
+);
 
-interface IErrorReceivingMetadata {
-    type: SearchActionType.ERROR_RECEIVING_METADATA;
-}
+export const errorReceivingMetadata = createAction("ERROR_RECEIVING_METADATA",
+    () => ({
+        type: "ERROR_RECEIVING_METADATA",
+    }),
+);
 
-export const errorReceivingMetadata = (): IErrorReceivingMetadata => {
-    return {
-        type: SearchActionType.ERROR_RECEIVING_METADATA,
-    };
-};
-
-type ILoadMetadataThunk = ThunkAction<void, {}, {}>;
+type ILoadMetadataThunk = ActionCreator<ThunkAction<void, {}, {}>>;
 
 export const loadMetadata = (): ILoadMetadataThunk => {
     return (dispatch) => {
@@ -80,32 +53,35 @@ export const loadMetadata = (): ILoadMetadataThunk => {
     };
 };
 
-interface IToggleSearchOmnibox {
-    type: SearchActionType.TOGGLE_SEARCH_OMNIBOX;
-}
+export const toggleSearchOmnibox = createAction("TOGGLE_SEARCH_OMNIBOX",
+    () => ({
+        type: "TOGGLE_SEARCH_OMNIBOX",
+    }),
+);
 
-export const toggleSearchOmnibox = (): IToggleSearchOmnibox => {
-    return {
-        type: SearchActionType.TOGGLE_SEARCH_OMNIBOX,
-    };
-};
+export const closeSearchOmnibox = createAction("CLOSE_SEARCH_OMNIBOX",
+    () => ({
+        type: "CLOSE_SEARCH_OMNIBOX",
+    }),
+);
 
-interface ICloseSearchOmnibox {
-    type: SearchActionType.CLOSE_SEARCH_OMNIBOX;
-}
+export const openSearchOmnibox = createAction("OPEN_SEARCH_OMNIBOX",
+    () => ({
+        type: "OPEN_SEARCH_OMNIBOX",
+    }),
+);
 
-export const closeSearchOmnibox = (): ICloseSearchOmnibox => {
-    return {
-        type: SearchActionType.CLOSE_SEARCH_OMNIBOX,
-    };
-};
+export const returnOfReceiveMetadata = getReturnOfExpression(receiveMetadata);
+export const returnOfErrorReceivingMetadata = getReturnOfExpression(errorReceivingMetadata);
+export const returnOfToggleSearchOmnibox = getReturnOfExpression(toggleSearchOmnibox);
+export const returnOfCloseSearchOmnibox = getReturnOfExpression(closeSearchOmnibox);
+export const returnOfOpenSearchOmnibox = getReturnOfExpression(openSearchOmnibox);
+export const returnOfSearchItem = getReturnOfExpression(searchItem);
 
-interface IOpenSearchOmnibox {
-    type: SearchActionType.OPEN_SEARCH_OMNIBOX;
-}
-
-export const openSearchOmnibox = (): IOpenSearchOmnibox => {
-    return {
-        type: SearchActionType.OPEN_SEARCH_OMNIBOX,
-    };
-};
+export type IActions =
+    | typeof returnOfReceiveMetadata
+    | typeof returnOfErrorReceivingMetadata
+    | typeof returnOfToggleSearchOmnibox
+    | typeof returnOfCloseSearchOmnibox
+    | typeof returnOfOpenSearchOmnibox
+    | typeof returnOfSearchItem;

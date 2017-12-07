@@ -1,10 +1,12 @@
 import * as React from "react";
 import {connect} from "react-redux";
+import {Dispatch} from "redux";
 
-import {loadSections} from "../actions/sectionActions";
+import {IMetadata} from "../Interfaces";
+import {loadSections} from "../sections/SectionActions";
 
+import Calendar from "../calendar/Calendar";
 import LeftSide from "./LeftSide";
-import Calendar from "./Calendar";
 
 interface IMainProps {
     onLoadSections?: () => Promise<void>;
@@ -29,7 +31,7 @@ export class Main extends React.Component<IMainProps, undefined> {
 
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: any) {
     return {
         onLoadSections: () => dispatch(loadSections()),
     };

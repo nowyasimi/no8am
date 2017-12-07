@@ -1,6 +1,9 @@
+import {getType} from "ts-redux-actions";
+
 import {DataLoadingState, SEARCH_ITEM_TYPE} from "../Constants";
 import {IMetadata, ISearchItem, ISection, ISectionReducer} from "../Interfaces";
-import {SectionActions, SectionActionType} from "./SectionActions";
+
+import * as SectionActions from "./SectionActions";
 
 const initialState: ISectionReducer = {
     allSections: [],
@@ -11,15 +14,78 @@ const initialState: ISectionReducer = {
 
 // TODO - Show if a section has already been selected in another searchItem
 
+export const sections = (state: ISectionReducer = initialState, action: SectionActions.IActions): ISectionReducer => {
+
+        switch (action.type) {
+            case getType(SectionActions.receiveSections):
+                return {
+                    ...state,
+                    allSections: action.sections,
+                    status: DataLoadingState.LOADED,
+                };
+
+            case getType(SectionActions.errorReceivingSections):
+                return {
+                    ...state,
+                    status: DataLoadingState.FAILED,
+                };
+
+            case getType(SectionActions.mouseEnterSectionListCard):
+                return {
+                    ...state,
+                    sectionListHoverCrn: action.section.CRN,
+                };
+
+            case getType(SectionActions.mouseLeaveSectionListCard):
+                return {
+                    ...state,
+                    sectionListHoverCrn: null,
+                };
+
+            case getType(SectionActions.clickSectionListCard):
+                return {
+                    ...state,
+                    searchItems: clickSectionListCard(action.section, state.allSections, state.searchItems),
+                };
+
+            case getType(SectionActions.clickCourseCard):
+                return {
+                    ...state,
+                    searchItems: selectSearchItem(action.abbreviation, state.searchItems),
+                };
+
+            case getType(SectionActions.searchItem):
+                return {
+                    ...state,
+                    searchItems: newSearchItem(action.item, state.allSections, state.searchItems),
+                };
+
+            case getType(SectionActions.clickDoneSelecting):
+                return {
+                    ...state,
+                    searchItems: deselectAllSearchItems(state.searchItems),
+                };
+
+            case getType(SectionActions.revertToOriginAbbreviation):
+                return {
+                    ...state,
+                    searchItems: revertToOriginItemAbbreviation(state.searchItems),
+                };
+
+            default:
+                return state;
+        }
+    };
+
 /**
  * Selects a search item.
  * @param searchItemAbbreviation Abbreviation of item to select
  * @param searchItems List of current searches
  */
 const selectSearchItem = (searchItemAbbreviation: string, searchItems: ISearchItem[]): ISearchItem[] =>
-    deselectAllSearchItems(searchItems).map((searchItem) => ({
-            ...searchItem,
-            isSelected: searchItem.currentItemBaseAbbreviation === searchItemAbbreviation,
+    deselectAllSearchItems(searchItems).map((currentSearchItem) => ({
+            ...currentSearchItem,
+            isSelected: currentSearchItem.currentItemBaseAbbreviation === searchItemAbbreviation,
     }));
 
 /**
@@ -27,25 +93,46 @@ const selectSearchItem = (searchItemAbbreviation: string, searchItems: ISearchIt
  * @param searchItems List of current searches to deselect
  */
 const deselectAllSearchItems = (searchItems: ISearchItem[]): ISearchItem[] =>
-    searchItems.map((searchItem) => ({
-        ...searchItem,
+    searchItems.map((currentSearchItem) => ({
+        ...currentSearchItem,
         isSelected: false,
     }));
 
 /**
- * Creates a list of abbreviations that will get grouped together in a single card. The purpose of this is to group
- * different section types for the same course in a single card.
- * @param baseAbbreviation Abbreviation to search for in list of all sections
+ * Get selected search item, if there is one.
+ * @param searchItems List of all search items
  */
-const getAllAbbreviations = (baseAbbreviation: string, allSections: ISection[]): string[] => {
-    const sectionsWithBaseAbbreviation = allSections.filter(
-        (section: ISection) => section.departmentAndBareCourse === baseAbbreviation)
-        .map((section) => section.departmentAndCourse);
+const getSelectedSearchItem = (searchItems: ISearchItem[]): ISearchItem | undefined =>
+    searchItems.find((currentSearchItem) => currentSearchItem.isSelected);
 
-    if (sectionsWithBaseAbbreviation.length === 0) {
-        return [baseAbbreviation];
+/**
+ * Get list of unselected search items.
+ * @param searchItems List of all search items
+ */
+const getUnselectedSearchItems = (searchItems: ISearchItem[]): ISearchItem[] =>
+    searchItems.filter((currentSearchItem) => !currentSearchItem.isSelected);
+
+/**
+ * Finds current search item and moves originItemAbbreviation to currentItemBaseAbbreviation
+ * @param searchItems List of all search items
+ */
+const revertToOriginItemAbbreviation = (searchItems: ISearchItem[]): ISearchItem[] => {
+    const selectedSearchItem = getSelectedSearchItem(searchItems);
+    const unselectedSearchItems = getUnselectedSearchItems(searchItems);
+
+    if (selectedSearchItem === undefined) {
+        return unselectedSearchItems;
+    } else if (selectedSearchItem.originItemAbbreviation === undefined) {
+        return searchItems;
     } else {
-        return [...new Set(sectionsWithBaseAbbreviation)];
+        return [
+            ...unselectedSearchItems,
+            {
+                ...selectedSearchItem,
+                currentItemBaseAbbreviation: selectedSearchItem.originItemAbbreviation,
+                originItemAbbreviation: undefined,
+            },
+        ];
     }
 };
 
@@ -57,7 +144,7 @@ const getAllAbbreviations = (baseAbbreviation: string, allSections: ISection[]):
 const newSearchItem = (newSearch: IMetadata, allSections: ISection[], searchItems: ISearchItem[]): ISearchItem[] => {
     const newSearchAbbreviation = newSearch.abbreviation;
     const newSearchInSearchItems = searchItems.find(
-        (searchItem) => searchItem.currentItemBaseAbbreviation === newSearchAbbreviation);
+        (currentSearchItem) => currentSearchItem.currentItemBaseAbbreviation === newSearchAbbreviation);
 
     if (newSearchInSearchItems) {
         return selectSearchItem(newSearchAbbreviation, searchItems);
@@ -65,6 +152,7 @@ const newSearchItem = (newSearch: IMetadata, allSections: ISection[], searchItem
         return selectSearchItem(newSearchAbbreviation, [
             ...searchItems,
             {
+                // TODO - move all abbreviations to CourseCard (potentially wrap it with reselect)
                 currentItemAllAbbreviations: getAllAbbreviations(newSearchAbbreviation, allSections),
                 currentItemBaseAbbreviation: newSearchAbbreviation,
                 isSelected: true,
@@ -79,61 +167,30 @@ const newSearchItem = (newSearch: IMetadata, allSections: ISection[], searchItem
  * @param clickedSection Section to add or remove
  * @param searchItems List of all searches that have been performed by the user
  */
-const clickSectionListCard = (clickedSection: ISection, searchItems: ISearchItem[]): ISearchItem[] =>
-    searchItems.map((searchItem) => !searchItem.isSelected ? searchItem : {
-        ...searchItem,
-        selectedCrns: searchItem.selectedCrns.find((crn) => crn === clickedSection.CRN) ?
-            searchItem.selectedCrns.filter((crn) => crn !== clickedSection.CRN) :
-            [...searchItem.selectedCrns, clickedSection.CRN],
-        // TODO - set originItemAbbreviation for course groups
+const clickSectionListCard = (clickedSection: ISection, allSections: ISection[],
+                              searchItems: ISearchItem[]): ISearchItem[] =>
+    searchItems.map((currentSearchItem) => {
+        if (!currentSearchItem.isSelected) {
+            return currentSearchItem;
+        } else {
+            const isInSelectedCrns = currentSearchItem.selectedCrns.find((crn) => crn === clickedSection.CRN);
+            const noNewOrigin = allSections.find((section) =>
+                clickedSection.departmentAndBareCourse === currentSearchItem.currentItemBaseAbbreviation) === undefined;
+
+            return {
+                ...currentSearchItem,
+                currentItemAllAbbreviations: noNewOrigin ?
+                currentSearchItem.currentItemAllAbbreviations :
+                    getAllAbbreviations(clickedSection.departmentAndBareCourse, allSections),
+                currentItemBaseAbbreviation: noNewOrigin ?
+                currentSearchItem.currentItemBaseAbbreviation :
+                    clickedSection.departmentAndBareCourse,
+                originItemAbbreviation: noNewOrigin ?
+                    currentSearchItem.originItemAbbreviation :
+                    currentSearchItem.currentItemBaseAbbreviation,
+                selectedCrns: isInSelectedCrns ?
+                    currentSearchItem.selectedCrns.filter((crn) => crn !== clickedSection.CRN) :
+                    [...currentSearchItem.selectedCrns, clickedSection.CRN],
+            };
+        }
     });
-
-export const sectionReducer = (state: ISectionReducer = initialState, action: SectionActions): ISectionReducer => {
-    switch (action.type) {
-        case SectionActionType.RECEIVE_SECTIONS:
-            return {
-                ...state,
-                allSections: action.sections,
-                status: DataLoadingState.LOADED,
-            };
-
-        case SectionActionType.ERROR_RECEIVING_SECTIONS:
-            return {
-                ...state,
-                status: DataLoadingState.FAILED,
-            };
-
-        case SectionActionType.MOUSE_ENTER_SECTION_LIST_CARD:
-            return {
-                ...state,
-                sectionListHoverCrn: action.section.CRN,
-            };
-
-        case SectionActionType.MOUSE_LEAVE_SECTION_LIST_CARD:
-            return {
-                ...state,
-                sectionListHoverCrn: null,
-            };
-
-        case SectionActionType.CLICK_SECTION_LIST_CARD:
-            return {
-                ...state,
-                searchItems: clickSectionListCard(action.section, state.searchItems),
-            };
-
-        case SectionActionType.SEARCH_ITEM:
-            return {
-                ...state,
-                searchItems: newSearchItem(action.item, state.allSections, state.searchItems),
-            };
-
-        case SectionActionType.CLICK_DONE_SELECTING:
-            return {
-                ...state,
-                searchItems: deselectAllSearchItems(state.searchItems),
-            };
-
-        default:
-            return state;
-    }
-};
