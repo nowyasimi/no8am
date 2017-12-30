@@ -1,20 +1,26 @@
 import * as React from "react";
+import {bindActionCreators, Dispatch} from "redux";
+
+import {connect} from "../Connect";
+import {IAllReducers} from "../Interfaces";
 
 import {Switch} from "@blueprintjs/core";
-import {connect} from "react-redux";
 import TimeAgo from "react-timeago";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import englishStrings from "react-timeago/lib/language-strings/en";
 
-import {clickAdvancedSectionSelection} from "./FilterActions";
+import {clickAdvancedSectionSelection, returnOfClickAdvancedSectionSelection} from "./FilterActions";
 
-interface IGlobalFiltersProps {
+interface IGlobalFiltersStateProps {
     isAdvanced?: boolean;
-    onClickAdvancedSectionSelection?: () => Promise<void>;
 }
 
-@(connect(mapStateToProps, mapDispatchToProps) as any)
-export default class GlobalFilters extends React.Component<IGlobalFiltersProps, undefined> {
+interface IGlobalFiltersDispatchProps {
+    onClickAdvancedSectionSelection?: () => typeof returnOfClickAdvancedSectionSelection;
+}
+
+@connect<IGlobalFiltersStateProps, IGlobalFiltersDispatchProps, {}> (mapStateToProps, mapDispatchToProps)
+export default class GlobalFilters extends React.Component<IGlobalFiltersStateProps & IGlobalFiltersDispatchProps> {
 
     public render() {
         const formatter = buildFormatter(englishStrings);
@@ -24,22 +30,25 @@ export default class GlobalFilters extends React.Component<IGlobalFiltersProps, 
         return (
             <div className="filters">
                 <TimeAgo date={cacheTime} formatter={formatter} />
-                <Switch style={{fontWeight: "normal"}} checked={!this.props.isAdvanced} label="Hide restricted sections" onChange={this.props.onClickAdvancedSectionSelection} />
+                <Switch
+                    style={{fontWeight: "normal"}}
+                    checked={!this.props.isAdvanced}
+                    label="Hide restricted sections"
+                    onChange={this.props.onClickAdvancedSectionSelection}
+                />
             </div>
         );
     }
 }
 
-// Map Redux state to component props
-function mapStateToProps(state) {
+function mapStateToProps(state: IAllReducers): IGlobalFiltersStateProps {
     return {
-        isAdvanced: state.isAdvanced,
+        isAdvanced: state.filters.isAdvanced,
     };
 }
 
-// Map Redux actions to component props
-function mapDispatchToProps(dispatch) {
-    return {
-        onClickAdvancedSectionSelection: () => dispatch(clickAdvancedSectionSelection()),
-    };
+function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): IGlobalFiltersDispatchProps {
+    return bindActionCreators({
+        onClickAdvancedSectionSelection: clickAdvancedSectionSelection,
+    }, dispatch);
 }

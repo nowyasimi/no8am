@@ -1,20 +1,19 @@
 import * as React from "react";
-import {connect} from "react-redux";
-import {Dispatch} from "redux";
+import {bindActionCreators, Dispatch} from "redux";
 
-import {IMetadata} from "../Interfaces";
-import {loadSections} from "../sections/SectionActions";
+import {connect} from "../Connect";
+import {IAllReducers, IMetadata} from "../Interfaces";
+import {ILoadSectionsThunk, loadSections} from "../sections/SectionActions";
 
 import Calendar from "../calendar/Calendar";
 import LeftSide from "./LeftSide";
 
-interface IMainProps {
-    onLoadSections?: () => Promise<void>;
+interface IMainDispatchProps {
+    onLoadSections: () => ILoadSectionsThunk;
 }
 
-/* tslint:disable:no-empty */
-@(connect(() => {}, mapDispatchToProps) as any)
-export class Main extends React.Component<IMainProps, undefined> {
+@connect<{}, IMainDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
+export class Main extends React.Component<IMainDispatchProps, undefined> {
 
     public componentDidMount() {
         this.props.onLoadSections();
@@ -31,8 +30,12 @@ export class Main extends React.Component<IMainProps, undefined> {
 
 }
 
-function mapDispatchToProps(dispatch: any) {
-    return {
-        onLoadSections: () => dispatch(loadSections()),
-    };
+function mapStateToProps(state: IAllReducers) {
+    return {};
+}
+
+function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): IMainDispatchProps {
+    return bindActionCreators({
+        onLoadSections: loadSections,
+    }, dispatch);
 }

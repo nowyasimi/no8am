@@ -1,26 +1,73 @@
-import * as React from 'react'
-import * as classNames from 'classnames'
+import * as React from "react";
+import {bindActionCreators, Dispatch} from "redux";
 
-import {connect} from 'react-redux'
+import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuItem} from "@blueprintjs/core";
+import {ISelectItemRendererProps, Omnibox} from "@blueprintjs/labs";
+import * as classNames from "classnames";
 
-import {MenuItem, Hotkey, Hotkeys, HotkeysTarget, Classes} from '@blueprintjs/core'
-import {Omnibox} from '@blueprintjs/labs'
-
-import {closeSearchOmnibox, loadMetadata, openSearchOmnibox, searchItem, toggleSearchOmnibox} from '../actions/sectionActions'
-import {IMetadata} from '../Interfaces'
-import {SEARCH_ITEM_TYPE} from '../Constants'
+import {connect} from "../Connect";
+import {DataLoadingState, SearchItemType, SearchItemTypes} from "../Constants";
+import {IAllReducers, IMetadata, ISearchItem} from "../Interfaces";
+import {closeSearchOmnibox, ILoadMetadataThunk, loadMetadata, openSearchOmnibox, returnOfCloseSearchOmnibox,
+        returnOfOpenSearchOmnibox, returnOfToggleSearchOmnibox, toggleSearchOmnibox} from "../search/SearchActions";
+import {returnOfSearchItem, searchItem} from "../sections/SectionActions";
 
 export const searchKeyCombo = "mod + k";
 
-@connect(mapStateToProps, mapDispatchToProps)
-@HotkeysTarget
-export class SearchOmnibox extends React.Component {
+interface ISearchOmniboxStateProps {
+    isOpen: boolean;
+    metadata: IMetadata[];
+    searchHistory: IMetadata[];
+    status: DataLoadingState;
+}
 
-    componentDidMount() {
+interface ISearchOmniboxDispatchProps {
+    onCloseSearchOmnibox: () => typeof returnOfCloseSearchOmnibox;
+    onLoadMetadata: () => ILoadMetadataThunk;
+    onOpenSearchOmnibox: () => typeof returnOfOpenSearchOmnibox;
+    onSearchItem: (item: IMetadata) => typeof returnOfSearchItem;
+    onToggleSearchOmnibox: () => typeof returnOfToggleSearchOmnibox;
+}
+
+interface IMetadataByType {
+    [x: string]: SearchOmniboxItem[];
+}
+
+interface ISearchHeader {
+    text: string;
+}
+
+type SearchOmniboxItem = ISearchHeader | IMetadata;
+
+const SearchOmniboxWrapper = Omnibox.ofType<SearchOmniboxItem>();
+
+@connect<ISearchOmniboxStateProps, ISearchOmniboxDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
+@HotkeysTarget
+export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & ISearchOmniboxDispatchProps> {
+
+    private initialContent = (
+        <MenuItem
+            disabled={true}
+            text={"Search by CCC, course, or number of credits"}
+        />
+    );
+
+    private noResults = (
+        // TODO
+        // } else if (this.props.searchHistory.length > 0) {
+        //     return ([{text: "Recent Searches (No results)"}] as SearchOmniboxItem[])
+        //         .concat(this.props.searchHistory);
+        <MenuItem
+            disabled={true}
+            text={"No results for query"}
+        />
+    );
+
+    public componentDidMount() {
         this.props.onLoadMetadata();
     }
 
-    renderHotkeys() {
+    public renderHotkeys() {
         return (
             <Hotkeys>
                 <Hotkey
@@ -31,7 +78,7 @@ export class SearchOmnibox extends React.Component {
                     onKeyDown={this.props.onToggleSearchOmnibox}
                 />
                 <Hotkey
-                    allowInInput
+                    allowInInput={true}
                     disabled={!this.props.isOpen}
                     global={true}
                     combo="esc"
@@ -42,134 +89,147 @@ export class SearchOmnibox extends React.Component {
         );
     }
 
-    render() {
+    public render() {
         return (
-            <Omnibox
+            <SearchOmniboxWrapper
                 isOpen={this.props.isOpen}
                 itemListPredicate={this.itemListPredicate}
                 itemRenderer={this.itemRenderer}
-                items={this.props.metadata.items}
+                items={this.props.metadata}
+                initialContent={this.initialContent}
+                noResults={this.noResults}
                 onItemSelect={this.onItemSelect}
-                inputProps={{ onBlur: this.onItemSelect }}
+                onClose={this.props.onCloseSearchOmnibox}
                 resetOnSelect={true}
             />
         );
     }
 
-    itemListPredicate = (query, itemList) => {
+    private itemListPredicate = (query: string, itemList: SearchOmniboxItem[]): SearchOmniboxItem[] => {
+        // get metadata that matches query
+        const filteredList = itemList.filter((x) => isMetadata(x) && x.token.includes(query.toLowerCase()));
 
-        let filteredList = itemList.filter(x => x.token.includes(query.toLowerCase()));
+        const metadataByType: IMetadataByType = {
+            [SearchItemType.CCC.toString()]: [],
+            [SearchItemType.Course.toString()]: [],
+            [SearchItemType.Credit.toString()]: [],
+            [SearchItemType.Department.toString()]: [],
+        };
 
-        let noResults = filteredList.length == 0;
-        let noQuery = query == "";
+        const filteredListByType = filteredList
+            // separate by SearchItemType
+            .reduce((searchOmniboxItemsByType, nextSearchOmniboxItem) => isMetadata(nextSearchOmniboxItem) ? ({
+                ...searchOmniboxItemsByType,
+                [nextSearchOmniboxItem.itemType.toString()]:
+                    searchOmniboxItemsByType[nextSearchOmniboxItem.itemType.toString()].concat(nextSearchOmniboxItem),
+            }) : searchOmniboxItemsByType, metadataByType);
 
-        if (this.props.metadata.loading) {
-            return [{text: 'Loading course information', itemType: SEARCH_ITEM_TYPE.HEADER}];
-        } else if ((noResults || noQuery) && this.props.searchHistory.length > 0) {
-            return [{text: 'Recent Searches (No results)', itemType: SEARCH_ITEM_TYPE.HEADER}]
-                .concat(this.props.searchHistory.map(history => history.item));
-        } else if ((noResults || noQuery) && this.props.searchHistory.length == 0) {
-            return [{text: 'Search by CCC, course, or number of credits', itemType: SEARCH_ITEM_TYPE.HEADER}];
-        }
+        filteredListByType.Course.sort(courseSort(query));
 
-        let filteredListWithHeaders = [];
+        const filteredListWithHeadersByType: SearchOmniboxItem[] = SearchItemTypes
+            // prevent adding headers if there are no results for the itemType
+            .filter((itemType) => filteredListByType[itemType].length !== 0)
+            // add header for each itemType
+            .map((itemType) => [{text: itemType}, ...filteredListByType[itemType]])
+            // convert to a 1D array of metadata and headers
+            .reduce((searchOmniboxItems, nextSearchOmniboxItems) =>
+                [...searchOmniboxItems, ...nextSearchOmniboxItems], []);
 
-        for (const type of SEARCH_ITEM_TYPE.enumValues) {
-            let itemsOfType = filteredList.filter(x => x.itemType == type);
+        return filteredListWithHeadersByType.slice(0, 50);
+    }
 
-            itemsOfType = type == SEARCH_ITEM_TYPE.Course ? itemsOfType.sort(courseSort(query)) : itemsOfType;
-
-            filteredListWithHeaders = itemsOfType.length == 0 ? filteredListWithHeaders :
-                filteredListWithHeaders.concat([{text: type.name, itemType: SEARCH_ITEM_TYPE.HEADER}]).concat(itemsOfType);
-        }
-
-        return filteredListWithHeaders.slice(0, 50);
-
-    };
-
-    itemRenderer({ handleClick, isActive, item }) {
+    private itemRenderer({handleClick, isActive, item}: ISelectItemRendererProps<SearchOmniboxItem>) {
         const classes = classNames({
             [Classes.ACTIVE]: isActive,
-            [Classes.INTENT_PRIMARY]: isActive
+            [Classes.INTENT_PRIMARY]: isActive,
         });
 
-        switch (item.itemType) {
-            case SEARCH_ITEM_TYPE.HEADER:
-                return <MenuItem
-                    disabled
+        if (isMetadata(item)) {
+            return (
+                <MenuItem
                     className={classes}
-                    key={item.text} text={item.text}
-                    onClick={handleClick}
-                />;
-            default:
-                return <MenuItem
-                    className={classes}
-                    key={`${item.itemType}${item.token}`} text={item.userFriendlyFormat}
+                    key={`${item.itemType}${item.token}`}
+                    text={item.userFriendlyFormat}
                     label={item.info}
                     onClick={handleClick}
-                />;
+                />);
+        } else if (isSearchHeader(item)) {
+             return (
+                <MenuItem
+                    disabled={true}
+                    className={classes}
+                    key={item.text}
+                    text={item.text}
+                    onClick={handleClick}
+                />);
+        } else {
+            return <div>TODO</div>;
         }
     }
 
-    onItemSelect = (item) => {
-        if (this.props.isOpen && item.hasOwnProperty("itemType")) {
+    private onItemSelect = (item: SearchOmniboxItem | undefined, event?: any) => {
+        if (this.props.isOpen && item !== undefined && isMetadata(item)) {
             this.props.onSearchItem(item);
-
             this.props.onCloseSearchOmnibox();
         }
-    };
+    }
 
 }
 
-const courseSort = (query) => (a: IMetadata, b: IMetadata) => {
-    //get input text
-    let InputString = query;
+const isMetadata = (searchOmniboxItem: SearchOmniboxItem): searchOmniboxItem is IMetadata => {
+    return (searchOmniboxItem as IMetadata).token !== undefined;
+};
 
-    let inputLen = InputString.length;
+const isSearchHeader = (searchOmniboxItem: SearchOmniboxItem): searchOmniboxItem is ISearchHeader => {
+    return (searchOmniboxItem as ISearchHeader).text !== undefined;
+};
+
+const courseSort = (query: string) => (a: SearchOmniboxItem, b: SearchOmniboxItem) => {
+    // ignore headers, they should never be passed to this function
+    if (!isMetadata(a) || !isMetadata(b)) {
+        throw Error("Headers should not be passed to courseSort");
+    }
+
+    // get input text
+    const InputString = query;
+    const inputLen = InputString.length;
 
     // get shortened courseNum, look at first len(InputString) letters
-    let shortA = a.abbreviation.substring(0,inputLen).toLowerCase();
-    let shortB = b.abbreviation.substring(0,inputLen).toLowerCase();
+    const shortA = a.abbreviation.substring(0, inputLen).toLowerCase();
+    const shortB = b.abbreviation.substring(0, inputLen).toLowerCase();
 
-    // case 1: a and b are in same dept:
-    // compare the letter ordering (eg MATH 120 vs MATH 200)
     if (InputString === shortA && InputString === shortB) {
+        // case 1: a and b are in same dept:
+        // compare the letter ordering (eg MATH 120 vs MATH 200)
         return a.abbreviation.localeCompare(b.abbreviation);
-    }
-    // case 2: a is in dept, b isn't:
-    else if (InputString === shortA && InputString !== shortB) {
+    } else if (InputString === shortA && InputString !== shortB) {
+        // case 2: a is in dept, b isn't:
         return -1;
-    }
-    // case 3: a isn't in dept, b is:
-    else if (InputString !== shortA && InputString === shortB) {
+    } else if (InputString !== shortA && InputString === shortB) {
+        // case 3: a isn't in dept, b is:
         return 1;
-    }
-    // case 3: neither are in depts
-    // compare the letter ordering (eg CSCI 200 vs ENGR 340)
-    else {
+    } else {
+        // case 4: neither are in depts
+        // compare the letter ordering (eg CSCI 200 vs ENGR 340)
         return a.abbreviation.localeCompare(b.abbreviation);
     }
 };
 
-
-// Map Redux state to component props
-function mapStateToProps(state) {
+function mapStateToProps(state: IAllReducers): ISearchOmniboxStateProps {
     return {
-        isOpen: state.isSearchOmniboxOpen,
-        searchHistory: state.searchHistory,
-        metadata: state.metadata
-    }
+        isOpen: state.search.isSearchOmniboxOpen,
+        metadata: state.search.metadata,
+        searchHistory: state.search.searchHistory,
+        status: state.search.status,
+    };
 }
 
-// Map Redux actions to component props
-function mapDispatchToProps(dispatch) {
-    return {
-        onToggleSearchOmnibox: () => dispatch(toggleSearchOmnibox()),
-        onCloseSearchOmnibox: () => dispatch(closeSearchOmnibox()),
-        onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
-        onSearchItem: (item) => dispatch(searchItem(item)),
-        onLoadMetadata: () => dispatch(loadMetadata())
-    }
+function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ISearchOmniboxDispatchProps {
+    return bindActionCreators({
+        onCloseSearchOmnibox: closeSearchOmnibox,
+        onLoadMetadata: loadMetadata,
+        onOpenSearchOmnibox: openSearchOmnibox,
+        onSearchItem: (item: IMetadata) => searchItem(item),
+        onToggleSearchOmnibox: toggleSearchOmnibox,
+    }, dispatch);
 }
-
-

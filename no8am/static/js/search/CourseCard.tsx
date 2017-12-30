@@ -6,10 +6,10 @@ import {bindActionCreators, Dispatch} from "redux";
 import {connect} from "../Connect";
 
 import {Classes} from "@blueprintjs/core";
-import assertNever from "assert-never";
-import {SEARCH_ITEM_TYPE} from "../Constants";
+import * as classNames from "classnames";
 import {IAllReducers, ISearchItemWithAllAbbreviations, ISectionReducer} from "../Interfaces";
-import {clickCourseCard, returnOfClickCourseCard} from "../sections/SectionActions";
+import {clickCourseCard, returnOfClickCourseCard, searchItem} from "../sections/SectionActions";
+import { SearchItemType } from "../Constants";
 
 const cardStyle = {
     flex: "1 1 200px",
@@ -21,7 +21,7 @@ interface ICourseCard {
 }
 
 interface ICourseCardDispatchProps {
-    onClickCourseCard?: () => typeof returnOfClickCourseCard;
+    onClickCourseCard: () => typeof returnOfClickCourseCard;
 }
 
 @connect<{}, ICourseCardDispatchProps, ICourseCard>(null, mapDispatchToProps)
@@ -41,15 +41,31 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
     //         </div> */}
 
     public render() {
+        const classes = classNames(
+            Classes.CARD,
+            Classes.INTERACTIVE,
+            {
+                selectedSection: this.props.searchItem.isSelected,
+            },
+        );
+
         return (
             <div
-                className={`${Classes.CARD} ${Classes.INTERACTIVE}`}
+                className={classes}
                 style={cardStyle}
                 onClick={this.props.onClickCourseCard}
             >
-                this.props.searchItem.currentItemBaseAbbreviation
+                <h5>{this.props.searchItem.currentItemBaseAbbreviation}</h5>
+                <p>{this.formatAbbreviations()}</p>
             </div>
         );
+    }
+
+    private formatAbbreviations() {
+        return this.props.searchItem.searchItemType === SearchItemType.Course ?
+            this.props.searchItem.currentItemAllAbbreviations
+                .map((abbreviation) => <span key={abbreviation}>{abbreviation} <br /></span>) :
+            [];
     }
 
     private handleClickCourseCard() {
@@ -59,11 +75,6 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
             throw new Error("Course card click event handler should not be undefined");
         }
     }
-}
-
-function mapStateToProps(state: IAllReducers) {
-    return {
-    };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, ownProps: ICourseCard): ICourseCardDispatchProps {

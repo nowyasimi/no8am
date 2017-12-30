@@ -1,56 +1,54 @@
-import {Enum} from 'enumify'
-
 export const colorDict = {
-  "blue":{
-    "s": "#5496dd", // selected 
-    "h": "#5c9ef9", // selected + hover
-    "n": "#A5CAFD"  // unselected
-  },
-  "red":{
-    "s": "#ff454b",
-    "h": "#ff6164",
-    "n": "#FFA9AB"
-  },
-  "yellow":{
-    "s": "#ffac4d",
-    "h": "#ffbd6a",
-    "n": "#FFD6A3"
-  },
-  "green":{
-    "s": "#94e354",
-    "h": "#98e857",
-    "n": "#C4E7A7"
-  },
-  "purple":{
-    "s": "#a97be6",
-    "h": "#bc9de6",
-    "n": "#c69fe5"
-  },
-  "orange":{
-    "s": "#e99b34",
-    "h": "#e6a153",
-    "n": "#f2a98d"
-  },
-  "pink":{
-    "s": "#f35ee1",
-    "h": "#f18bea",
-    "n": "#f09eee"
-  },
-  "teal":{
-    "s": "#3faabb",
-    "h": "#338794",
-    "n": "#88ced9"
-  },
-  "cyan":{
-    "s": "#2d8284",
-    "h": "#205c5d",
-    "n": "#205c5d"
-  },
-  "lightgreen":{
-    "s": "#66cb65",
-    "h": "#43bb41",
-    "n": "#b1e6b0"
-  }
+    blue: {
+        h: "#5c9ef9", // selected + hover
+        n: "#A5CAFD", // unselected
+        s: "#5496dd", // selected
+    },
+    cyan: {
+        h: "#205c5d",
+        n: "#205c5d",
+        s: "#2d8284",
+    },
+    green: {
+        h: "#98e857",
+        n: "#C4E7A7",
+        s: "#94e354",
+    },
+    lightgreen: {
+        h: "#43bb41",
+        n: "#b1e6b0",
+        s: "#66cb65",
+    },
+    orange: {
+        h: "#e6a153",
+        n: "#f2a98d",
+        s: "#e99b34",
+    },
+    pink: {
+        h: "#f18bea",
+        n: "#f09eee",
+        s: "#f35ee1",
+    },
+    purple: {
+        h: "#bc9de6",
+        n: "#c69fe5",
+        s: "#a97be6",
+    },
+    red: {
+        h: "#ff6164",
+        n: "#FFA9AB",
+        s: "#ff454b",
+    },
+    teal: {
+        h: "#338794",
+        n: "#88ced9",
+        s: "#3faabb",
+    },
+    yellow: {
+        h: "#ffbd6a",
+        n: "#FFD6A3",
+        s: "#ffac4d",
+    },
 };
 
 export enum DataLoadingState {
@@ -58,6 +56,16 @@ export enum DataLoadingState {
     LOADED,
     LOADING,
     REFRESHING,
+}
+
+// items appear in search box in this order
+export const SearchItemTypes = ["Credit", "CCC", "Department", "Course"];
+
+export enum SearchItemType {
+    CCC = "CCC",
+    Course = "Course",
+    Credit = "Credit",
+    Department = "Department",
 }
 
 export const DAYS_OF_WEEK: string[] = ["M", "T", "W", "R", "F"];
@@ -75,6 +83,3 @@ export const SUCCESSFUL_SAVE_MESSAGE: string = '<div class="alert alert-success 
 export const REPORT_SENT_MESSAGE: string = '<div class="alert alert-success alert-dismissible reportSuccess" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>Report sent!</b>  We\'ll fix it as soon as possible.</div>';
 export const NEW_CUSTOM_LINK_WARNING: string = "You have modified your schedule. Be sure to generate a new custom link!";
 export const JUST_DO_IT: string = '<div class="shia-do-it" style="margin-right: 30px;"><div class="container"><video id="doitvid" width="960" height="540" autoplay="" name="media" src="https://etaheri.github.io/output.webm" style="visibility: visible;"><source type="video/webm"></video></div></div>';
-
-export class SEARCH_ITEM_TYPE extends Enum {}
-SEARCH_ITEM_TYPE.initEnum(["HEADER", "Credit", "CCC", "Department", "Course"]);

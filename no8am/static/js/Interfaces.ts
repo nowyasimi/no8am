@@ -1,6 +1,7 @@
-import {DataLoadingState} from "./Constants";
+import {DataLoadingState, SearchItemType} from "./Constants";
 
 export interface ISectionUnparsed {
+    credits: string;
     CCC: string[];
     course: string;
     courseName: string;
@@ -10,6 +11,7 @@ export interface ISectionUnparsed {
     departmentAndCourse: string;
     departmentAndCourseAndSection: string;
     freeSeats: string;
+    main: boolean;
     message: string;
     resSeats: string;
     roomMet: string[];
@@ -20,19 +22,33 @@ export interface ISectionUnparsed {
     waitList: string;
 }
 
-export interface ISectionParsed extends ISectionUnparsed {
-    daysMet: any;
-}
-
-export interface ISectionMain extends ISectionParsed {
-    main: boolean;
-}
-
-export interface ISectionExtra extends ISectionParsed {
+export interface ISectionExtraUnparsed extends ISectionUnparsed {
     dependent_main_sections: string[];
 }
 
-export type ISection =
+export interface IMeetingTime {
+    day: string;
+    duration: number;
+    startTime: number;
+    startTimeUserFriendly: string;
+    endTimeUserFriendly: string;
+}
+
+export interface IMeetingTimes {
+    meetingTimes: IMeetingTime[];
+}
+
+export interface ISectionMain extends ISectionUnparsed, IMeetingTimes {}
+
+export interface ISectionExtra extends ISectionExtraUnparsed, IMeetingTimes {}
+
+export interface ISection extends ISectionMain, ISectionExtra {}
+
+export type SectionUnparsed =
+    | ISectionUnparsed
+    | ISectionExtraUnparsed;
+
+export type Section =
     | ISectionMain
     | ISectionExtra;
 
@@ -45,7 +61,7 @@ export interface IMetadataUnparsed {
 export interface IMetadata extends IMetadataUnparsed {
     userFriendlyFormat: string;
     token: string;
-    itemType: any;
+    itemType: SearchItemType;
 }
 
 export interface ISelectedSection {
@@ -56,12 +72,22 @@ export interface ISelectedSection {
 export interface ISearchItem {
     readonly currentItemBaseAbbreviation: string;
     readonly isSelected: boolean;
-    readonly originItemAbbreviation?: string;
+    readonly originItemAbbreviation: string | null;
+    readonly searchItemType: SearchItemType;
     readonly selectedCrns: string[];
 }
 
 export interface ISearchItemWithAllAbbreviations extends ISearchItem {
     readonly currentItemAllAbbreviations: string[];
+}
+
+export interface ICalendarReducer {
+    readonly hoverCRN: string | null;
+}
+
+export interface IFilterReducer {
+    filterTime: [number, number];
+    isAdvanced: boolean;
 }
 
 export interface ISearchReducer {
@@ -72,18 +98,15 @@ export interface ISearchReducer {
 }
 
 export interface ISectionReducer {
-    readonly allSections: ISection[];
+    readonly allSections: Section[];
     readonly searchItems: ISearchItem[];
     readonly sectionListHoverCrn: string | null;
     readonly status: DataLoadingState;
 }
 
-export interface ICalendarReducer {
-    readonly hoverCRN: string;
-}
-
 export interface IAllReducers {
     readonly calendar: ICalendarReducer;
+    readonly filters: IFilterReducer;
     readonly search: ISearchReducer;
     readonly sections: ISectionReducer;
 }

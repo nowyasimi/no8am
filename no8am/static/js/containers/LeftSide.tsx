@@ -1,6 +1,5 @@
 import * as React from "react";
-
-import {connect} from "react-redux";
+import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
 import {Button, Classes, IconClasses, KeyCombo, Menu, MenuItem, NonIdealState, Popover, Position,
@@ -12,22 +11,25 @@ import CourseCards from "../search/CourseCards";
 import {searchKeyCombo, SearchOmnibox} from "../search/SearchOmnibox";
 import SectionList from "../sections/SectionList";
 
+import {connect} from "../Connect";
 import {DataLoadingState} from "../Constants";
-import {clickAdvancedSectionSelection} from "../filters/FilterActions";
+import {clickAdvancedSectionSelection, returnOfClickAdvancedSectionSelection} from "../filters/FilterActions";
+import {getSelectedSearchItemMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem} from "../Interfaces";
-import {openSearchOmnibox} from "../search/SearchActions";
+import {openSearchOmnibox, returnOfOpenSearchOmnibox} from "../search/SearchActions";
 
 type ILeftSideProps = ILeftSideStateProps & ILeftSideDispatchProps;
 
 interface ILeftSideStateProps {
     hasSearchItems: boolean;
+    selectedSearchItem: ISearchItem | undefined;
     searchStatus: DataLoadingState;
     sectionStatus: DataLoadingState;
 }
 
 interface ILeftSideDispatchProps {
-    onClickAdvancedSectionSelection: () => Promise<void>;
-    onOpenSearchOmnibox: () => Promise<void>;
+    onClickAdvancedSectionSelection: () => typeof returnOfClickAdvancedSectionSelection;
+    onOpenSearchOmnibox: () => typeof returnOfOpenSearchOmnibox;
 }
 
 @connect<ILeftSideStateProps, ILeftSideDispatchProps, ILeftSideProps>(mapStateToProps, mapDispatchToProps)
@@ -44,7 +46,7 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
 
         return (
             <div className="col-sm-6" id="filters">
-                <SearchOmnibox/>
+                <SearchOmnibox />
 
                 <div className={`${Classes.BUTTON_GROUP} ${Classes.FILL} ${Classes.LARGE}`}>
                     <OpenDialog />
@@ -64,7 +66,7 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
             this.props.sectionStatus === DataLoadingState.FAILED) {
             return (
                 <div>
-                    TODO
+                    Failed to load course data. Refresh the page or try again later.
                 </div>
             );
         } else if (this.props.searchStatus === DataLoadingState.LOADING ||
@@ -77,8 +79,16 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
                     description={`Loading course information`}
                 />
             );
+        } else if (this.props.hasSearchItems && this.props.selectedSearchItem === undefined) {
+            return (
+                <NonIdealState
+                    visual={IconClasses.SELECT}
+                    className="nonIdealState"
+                    description="Choose from the searches above to view sections"
+                />
+            );
         } else if (this.props.hasSearchItems) {
-            return <SectionList {...this.props.currentSearch} />;
+            return <SectionList searchItem={this.props.selectedSearchItem} />;
         } else if (!this.props.hasSearchItems) {
             return (
                 <NonIdealState
@@ -110,12 +120,13 @@ function mapStateToProps(state: IAllReducers): ILeftSideStateProps {
         hasSearchItems: getHasSearchItems(state),
         searchStatus: state.search.status,
         sectionStatus: state.sections.status,
+        selectedSearchItem: getSelectedSearchItemMemoized(state),
     };
 }
 
-function mapDispatchToProps(dispatch): ILeftSideDispatchProps {
-    return {
-        onClickAdvancedSectionSelection: () => dispatch(clickAdvancedSectionSelection()),
-        onOpenSearchOmnibox: () => dispatch(openSearchOmnibox()),
-    };
+function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILeftSideDispatchProps {
+    return bindActionCreators({
+        onClickAdvancedSectionSelection: clickAdvancedSectionSelection,
+        onOpenSearchOmnibox: openSearchOmnibox,
+    }, dispatch);
 }

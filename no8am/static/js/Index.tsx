@@ -8,6 +8,7 @@ import {Provider} from "react-redux";
 import thunkMiddleware from "redux-thunk";
 
 import {calendar} from "./calendar/CalendarReducer";
+import {filters} from "./filters/FilterReducer";
 import {search} from "./search/SearchReducer";
 import {sections} from "./sections/SectionReducer";
 
@@ -16,7 +17,7 @@ import {Main} from "./containers/Main";
 // global.Perf = Perf
 
 const store = createStore(
-    combineReducers({calendar, search, sections}),
+    combineReducers({calendar, filters, search, sections}),
     // @ts-ignore
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunkMiddleware), // lets us dispatch() functions
@@ -26,5 +27,5 @@ ReactDOM.render(
     <Provider store={store}>
         <Main />
     </Provider>,
-    document.getElementById("mainReactContainer")
+    document.getElementById("mainReactContainer"),
 );

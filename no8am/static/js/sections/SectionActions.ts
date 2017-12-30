@@ -3,14 +3,13 @@ import {ThunkAction} from "redux-thunk";
 import {createAction} from "ts-redux-actions";
 
 import {SEARCH_ITEM_TYPE, SECTION_DETAILS_URL} from "../Constants";
-import {IAllReducers, IMetadata, ISearchItem, ISection, ISectionUnparsed} from "../Interfaces";
-import {SearchActionType} from "../search/SearchActions";
+import {IAllReducers, IMeetingTime, IMetadata, ISearchItem, Section, SectionUnparsed} from "../Interfaces";
 import {search} from "../search/SearchReducer";
 
-import { getReturnOfExpression } from "react-redux-typescript";
+import {getReturnOfExpression} from "react-redux-typescript";
 
 export const receiveSections = createAction("RECEIVE_SECTIONS",
-    (sections: ISection[]) => ({
+    (sections: Section[]) => ({
         sections,
         type: "RECEIVE_SECTIONS",
     }),
@@ -22,20 +21,20 @@ export const errorReceivingSections = createAction("ERROR_RECEIVING_SECTIONS",
     }),
 );
 
-type ILoadSectionsThunk = ActionCreator<ThunkAction<void, {}, {}>>;
+export type ILoadSectionsThunk = ThunkAction<void, {}, {}>;
 
 export const loadSections = (): ILoadSectionsThunk => {
     return (dispatch) => {
         return fetch(SECTIONS_URL)
-            .then((response) => response.json())
+            .then((response) => response.json(),
+                  (error) => dispatch(errorReceivingSections()))
             .then((jsonResponse) => initializeSections(jsonResponse.sections))
-            .then((sections: ISection[]) => dispatch(receiveSections(sections)))
-            .catch(dispatch(errorReceivingSections()));
+            .then((sections: Section[]) => dispatch(receiveSections(sections)));
     };
 };
 
 export const mouseEnterSectionListCard = createAction("MOUSE_ENTER_SECTION_LIST_CARD",
-    (section: ISection) => ({
+    (section: Section) => ({
         section,
         type: "MOUSE_ENTER_SECTION_LIST_CARD",
     }),
@@ -48,7 +47,7 @@ export const mouseLeaveSectionListCard = createAction("MOUSE_LEAVE_SECTION_LIST_
 );
 
 export const clickSectionListCard = createAction("CLICK_SECTION_LIST_CARD",
-    (section: ISection) => ({
+    (section: Section) => ({
         section,
         type: "CLICK_SECTION_LIST_CARD",
     }),
@@ -80,10 +79,10 @@ export const revertToOriginAbbreviation = createAction("REVERT_TO_ORIGIN_ABBREVI
     }),
 );
 
-const initializeSections = (sections: ISectionUnparsed[]) => {
+const initializeSections = (sections: SectionUnparsed[]): Section[] => {
     return sections.map((section) => ({
         ...section,
-        daysMet: parseTimesMet(restructureHours(section.timesMet)),
+        meetingTimes: parseTimesMet(restructureHours(section.timesMet)),
     }));
 };
 
@@ -148,7 +147,7 @@ const restructureHours = (timesMet) => {
     return newTimesMet;
 };
 
-const parseTimesMet = (timesMet) => {
+const parseTimesMet = (timesMet): IMeetingTime[] => {
 
     const daysMet = [];
 
@@ -167,7 +166,14 @@ const parseTimesMet = (timesMet) => {
             if (day === "S") {
                 continue;
             }
-            daysMet.push([day, parsedStart, parsedEnd, start.slice(0, -2), end.slice(0, -2)]);
+
+            daysMet.push({
+                day,
+                duration: parsedEnd,
+                endTimeUserFriendly: end.slice(0, -2),
+                startTime: parsedStart,
+                startTimeUserFriendly: start.slice(0, -2),
+            });
         }
     }
 

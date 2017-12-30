@@ -1,21 +1,21 @@
-import {SEARCH_ITEM_TYPE} from "../Constants";
-import {ICalendarReducer} from "../Interfaces";
+import {getType} from "ts-redux-actions";
 
-import {CalendarActions, CalendarActionType} from "./CalendarActions";
+import {ICalendarReducer} from "../Interfaces";
+import * as CalendarActions from "./CalendarActions";
 
 const initialState: ICalendarReducer = {
     hoverCRN: null,
 };
 
-export const calendar = (state: ICalendarReducer = initialState, action: CalendarActions): ICalendarReducer => {
+export const calendar = (state = initialState, action: CalendarActions.IActions): ICalendarReducer => {
     switch (action.type) {
-        case CalendarActionType.MOUSE_ENTER_CALENDAR_SECTION:
+        case getType(CalendarActions.mouseEnterCalendarSection):
             return {
                 ...state,
                 hoverCRN: action.CRN,
             };
 
-        case CalendarActionType.MOUSE_LEAVE_CALENDAR_SECTION:
+        case getType(CalendarActions.mouseLeaveCalendarSection):
             return {
                 ...state,
                 hoverCRN: null,

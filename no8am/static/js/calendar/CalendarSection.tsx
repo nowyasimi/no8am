@@ -1,73 +1,77 @@
-import * as React from 'react'
+import * as React from "react";
+import {bindActionCreators, Dispatch} from "redux";
 
-import { connect } from 'react-redux'
+import {mouseEnterCalendarSection, mouseLeaveCalendarSection, returnOfMouseEnterCalendarSection,
+        returnOfMouseLeaveCalendarSection} from "../calendar/CalendarActions.js";
+import {connect} from "../Connect";
+import {colorDict} from "../Constants";
+import {IAllReducers, Section} from "../Interfaces";
 
-import {colorDict} from '../Constants'
-import {mouseEnterCalendarSection, mouseLeaveCalendarSection, clickViewCourseTableButton} from '../actions/sectionActions.js'
-import {ISection} from '../Interfaces'
-
-interface CalendarSectionProps extends ISection {
-    isSelected: boolean
-    day: string
-    hoverCRN: string
-    onMouseEnterCalendar: () => Promise<void>
-    onMouseLeaveCalendar: () => Promise<void>
-    onClickViewCourseTable: () => Promise<void>
+interface ICalendarSectionProps {
+    isSelected: boolean;
+    section: Section;
+    meetingTimeIndex: number;
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class CalendarSection extends React.Component<CalendarSectionProps, undefined> {
+interface ICalendarSectionStateProps {
+    hoverCRN?: string | null;
+}
 
-    render() {
+interface ICalendarSectionDispatchProps {
+    onMouseEnterCalendarSection?: () => typeof returnOfMouseEnterCalendarSection;
+    onMouseLeaveCalendarSection?: () => typeof returnOfMouseLeaveCalendarSection;
+}
 
-        let hexColor = colorDict["blue"][this.props.isSelected ? "s" : "n"];
+@connect<ICalendarSectionStateProps, ICalendarSectionDispatchProps, ICalendarSectionProps>
+    (mapStateToProps, mapDispatchToProps)
+export default class CalendarSection
+    extends React.Component<ICalendarSectionStateProps & ICalendarSectionDispatchProps & ICalendarSectionProps> {
 
-        let day = this.props.day;
-        let daysMet = this.props.daysMet;
+    public render() {
 
-        let style = {
-            height: (daysMet[day][1] + daysMet[day][2] > 26 ? 25.73 - daysMet[day][1] : daysMet[day][2])*20/5.6 + "%",
-            marginTop: daysMet[day][1]*20/5.6 + "%",
-            display:  'block',
+        const hexColor = colorDict.blue[this.props.isSelected ? "s" : "n"];
+
+        const currentMeetingTime = this.props.section.meetingTimes[this.props.meetingTimeIndex];
+
+        const style = {
             background: hexColor,
-            zIndex: this.props.isSelected ? 1 : 5
+            display:  "block",
+            height: (currentMeetingTime.startTime + currentMeetingTime.duration > 26 ?
+                25.73 - currentMeetingTime.startTime : currentMeetingTime.duration) * 20 / 5.6 + "%",
+            marginTop: currentMeetingTime.startTime * 20 / 5.6 + "%",
+            zIndex: this.props.isSelected ? 1 : 5,
         };
 
-        let className = this.props.isSelected ?  "selectedCalendarSection" : "unselectedCalendarSection";
+        const className = this.props.isSelected ?  "selectedCalendarSection" : "unselectedCalendarSection";
 
-        let innerDetails = this.props.hoverCRN == this.props.CRN ?
-            <p className="timesMet">{this.props.daysMet[day][3] + "-" + this.props.daysMet[day][4]}</p> :
-            <p className="courseNum">{this.props.departmentAndCourseAndSection.slice(0,-3)}</p>;
+        const innerDetails = this.props.hoverCRN === this.props.section.CRN ? (
+            <p className="timesMet">
+                {currentMeetingTime.startTimeUserFriendly + "-" + currentMeetingTime.endTimeUserFriendly}
+            </p>) :
+            <p className="courseNum">{this.props.section.departmentAndCourseAndSection.slice(0, -3)}</p>;
 
         return (
-            <li style={style} className={className}
-                onClick={() => this.props.onClickViewCourseTable()}
-                onMouseEnter={() => this.props.onMouseEnterCalendar()}
-                onMouseLeave={() => this.props.onMouseLeaveCalendar()}>
+            <li
+                style={style}
+                className={className}
+                onMouseEnter={this.props.onMouseEnterCalendarSection}
+                onMouseLeave={this.props.onMouseLeaveCalendarSection}
+            >
                 {innerDetails}
             </li>
         );
     }
 }
 
-// Map Redux state to component props
-function mapStateToProps(state) {
+function mapStateToProps(state: IAllReducers): ICalendarSectionStateProps {
     return {
-        hoverCRN: state.hoverCRN,
-        highlight: {
-            courseId: state.highlightCourseId,
-            sectionId: state.highlightSectionId
-        }
-    }
+        hoverCRN: state.calendar.hoverCRN,
+    };
 }
 
-// Map Redux actions to component props
-function mapDispatchToProps(dispatch, sectionProps) {
-    return {
-        onMouseEnterCalendar: () => dispatch(mouseEnterCalendarSection(sectionProps.CRN)),
-        onMouseLeaveCalendar: () => dispatch(mouseLeaveCalendarSection()),
-        onClickViewCourseTable: () => dispatch(clickViewCourseTableButton(sectionProps.courseId))
-    }
+function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, sectionProps: ICalendarSectionProps) {
+    return bindActionCreators({
+        onMouseEnterCalendarSection: () => dispatch(mouseEnterCalendarSection(sectionProps.section.CRN)),
+        onMouseLeaveCalendarSection: () => dispatch(mouseLeaveCalendarSection()),
+    }, dispatch);
 }
-
-

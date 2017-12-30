@@ -12,13 +12,20 @@ const initialState: ISearchReducer = {
     status: DataLoadingState.LOADING,
 };
 
-export const search = (state: ISearchReducer = initialState, action: SearchActions.IActions): ISearchReducer => {
+export const search = (state = initialState, action: SearchActions.IActions): ISearchReducer => {
 
     switch (action.type) {
         case getType(SearchActions.receiveMetadata):
             return {
                 ...state,
                 metadata: action.metadata,
+                status: DataLoadingState.LOADED,
+            };
+
+        case getType(SearchActions.errorReceivingMetadata):
+            return {
+                ...state,
+                status: DataLoadingState.FAILED,
             };
 
         case getType(SearchActions.toggleSearchOmnibox):

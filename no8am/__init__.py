@@ -21,9 +21,9 @@ app.config.update(
 	CDN_HTTPS=True,
 	CDN_TIMESTAMP=False,
 	BROWSERIFY_BIN='./no8am/static/js/node_modules/.bin/browserify',
-	CLEANCSS_BIN='./node_modules/.bin/cleancss',
+	CLEANCSS_BIN='./no8am/static/js/node_modules/.bin/cleancss',
 	CLEANCSS_EXTRA_ARGS=['--skip-rebase'],
-	UGLIFYJS_BIN='./node_modules/.bin/uglifyjs',
+	UGLIFYJS_BIN='./no8am/static/js/node_modules/.bin/uglifyjs',
 	UGLIFYJS_EXTRA_ARGS=['-c', '-m'],
 	FLASK_ASSETS_USE_CDN=use_cdn,
 	CDN_DEBUG=cdn_debug

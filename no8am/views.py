@@ -62,7 +62,9 @@ def bucknell(config=None):
 		return redirect(url_for('bucknell'))
 	else:
 		return render_template(
-			'start.html', CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT
+			'start.html',
+			CURRENT_SEMESTER=get_user_format_semester(),
+			APP_ROOT=APPLICATION_ROOT
 		)
 
 
