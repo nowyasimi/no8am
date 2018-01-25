@@ -1,23 +1,24 @@
 import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 
-import {Button, Classes, Position} from "@blueprintjs/core";
+import {Button, Classes} from "@blueprintjs/core";
+import * as classNames from "classnames";
 
 import {connect} from "../Connect";
-import {SearchItemType} from "../Constants";
 import {IAllReducers, ISearchItem} from "../Interfaces";
-import {returnOfRevertToOriginAbbreviation, revertToOriginAbbreviation} from "../sections/SectionActions";
+import {clickDoneSelecting, returnOfClickDoneSelecting,
+        returnOfRevertToOriginAbbreviation, revertToOriginAbbreviation} from "../sections/SectionActions";
 import FilterTime from "./FilterTime";
 
 interface ILookupFiltersProps {
     filterTime: any;
-    item: ISearchItem;
-    originAbbreviation: string | null;
+    searchItem: ISearchItem;
     numberOfSectionsVisible: number;
     numberOfSectionsTotal: number;
 }
 
 interface ILookupFiltersDispatchProps {
+    onClickDoneSelecting: () => typeof returnOfClickDoneSelecting;
     onRevertToOriginAbbreviation: () => typeof returnOfRevertToOriginAbbreviation;
 }
 
@@ -38,30 +39,49 @@ export default class LookupFilters extends React.Component<ILookupFiltersDispatc
                     Showing {sectionFilterString} sections
                 </div>
                 <FilterTime filterTime={this.props.filterTime} />
-                {this.renderOriginAbbreviationButtons()}
+                {this.renderButtons()}
             </div>
         );
     }
 
+    private renderButtons() {
+        return (
+            <div>
+                {this.renderOriginAbbreviationButtons()}
+                <Button
+                    text={`Done selecting`}
+                    onClick={this.props.onClickDoneSelecting}
+                />
+            </div>
+        );
+
+    }
+
     private renderOriginAbbreviationButtons() {
-        if (this.props.originAbbreviation !== null) {
-            return (
-                <div>
-                    <Button
-                        text={`Revert to ${this.props.originAbbreviation}`}
-                        onClick={this.props.onRevertToOriginAbbreviation}
-                    />
-                    <Button
-                        text={`Search again for ${this.props.originAbbreviation}`}
-                    />
-                </div>
-            );
+        if (this.props.searchItem.originItemAbbreviation !== null) {
+            const classes = classNames({
+                [Classes.DISABLED]: this.props.searchItem.currentItemCourseAbbreviation === null,
+            });
+
+            return [(
+                <Button
+                    className={classes}
+                    text={`Revert to ${this.props.searchItem.originItemAbbreviation}`}
+                    onClick={this.props.onRevertToOriginAbbreviation}
+                />), (
+                <Button
+                    className={classes}
+                    text={`Search again for ${this.props.searchItem.originItemAbbreviation}`}
+                />),
+            ];
         }
     }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILookupFiltersDispatchProps {
     return bindActionCreators({
+        onClickDoneSelecting: clickDoneSelecting,
         onRevertToOriginAbbreviation: revertToOriginAbbreviation,
+        // onSearchAgainForAbbreviation: searchAgainForAbbreviation,
     }, dispatch);
 }

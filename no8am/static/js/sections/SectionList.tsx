@@ -1,9 +1,11 @@
 import * as React from "react";
+import {createSelector} from "reselect";
 
 import {connect} from "../Connect";
 
-import {getAllManagedSections, getFilterCourseForSelectedCourseCard, getSectionsForSearchItem,
-        getSelectedSectionsForSelectedCourseCard} from "../Helpers";
+import {filterSectionsWithSearchItem, getAllSections,
+        getSectionsForSearchItem, getSelectedSectionsForSelectedCourseCard,
+        getUnselectedSearchItemsMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem, ISectionExtra, Section} from "../Interfaces";
 
 import GlobalFilters from "../filters/GlobalFilters";
@@ -55,10 +57,9 @@ export default class SectionList extends React.Component<ISectionListStateProps 
                 <GlobalFilters />
                 <LookupFilters
                     filterTime={this.props.filterTime}
-                    item={this.props.searchItem}
+                    searchItem={this.props.searchItem}
                     numberOfSectionsVisible={visibleCount}
                     numberOfSectionsTotal={sectionCards.length}
-                    originAbbreviation={this.props.searchItem.originItemAbbreviation}
                 />
                 {sectionCards}
             </div>
@@ -76,7 +77,8 @@ export default class SectionList extends React.Component<ISectionListStateProps 
 
     // handles case when another course card contains the course baseAbbreviation
     private isManaged(section: Section): boolean {
-        return this.props.managedSections.find((managedSection) => managedSection.CRN === section.CRN) !== undefined;
+        return this.props.searchItem.currentItemCourseAbbreviation === null &&
+        this.props.managedSections.find((managedSection) => managedSection.CRN === section.CRN) !== undefined;
     }
 
     // highlights selected sections and used to flag when a user selects an unavailable section
@@ -96,16 +98,32 @@ export default class SectionList extends React.Component<ISectionListStateProps 
     }
 
     private isVisible(section: Section): boolean {
+        // section has already been selected
+        return this.isSelected(section) || (
         // show sections despite registrar restrictions if advanced mode is enabled
-        return ((this.props.isAdvanced || !this.isUnavailable(section)) &&
-                (this.props.searchItem.originItemAbbreviation === null ||
-                 this.props.searchItem.currentItemBaseAbbreviation === section.departmentAndBareCourse) &&
+                (this.props.isAdvanced || !this.isUnavailable(section)) &&
+        // generic search was made and has not been narrowed down to a single course
+                ((this.props.searchItem.currentItemCourseAbbreviation === null) ||
+        // or search has been filtered for a single course
+                (this.props.searchItem.currentItemCourseAbbreviation !== null &&
+                 this.props.searchItem.currentItemCourseAbbreviation === section.departmentAndBareCourse)) &&
+        // section is within filtered time range
                 (section.meetingTimes.every((meetingTime) => meetingTime.startTime >= this.props.filterTime[0] &&
-                                      meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1])) ||
-                 this.props.selectedSections.find((selectedSection) => selectedSection.CRN === section.CRN)
-               ) !== undefined;
+                                      meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1])));
     }
 }
+
+// TODO - output more data here to show which course card is managing the sections
+const getAllManagedSections = createSelector(
+    [getAllSections, getUnselectedSearchItemsMemoized],
+    (allSections, searchItems) => searchItems
+        // filter for cards that are managing sections (card is responsible for a single course)
+        .filter((searchItem) => searchItem.currentItemCourseAbbreviation != null)
+        // get all sections this search item is responsible for
+        .map((searchItem) => filterSectionsWithSearchItem(searchItem, allSections))
+        // flatten 2D list of managed sections
+        .reduce((managedSectionsA, managedSectionsB) => managedSectionsA.concat(managedSectionsB), []),
+);
 
 function mapStateToProps(state: IAllReducers): ISectionListStateProps {
     return {

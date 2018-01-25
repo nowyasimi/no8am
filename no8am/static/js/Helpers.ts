@@ -10,11 +10,10 @@ export const isMainSection = (section: Section): section is ISectionMain => {
     return section.main;
 };
 
-// TODO - filter by origin abbreviation when possible - this is necessary for SectionList transitions
-
-const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Section[]) => {
+// filter by origin abbreviation when possible, this is necessary for SectionList transitions
+export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Section[]) => {
     const abbreviation = searchItem.originItemAbbreviation === null ?
-        searchItem.currentItemBaseAbbreviation :
+        searchItem.currentItemCourseAbbreviation :
         searchItem.originItemAbbreviation;
 
     const searchType = searchItem.searchItemType;
@@ -23,7 +22,7 @@ const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Sect
         return allSections.filter((section) => section.departmentAndBareCourse === abbreviation);
     } else if (searchType === SearchItemType.Department) {
         return allSections.filter((section) => section.department === abbreviation);
-    } else if (searchType === SearchItemType.CCC) {
+    } else if (searchType === SearchItemType.CCC && abbreviation !== null) {
         return allSections.filter((section) => section.CCC.includes(abbreviation));
     } else if (searchType === SearchItemType.Credit) {
         return allSections.filter((section) => section.credits === abbreviation);
@@ -33,32 +32,26 @@ const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Sect
 };
 
 /**
- * Creates a list of abbreviations that will get grouped together in a single card. The purpose of this is to group
+ * Creates a list of abbreviations for a given base abbreviation. The purpose of this is to group
  * different section types for the same course in a single card.
- * @param baseAbbreviation Abbreviation to search for in list of all sections
+ * For example, if the searchItem is for CHEM 201, this method will return ["CHEM 201", "CHEM 201R", "CHEM 201L"]
+ * If the search item is for CSCI, this method will return ["CSCI 203", "CSCI 203L", "CSCI 204", ...]
+ * @param searchItem Contains the course, department, etc depending on the search type
+ * @param allSections Array of all sections
  */
-const getAllAbbreviations = (searchItem: ISearchItem, allSections: Section[]): string[] => {
-    const sectionsWithBaseAbbreviation = filterSectionsWithSearchItem(searchItem, allSections)
-        .map((section) => section.departmentAndCourse);
-
-    if (sectionsWithBaseAbbreviation.length === 0) {
-        return [searchItem.currentItemBaseAbbreviation];
-    } else {
-        return [...new Set(sectionsWithBaseAbbreviation)];
-    }
-};
+const getAllAbbreviations = (searchItem: ISearchItem, allSections: Section[]): string[] =>
+    filterSectionsWithSearchItem(searchItem, allSections).map((section) => section.departmentAndCourse);
 
 const getSearchItems = (state: IAllReducers): ISearchItem[] => state.sections.searchItems;
-const getAllSections = (state: IAllReducers): Section[] => state.sections.allSections;
+export const getAllSections = (state: IAllReducers): Section[] => state.sections.allSections;
 
 export const getSearchItemsWithBaseAbbreviations = createSelector(
     [getSearchItems, getAllSections],
     (searchItems, allSections) =>
         searchItems.map((currentSearchItem) => ({
             ...currentSearchItem,
-            currentItemAllAbbreviations: getAllAbbreviations(currentSearchItem, allSections),
-        }))
-    ,
+            currentItemAllAbbreviations: [...new Set(getAllAbbreviations(currentSearchItem, allSections))],
+        })),
 );
 
 export const getSelectedSearchItemMemoized = createSelector(
@@ -69,19 +62,6 @@ export const getSelectedSearchItemMemoized = createSelector(
 export const getUnselectedSearchItemsMemoized = createSelector(
     [getSearchItems],
     getUnselectedSearchItems,
-);
-
-// TODO - output more data here to show which course card is managing the sections
-export const getAllManagedSections = createSelector(
-    [getAllSections, getUnselectedSearchItemsMemoized],
-    (allSections, searchItems) => searchItems
-        // filter for cards that are managing sections (card is responsible for a single course)
-        .filter((searchItem) =>
-            searchItem.searchItemType === SearchItemType.Course || searchItem.originItemAbbreviation !== null)
-        // get only the selected CRNs from each search item
-        .map((searchItem) => filterSectionsWithSearchItem(searchItem, allSections))
-        // flatten 2D list of managed sections
-        .reduce((managedSectionsA, managedSectionsB) => managedSectionsA.concat(managedSectionsB), []),
 );
 
 // TODO - see if this is needed

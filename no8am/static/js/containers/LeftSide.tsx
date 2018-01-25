@@ -41,6 +41,16 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
         </div>
     );
 
+    public componentWillReceiveProps(nextProps: ILeftSideProps) {
+        const currentSearchItem = this.props.selectedSearchItem;
+        const nextSearchItem = nextProps.selectedSearchItem;
+
+        if (currentSearchItem !== undefined && nextSearchItem !== undefined &&
+            currentSearchItem.originItemAbbreviation !== nextSearchItem.originItemAbbreviation) {
+                window.scrollTo(0, 0);
+        }
+    }
+
     public render() {
         const mainContent = this.getMainContent();
 

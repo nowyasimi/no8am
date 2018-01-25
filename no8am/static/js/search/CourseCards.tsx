@@ -32,7 +32,7 @@ export default class CourseCards extends React.Component<ICourseCardStateProps> 
     private createCourseCards() {
         return this.props.searchItems.map((currentSearchItem) => (
             <CourseCard
-                key={`${currentSearchItem.currentItemBaseAbbreviation}${currentSearchItem.originItemAbbreviation}`}
+                key={`${currentSearchItem.currentItemCourseAbbreviation}${currentSearchItem.originItemAbbreviation}`}
                 searchItem={currentSearchItem}
             />
         ));

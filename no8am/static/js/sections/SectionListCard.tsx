@@ -3,13 +3,11 @@ import {bindActionCreators, Dispatch} from "redux";
 
 import {connect} from "../Connect";
 
-import {Icon} from "@blueprintjs/core";
 import {Tooltip2} from "@blueprintjs/labs";
 import * as classNames from "classnames";
 import {Transition} from "react-transition-group";
 
-import {isMainSection} from "../Helpers";
-import {IAllReducers, ISectionMain, Section} from "../Interfaces";
+import {IAllReducers, Section} from "../Interfaces";
 import {clickSectionListCard, mouseEnterSectionListCard, mouseLeaveSectionListCard, returnOfClickSectionListCard,
         returnOfMouseEnterSectionListCard, returnOfMouseLeaveSectionListCard} from "./SectionActions";
 
@@ -140,7 +138,7 @@ function mapStateToProps(state: IAllReducers): ISectionListCardStateProps {
 
 function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, props: ISectionListCard): ISectionListCardDispatchProps {
     return bindActionCreators({
-        onClickSectionListCard: () => clickSectionListCard(props.section),
+        onClickSectionListCard: () => clickSectionListCard(props.section, props.isManaged),
         onMouseEnterSectionListCard: () => mouseEnterSectionListCard(props.section),
         onMouseLeaveSectionListCard: mouseLeaveSectionListCard,
     }, dispatch);

@@ -70,7 +70,7 @@ export interface ISelectedSection {
 }
 
 export interface ISearchItem {
-    readonly currentItemBaseAbbreviation: string;
+    readonly currentItemCourseAbbreviation: string | null;
     readonly isSelected: boolean;
     readonly originItemAbbreviation: string | null;
     readonly searchItemType: SearchItemType;

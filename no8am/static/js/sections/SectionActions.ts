@@ -2,7 +2,7 @@ import {ActionCreator} from "react-redux";
 import {ThunkAction} from "redux-thunk";
 import {createAction} from "ts-redux-actions";
 
-import {SEARCH_ITEM_TYPE, SECTION_DETAILS_URL} from "../Constants";
+import {SECTION_DETAILS_URL} from "../Constants";
 import {IAllReducers, IMeetingTime, IMetadata, ISearchItem, Section, SectionUnparsed} from "../Interfaces";
 import {search} from "../search/SearchReducer";
 
@@ -47,7 +47,8 @@ export const mouseLeaveSectionListCard = createAction("MOUSE_LEAVE_SECTION_LIST_
 );
 
 export const clickSectionListCard = createAction("CLICK_SECTION_LIST_CARD",
-    (section: Section) => ({
+    (section: Section, isManaged: boolean) => ({
+        isManaged,
         section,
         type: "CLICK_SECTION_LIST_CARD",
     }),
@@ -55,7 +56,7 @@ export const clickSectionListCard = createAction("CLICK_SECTION_LIST_CARD",
 
 export const clickCourseCard = createAction("CLICK_COURSE_CARD",
     (clickedSearchItem: ISearchItem) => ({
-        abbreviation: clickedSearchItem.currentItemBaseAbbreviation,
+        clickedSearchItem,
         type: "CLICK_COURSE_CARD",
     }),
 );

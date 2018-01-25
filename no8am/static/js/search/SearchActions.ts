@@ -1,4 +1,3 @@
-import {ActionCreator} from "react-redux";
 import {getReturnOfExpression} from "react-redux-typescript";
 import {Dispatch} from "redux";
 import {ThunkAction} from "redux-thunk";
@@ -7,8 +6,6 @@ import {createAction} from "ts-redux-actions";
 import * as Constants from "../Constants";
 import * as Interfaces from "../Interfaces";
 import {searchItem} from "../sections/SectionActions";
-
-// import {ISearchItemAction} from "../sections/SectionActions";
 
 export const receiveMetadata = createAction("RECEIVE_METADATA",
     (metadata: Interfaces.IMetadata[]) => ({

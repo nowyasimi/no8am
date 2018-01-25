@@ -43,13 +43,14 @@ export const sections = (state = initialState, action: SectionActions.IActions):
             case getType(SectionActions.clickSectionListCard):
                 return {
                     ...state,
-                    searchItems: clickSectionListCard(action.section, state.allSections, state.searchItems),
+                    searchItems: clickSectionListCard(action.section, action.isManaged,
+                        state.allSections, state.searchItems),
                 };
 
             case getType(SectionActions.clickCourseCard):
                 return {
                     ...state,
-                    searchItems: selectSearchItem(action.abbreviation, state.searchItems),
+                    searchItems: selectSearchItem(action.clickedSearchItem, state.searchItems),
                 };
 
             case getType(SectionActions.searchItem):
@@ -77,27 +78,40 @@ export const sections = (state = initialState, action: SectionActions.IActions):
 
 /**
  * True if the selected search item's abbrevation matches the one passed to the function.
- * @param searchItemAbbreviation Abbreviation to compare to the selected search item
+ * @param searchItem Abbreviation to compare to the selected search item
  * @param searchItems Array of all search items
  */
-const isSearchItemSelected = (searchItemAbbreviation: string, searchItems: ISearchItem[]): boolean => {
-    const searchItem = getSelectedSearchItem(searchItems);
-    return searchItem === undefined ? false : searchItem.currentItemBaseAbbreviation === searchItemAbbreviation;
+const isSearchItemSelected = (searchItem: ISearchItem, searchItems: ISearchItem[]): boolean => {
+    const selectedSearchItem = getSelectedSearchItem(searchItems);
+    return isSearchItemEqual(selectedSearchItem, searchItem);
 };
 
 /**
+ * True if the input search items are equal. Returns false if either is undefined.
+ * @param searchItemA First search item
+ * @param searchItemB Second search item
+ */
+const isSearchItemEqual = (searchItemA: ISearchItem | undefined, searchItemB: ISearchItem | undefined) =>
+    searchItemA !== undefined
+    && searchItemB !== undefined
+    && (searchItemA.currentItemCourseAbbreviation === searchItemB.currentItemCourseAbbreviation
+    || (searchItemA.originItemAbbreviation === searchItemB.originItemAbbreviation
+        && searchItemA.searchItemType === searchItemB.searchItemType));
+
+/**
  * Selects a search item.
- * @param searchItemAbbreviation Abbreviation of item to select
+ * @param searchItemToSelect Search item to select
  * @param searchItems List of current searches
  */
-const selectSearchItem = (searchItemAbbreviation: string, searchItems: ISearchItem[]): ISearchItem[] =>
-    isSearchItemSelected(searchItemAbbreviation, searchItems) ?
+const selectSearchItem = (searchItemToSelect: ISearchItem, searchItems: ISearchItem[]): ISearchItem[] =>
+    // TODO - implement equals method
+    isSearchItemSelected(searchItemToSelect, searchItems) ?
         // only deselect the search item if the clicked search item was already selected
         deselectAllSearchItems(searchItems) :
         // deselected the selected search item (if any) and select the one that was clicked
         deselectAllSearchItems(searchItems).map((currentSearchItem) => ({
             ...currentSearchItem,
-            isSelected: currentSearchItem.currentItemBaseAbbreviation === searchItemAbbreviation,
+            isSelected: isSearchItemEqual(currentSearchItem, searchItemToSelect),
         }));
 
 /**
@@ -130,21 +144,19 @@ export const getUnselectedSearchItems = (searchItems: ISearchItem[]): ISearchIte
  */
 const revertToOriginItemAbbreviation = (searchItems: ISearchItem[]): ISearchItem[] => {
     const selectedSearchItem = getSelectedSearchItem(searchItems);
-    const unselectedSearchItems = getUnselectedSearchItems(searchItems);
 
     if (selectedSearchItem === undefined) {
-        return unselectedSearchItems;
-    } else if (selectedSearchItem.originItemAbbreviation === null) {
-        return searchItems;
+        // nothing to revert
+        throw new Error("attempted to revert when search item was undefined");
     } else {
-        return [
-            ...unselectedSearchItems,
+        // remove course abbreviation and selected sections
+        return searchItems.map((currentSearchItem) => currentSearchItem !== selectedSearchItem ? currentSearchItem :
             {
                 ...selectedSearchItem,
-                currentItemBaseAbbreviation: selectedSearchItem.originItemAbbreviation,
-                originItemAbbreviation: null,
+                currentItemCourseAbbreviation: null,
+                selectedCrns: [],
             },
-        ];
+        );
     }
 };
 
@@ -155,24 +167,41 @@ const revertToOriginItemAbbreviation = (searchItems: ISearchItem[]): ISearchItem
  * @param searchItems Current list of searches
  */
 const newSearchItem = (newSearch: IMetadata, allSections: Section[], searchItems: ISearchItem[]): ISearchItem[] => {
-    const newSearchAbbreviation = newSearch.abbreviation;
+
+    // use search type and abbreviation to create searchItem
+    const searchItemFromMetadata = {
+        currentItemCourseAbbreviation: newSearch.itemType === SearchItemType.Course ?
+            newSearch.abbreviation :
+            null,
+        isSelected: true,
+        originItemAbbreviation: newSearch.itemType !== SearchItemType.Course ?
+            newSearch.abbreviation :
+            null,
+        searchItemType: newSearch.itemType,
+        selectedCrns: [],
+    };
+
+    // check if this search item already exists
     const newSearchInSearchItems = searchItems.find(
-        (currentSearchItem) => currentSearchItem.currentItemBaseAbbreviation === newSearchAbbreviation);
+        (currentSearchItem) => isSearchItemEqual(currentSearchItem, searchItemFromMetadata));
 
     if (newSearchInSearchItems) {
-        return selectSearchItem(newSearchAbbreviation, searchItems);
+        // select the search item if it already exists
+        return selectSearchItem(newSearchInSearchItems, searchItems);
     } else {
+        // add the new search item
         return [
             ...deselectAllSearchItems(searchItems),
-            {
-                currentItemBaseAbbreviation: newSearchAbbreviation,
-                isSelected: true,
-                originItemAbbreviation: null,
-                searchItemType: newSearch.itemType,
-                selectedCrns: [],
-            },
+            searchItemFromMetadata,
         ];
     }
+};
+
+const selectSearchItemManagerForSection = (clickedSection: Section, searchItems: ISearchItem[]) => {
+    const searchItemManager = searchItems.find((currentSearchItem) =>
+        currentSearchItem.currentItemCourseAbbreviation === clickedSection.departmentAndBareCourse);
+
+    return searchItemManager === undefined ? searchItems : selectSearchItem(searchItemManager, searchItems);
 };
 
 /**
@@ -181,24 +210,18 @@ const newSearchItem = (newSearch: IMetadata, allSections: Section[], searchItems
  * @param allSections List of all sections
  * @param searchItems List of all searches that have been performed by the user
  */
-const clickSectionListCard = (clickedSection: Section, allSections: Section[],
+const clickSectionListCard = (clickedSection: Section, isManaged: boolean, allSections: Section[],
                               searchItems: ISearchItem[]): ISearchItem[] =>
+    isManaged ? selectSearchItemManagerForSection(clickedSection, searchItems) :
     searchItems.map((currentSearchItem) => {
         if (!currentSearchItem.isSelected) {
             return currentSearchItem;
         } else {
             const isInSelectedCrns = currentSearchItem.selectedCrns.find((crn) => crn === clickedSection.CRN);
-            const noNewOrigin = clickedSection.departmentAndBareCourse ===
-                                currentSearchItem.currentItemBaseAbbreviation;
 
             return {
                 ...currentSearchItem,
-                currentItemBaseAbbreviation: noNewOrigin ?
-                currentSearchItem.currentItemBaseAbbreviation :
-                    clickedSection.departmentAndBareCourse,
-                originItemAbbreviation: noNewOrigin ?
-                    currentSearchItem.originItemAbbreviation :
-                    currentSearchItem.currentItemBaseAbbreviation,
+                currentItemCourseAbbreviation: clickedSection.departmentAndBareCourse,
                 selectedCrns: isInSelectedCrns ?
                     // deselect clicked section by removing itself from selected crns
                     currentSearchItem.selectedCrns.filter((crn) => crn !== clickedSection.CRN) :
