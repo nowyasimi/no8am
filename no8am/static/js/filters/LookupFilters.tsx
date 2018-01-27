@@ -6,8 +6,9 @@ import * as classNames from "classnames";
 
 import {connect} from "../Connect";
 import {IAllReducers, ISearchItem} from "../Interfaces";
-import {clickDoneSelecting, returnOfClickDoneSelecting,
-        returnOfRevertToOriginAbbreviation, revertToOriginAbbreviation} from "../sections/SectionActions";
+import {clickDoneSelecting, returnOfClickDoneSelecting, returnOfRevertToOriginAbbreviation,
+        returnOfSearchAgainForAbbreviation, revertToOriginAbbreviation,
+        searchAgainForAbbreviation} from "../sections/SectionActions";
 import FilterTime from "./FilterTime";
 
 interface ILookupFiltersProps {
@@ -20,23 +21,25 @@ interface ILookupFiltersProps {
 interface ILookupFiltersDispatchProps {
     onClickDoneSelecting: () => typeof returnOfClickDoneSelecting;
     onRevertToOriginAbbreviation: () => typeof returnOfRevertToOriginAbbreviation;
+    onSearchAgainForAbbreviation: () => typeof returnOfSearchAgainForAbbreviation;
 }
 
 @connect<{}, ILookupFiltersDispatchProps, ILookupFiltersProps>((state: IAllReducers) => ({}), mapDispatchToProps)
 export default class LookupFilters extends React.Component<ILookupFiltersDispatchProps & ILookupFiltersProps> {
 
     public render() {
-        // TOOD add buttons for done selecting and to duplicate current search item
-        // const isFromCategorySearch = this.props.item.searchItemType !== SearchItemType.Course &&
-        //                        this.props.item.searchItemType !== SearchItemType.Department;
+        const {originItemAbbreviation, currentItemCourseAbbreviation} = this.props.searchItem;
 
         const sectionFilterString = this.props.numberOfSectionsVisible === this.props.numberOfSectionsTotal ? "all" :
             `${this.props.numberOfSectionsVisible} out of ${this.props.numberOfSectionsTotal}`;
 
+        const sectionFilterSentence = `Showing ${sectionFilterString} sections for ` +
+            `${originItemAbbreviation === null ? currentItemCourseAbbreviation : originItemAbbreviation}`;
+
         return (
             <div className="filters">
                 <div>
-                    Showing {sectionFilterString} sections
+                    {sectionFilterSentence}
                 </div>
                 <FilterTime filterTime={this.props.filterTime} />
                 {this.renderButtons()}
@@ -72,6 +75,7 @@ export default class LookupFilters extends React.Component<ILookupFiltersDispatc
                 <Button
                     className={classes}
                     text={`Search again for ${this.props.searchItem.originItemAbbreviation}`}
+                    onClick={this.props.onSearchAgainForAbbreviation}
                 />),
             ];
         }
@@ -82,6 +86,6 @@ function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILookupFiltersDis
     return bindActionCreators({
         onClickDoneSelecting: clickDoneSelecting,
         onRevertToOriginAbbreviation: revertToOriginAbbreviation,
-        // onSearchAgainForAbbreviation: searchAgainForAbbreviation,
+        onSearchAgainForAbbreviation: searchAgainForAbbreviation,
     }, dispatch);
 }

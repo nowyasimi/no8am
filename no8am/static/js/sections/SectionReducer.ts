@@ -4,6 +4,8 @@ import {DataLoadingState, SearchItemType} from "../Constants";
 import {IMetadata, ISearchItem, ISectionReducer, Section} from "../Interfaces";
 
 import * as SectionActions from "./SectionActions";
+import { clickManagedCard } from "./SectionActions";
+import { currentId } from "async_hooks";
 
 const initialState: ISectionReducer = {
     allSections: [],
@@ -53,6 +55,12 @@ export const sections = (state = initialState, action: SectionActions.IActions):
                     searchItems: selectSearchItem(action.clickedSearchItem, state.searchItems),
                 };
 
+            case getType(SectionActions.goToManagedCard):
+                return {
+                    ...state,
+                    searchItems: goToManagedCard(action.abbreviation, state.searchItems),
+                };
+
             case getType(SectionActions.searchItem):
                 return {
                     ...state,
@@ -69,6 +77,12 @@ export const sections = (state = initialState, action: SectionActions.IActions):
                 return {
                     ...state,
                     searchItems: revertToOriginItemAbbreviation(state.searchItems),
+                };
+
+            case getType(SectionActions.searchAgainForAbbreviation):
+                return {
+                    ...state,
+                    searchItems: searchAgainForAbbreviation(state.searchItems),
                 };
 
             default:
@@ -96,7 +110,23 @@ const isSearchItemEqual = (searchItemA: ISearchItem | undefined, searchItemB: IS
     && searchItemB !== undefined
     && (searchItemA.currentItemCourseAbbreviation === searchItemB.currentItemCourseAbbreviation
     || (searchItemA.originItemAbbreviation === searchItemB.originItemAbbreviation
-        && searchItemA.searchItemType === searchItemB.searchItemType));
+        && searchItemA.searchItemType === searchItemB.searchItemType
+        && searchItemA.currentItemCourseAbbreviation === null
+        && searchItemB.currentItemCourseAbbreviation === null));
+
+/**
+ * Redirects user to a managed search if they click a managed section card in the section list.
+ * @param abbreviation Abbreviation for a managed search
+ * @param searchItems List of current searches
+ */
+const goToManagedCard = (abbreviation: string, searchItems: ISearchItem[]): ISearchItem[] => {
+    const searchItemMatchingAbbreviation = searchItems.find((currentSearchItem) =>
+        currentSearchItem.currentItemCourseAbbreviation === abbreviation);
+
+    return searchItemMatchingAbbreviation === undefined ?
+        searchItems :
+        selectSearchItem(searchItemMatchingAbbreviation, searchItems);
+};
 
 /**
  * Selects a search item.
@@ -104,7 +134,6 @@ const isSearchItemEqual = (searchItemA: ISearchItem | undefined, searchItemB: IS
  * @param searchItems List of current searches
  */
 const selectSearchItem = (searchItemToSelect: ISearchItem, searchItems: ISearchItem[]): ISearchItem[] =>
-    // TODO - implement equals method
     isSearchItemSelected(searchItemToSelect, searchItems) ?
         // only deselect the search item if the clicked search item was already selected
         deselectAllSearchItems(searchItems) :
@@ -137,6 +166,27 @@ export const getSelectedSearchItem = (searchItems: ISearchItem[]): ISearchItem |
  */
 export const getUnselectedSearchItems = (searchItems: ISearchItem[]): ISearchItem[] =>
     searchItems.filter((currentSearchItem) => !currentSearchItem.isSelected);
+
+export const searchAgainForAbbreviation = (searchItems: ISearchItem[]): ISearchItem[] => {
+    const selectedSearchItem = getSelectedSearchItem(searchItems);
+
+    // remove course abbreviation and add new search item
+    const searchItemsWithoutCourseAbbreviation = searchItems.map((currentSearchItem) =>
+        currentSearchItem !== selectedSearchItem ? currentSearchItem :
+            {
+                ...selectedSearchItem,
+                isSelected: false,
+                originItemAbbreviation: null,
+                searchItemType: SearchItemType.Course,
+        },
+    );
+
+    return selectedSearchItem === undefined ? searchItems : [...searchItemsWithoutCourseAbbreviation, {
+        ...selectedSearchItem,
+        currentItemCourseAbbreviation: null,
+        selectedCrns: [],
+    }];
+};
 
 /**
  * Finds current search item and moves originItemAbbreviation to currentItemBaseAbbreviation

@@ -11,13 +11,13 @@ import {IAllReducers, ISearchItem, ISectionExtra, Section} from "../Interfaces";
 import GlobalFilters from "../filters/GlobalFilters";
 import LookupFilters from "../filters/LookupFilters";
 import SectionListCard from "./SectionListCard";
+import SectionListManagedCard from "./SectionListManagedCard";
 
 interface ISectionListProps {
     searchItem: ISearchItem;
 }
 
 interface ISectionListStateProps {
-    // filterCourse: string | null;
     filterTime: [number, number];
     isAdvanced: boolean;
     managedSections: Section[];
@@ -33,24 +33,12 @@ export default class SectionList extends React.Component<ISectionListStateProps 
         // TODO - fix cache time
         // const cacheTime = this.props.data.cache_time || new Date();
 
-        let visibleCount = 0;
+        const sectionCards = this.groupSectionsByType()
+            .map((sectionGroup) => this.createCardsFromSectionGroup(sectionGroup));
 
-        const sectionCards = this.props.sections.map((section) => {
-            const isVisible = this.isVisible(section);
-            visibleCount = isVisible ? visibleCount + 1 : visibleCount;
-
-            return (
-                <SectionListCard
-                    key={section.CRN}
-                    section={section}
-                    isLastOfType={this.isLastOfType(section, isVisible)}
-                    isManaged={this.isManaged(section)}
-                    isSelected={this.isSelected(section)}
-                    isUnavailable={this.isUnavailable(section)}
-                    isVisible={isVisible}
-                />
-            );
-        });
+        const visibleCount = this.props.sections
+            .map((section) => this.isVisible(section) ? 1 : 0)
+            .reduce((previousVisibleCount: number, nextVisibleCount) => previousVisibleCount + nextVisibleCount, 0);
 
         return (
             <div className="sectionList">
@@ -59,18 +47,61 @@ export default class SectionList extends React.Component<ISectionListStateProps 
                     filterTime={this.props.filterTime}
                     searchItem={this.props.searchItem}
                     numberOfSectionsVisible={visibleCount}
-                    numberOfSectionsTotal={sectionCards.length}
+                    numberOfSectionsTotal={this.props.sections.length}
                 />
                 {sectionCards}
             </div>
         );
     }
 
+    private groupSectionsByType() {
+        return this.props.sections.reduce((groupedSections: Section[][], currentSection: Section) => {
+            const lastSectionGroup = groupedSections.slice(-1).pop();
+            const otherSectionGroups = groupedSections.slice(0, -1);
+
+            if (lastSectionGroup === undefined) {
+                // first iteration, create a new section group
+                return [[currentSection]];
+            } else if (lastSectionGroup[0].departmentAndCourse === currentSection.departmentAndCourse ||
+                       (lastSectionGroup[0].departmentAndBareCourse === currentSection.departmentAndBareCourse &&
+                        this.isManaged(lastSectionGroup[0]) && this.isManaged(currentSection))) {
+                // add section to last section group
+                return [...otherSectionGroups, [...lastSectionGroup, currentSection]];
+            } else {
+                // create a new section group
+                return [...groupedSections, [currentSection]];
+            }
+        }, []);
+    }
+
+    private createCardsFromSectionGroup(sections: Section[]): JSX.Element[] {
+        if (sections.every((section) => this.isManaged(section))) {
+            const course = sections[0].departmentAndBareCourse;
+            return [(
+                <SectionListManagedCard
+                    key={course}
+                    managedAbbreviation={course}
+                />
+            )];
+        } else {
+            return sections.map((section) => (
+                <SectionListCard
+                    key={section.CRN}
+                    section={section}
+                    isLastOfType={this.isLastOfType(sections, section)}
+                    isManaged={this.isManaged(section)}
+                    isSelected={this.isSelected(section)}
+                    isUnavailable={this.isUnavailable(section)}
+                    isVisible={this.isVisible(section)}
+                />),
+            );
+        }
+    }
+
     // separates different types of sections in the section list
-    private isLastOfType(section: Section, isVisible: boolean): boolean {
-        const lastSectionOfType = this.props.sections.filter((maybeSectionOfType) => isVisible &&
-            this.isVisible(maybeSectionOfType) &&
-            maybeSectionOfType.departmentAndCourse === section.departmentAndCourse).pop();
+    private isLastOfType(sections: Section[], section: Section): boolean {
+        const lastSectionOfType = sections.filter((maybeSectionOfType) =>
+            this.isVisible(section) && this.isVisible(maybeSectionOfType)).pop();
 
         return lastSectionOfType !== undefined && lastSectionOfType.CRN === section.CRN;
     }
@@ -113,22 +144,19 @@ export default class SectionList extends React.Component<ISectionListStateProps 
     }
 }
 
-// TODO - output more data here to show which course card is managing the sections
 const getAllManagedSections = createSelector(
     [getAllSections, getUnselectedSearchItemsMemoized],
     (allSections, searchItems) => searchItems
         // filter for cards that are managing sections (card is responsible for a single course)
-        .filter((searchItem) => searchItem.currentItemCourseAbbreviation != null)
+        .filter((searchItem) => searchItem.currentItemCourseAbbreviation !== null)
         // get all sections this search item is responsible for
-        .map((searchItem) => filterSectionsWithSearchItem(searchItem, allSections))
+        .map((searchItem) => filterSectionsWithSearchItem(searchItem, allSections, true))
         // flatten 2D list of managed sections
         .reduce((managedSectionsA, managedSectionsB) => managedSectionsA.concat(managedSectionsB), []),
 );
 
 function mapStateToProps(state: IAllReducers): ISectionListStateProps {
     return {
-        // TODO - add button to revert back to filter course
-        // filterCourse: getFilterCourseForSelectedCourseCard(state),
         filterTime: state.filters.filterTime,
         isAdvanced: state.filters.isAdvanced,
         managedSections: getAllManagedSections(state),

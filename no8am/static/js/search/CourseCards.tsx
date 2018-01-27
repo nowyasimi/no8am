@@ -1,12 +1,10 @@
 import * as React from "react";
-
-import {MapDispatchToProps, MapStateToProps} from "react-redux";
+import {createSelector} from "reselect";
 
 import {connect} from "../Connect";
-import {getSearchItemsWithBaseAbbreviations} from "../Helpers";
 
-import { Classes, Switch, Tab2, Tabs2 } from "@blueprintjs/core";
-import {IAllReducers, ISearchItem, ISearchItemWithAllAbbreviations, ISection} from "../Interfaces";
+import {filterSectionsWithSearchItem, getAllSections, getSearchItems} from "../Helpers";
+import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
 import {CourseCard} from "./CourseCard";
 
 const cardContainerStyle: React.CSSProperties = {
@@ -15,7 +13,7 @@ const cardContainerStyle: React.CSSProperties = {
 };
 
 interface ICourseCardStateProps {
-    searchItems: ISearchItemWithAllAbbreviations[];
+    searchItems: ISearchItemWithMatchingSections[];
 }
 
 @connect<ICourseCardStateProps, {}, ICourseCardStateProps>(mapStateToProps)
@@ -39,8 +37,17 @@ export default class CourseCards extends React.Component<ICourseCardStateProps> 
     }
 }
 
+const getSearchItemsWithSections = createSelector(
+    [getSearchItems, getAllSections],
+    (searchItems, allSections) =>
+        searchItems.map((currentSearchItem) => ({
+            ...currentSearchItem,
+            sectionsInSearchItem: filterSectionsWithSearchItem(currentSearchItem, allSections, true),
+        })),
+);
+
 function mapStateToProps(state: IAllReducers): ICourseCardStateProps {
     return {
-        searchItems: getSearchItemsWithBaseAbbreviations(state),
+        searchItems: getSearchItemsWithSections(state),
     };
 }

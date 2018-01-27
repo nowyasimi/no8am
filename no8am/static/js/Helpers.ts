@@ -11,13 +11,19 @@ export const isMainSection = (section: Section): section is ISectionMain => {
 };
 
 // filter by origin abbreviation when possible, this is necessary for SectionList transitions
-export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Section[]) => {
+export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Section[],
+                                             chooseCourseOverOrigin: boolean) => {
+
     const abbreviation = searchItem.originItemAbbreviation === null ?
         searchItem.currentItemCourseAbbreviation :
         searchItem.originItemAbbreviation;
 
     const searchType = searchItem.searchItemType;
 
+    if (chooseCourseOverOrigin && searchItem.currentItemCourseAbbreviation !== null) {
+        return allSections.filter(
+            (section) => section.departmentAndBareCourse === searchItem.currentItemCourseAbbreviation);
+    }
     if (searchType === SearchItemType.Course) {
         return allSections.filter((section) => section.departmentAndBareCourse === abbreviation);
     } else if (searchType === SearchItemType.Department) {
@@ -31,28 +37,8 @@ export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSection
     }
 };
 
-/**
- * Creates a list of abbreviations for a given base abbreviation. The purpose of this is to group
- * different section types for the same course in a single card.
- * For example, if the searchItem is for CHEM 201, this method will return ["CHEM 201", "CHEM 201R", "CHEM 201L"]
- * If the search item is for CSCI, this method will return ["CSCI 203", "CSCI 203L", "CSCI 204", ...]
- * @param searchItem Contains the course, department, etc depending on the search type
- * @param allSections Array of all sections
- */
-const getAllAbbreviations = (searchItem: ISearchItem, allSections: Section[]): string[] =>
-    filterSectionsWithSearchItem(searchItem, allSections).map((section) => section.departmentAndCourse);
-
-const getSearchItems = (state: IAllReducers): ISearchItem[] => state.sections.searchItems;
+export const getSearchItems = (state: IAllReducers): ISearchItem[] => state.sections.searchItems;
 export const getAllSections = (state: IAllReducers): Section[] => state.sections.allSections;
-
-export const getSearchItemsWithBaseAbbreviations = createSelector(
-    [getSearchItems, getAllSections],
-    (searchItems, allSections) =>
-        searchItems.map((currentSearchItem) => ({
-            ...currentSearchItem,
-            currentItemAllAbbreviations: [...new Set(getAllAbbreviations(currentSearchItem, allSections))],
-        })),
-);
 
 export const getSelectedSearchItemMemoized = createSelector(
     [getSearchItems],
@@ -90,7 +76,7 @@ export const getSectionsForSearchItem = createSelector(
         if (searchItem === undefined) {
             return [];
         } else {
-            return filterSectionsWithSearchItem(searchItem, allSections);
+            return filterSectionsWithSearchItem(searchItem, allSections, false);
         }
     },
 );

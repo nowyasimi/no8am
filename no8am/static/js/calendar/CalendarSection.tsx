@@ -6,8 +6,10 @@ import {mouseEnterCalendarSection, mouseLeaveCalendarSection, returnOfMouseEnter
 import {connect} from "../Connect";
 import {colorDict} from "../Constants";
 import {IAllReducers, Section} from "../Interfaces";
+import {goToManagedCard, returnOfGoToManagedCard} from "../sections/SectionActions";
 
 interface ICalendarSectionProps {
+    isCurrentCourseCard: boolean;
     isSelected: boolean;
     section: Section;
     meetingTimeIndex: number;
@@ -18,6 +20,7 @@ interface ICalendarSectionStateProps {
 }
 
 interface ICalendarSectionDispatchProps {
+    onGoToManagedCard?: () => typeof returnOfGoToManagedCard;
     onMouseEnterCalendarSection?: () => typeof returnOfMouseEnterCalendarSection;
     onMouseLeaveCalendarSection?: () => typeof returnOfMouseLeaveCalendarSection;
 }
@@ -56,6 +59,7 @@ export default class CalendarSection
                 className={className}
                 onMouseEnter={this.props.onMouseEnterCalendarSection}
                 onMouseLeave={this.props.onMouseLeaveCalendarSection}
+                onClick={this.props.isCurrentCourseCard ? () => null : this.props.onGoToManagedCard}
             >
                 {innerDetails}
             </li>
@@ -71,7 +75,8 @@ function mapStateToProps(state: IAllReducers): ICalendarSectionStateProps {
 
 function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, sectionProps: ICalendarSectionProps) {
     return bindActionCreators({
-        onMouseEnterCalendarSection: () => dispatch(mouseEnterCalendarSection(sectionProps.section.CRN)),
-        onMouseLeaveCalendarSection: () => dispatch(mouseLeaveCalendarSection()),
+        onGoToManagedCard: () => goToManagedCard(sectionProps.section.departmentAndBareCourse),
+        onMouseEnterCalendarSection: () => mouseEnterCalendarSection(sectionProps.section.CRN),
+        onMouseLeaveCalendarSection: mouseLeaveCalendarSection,
     }, dispatch);
 }

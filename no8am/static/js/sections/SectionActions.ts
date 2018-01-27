@@ -61,6 +61,13 @@ export const clickCourseCard = createAction("CLICK_COURSE_CARD",
     }),
 );
 
+export const goToManagedCard = createAction("GO_TO_MANAGED_CARD",
+    (abbreviation: string) => ({
+        abbreviation,
+        type: "GO_TO_MANAGED_CARD",
+    }),
+);
+
 export const searchItem = createAction("SEARCH_ITEM",
     (item: IMetadata) => ({
         item,
@@ -80,23 +87,17 @@ export const revertToOriginAbbreviation = createAction("REVERT_TO_ORIGIN_ABBREVI
     }),
 );
 
+export const searchAgainForAbbreviation = createAction("SEARCH_AGAIN_FOR_ABBREVIATION",
+    () => ({
+        type: "SEARCH_AGAIN_FOR_ABBREVIATION",
+    }),
+);
+
 const initializeSections = (sections: SectionUnparsed[]): Section[] => {
     return sections.map((section) => ({
         ...section,
         meetingTimes: parseTimesMet(restructureHours(section.timesMet)),
     }));
-};
-
-export const actionCreators = {
-    clickCourseCard,
-    clickDoneSelecting,
-    clickSectionListCard,
-    errorReceivingSections,
-    mouseEnterSectionListCard,
-    mouseLeaveSectionListCard,
-    receiveSections,
-    revertToOriginAbbreviation,
-    searchItem,
 };
 
 export const returnOfReceiveSections = getReturnOfExpression(receiveSections);
@@ -105,9 +106,11 @@ export const returnOfMouseEnterSectionListCard = getReturnOfExpression(mouseEnte
 export const returnOfMouseLeaveSectionListCard = getReturnOfExpression(mouseLeaveSectionListCard);
 export const returnOfClickSectionListCard = getReturnOfExpression(clickSectionListCard);
 export const returnOfClickCourseCard = getReturnOfExpression(clickCourseCard);
+export const returnOfGoToManagedCard = getReturnOfExpression(goToManagedCard);
 export const returnOfSearchItem = getReturnOfExpression(searchItem);
 export const returnOfClickDoneSelecting = getReturnOfExpression(clickDoneSelecting);
 export const returnOfRevertToOriginAbbreviation = getReturnOfExpression(revertToOriginAbbreviation);
+export const returnOfSearchAgainForAbbreviation = getReturnOfExpression(searchAgainForAbbreviation);
 
 export type IActions =
     | typeof returnOfReceiveSections
@@ -116,9 +119,11 @@ export type IActions =
     | typeof returnOfMouseLeaveSectionListCard
     | typeof returnOfClickSectionListCard
     | typeof returnOfClickCourseCard
+    | typeof returnOfGoToManagedCard
     | typeof returnOfSearchItem
     | typeof returnOfClickDoneSelecting
-    | typeof returnOfRevertToOriginAbbreviation;
+    | typeof returnOfRevertToOriginAbbreviation
+    | typeof returnOfSearchAgainForAbbreviation;
 
 const restructureHours = (timesMet) => {
 

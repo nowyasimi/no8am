@@ -77,8 +77,8 @@ export interface ISearchItem {
     readonly selectedCrns: string[];
 }
 
-export interface ISearchItemWithAllAbbreviations extends ISearchItem {
-    readonly currentItemAllAbbreviations: string[];
+export interface ISearchItemWithMatchingSections extends ISearchItem {
+    readonly sectionsInSearchItem: Section[];
 }
 
 export interface ICalendarReducer {

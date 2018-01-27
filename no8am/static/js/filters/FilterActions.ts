@@ -2,9 +2,6 @@ import {createAction} from "ts-redux-actions";
 
 import {getReturnOfExpression} from "react-redux-typescript";
 
-import {CCC_LOOKUP_URL, COURSE_LOOKUP_URL, CREDIT_LOOKUP_URL} from "../Constants";
-import {IMetadata, IMetadataUnparsed, ISection, ISectionUnparsed} from "../Interfaces";
-
 export const clickAdvancedSectionSelection = createAction("CLICK_ADVANCED_SECTION_SELECTION",
     () => ({
         type: "CLICK_ADVANCED_SECTION_SELECTION",

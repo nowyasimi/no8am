@@ -3,13 +3,14 @@ import * as React from "react";
 import {connect} from "../Connect";
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from "../Constants";
-import {getSectionListHoverSection, getSelectedSections} from "../Helpers";
-import {IAllReducers, Section} from "../Interfaces";
+import {getSectionListHoverSection, getSelectedSearchItemMemoized, getSelectedSections} from "../Helpers";
+import {IAllReducers, ISearchItem, Section} from "../Interfaces";
 import CalendarSection from "./CalendarSection";
 
 interface ICalendarStateProps {
     sectionListHoverSection: Section | undefined;
     selectedSections: Section[];
+    selectedSearchItem: ISearchItem | undefined;
 }
 
 interface ISectionToSeparateByDay {
@@ -40,7 +41,7 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
      * Add an HTML wrapper for each day of the week that contains sections for a given day.
      * @param sectionsSeparatedByDay Sections grouped by day
      */
-    private static addCalendarSectionsToCalendar(sectionsSeparatedByDay: ICalendarSectionsByDay) {
+    private addCalendarSectionsToCalendar(sectionsSeparatedByDay: ICalendarSectionsByDay) {
         // iterate through DAYS_OF_WEEK so columns in the calendar are sorted by day of week
         return DAYS_OF_WEEK.map((day) => (
             <div className="day" id={day} key={day}>
@@ -55,12 +56,13 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
      * Create an entry in the calendar for each time a section meets in a week.
      * @param sectionToSeparate Section containing 0 or more meeting times
      */
-    private static createCalendarSectionsForSection(sectionToSeparate: ISectionToSeparateByDay) {
+    private createCalendarSectionsForSection(sectionToSeparate: ISectionToSeparateByDay) {
         return sectionToSeparate.section.meetingTimes
             // include day in object returned so CalendarSection elements can later be grouped by day
             .map((meetingTime, index) => ({
                 calendarSection: (
                     <CalendarSection
+                        isCurrentCourseCard={this.isCurrentCourseCard(sectionToSeparate.section)}
                         isSelected={sectionToSeparate.isSelected}
                         meetingTimeIndex={index}
                         section={sectionToSeparate.section}
@@ -70,16 +72,21 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
             }));
     }
 
+    private isCurrentCourseCard(section: Section) {
+        return this.props.selectedSearchItem !== undefined &&
+               this.props.selectedSearchItem.currentItemCourseAbbreviation === section.departmentAndBareCourse;
+    }
+
     /**
      * Creates a CalendarSection for each time a section meets in a week and groups it by day of the week.
      * @param sectionsToSeparate A list of sections to be displayed on the calendar
      */
-    private static getCalendarSectionsByDay(sectionsToSeparate: ISectionToSeparateByDay[]): ICalendarSectionsByDay {
+    private getCalendarSectionsByDay(sectionsToSeparate: ISectionToSeparateByDay[]): ICalendarSectionsByDay {
         const startCalendarSectionsByDay: ICalendarSectionsByDay = {M: [], T: [], W: [], R: [], F: []};
 
         return sectionsToSeparate
             // convert each section to a list of that sections meetings times
-            .map((sectionToSeparate) => Calendar.createCalendarSectionsForSection(sectionToSeparate))
+            .map((sectionToSeparate) => this.createCalendarSectionsForSection(sectionToSeparate))
             // flatten to 1D array of CalendarSections
             .reduce((calendarSectionsToSeparate, nextCalendarSectionsToSeparate) =>
                 calendarSectionsToSeparate.concat(nextCalendarSectionsToSeparate), [])
@@ -108,8 +115,8 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
             }];
         }
 
-        const sectionsSeparatedByDay = Calendar.getCalendarSectionsByDay(sectionsToSeparateByDay);
-        const calendarSectionsInCalendar = Calendar.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
+        const sectionsSeparatedByDay = this.getCalendarSectionsByDay(sectionsToSeparateByDay);
+        const calendarSectionsInCalendar = this.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
 
         return (
             <div className="col-sm-6 page2bg" id="calendar-col">
@@ -135,6 +142,7 @@ function mapStateToProps(state: IAllReducers): ICalendarStateProps {
     // @ts-ignore
     return {
         sectionListHoverSection: getSectionListHoverSection(state),
+        selectedSearchItem: getSelectedSearchItemMemoized(state),
         selectedSections: getSelectedSections(state),
     };
 }
