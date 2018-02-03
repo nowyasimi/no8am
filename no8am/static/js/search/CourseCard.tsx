@@ -6,11 +6,11 @@ import {connect} from "../Connect";
 
 import {Classes, Icon, IconClasses} from "@blueprintjs/core";
 import * as classNames from "classnames";
-import {IAllReducers, ISearchItemWithMatchingSections, Section} from "../Interfaces";
+import {CalendarSectionColorType, colorMapping} from "../Constants";
+import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
 import {clickCourseCard, returnOfClickCourseCard} from "../sections/SectionActions";
 
 const cardStyle = {
-    borderLeft: "8px solid blue",
     flex: "1 0 auto",
     margin: "10px",
     maxWidth: "50%",
@@ -36,10 +36,15 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
             [Classes.ELEVATION_4]: this.props.searchItem.isSelected,
         });
 
+        const cardStyleWithColor = {
+            ...cardStyle,
+            borderLeft: `8px solid ${colorMapping[this.props.searchItem.color][CalendarSectionColorType.SELECTED]}`,
+        };
+
         return (
             <div
                 className={classes}
-                style={cardStyle}
+                style={cardStyleWithColor}
                 onClick={this.props.onClickCourseCard}
             >
                 <h5>{this.formatTitle()}</h5>
@@ -65,7 +70,7 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
         const selectedAbbreviations = this.getSelectedAbbreviations();
 
         return this.filterAbbreviations().map((abbreviation) =>
-             this.createAbbreviation(abbreviation, selectedAbbreviations)
+             this.createAbbreviation(abbreviation, selectedAbbreviations),
         );
     }
 

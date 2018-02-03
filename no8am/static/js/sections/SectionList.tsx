@@ -4,7 +4,7 @@ import {createSelector} from "reselect";
 import {connect} from "../Connect";
 
 import {filterSectionsWithSearchItem, getAllSections,
-        getSectionsForSearchItem, getSelectedSectionsForSelectedCourseCard,
+        getSectionsForSelectedSearchItem, getSelectedSectionsForSelectedCourseCard,
         getUnselectedSearchItemsMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem, ISectionExtra, Section} from "../Interfaces";
 
@@ -160,7 +160,7 @@ function mapStateToProps(state: IAllReducers): ISectionListStateProps {
         filterTime: state.filters.filterTime,
         isAdvanced: state.filters.isAdvanced,
         managedSections: getAllManagedSections(state),
-        sections: getSectionsForSearchItem(state),
+        sections: getSectionsForSelectedSearchItem(state),
         selectedSections: getSelectedSectionsForSelectedCourseCard(state),
     };
 }

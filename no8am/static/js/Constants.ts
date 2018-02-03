@@ -1,53 +1,74 @@
-export const colorDict = {
-    blue: {
-        h: "#5c9ef9", // selected + hover
-        n: "#A5CAFD", // unselected
-        s: "#5496dd", // selected
+import {IColors} from "./Interfaces";
+
+export enum CalendarSectionColorType {
+    HOVER,
+    SELECTED,
+    UNSELECTED,
+}
+
+export enum Colors {
+    blue,
+    cyan,
+    green,
+    lightgreen,
+    orange,
+    pink,
+    purple,
+    red,
+    teal,
+    yellow,
+}
+
+export const colorMapping: IColors = {
+    [Colors.blue]: {
+        [CalendarSectionColorType.HOVER]: "#5c9ef9", // selected + hover
+        [CalendarSectionColorType.SELECTED]: "#5496dd", // selected
+        [CalendarSectionColorType.UNSELECTED]: "#A5CAFD", // unselected
     },
-    cyan: {
-        h: "#205c5d",
-        n: "#205c5d",
-        s: "#2d8284",
+    [Colors.cyan]: {
+        [CalendarSectionColorType.HOVER]: "#205c5d",
+        [CalendarSectionColorType.SELECTED]: "#2d8284",
+        [CalendarSectionColorType.UNSELECTED]: "#205c5d",
     },
-    green: {
-        h: "#98e857",
-        n: "#C4E7A7",
-        s: "#94e354",
+    [Colors.green]: {
+        [CalendarSectionColorType.HOVER]: "#98e857",
+        [CalendarSectionColorType.SELECTED]: "#94e354",
+        [CalendarSectionColorType.UNSELECTED]: "#C4E7A7",
     },
-    lightgreen: {
-        h: "#43bb41",
-        n: "#b1e6b0",
-        s: "#66cb65",
+    [Colors.lightgreen]: {
+        [CalendarSectionColorType.HOVER]: "#43bb41",
+        [CalendarSectionColorType.SELECTED]: "#66cb65",
+        [CalendarSectionColorType.UNSELECTED]: "#b1e6b0",
     },
-    orange: {
-        h: "#e6a153",
-        n: "#f2a98d",
-        s: "#e99b34",
+    [Colors.orange]: {
+        [CalendarSectionColorType.HOVER]: "#e6a153",
+        [CalendarSectionColorType.SELECTED]: "#e99b34",
+        [CalendarSectionColorType.UNSELECTED]: "#f2a98d",
     },
-    pink: {
-        h: "#f18bea",
-        n: "#f09eee",
-        s: "#f35ee1",
+    [Colors.pink]: {
+        [CalendarSectionColorType.HOVER]: "#f18bea",
+        [CalendarSectionColorType.SELECTED]: "#f35ee1",
+        [CalendarSectionColorType.UNSELECTED]: "#f09eee",
     },
-    purple: {
-        h: "#bc9de6",
-        n: "#c69fe5",
-        s: "#a97be6",
+    [Colors.purple]: {
+        [CalendarSectionColorType.HOVER]: "#bc9de6",
+        [CalendarSectionColorType.SELECTED]: "#a97be6",
+        [CalendarSectionColorType.UNSELECTED]: "#c69fe5",
     },
-    red: {
-        h: "#ff6164",
-        n: "#FFA9AB",
-        s: "#ff454b",
+    [Colors.red]: {
+        [CalendarSectionColorType.HOVER]: "#ff6164",
+        [CalendarSectionColorType.SELECTED]: "#ff454b",
+        [CalendarSectionColorType.UNSELECTED]: "#FFA9AB",
     },
-    teal: {
-        h: "#338794",
-        n: "#88ced9",
-        s: "#3faabb",
+    [Colors.teal]: {
+        [CalendarSectionColorType.HOVER]: "#338794",
+        [CalendarSectionColorType.SELECTED]: "#3faabb",
+        [CalendarSectionColorType.UNSELECTED]: "#88ced9",
     },
-    yellow: {
-        h: "#ffbd6a",
-        n: "#FFD6A3",
-        s: "#ffac4d",
+    [Colors.yellow]: {
+        [CalendarSectionColorType.HOVER]: "#ffbd6a",
+        [CalendarSectionColorType.SELECTED]: "#ffac4d",
+        [CalendarSectionColorType.UNSELECTED]: "#FFD6A3",
     },
 };
 

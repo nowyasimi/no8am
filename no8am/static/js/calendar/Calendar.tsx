@@ -1,21 +1,26 @@
 import * as React from "react";
+import {createSelector} from "reselect";
 
 import {connect} from "../Connect";
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from "../Constants";
-import {getSectionListHoverSection, getSelectedSearchItemMemoized, getSelectedSections} from "../Helpers";
-import {IAllReducers, ISearchItem, Section} from "../Interfaces";
+import {filterSectionsWithSearchItemWithColor, getAllSections, getSelectedSearchItemMemoized,
+        getSelectedSections} from "../Helpers";
+import {IAllReducers, ISearchItemWithMatchingSections, Section, SectionWithColor} from "../Interfaces";
 import CalendarSection from "./CalendarSection";
 
+import { isNullOrUndefined } from "util";
+
 interface ICalendarStateProps {
-    sectionListHoverSection: Section | undefined;
-    selectedSections: Section[];
-    selectedSearchItem: ISearchItem | undefined;
+    sectionListHoverCrn: string | null;
+    selectedSections: SectionWithColor[];
+    selectedSearchItem: ISearchItemWithMatchingSections | undefined;
 }
 
 interface ISectionToSeparateByDay {
+    isSectionListHover: boolean;
     isSelected: boolean;
-    section: Section;
+    section: SectionWithColor;
 }
 
 interface ICalendarSectionsByDay {
@@ -25,10 +30,51 @@ interface ICalendarSectionsByDay {
 @connect<ICalendarStateProps, {}, {}>(mapStateToProps)
 export default class Calendar extends React.Component<ICalendarStateProps> {
 
+    public render() {
+        const sectionListHoverSection = this.getSectionListHoverSection();
+        let sectionsToSeparateByDay: ISectionToSeparateByDay[] = [];
+
+        for (const section of this.props.selectedSections) {
+            sectionsToSeparateByDay = [...sectionsToSeparateByDay, {
+                isSectionListHover: section.CRN === this.props.sectionListHoverCrn,
+                isSelected: true,
+                section,
+            }];
+        }
+
+        if (sectionListHoverSection) {
+            sectionsToSeparateByDay = [...sectionsToSeparateByDay, {
+                isSectionListHover: true,
+                isSelected: false,
+                section: sectionListHoverSection,
+            }];
+        }
+
+        const sectionsSeparatedByDay = this.getCalendarSectionsByDay(sectionsToSeparateByDay);
+        const calendarSectionsInCalendar = this.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
+
+        return (
+            <div className="col-sm-6 page2bg" id="calendar-col">
+                <div>
+                    <div id="calendar" className="list-group">
+                        <div id="calendar-titles" className="panel-heading">
+                            {this.generate_calendar_titles()}
+                        </div>
+                        <div id="course-data" className="list-group-item">
+                            <div className="week">
+                                {calendarSectionsInCalendar}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     /**
      * Create the calendar header that displays each day of the week.
      */
-    private static generate_calendar_titles() {
+    private generate_calendar_titles() {
         // iterate through DAYS_OF_WEEK so columns in the calendar are sorted by day of week
         return DAYS_OF_WEEK_LONG.map((day) => (
             <div className="dayweek" key={day}>
@@ -44,7 +90,7 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
     private addCalendarSectionsToCalendar(sectionsSeparatedByDay: ICalendarSectionsByDay) {
         // iterate through DAYS_OF_WEEK so columns in the calendar are sorted by day of week
         return DAYS_OF_WEEK.map((day) => (
-            <div className="day" id={day} key={day}>
+            <div className="day" id={day} key={`day${day}`}>
                 <ul className="list-unstyled open">
                     {sectionsSeparatedByDay[day]}
                 </ul>
@@ -62,8 +108,10 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
             .map((meetingTime, index) => ({
                 calendarSection: (
                     <CalendarSection
+                        key={`crn${sectionToSeparate.section.CRN}index${index}`}
                         isCurrentCourseCard={this.isCurrentCourseCard(sectionToSeparate.section)}
                         isSelected={sectionToSeparate.isSelected}
+                        isSectionListHover={sectionToSeparate.isSectionListHover}
                         meetingTimeIndex={index}
                         section={sectionToSeparate.section}
                     />
@@ -72,7 +120,7 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
             }));
     }
 
-    private isCurrentCourseCard(section: Section) {
+    private isCurrentCourseCard(section: SectionWithColor) {
         return this.props.selectedSearchItem !== undefined &&
                this.props.selectedSearchItem.currentItemCourseAbbreviation === section.departmentAndBareCourse;
     }
@@ -98,51 +146,38 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
             }), startCalendarSectionsByDay);
     }
 
-    public render() {
-        let sectionsToSeparateByDay: ISectionToSeparateByDay[]  = [];
-
-        for (const section of this.props.selectedSections) {
-            sectionsToSeparateByDay = [...sectionsToSeparateByDay, {
-                isSelected: true,
-                section,
-            }];
+    private getSectionListHoverSection() {
+        if (isNullOrUndefined(this.props.sectionListHoverCrn) ||
+          this.props.selectedSearchItem === undefined ||
+          this.props.selectedSections.find((section) => section.CRN === this.props.sectionListHoverCrn) !== undefined) {
+            return undefined;
+        } else {
+            return this.props.selectedSearchItem.sectionsInSearchItem
+                    .find((currentSection) => currentSection.CRN === this.props.sectionListHoverCrn);
         }
-
-        if (this.props.sectionListHoverSection) {
-            sectionsToSeparateByDay = [...sectionsToSeparateByDay, {
-                isSelected: false,
-                section: this.props.sectionListHoverSection,
-            }];
-        }
-
-        const sectionsSeparatedByDay = this.getCalendarSectionsByDay(sectionsToSeparateByDay);
-        const calendarSectionsInCalendar = this.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
-
-        return (
-            <div className="col-sm-6 page2bg" id="calendar-col">
-                <div>
-                    <div id="calendar" className="list-group">
-                        <div id="calendar-titles" className="panel-heading">
-                            {Calendar.generate_calendar_titles()}
-                        </div>
-                        <div id="course-data" className="list-group-item">
-                            <div className="week">
-                                {calendarSectionsInCalendar}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     }
 }
 
+const getSectionListHoverCrn = (state: IAllReducers) => state.sections.sectionListHoverCrn;
+
+const getSelectedSearchItemWithSections = createSelector(
+    [getAllSections, getSelectedSearchItemMemoized],
+    (allSections, selectedSearchItem) => {
+        if (selectedSearchItem === undefined) {
+            return undefined;
+        } else {
+            return {
+                ...selectedSearchItem,
+                sectionsInSearchItem: filterSectionsWithSearchItemWithColor(selectedSearchItem, allSections, false),
+            };
+        }
+    },
+);
+
 function mapStateToProps(state: IAllReducers): ICalendarStateProps {
-    // TODO - follow up on https://github.com/Microsoft/TypeScript/issues/7657
-    // @ts-ignore
     return {
-        sectionListHoverSection: getSectionListHoverSection(state),
-        selectedSearchItem: getSelectedSearchItemMemoized(state),
+        sectionListHoverCrn: getSectionListHoverCrn(state),
+        selectedSearchItem: getSelectedSearchItemWithSections(state),
         selectedSections: getSelectedSections(state),
     };
 }

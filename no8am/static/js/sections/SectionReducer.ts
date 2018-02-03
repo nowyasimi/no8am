@@ -1,11 +1,9 @@
 import {getType} from "ts-redux-actions";
 
-import {DataLoadingState, SearchItemType} from "../Constants";
+import {Colors, DataLoadingState, SearchItemType} from "../Constants";
 import {IMetadata, ISearchItem, ISectionReducer, Section} from "../Interfaces";
 
 import * as SectionActions from "./SectionActions";
-import { clickManagedCard } from "./SectionActions";
-import { currentId } from "async_hooks";
 
 const initialState: ISectionReducer = {
     allSections: [],
@@ -220,6 +218,7 @@ const newSearchItem = (newSearch: IMetadata, allSections: Section[], searchItems
 
     // use search type and abbreviation to create searchItem
     const searchItemFromMetadata = {
+        color: chooseColorForNewSearchItem(searchItems),
         currentItemCourseAbbreviation: newSearch.itemType === SearchItemType.Course ?
             newSearch.abbreviation :
             null,
@@ -245,6 +244,37 @@ const newSearchItem = (newSearch: IMetadata, allSections: Section[], searchItems
             searchItemFromMetadata,
         ];
     }
+};
+
+interface IColorCounter {
+    [color: number]: number;
+}
+
+function enumKeys<E>(e: E): Array<keyof E> {
+    return Object.keys(e) as Array<keyof E>;
+}
+
+const chooseColorForNewSearchItem = (searchItems: ISearchItem[]): Colors => {
+    // track the least frequent color among search items
+    let leastFrequentColor = Colors.blue;
+
+    // fall back on number in case browser does not support MAX_SAFE_INTEGER
+    let leastFrequentCount = Number.MAX_SAFE_INTEGER || 100000000;
+
+    const colorCounter: IColorCounter = searchItems.reduce((counter: IColorCounter, currentSearchItem) =>
+        counter[currentSearchItem.color] === undefined ? {...counter, [currentSearchItem.color]: 1} :
+        {...counter, [currentSearchItem.color]: (counter[currentSearchItem.color] + 1)}, {});
+
+    for (const color of enumKeys(Colors)) {
+        const colorAsEnum = Colors[color];
+        const colorCount = colorCounter[colorAsEnum];
+        if (colorCount === undefined || colorCount < leastFrequentCount) {
+            leastFrequentColor = colorAsEnum;
+            leastFrequentCount = colorCounter[colorAsEnum];
+        }
+    }
+
+    return leastFrequentColor;
 };
 
 const selectSearchItemManagerForSection = (clickedSection: Section, searchItems: ISearchItem[]) => {

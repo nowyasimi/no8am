@@ -1,4 +1,4 @@
-import {DataLoadingState, SearchItemType} from "./Constants";
+import {Colors, DataLoadingState, SearchItemType} from "./Constants";
 
 export interface ISectionUnparsed {
     credits: string;
@@ -39,10 +39,15 @@ export interface IMeetingTimes {
 }
 
 export interface ISectionMain extends ISectionUnparsed, IMeetingTimes {}
-
 export interface ISectionExtra extends ISectionExtraUnparsed, IMeetingTimes {}
-
 export interface ISection extends ISectionMain, ISectionExtra {}
+
+interface ISectionColor {
+    color: Colors;
+}
+
+export interface ISectionMainWithColor extends ISectionMain, ISectionColor {}
+export interface ISectionExtraWithColor extends ISectionExtra, ISectionColor {}
 
 export type SectionUnparsed =
     | ISectionUnparsed
@@ -51,6 +56,10 @@ export type SectionUnparsed =
 export type Section =
     | ISectionMain
     | ISectionExtra;
+
+export type SectionWithColor =
+    | ISectionMainWithColor
+    | ISectionExtraWithColor;
 
 export interface IMetadataUnparsed {
     abbreviation: string;
@@ -69,7 +78,16 @@ export interface ISelectedSection {
     CRN: string;
 }
 
+export interface IColor {
+    [color: number]: string;
+}
+
+export interface IColors {
+    [color: number]: IColor;
+}
+
 export interface ISearchItem {
+    readonly color: Colors;
     readonly currentItemCourseAbbreviation: string | null;
     readonly isSelected: boolean;
     readonly originItemAbbreviation: string | null;
@@ -78,7 +96,7 @@ export interface ISearchItem {
 }
 
 export interface ISearchItemWithMatchingSections extends ISearchItem {
-    readonly sectionsInSearchItem: Section[];
+    readonly sectionsInSearchItem: SectionWithColor[];
 }
 
 export interface ICalendarReducer {

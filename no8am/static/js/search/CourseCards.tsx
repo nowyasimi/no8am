@@ -3,7 +3,7 @@ import {createSelector} from "reselect";
 
 import {connect} from "../Connect";
 
-import {filterSectionsWithSearchItem, getAllSections, getSearchItems} from "../Helpers";
+import {getSearchItemsWithSections} from "../Helpers";
 import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
 import {CourseCard} from "./CourseCard";
 
@@ -36,15 +36,6 @@ export default class CourseCards extends React.Component<ICourseCardStateProps> 
         ));
     }
 }
-
-const getSearchItemsWithSections = createSelector(
-    [getSearchItems, getAllSections],
-    (searchItems, allSections) =>
-        searchItems.map((currentSearchItem) => ({
-            ...currentSearchItem,
-            sectionsInSearchItem: filterSectionsWithSearchItem(currentSearchItem, allSections, true),
-        })),
-);
 
 function mapStateToProps(state: IAllReducers): ICourseCardStateProps {
     return {

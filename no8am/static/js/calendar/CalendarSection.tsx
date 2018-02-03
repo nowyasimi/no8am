@@ -4,19 +4,20 @@ import {bindActionCreators, Dispatch} from "redux";
 import {mouseEnterCalendarSection, mouseLeaveCalendarSection, returnOfMouseEnterCalendarSection,
         returnOfMouseLeaveCalendarSection} from "../calendar/CalendarActions.js";
 import {connect} from "../Connect";
-import {colorDict} from "../Constants";
-import {IAllReducers, Section} from "../Interfaces";
+import {CalendarSectionColorType, colorMapping, Colors} from "../Constants";
+import {IAllReducers, SectionWithColor} from "../Interfaces";
 import {goToManagedCard, returnOfGoToManagedCard} from "../sections/SectionActions";
 
 interface ICalendarSectionProps {
+    isSectionListHover: boolean;
     isCurrentCourseCard: boolean;
     isSelected: boolean;
-    section: Section;
+    section: SectionWithColor;
     meetingTimeIndex: number;
 }
 
 interface ICalendarSectionStateProps {
-    hoverCRN?: string | null;
+    calendarHoverCRN?: string | null;
 }
 
 interface ICalendarSectionDispatchProps {
@@ -32,8 +33,9 @@ export default class CalendarSection
 
     public render() {
 
-        const hexColor = colorDict.blue[this.props.isSelected ? "s" : "n"];
-
+        const isCalendarHover = this.props.calendarHoverCRN === this.props.section.CRN;
+        const hexColor = this.chooseHexColor(this.props.section.color, this.props.isSelected,
+                                             isCalendarHover, this.props.isSectionListHover);
         const currentMeetingTime = this.props.section.meetingTimes[this.props.meetingTimeIndex];
 
         const style = {
@@ -47,7 +49,7 @@ export default class CalendarSection
 
         const className = this.props.isSelected ?  "selectedCalendarSection" : "unselectedCalendarSection";
 
-        const innerDetails = this.props.hoverCRN === this.props.section.CRN ? (
+        const innerDetails = isCalendarHover ? (
             <p className="timesMet">
                 {currentMeetingTime.startTimeUserFriendly + "-" + currentMeetingTime.endTimeUserFriendly}
             </p>) :
@@ -65,11 +67,24 @@ export default class CalendarSection
             </li>
         );
     }
+
+    private chooseHexColor(color: Colors, isSelected: boolean, isCalendarHover: boolean, isSectionListHover: boolean) {
+        if (isSelected && (isCalendarHover || isSectionListHover)) {
+            // cursor is on one of the calendar sections or selected section in section list
+            return colorMapping[color][CalendarSectionColorType.HOVER];
+        } else if (isSelected) {
+            // section has been selected
+            return colorMapping[color][CalendarSectionColorType.SELECTED];
+        } else {
+            // section has not been selected yet
+            return colorMapping[color][CalendarSectionColorType.UNSELECTED];
+        }
+    }
 }
 
 function mapStateToProps(state: IAllReducers): ICalendarSectionStateProps {
     return {
-        hoverCRN: state.calendar.hoverCRN,
+        calendarHoverCRN: state.calendar.hoverCRN,
     };
 }
 

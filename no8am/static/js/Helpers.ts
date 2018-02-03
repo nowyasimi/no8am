@@ -1,7 +1,7 @@
 import {createSelector} from "reselect";
 
 import {SearchItemType} from "./Constants";
-import {IAllReducers, ISearchItem, ISectionMain, Section} from "./Interfaces";
+import {IAllReducers, ISearchItem, ISectionMain, Section, SectionWithColor} from "./Interfaces";
 
 import {getSelectedSearchItem, getSelectedSectionsForSearchItem,
         getUnselectedSearchItems} from "./sections/SectionReducer";
@@ -37,6 +37,11 @@ export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSection
     }
 };
 
+export const filterSectionsWithSearchItemWithColor = (searchItem: ISearchItem, allSections: Section[],
+                                                      chooseCourseOverOrigin: boolean): SectionWithColor[] =>
+    filterSectionsWithSearchItem(searchItem, allSections, chooseCourseOverOrigin)
+        .map((section) => ({...section, color: searchItem.color}));
+
 export const getSearchItems = (state: IAllReducers): ISearchItem[] => state.sections.searchItems;
 export const getAllSections = (state: IAllReducers): Section[] => state.sections.allSections;
 
@@ -50,27 +55,13 @@ export const getUnselectedSearchItemsMemoized = createSelector(
     getUnselectedSearchItems,
 );
 
-// TODO - see if this is needed
-// export const getFilterCourseForSelectedCourseCard = createSelector(
-//     [getSelectedSearchItemMemoized],
-//     (searchItem) => {
-//         if (searchItem.originItemAbbreviation !== nu) {
-//             return null;
-//         } else if (searchItem.searchItemType === SearchItemType.Course) {
-//             return searchItem.currentItemBaseAbbreviation;
-//         } else {
-//             return searchItem.originItemAbbreviation;
-//         }
-//     },
-// );
-
 export const getSelectedSectionsForSelectedCourseCard = createSelector(
     [getAllSections, getSelectedSearchItemMemoized],
     // filter all sections by sections that match selected crns for the current card
     getSelectedSectionsForSearchItem,
 );
 
-export const getSectionsForSearchItem = createSelector(
+export const getSectionsForSelectedSearchItem = createSelector(
     [getSelectedSearchItemMemoized, getAllSections],
     (searchItem, allSections) => {
         if (searchItem === undefined) {
@@ -81,22 +72,21 @@ export const getSectionsForSearchItem = createSelector(
     },
 );
 
-const getSectionListHoverCrn = (state: IAllReducers): string | null => state.sections.sectionListHoverCrn;
-
-export const getSectionListHoverSection = createSelector(
-    [getSectionListHoverCrn, getAllSections],
-    (hoverCRN, allSections) => hoverCRN === null ? undefined : allSections.find((section) => section.CRN === hoverCRN),
+export const getSearchItemsWithSections = createSelector(
+    [getSearchItems, getAllSections],
+    (searchItems, allSections) =>
+        searchItems.map((currentSearchItem) => ({
+            ...currentSearchItem,
+            sectionsInSearchItem: filterSectionsWithSearchItemWithColor(currentSearchItem, allSections, true),
+        })),
 );
 
 export const getSelectedSections = createSelector(
-    [getAllSections, getSearchItems],
-    (allSections, searchItems) => searchItems
-        // get only the selected CRNs from each search item
-        .map((searchItem) => searchItem.selectedCrns)
-        // flatten to 1D array of selected crns
-        .reduce((selectedCrns, nextSelectedCrns) => selectedCrns.concat(nextSelectedCrns), [])
-        // get the section of corresponding to the selected CRN
-        .map((selectedCrn) => allSections.find((section) => section.CRN === selectedCrn))
-        // remove sections that were not found (this should only happen if the course catalog changes/removes a CRN)
-        .filter((section) => section !== undefined),
+    [getSearchItemsWithSections],
+    (searchItemsWithSections) => searchItemsWithSections
+        // get selected sections for each search item
+        .map((currentSearchItem) => currentSearchItem.sectionsInSearchItem.filter((section) =>
+            currentSearchItem.selectedCrns.find((currentCrn) => section.CRN === currentCrn) !== undefined))
+        // flatten to 1D array of selected sections
+        .reduce((selectedSections, nextSelectedSections) => selectedSections.concat(nextSelectedSections), []),
 );
