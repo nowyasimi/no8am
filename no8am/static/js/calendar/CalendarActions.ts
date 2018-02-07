@@ -1,5 +1,3 @@
-import {IMetadata, IMetadataUnparsed, ISection, ISectionUnparsed} from "../Interfaces";
-
 import {getReturnOfExpression} from "react-redux-typescript";
 import {createAction} from "ts-redux-actions";
 

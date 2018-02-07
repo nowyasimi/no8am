@@ -4,7 +4,6 @@
   "description": "no8am",
   "main": "Index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,22 +16,21 @@
   },
   "homepage": "https://github.com/nowyasimi/no8am#readme",
   "devDependencies": {
-    "browserify": "^14.5.0",
-    "browserify-incremental": "^3.1.1",
+    "browserify": "^15.2.0",
     "clean-css": "^3.4.23",
-    "eslint": "^4.12.1",
+    "eslint": "^4.17.0",
     "eslint-config-google": "^0.9.1",
-    "tslint": "^5.8.0",
+    "tslint": "^5.9.1",
     "tslint-blueprint": "^0.1.0",
-    "tslint-react": "^3.2.0",
-    "typescript": "^2.6.2",
+    "tslint-react": "^3.4.0",
+    "typescript": "^2.6.4",
     "uglifyjs": "^2.4.10"
   },
   "dependencies": {
     "@blueprintjs/core": "^1.33.0",
     "@blueprintjs/labs": "^0.13.0",
     "@types/classnames": "^2.2.3",
-    "@types/react": "^16.0.26",
+    "@types/react": "^16.0.36",
     "@types/react-dom": "^16.0.3",
     "@types/react-redux": "^5.0.14",
     "@types/react-transition-group": "^2.0.6",
@@ -42,7 +40,7 @@
     "react-addons-perf": "^15.4.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
-    "react-redux-typescript": "^3.0.0-rc.2",
+    "react-redux-typescript": "^3.0.0-rc.3",
     "react-timeago": "^3.4.3",
     "react-transition-group": "^2.2.1",
     "redux": "^3.7.2",

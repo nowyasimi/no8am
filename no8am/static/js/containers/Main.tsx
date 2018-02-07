@@ -2,7 +2,7 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 
 import {connect} from "../Connect";
-import {IAllReducers, IMetadata} from "../Interfaces";
+import {IAllReducers} from "../Interfaces";
 import {ILoadSectionsThunk, loadSections} from "../sections/SectionActions";
 
 import Calendar from "../calendar/Calendar";

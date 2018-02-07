@@ -3,7 +3,7 @@ import {bindActionCreators, Dispatch} from "redux";
 
 import {connect} from "../Connect";
 
-import {Tooltip2} from "@blueprintjs/labs";
+import {Classes, Position, Tooltip} from "@blueprintjs/core";
 import * as classNames from "classnames";
 import {Transition} from "react-transition-group";
 
@@ -11,17 +11,24 @@ import {IAllReducers, Section} from "../Interfaces";
 import {clickSectionListCard, mouseEnterSectionListCard, mouseLeaveSectionListCard, returnOfClickSectionListCard,
         returnOfMouseEnterSectionListCard, returnOfMouseLeaveSectionListCard} from "./SectionActions";
 
-const duration: number = 300;
+const duration: number = 500;
+
+const baseTransition = `max-height ${duration}ms ease-in-out, opacity ${duration}ms ease-in-out`;
 
 const defaultStyle = {
     maxHeight: 0,
     opacity: 0,
-    transition: `max-height ${duration}ms ease-in-out, opacity ${duration}ms ease-in-out`,
+    transition: `${baseTransition}, width 0ms linear ${duration + 10}ms`,
+    width: 0,
 };
 
 const transitionStyles: any = {
-    entered:  { maxHeight: "100px", opacity: 1 },
-    entering: { maxHeight: "100px", opacity: 1 },
+    entered:  {
+        maxHeight: "100px",
+        opacity: 1,
+        transition: baseTransition,
+        width: "100%",
+    },
 };
 
 const unavailableExtraSectionMessage = "This section can be selected with one of the following main sections:";
@@ -62,7 +69,7 @@ export default class SectionListCard
                 in={this.props.isVisible}
                 timeout={duration}
                 mountOnEnter={true}
-                unmountOnExit={true}
+                unmountOnExit={false}
             >
                 {(transitionState: any) => this.createSectionListCard(transitionState)}
             </Transition>
@@ -72,15 +79,15 @@ export default class SectionListCard
             this.props.sectionListHoverCrn === this.props.section.CRN && this.props.isUnavailable;
 
         return this.props.isAdvanced ? (
-            <Tooltip2
-                className={this.props.isVisible ? "sectionListCardTooltip" : ""}
+            <Tooltip
+                className={`${this.props.isVisible ? "sectionListCardTooltip" : ""}`}
                 content={<span>{unavailableMessage}</span>}
                 isOpen={isTooltipOpen}
                 openOnTargetFocus={false}
-                placement="right"
+                position={Position.RIGHT}
             >
                 {sectionListCardWithTransition}
-            </Tooltip2>) : sectionListCardWithTransition;
+            </Tooltip>) : sectionListCardWithTransition;
     }
 
     private createSectionListCard(transitionState: any) {
@@ -88,7 +95,11 @@ export default class SectionListCard
 
         const isViolation = this.props.isSelected && this.props.isUnavailable && !this.props.isManaged;
 
-        const classes = classNames({
+        const sectionCardClasses = classNames(
+            Classes.CARD, Classes.INTERACTIVE, "sectionCard",
+        );
+
+        const sectionDetailsClasses = classNames("sectionCardItemContainer", {
             managedSection: this.props.isManaged,
             selectedSection: this.props.isSelected,
             unavailableSection: this.props.isUnavailable,
@@ -96,34 +107,32 @@ export default class SectionListCard
         });
 
         return (
-            <div>
-                <div
-                    className={`pt-card pt-interactive sectionCard ${this.props.isLastOfType ? "lastOfType" : ""}`}
-                    onMouseEnter={this.props.onMouseEnterSectionListCard}
-                    onMouseLeave={this.props.onMouseLeaveSectionListCard}
-                    style={{...defaultStyle, ...transitionStyles[transitionState]}}
+            <div
+                className={sectionCardClasses}
+                onMouseEnter={this.props.onMouseEnterSectionListCard}
+                onMouseLeave={this.props.onMouseLeaveSectionListCard}
+                style={{...defaultStyle, ...transitionStyles[transitionState]}}
+            >
+                <ul
+                    className={sectionDetailsClasses}
+                    onClick={this.props.isVisible ? this.props.onClickSectionListCard : () => null}
                 >
-                    <ul
-                        className={`sectionCardItemContainer ${classes}`}
-                        onClick={this.props.onClickSectionListCard}
-                    >
-                        <li className="sectionCardItem">
-                            {this.props.section.departmentAndCourseAndSection}
-                        </li>
-                        <li className="sectionCardItem">
-                            {this.props.section.timesMet.join(", ")}
-                        </li>
-                        <li className="sectionCardItem">
-                            {this.props.section.roomMet.join(", ")}
-                        </li>
-                        <li className="sectionCardItem">
-                            {this.props.section.professor.join(" ")}
-                        </li>
-                        <li className="sectionCardItem" style={{width: "10%"}}>
-                            {this.props.section.freeSeats}
-                        </li>
-                    </ul>
-                </div>
+                    <li className="sectionCardItem">
+                        {this.props.section.departmentAndCourseAndSection}
+                    </li>
+                    <li className="sectionCardItem">
+                        {this.props.section.timesMet.join(", ")}
+                    </li>
+                    <li className="sectionCardItem">
+                        {this.props.section.roomMet.join(", ")}
+                    </li>
+                    <li className="sectionCardItem">
+                        {this.props.section.professor.join(" ")}
+                    </li>
+                    <li className="sectionCardItem" style={{width: "10%"}}>
+                        {this.props.section.freeSeats}
+                    </li>
+                </ul>
             </div>
         );
     }

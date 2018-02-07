@@ -1,6 +1,8 @@
 import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 
+import {Classes} from "@blueprintjs/core";
+
 import {connect} from "../Connect";
 
 import {IAllReducers} from "../Interfaces";
@@ -16,7 +18,7 @@ interface ISectionListManagedCard {
 }
 
 interface ISectionListManagedCardDispatchProps {
-    onClickManagedCard?: () => typeof returnOfClickManagedCard;
+    onClickManagedCard?: () => typeof returnOfGoToManagedCard;
 }
 
 @connect<{}, ISectionListManagedCardDispatchProps, ISectionListManagedCard>(() => {}, mapDispatchToProps)
@@ -26,20 +28,18 @@ export default class SectionListManagedCard
     public render() {
 
         return (
-            <div>
-                <div
-                    className={`pt-card pt-interactive sectionCard lastOfType`}
-                    style={defaultStyle}
+            <div
+                className={`${Classes.CARD} ${Classes.INTERACTIVE} sectionCard`}
+                style={defaultStyle}
+            >
+                <ul
+                    className={`sectionCardItemContainer`}
+                    onClick={this.props.onClickManagedCard}
                 >
-                    <ul
-                        className={`sectionCardItemContainer`}
-                        onClick={this.props.onClickManagedCard}
-                    >
-                        <li className="sectionCardItem">
-                            Go to {this.props.managedAbbreviation}
-                        </li>
-                    </ul>
-                </div>
+                    <li className="sectionCardItem">
+                        Go to {this.props.managedAbbreviation}
+                    </li>
+                </ul>
             </div>
         );
     }

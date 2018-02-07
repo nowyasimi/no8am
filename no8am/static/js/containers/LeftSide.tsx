@@ -2,8 +2,7 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {Button, Classes, IconClasses, KeyCombo, Menu, MenuItem, NonIdealState, Popover, Position,
-    Spinner} from "@blueprintjs/core";
+import {Button, Classes, IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
 
 import OpenDialog from "../components/OpenDialog";
 import SaveDialog from "../components/SaveDialog";

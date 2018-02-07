@@ -34,7 +34,11 @@ export default class SectionList extends React.Component<ISectionListStateProps 
         // const cacheTime = this.props.data.cache_time || new Date();
 
         const sectionCards = this.groupSectionsByType()
-            .map((sectionGroup) => this.createCardsFromSectionGroup(sectionGroup));
+            .map((sectionGroup) => (
+                <div key={sectionGroup[0].departmentAndCourse}>
+                    {this.createCardsFromSectionGroup(sectionGroup)}
+                </div>
+            ));
 
         const visibleCount = this.props.sections
             .map((section) => this.isVisible(section) ? 1 : 0)

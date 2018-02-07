@@ -1,5 +1,4 @@
 import * as React from "react";
-import {createSelector} from "reselect";
 
 import {connect} from "../Connect";
 

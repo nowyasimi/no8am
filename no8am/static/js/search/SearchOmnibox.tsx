@@ -7,7 +7,7 @@ import * as classNames from "classnames";
 
 import {connect} from "../Connect";
 import {DataLoadingState, SearchItemType, SearchItemTypes} from "../Constants";
-import {IAllReducers, IMetadata, ISearchItem} from "../Interfaces";
+import {IAllReducers, IMetadata} from "../Interfaces";
 import {closeSearchOmnibox, ILoadMetadataThunk, loadMetadata, openSearchOmnibox, returnOfCloseSearchOmnibox,
         returnOfOpenSearchOmnibox, returnOfToggleSearchOmnibox, toggleSearchOmnibox} from "../search/SearchActions";
 import {returnOfSearchItem, searchItem} from "../sections/SectionActions";

@@ -1,10 +1,7 @@
-import {ActionCreator} from "react-redux";
 import {ThunkAction} from "redux-thunk";
 import {createAction} from "ts-redux-actions";
 
-import {SECTION_DETAILS_URL} from "../Constants";
-import {IAllReducers, IMeetingTime, IMetadata, ISearchItem, Section, SectionUnparsed} from "../Interfaces";
-import {search} from "../search/SearchReducer";
+import {IMeetingTime, IMetadata, ISearchItem, Section, SectionUnparsed} from "../Interfaces";
 
 import {getReturnOfExpression} from "react-redux-typescript";
 

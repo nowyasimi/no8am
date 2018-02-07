@@ -6,7 +6,7 @@ import {connect} from "../Connect";
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from "../Constants";
 import {filterSectionsWithSearchItemWithColor, getAllSections, getSelectedSearchItemMemoized,
         getSelectedSections} from "../Helpers";
-import {IAllReducers, ISearchItemWithMatchingSections, Section, SectionWithColor} from "../Interfaces";
+import {IAllReducers, ISearchItemWithMatchingSections, SectionWithColor} from "../Interfaces";
 import CalendarSection from "./CalendarSection";
 
 import { isNullOrUndefined } from "util";
