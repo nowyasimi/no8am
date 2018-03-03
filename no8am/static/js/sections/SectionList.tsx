@@ -4,12 +4,12 @@ import {createSelector} from "reselect";
 import {connect} from "../Connect";
 
 import {filterSectionsWithSearchItem, getAllSections,
-        getSectionsForSelectedSearchItem, getSelectedSectionsForSelectedCourseCard,
-        getUnselectedSearchItemsMemoized} from "../Helpers";
+        getSelectedSearchItemMemoized, getUnselectedSearchItemsMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem, ISectionExtra, Section} from "../Interfaces";
 
 import GlobalFilters from "../filters/GlobalFilters";
 import LookupFilters from "../filters/LookupFilters";
+import {getSelectedSectionsForSearchItem} from "../sections/SectionReducer";
 import SectionListCard from "./SectionListCard";
 import SectionListManagedCard from "./SectionListManagedCard";
 
@@ -157,6 +157,23 @@ const getAllManagedSections = createSelector(
         .map((searchItem) => filterSectionsWithSearchItem(searchItem, allSections, true))
         // flatten 2D list of managed sections
         .reduce((managedSectionsA, managedSectionsB) => managedSectionsA.concat(managedSectionsB), []),
+);
+
+const getSelectedSectionsForSelectedCourseCard = createSelector(
+    [getAllSections, getSelectedSearchItemMemoized],
+    // filter all sections by sections that match selected crns for the current card
+    getSelectedSectionsForSearchItem,
+);
+
+const getSectionsForSelectedSearchItem = createSelector(
+    [getSelectedSearchItemMemoized, getAllSections],
+    (searchItem, allSections) => {
+        if (searchItem === undefined) {
+            return [];
+        } else {
+            return filterSectionsWithSearchItem(searchItem, allSections, false);
+        }
+    },
 );
 
 function mapStateToProps(state: IAllReducers): ISectionListStateProps {

@@ -1,14 +1,9 @@
 import {createSelector} from "reselect";
 
 import {SearchItemType} from "./Constants";
-import {IAllReducers, ISearchItem, ISectionMain, Section, SectionWithColor} from "./Interfaces";
+import {IAllReducers, ISearchItem, Section, SectionWithColor} from "./Interfaces";
 
-import {getSelectedSearchItem, getSelectedSectionsForSearchItem,
-        getUnselectedSearchItems} from "./sections/SectionReducer";
-
-export const isMainSection = (section: Section): section is ISectionMain => {
-    return section.main;
-};
+import {getSelectedSearchItem, getUnselectedSearchItems} from "./sections/SectionReducer";
 
 // filter by origin abbreviation when possible, this is necessary for SectionList transitions
 export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Section[],
@@ -55,23 +50,6 @@ export const getUnselectedSearchItemsMemoized = createSelector(
     getUnselectedSearchItems,
 );
 
-export const getSelectedSectionsForSelectedCourseCard = createSelector(
-    [getAllSections, getSelectedSearchItemMemoized],
-    // filter all sections by sections that match selected crns for the current card
-    getSelectedSectionsForSearchItem,
-);
-
-export const getSectionsForSelectedSearchItem = createSelector(
-    [getSelectedSearchItemMemoized, getAllSections],
-    (searchItem, allSections) => {
-        if (searchItem === undefined) {
-            return [];
-        } else {
-            return filterSectionsWithSearchItem(searchItem, allSections, false);
-        }
-    },
-);
-
 export const getSearchItemsWithSections = createSelector(
     [getSearchItems, getAllSections],
     (searchItems, allSections) =>
@@ -79,14 +57,4 @@ export const getSearchItemsWithSections = createSelector(
             ...currentSearchItem,
             sectionsInSearchItem: filterSectionsWithSearchItemWithColor(currentSearchItem, allSections, true),
         })),
-);
-
-export const getSelectedSections = createSelector(
-    [getSearchItemsWithSections],
-    (searchItemsWithSections) => searchItemsWithSections
-        // get selected sections for each search item
-        .map((currentSearchItem) => currentSearchItem.sectionsInSearchItem.filter((section) =>
-            currentSearchItem.selectedCrns.find((currentCrn) => section.CRN === currentCrn) !== undefined))
-        // flatten to 1D array of selected sections
-        .reduce((selectedSections, nextSelectedSections) => selectedSections.concat(nextSelectedSections), []),
 );

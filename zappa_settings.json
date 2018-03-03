@@ -1,6 +1,7 @@
 {
     "common": {
         "app_function": "run.app",
+        "debug": false,
         "parameter_depth": 6,
         "memory_size": 320,
         "prebuild_script": "prebuild.update_static_files_wrapper",
@@ -12,22 +13,22 @@
         "timeout_seconds": 300,
         "exclude": ["no8am/static", "node_modules", "browserify-cache.json"]
     },
-    "dev": {
+    "beta": {
        "extends": "common",
-       "debug": true,
+       "domain": "beta.no8.am",
        "environment_variables": {
-         "APPLICATION_ROOT": "/dev",
-         "STATIC_LOCATION": "https://static.no8.am"
-        }
+         "STATIC_LOCATION": "https://static-beta.no8.am",
+         "STATIC_DOMAIN": "static-beta.no8.am"
+       }
     },
     "production": {
        "extends": "common",
-       "debug": false,
        "domain": "no8.am",
        "environment_variables": {
-         "STATIC_LOCATION": "https://static.no8.am"
+         "STATIC_LOCATION": "https://static.no8.am",
+         "STATIC_DOMAIN": "static.no8.am"
        },
-      "events": [
+       "events": [
             {
                 "function": "prebuild.update_metadata_wrapper_a",
                 "expression": "cron(0 1 15 9 ? *)"

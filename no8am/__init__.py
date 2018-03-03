@@ -17,7 +17,7 @@ cdn_debug = not use_cdn
 
 app.config.update(
 	SECRET_KEY=secret_key,
-	CDN_DOMAIN="static.no8.am",
+	CDN_DOMAIN=os.environ.get("STATIC_DOMAIN"),
 	CDN_HTTPS=True,
 	CDN_TIMESTAMP=False,
 	BROWSERIFY_BIN='./no8am/static/js/node_modules/.bin/browserify',

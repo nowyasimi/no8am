@@ -10,7 +10,6 @@ from webassets_browserify import Browserify
 from no8am import generate_course_descriptions, DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST, \
 	CLOUDFRONT_DISTRIBUTION_ID, assets, get_user_format_semester
 
-S3_BUCKET_NAME = "no8.am"
 JS_OUTPUT_FILENAME = "app.js"
 PROD_JS_OUTPUT_FILENAME = "prod-app.js"
 
@@ -25,7 +24,7 @@ assets.manifest = False
 depends = ['js/**.js*', 'js/**/*.js*']
 
 js_files_development = Bundle('js/Index.js', filters=['browserify'], depends=depends, output=JS_OUTPUT_FILENAME)
-js_files_production = Bundle('js/Index.js', filters=['browserify', 'uglifyjs'], depends=depends, output=PROD_JS_OUTPUT_FILENAME)
+js_files_production = Bundle('js/Index.js', filters=['browserify'], depends=depends, output=PROD_JS_OUTPUT_FILENAME)
 
 css_home = Bundle('css/bootstrap.min.css', 'css/home.css', filters='cleancss', output='min_css/home.css')
 css_bucknell = Bundle('css/bootstrap.min.css', 'css/calendar.css', filters='cleancss', output='min_css/bucknell.css')
@@ -81,6 +80,10 @@ def minify_css(file):
 
 
 def invalidate_cache():
+	"""
+	Invalidates the cache in Amazon Cloudfront. The cache invalidation is made
+	to reduce the time needed for the client to access the updated files.
+	"""
 
 	cloudfront = boto3.client('cloudfront')
 
@@ -98,10 +101,12 @@ def invalidate_cache():
 	print response
 
 
-def update_metadata():
+def update_metadata(s3_bucket_name):
 	"""
 	Get course descriptions and use them to create a new metadata dictionary. This dictionary is uploaded to S3 and is
 	used for the autocomplete search box.
+
+	:param s3_bucket_name: S3 bucket to update
 	"""
 
 	global course_descriptions
@@ -112,15 +117,16 @@ def update_metadata():
 
 	s3 = boto3.resource('s3')
 
-	s3.Object(S3_BUCKET_NAME, remote_metadata_path)\
+	s3.Object(s3_bucket_name, remote_metadata_path)\
 		.put(Body=metadata, ContentType='application/json', CacheControl='max-age=900')
 
 
-def update_static_files():
+def update_static_files(s3_bucket_name):
 	"""
-	Minifies and pushes static assets to S3 and invalidates the cache in Amazon Cloudfront. The files are minified to
-	reduce the number of requests the client needs to make when retrieving static assets. The cache invalidation is made
-	to reduce the time needed for the client to access the updated files.
+	Minifies and pushes static assets to S3. The files are minified to
+	reduce the number of requests the client needs to make when retrieving static assets.
+
+	:param s3_bucket_name: S3 bucket to update
 	"""
 
 	global course_descriptions
@@ -133,14 +139,14 @@ def update_static_files():
 	if os.path.isfile(prod_js_path):
 		os.remove(prod_js_path)
 	js_files_production.urls()
-	s3.Object(S3_BUCKET_NAME, 'static/' + JS_OUTPUT_FILENAME).\
+	s3.Object(s3_bucket_name, 'static/' + JS_OUTPUT_FILENAME).\
 		put(Body=open(prod_js_path, 'rb'), ContentType='application/javascript', CacheControl='max-age=900')
 
 	# generate and upload minified CSS
 	to_minify = ["home.css", "bucknell.css"]
 	for m in to_minify:
 		data = minify_css(m)
-		s3.Object(S3_BUCKET_NAME, 'static/min_css/' + m).\
+		s3.Object(s3_bucket_name, 'static/min_css/' + m).\
 			put(Body=data, ContentType='text/css', CacheControl='max-age=900')
 
 	# upload all other files to S3
@@ -149,4 +155,4 @@ def update_static_files():
 	"fonts/glyphicons-halflings-regular.woff2", "favicon.ico"]
 
 	for f in files:
-		s3.Object(S3_BUCKET_NAME, 'static/' + f).put(Body=open("no8am/static/" + f, 'rb'))
+		s3.Object(s3_bucket_name, 'static/' + f).put(Body=open("no8am/static/" + f, 'rb'))
