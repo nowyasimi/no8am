@@ -1,6 +1,7 @@
 import {ThunkAction} from "redux-thunk";
 import {createAction} from "ts-redux-actions";
 
+import {SECTIONS_URL} from "../Constants";
 import {IMeetingTime, IMetadata, ISearchItem, Section, SectionUnparsed} from "../Interfaces";
 
 import {getReturnOfExpression} from "react-redux-typescript";
@@ -90,6 +91,12 @@ export const searchAgainForAbbreviation = createAction("SEARCH_AGAIN_FOR_ABBREVI
     }),
 );
 
+export const removeSearch = createAction("REMOVE_SEARCH",
+    () => ({
+        type: "REMOVE_SEARCH",
+    }),
+);
+
 const initializeSections = (sections: SectionUnparsed[]): Section[] => {
     return sections.map((section) => ({
         ...section,
@@ -108,6 +115,7 @@ export const returnOfSearchItem = getReturnOfExpression(searchItem);
 export const returnOfClickDoneSelecting = getReturnOfExpression(clickDoneSelecting);
 export const returnOfRevertToOriginAbbreviation = getReturnOfExpression(revertToOriginAbbreviation);
 export const returnOfSearchAgainForAbbreviation = getReturnOfExpression(searchAgainForAbbreviation);
+export const returnOfRemoveSearch = getReturnOfExpression(removeSearch);
 
 export type IActions =
     | typeof returnOfReceiveSections
@@ -120,7 +128,8 @@ export type IActions =
     | typeof returnOfSearchItem
     | typeof returnOfClickDoneSelecting
     | typeof returnOfRevertToOriginAbbreviation
-    | typeof returnOfSearchAgainForAbbreviation;
+    | typeof returnOfSearchAgainForAbbreviation
+    | typeof returnOfRemoveSearch;
 
 const restructureHours = (timesMet) => {
 

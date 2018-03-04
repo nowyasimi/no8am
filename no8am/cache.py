@@ -1,47 +1,66 @@
-from werkzeug.contrib.cache import RedisCache
 from time import time
+import boto3
+import json
+import zlib
 
-from no8am import REDIS_PASS, REDIS_SERVER
+from no8am import ENABLE_CACHE
 
 # TODO - adjust cache time based on time of year
 DEFAULT_CACHE_TIME = 172800
+DYNAMODB_COURSE_DATA_TABLE_NAME = 'no8am-course-data'
 
-# cache is disabled if Redis is not configured
-DISABLE_CACHE = True if REDIS_PASS is None or REDIS_SERVER is None else False
-
-redis_cache = None
+dynamodb_client = None
 
 
 def connect_to_cache(func):
 	"""
-	Connects to cache if connection has not been established.
+	Creates instance of cache object if it does not exist and caching
+	is enabled.
 	"""
 
 	def wrapper(*args, **kwargs):
-		if DISABLE_CACHE:
-			return None
-		global redis_cache
-		if redis_cache is None:
-			redis_cache = RedisCache(host=REDIS_SERVER, password=REDIS_PASS, default_timeout=DEFAULT_CACHE_TIME)
+		if ENABLE_CACHE is None:
+			return None, None
+		global dynamodb_client
+		if dynamodb_client is None:
+			dynamodb_client = boto3.client("dynamodb")
 		return func(*args, **kwargs)
 
 	return wrapper
 
 
 @connect_to_cache
-def course_data_get(type):
+def course_data_get(primary_key):
 	"""
 	Get course data stored in cache
 
 	:param type: Name of course data eg CSCI, W1, 34934details (for section details)
+	:return: The item if it exists in the cache, or None if does not exist
 	"""
 
-	response = redis_cache.get(type)
-	return response
+	get_item_result = dynamodb_client.get_item(
+		TableName=DYNAMODB_COURSE_DATA_TABLE_NAME,
+		Key={
+			"primary_key": {"S": primary_key}
+		}
+	)
+
+	if "Item" in get_item_result.keys():
+		# get age of item to check if item has expired
+		item = get_item_result["Item"]
+		last_updated_time = int(item["last_updated_time"]["N"])
+		expiration_time_seconds = last_updated_time + int(item["expiration_seconds"]["N"])
+
+		if time() <= expiration_time_seconds:
+			return last_updated_time, json.loads(zlib.decompress(item["data"]["B"]))
+		else:
+			return None, None
+	else:
+		return None, None
 
 
 @connect_to_cache
-def course_data_set(type, val, timeout=DEFAULT_CACHE_TIME):
+def course_data_set(primary_key, val, timeout=DEFAULT_CACHE_TIME):
 	"""
 	Store data in cache.
 
@@ -51,8 +70,20 @@ def course_data_set(type, val, timeout=DEFAULT_CACHE_TIME):
 	"""
 
 	if val is None or val == []:
-		return None
+		return None, None
 
 	cache_time = int(time())
-	redis_cache.set(type, {"set_time": cache_time, "data": val}, timeout)
-	return cache_time
+
+	data_to_store = {
+		"primary_key": {"S": primary_key},
+		"data": {"B": zlib.compress(json.dumps(val))},
+		"last_updated_time": {"N": str(cache_time)},
+		"expiration_seconds": {"N": str(timeout)}
+	}
+
+	dynamodb_client.put_item(
+		TableName=DYNAMODB_COURSE_DATA_TABLE_NAME,
+		Item=data_to_store
+	)
+
+	return cache_time, None

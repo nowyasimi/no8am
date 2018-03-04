@@ -18,3 +18,4 @@ freezegun==0.3.8
 Flask-Assets==0.12
 webassets-browserify==1.1.0
 Flask-CDN==1.5.3
+requests-futures==0.9.7

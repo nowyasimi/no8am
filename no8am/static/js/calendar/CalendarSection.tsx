@@ -41,9 +41,8 @@ export default class CalendarSection
         const style = {
             background: hexColor,
             display:  "block",
-            height: (currentMeetingTime.startTime + currentMeetingTime.duration > 26 ?
-                25.73 - currentMeetingTime.startTime : currentMeetingTime.duration) * 20 / 5.6 + "%",
-            marginTop: currentMeetingTime.startTime * 20 / 5.6 + "%",
+            height: `${currentMeetingTime.duration * 100 / 28}%`,
+            top: currentMeetingTime.startTime * 100 / 28 + "%",
             zIndex: this.props.isSelected ? 1 : 5,
         };
 

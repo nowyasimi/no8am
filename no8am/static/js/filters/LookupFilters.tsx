@@ -6,8 +6,8 @@ import * as classNames from "classnames";
 
 import {connect} from "../Connect";
 import {IAllReducers, ISearchItem} from "../Interfaces";
-import {clickDoneSelecting, returnOfClickDoneSelecting, returnOfRevertToOriginAbbreviation,
-        returnOfSearchAgainForAbbreviation, revertToOriginAbbreviation,
+import {clickDoneSelecting, removeSearch, returnOfClickDoneSelecting, returnOfRemoveSearch,
+        returnOfRevertToOriginAbbreviation, returnOfSearchAgainForAbbreviation, revertToOriginAbbreviation,
         searchAgainForAbbreviation} from "../sections/SectionActions";
 import FilterTime from "./FilterTime";
 
@@ -22,6 +22,7 @@ interface ILookupFiltersDispatchProps {
     onClickDoneSelecting: () => typeof returnOfClickDoneSelecting;
     onRevertToOriginAbbreviation: () => typeof returnOfRevertToOriginAbbreviation;
     onSearchAgainForAbbreviation: () => typeof returnOfSearchAgainForAbbreviation;
+    onRemoveSearch: () => typeof returnOfRemoveSearch;
 }
 
 @connect<{}, ILookupFiltersDispatchProps, ILookupFiltersProps>((state: IAllReducers) => ({}), mapDispatchToProps)
@@ -55,6 +56,10 @@ export default class LookupFilters extends React.Component<ILookupFiltersDispatc
                     text={`Done selecting`}
                     onClick={this.props.onClickDoneSelecting}
                 />
+                <Button
+                    text={`Remove search`}
+                    onClick={this.props.onRemoveSearch}
+                />
             </div>
         );
 
@@ -85,6 +90,7 @@ export default class LookupFilters extends React.Component<ILookupFiltersDispatc
 function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILookupFiltersDispatchProps {
     return bindActionCreators({
         onClickDoneSelecting: clickDoneSelecting,
+        onRemoveSearch: removeSearch,
         onRevertToOriginAbbreviation: revertToOriginAbbreviation,
         onSearchAgainForAbbreviation: searchAgainForAbbreviation,
     }, dispatch);

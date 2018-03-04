@@ -3,7 +3,7 @@ import time
 import string
 import random
 
-DYNAMODB_TABLE_NAME = 'no8am-links'
+DYNAMODB_LINKS_TABLE_NAME = 'no8am-links'
 
 
 def store_link(link, schedule):
@@ -66,7 +66,7 @@ def generate_short_link():
 
 	link_search_attempts = 5
 	link_length = 4
-	
+
 	for x in range(link_search_attempts):
 		link_string = "".join([random.choice(string.letters + string.digits) for x in range(link_length)])
 		if check_link_available(link_string):

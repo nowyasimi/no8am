@@ -1,4 +1,5 @@
 import requests
+from requests_futures.sessions import FuturesSession
 from bs4 import BeautifulSoup
 import re
 from itertools import groupby
@@ -28,13 +29,13 @@ class CreditType(Enum):
 	HALF = '.5'
 	FULL = '1'
 
-def fetch_course_html(credit_type):
+def get_course_html_request_url(credit_type):
 	"""
 	Helper function for retrieving course data from Bucknell servers.
 
 	:param payload_value: The data being requested in a category
 	:param lookup_type: The category of data being requested
-	:return: Sections as raw HTML
+	:return: URL to request
 	"""
 
 	CREDIT_LOOKUP = 'CRD'
@@ -46,8 +47,7 @@ def fetch_course_html(credit_type):
 		'openopt': 'ALL'
 	}
 
-	r = requests.get(BUCKNELL_COURSE_DATA_URL, params=payload)
-	return r.text
+	return requests.Request('GET', BUCKNELL_COURSE_DATA_URL, params=payload).prepare().url
 
 
 def fetch_section_details(crn, department):
@@ -291,6 +291,12 @@ class Course:
 
 def get_course_information():
 
+	# return cached data, if it exists
+	cache_time, cached_sections = course_data_get(TERM)
+
+	if cached_sections is not None:
+		return cache_time, cached_sections
+
 	all_sections_with_message = get_sections_with_message()
 	grouped_sections_by_course = group_sections_by_course(all_sections_with_message)
 	parsed_courses = map(Course, grouped_sections_by_course)
@@ -298,22 +304,30 @@ def get_course_information():
 	formatted_results = [course.export() for course in sorted_courses]
 	flattened_sections = [item for sublist in formatted_results for item in sublist]
 
-	return flattened_sections
+	cache_time, _ = course_data_set(TERM, flattened_sections)
+
+	return cache_time, flattened_sections
 
 def get_sections_with_message():
+	session = FuturesSession()
+
+	# make all credit requests simultaneously to reduce overall request time
+	futures = [session.get(get_course_html_request_url(credit_type.value), background_callback=fetch_course_html_callback) for credit_type in CreditType]
+	futures_response = [response.result().data for response in futures]
+
+	# flatten to list of sections
+	return [section for sections_for_credit in futures_response for section in sections_for_credit]
+
+def fetch_course_html_callback(session, response):
 	department_message = re.compile("Department: .*")
+	credit_value_from_url_regex = re.compile(".*param1=(.5|1|0|.25)")
 
-	# TODO - switch to grequests
+	credit_value = re.findall(credit_value_from_url_regex, response.request.path_url)[0]
+	html = response.text
 
-	all_sections_with_message = []
-
-	for credit_type in CreditType:
-		html = fetch_course_html(credit_type.value)
-		table_rows = extract_table_rows(html)
-		filtered_table_rows = filter(lambda x: len(re.findall(department_message, x.text)) == 0, table_rows)
-		all_sections_with_message += group_sections_with_message(filtered_table_rows, credit_type.value)
-
-	return all_sections_with_message
+	table_rows = extract_table_rows(html)
+	filtered_table_rows = filter(lambda x: len(re.findall(department_message, x.text)) == 0, table_rows)
+	response.data = group_sections_with_message(filtered_table_rows, credit_value)
 
 def group_sections_with_message(table_rows, credits):
 	split_table_rows = map(lambda x: x.find_all('td'), table_rows)

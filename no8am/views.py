@@ -68,30 +68,11 @@ def bucknell(config=None):
 		)
 
 
-@app.route('/course')
-@app.route('/course/<department>')
-@app.route('/course/<department>/<course_number>')
-def course_lookup(department=None, course_number=None):
+@app.route('/sections/')
+def course_lookup():
+	cache_time, sections = get_course_information()
 
-	return jsonify(sections=get_course_information())
-
-	# return metadata if no parameters are provided
-	if department is None and course_number is None:
-		return jsonify(departments=DEPARTMENT_LIST)
-
-	# TODO - validate department against metadata
-	department = department.upper()
-
-	cache_time, department_data = Department.process_department_request(department)
-
-	# return all courses in department
-	if course_number is None:
-		return jsonify(sections=department_data, cache_time=cache_time)
-
-	# return data on specified course
-	else:
-		sections = find_course_in_department(department_data, department, course_number)
-		return jsonify(sections=sections, cache_time=cache_time)
+	return jsonify(cache_time=cache_time, sections=sections)
 
 
 @app.route('/category')

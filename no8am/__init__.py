@@ -10,8 +10,7 @@ APPLICATION_ROOT = os.environ.get('APPLICATION_ROOT') or ""
 STATIC_LOCATION = os.environ.get('STATIC_LOCATION') or "local"
 SIMPLE_FORM_TOKEN = os.environ.get("SIMPLE_FORM_TOKEN")
 CLOUDFRONT_DISTRIBUTION_ID = os.environ.get("CLOUDFRONT_DISTRIBUTION_ID")
-REDIS_PASS = os.environ.get("REDIS_PASS")
-REDIS_SERVER = os.environ.get("REDIS_SERVER")
+ENABLE_CACHE = os.environ.get("ENABLE_CACHE")
 use_cdn = STATIC_LOCATION != "local"
 cdn_debug = not use_cdn
 

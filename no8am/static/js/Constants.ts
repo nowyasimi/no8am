@@ -97,7 +97,7 @@ export const EXTRA_SECTION_TYPES: string[] = ["R", "L", "P"];
 export const CCC_LOOKUP_URL: string = APP_ROOT + "/category/ccc/";
 export const CREDIT_LOOKUP_URL: string = APP_ROOT + "/category/credit/";
 export const DEPT_LOOKUP_URL: string = APP_ROOT + "/course/";
-export const COURSE_LOOKUP_URL: string = APP_ROOT + "/course/";
+export const SECTIONS_URL: string = APP_ROOT + "/sections/";
 export const SECTION_DETAILS_URL: string = APP_ROOT + "/sectiondetails/";
 export const STORE_CONFIG_URL: string = APP_ROOT + "/storeConfig/";
 export const SUCCESSFUL_SAVE_MESSAGE: string = '<div class="alert alert-success alert-dismissible saveSuccess" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><b>Saved!</b>  This schedule has been saved to your browser.</div>';

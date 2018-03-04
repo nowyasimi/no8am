@@ -18,7 +18,8 @@
        "domain": "beta.no8.am",
        "environment_variables": {
          "STATIC_LOCATION": "https://static-beta.no8.am",
-         "STATIC_DOMAIN": "static-beta.no8.am"
+         "STATIC_DOMAIN": "static-beta.no8.am",
+         "ENABLE_CACHE": "true"
        }
     },
     "production": {
@@ -26,7 +27,8 @@
        "domain": "no8.am",
        "environment_variables": {
          "STATIC_LOCATION": "https://static.no8.am",
-         "STATIC_DOMAIN": "static.no8.am"
+         "STATIC_DOMAIN": "static.no8.am",
+         "ENABLE_CACHE": "true"
        },
        "events": [
             {

@@ -83,6 +83,12 @@ export const sections = (state = initialState, action: SectionActions.IActions):
                     searchItems: searchAgainForAbbreviation(state.searchItems),
                 };
 
+            case getType(SectionActions.removeSearch):
+                return {
+                    ...state,
+                    searchItems: getUnselectedSearchItems(state.searchItems),
+                };
+
             default:
                 return state;
         }
@@ -287,6 +293,7 @@ const selectSearchItemManagerForSection = (clickedSection: Section, searchItems:
 /**
  * Adds section to list of selected sections if it is not in the list. Removes section from the list if it exists.
  * @param clickedSection Section to add or remove
+ * @param isManaged Switch current course course to the manager of the clicked section
  * @param allSections List of all sections
  * @param searchItems List of all searches that have been performed by the user
  */
