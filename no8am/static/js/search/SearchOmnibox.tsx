@@ -1,5 +1,6 @@
 import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
+import {createSelector} from "reselect";
 
 import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuItem} from "@blueprintjs/core";
 import {ISelectItemRendererProps, Omnibox} from "@blueprintjs/labs";
@@ -7,6 +8,7 @@ import * as classNames from "classnames";
 
 import {connect} from "../Connect";
 import {DataLoadingState, SearchItemType, SearchItemTypes} from "../Constants";
+import {getAllSections} from "../Helpers";
 import {IAllReducers, IMetadata} from "../Interfaces";
 import {closeSearchOmnibox, ILoadMetadataThunk, loadMetadata, openSearchOmnibox, returnOfCloseSearchOmnibox,
         returnOfOpenSearchOmnibox, returnOfToggleSearchOmnibox, toggleSearchOmnibox} from "../search/SearchActions";
@@ -167,7 +169,7 @@ export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & IS
         }
     }
 
-    private onItemSelect = (item: SearchOmniboxItem | undefined, event?: any) => {
+    private onItemSelect = (item: SearchOmniboxItem | undefined) => {
         if (this.props.isOpen && item !== undefined && isMetadata(item)) {
             this.props.onSearchItem(item);
             this.props.onCloseSearchOmnibox();
@@ -215,10 +217,59 @@ const courseSort = (query: string) => (a: SearchOmniboxItem, b: SearchOmniboxIte
     }
 };
 
+export const getMetadata = (state: IAllReducers): IMetadata[] => state.search.metadata;
+
+export const getMetadataUsingAllSections = createSelector(
+    [getMetadata, getAllSections],
+    (metadata, allSections) => {
+        const coursesNotInMetadata: IMetadata[] = [...new Set(allSections
+            .filter((section) => section.main)
+            .map((section) => section.departmentAndCourse))]
+            .filter((courseAbbreviation) =>
+                metadata.find((metadataItem) => metadataItem.abbreviation === courseAbbreviation) === undefined)
+            .map((courseAbbreviation) => ({
+                abbreviation: courseAbbreviation,
+                info: "",
+                itemType: SearchItemType.Course,
+                name: "",
+                token: courseAbbreviation.toLowerCase(),
+                userFriendlyFormat: courseAbbreviation,
+            }));
+
+        const departmentsNotInMetadata: IMetadata[] = [...new Set(allSections
+            .map((section) => section.department))]
+            .filter((departmentAbbreviation) =>
+                metadata.find((metadataItem) => metadataItem.abbreviation === departmentAbbreviation) === undefined)
+            .map((departmentAbbreviation) => ({
+                abbreviation: departmentAbbreviation,
+                info: "",
+                itemType: SearchItemType.Department,
+                name: "",
+                token: departmentAbbreviation.toLowerCase(),
+                userFriendlyFormat: departmentAbbreviation,
+            }));
+
+        const cccNotInMetadata: IMetadata[] = [...new Set(allSections
+            .map((section) => section.CCC)
+            .reduce((allCCCs, sectionCCCs) => allCCCs.concat(sectionCCCs), []))]
+            .filter((cccAbbreviation) =>
+                metadata.find((metadataItem) => metadataItem.abbreviation === cccAbbreviation) === undefined)
+            .map((cccAbbreviation) => ({
+                abbreviation: cccAbbreviation,
+                info: "",
+                itemType: SearchItemType.CCC,
+                name: "",
+                token: cccAbbreviation.toLowerCase(),
+                userFriendlyFormat: cccAbbreviation,
+            }));
+
+        return [...metadata, ...coursesNotInMetadata, ...departmentsNotInMetadata, ...cccNotInMetadata];
+});
+
 function mapStateToProps(state: IAllReducers): ISearchOmniboxStateProps {
     return {
         isOpen: state.search.isSearchOmniboxOpen,
-        metadata: state.search.metadata,
+        metadata: getMetadataUsingAllSections(state),
         searchHistory: state.search.searchHistory,
         status: state.search.status,
     };

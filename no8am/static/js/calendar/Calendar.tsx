@@ -4,8 +4,8 @@ import {createSelector} from "reselect";
 import {connect} from "../Connect";
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from "../Constants";
-import {filterSectionsWithSearchItemWithColor, getAllSections, getSearchItemsWithSections,
-        getSelectedSearchItemMemoized} from "../Helpers";
+import {filterSectionsWithSearchItemWithColor, getAllSections,
+        getSelectedSearchItemMemoized, getSelectedSections} from "../Helpers";
 import {IAllReducers, ISearchItemWithMatchingSections, SectionWithColor} from "../Interfaces";
 import CalendarSection from "./CalendarSection";
 
@@ -172,16 +172,6 @@ const getSelectedSearchItemWithSections = createSelector(
             };
         }
     },
-);
-
-export const getSelectedSections = createSelector(
-    [getSearchItemsWithSections],
-    (searchItemsWithSections) => searchItemsWithSections
-        // get selected sections for each search item
-        .map((currentSearchItem) => currentSearchItem.sectionsInSearchItem.filter((section) =>
-            currentSearchItem.selectedCrns.find((currentCrn) => section.CRN === currentCrn) !== undefined))
-        // flatten to 1D array of selected sections
-        .reduce((selectedSections, nextSelectedSections) => selectedSections.concat(nextSelectedSections), []),
 );
 
 function mapStateToProps(state: IAllReducers): ICalendarStateProps {

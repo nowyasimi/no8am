@@ -1,7 +1,7 @@
 import {createSelector} from "reselect";
 
 import {SearchItemType} from "./Constants";
-import {IAllReducers, ISearchItem, Section, SectionWithColor} from "./Interfaces";
+import {IAllReducers, ISearchItem, Section, SectionWithColor, IMetadata} from "./Interfaces";
 
 import {getSelectedSearchItem, getUnselectedSearchItems} from "./sections/SectionReducer";
 
@@ -57,4 +57,14 @@ export const getSearchItemsWithSections = createSelector(
             ...currentSearchItem,
             sectionsInSearchItem: filterSectionsWithSearchItemWithColor(currentSearchItem, allSections, true),
         })),
+);
+
+export const getSelectedSections = createSelector(
+    [getSearchItemsWithSections],
+    (searchItemsWithSections) => searchItemsWithSections
+        // get selected sections for each search item
+        .map((currentSearchItem) => currentSearchItem.sectionsInSearchItem.filter((section) =>
+            currentSearchItem.selectedCrns.find((currentCrn) => section.CRN === currentCrn) !== undefined))
+        // flatten to 1D array of selected sections
+        .reduce((selectedSections, nextSelectedSections) => selectedSections.concat(nextSelectedSections), []),
 );

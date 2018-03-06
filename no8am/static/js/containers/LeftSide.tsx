@@ -9,6 +9,7 @@ import SaveDialog from "../components/SaveDialog";
 import CourseCards from "../search/CourseCards";
 import {searchKeyCombo, SearchOmnibox} from "../search/SearchOmnibox";
 import SectionList from "../sections/SectionList";
+import SelectedSectionsTable from "../sections/SelectedSectionsTable";
 
 import {connect} from "../Connect";
 import {DataLoadingState} from "../Constants";
@@ -36,7 +37,7 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
 
     private instructions: JSX.Element = (
         <div>Use the search button to start or press
-            <KeyCombo combo={searchKeyCombo} />
+            <span style={{paddingLeft: "5px"}}><KeyCombo combo={searchKeyCombo} /></span>
         </div>
     );
 
@@ -90,11 +91,16 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
             );
         } else if (this.props.hasSearchItems && this.props.selectedSearchItem === undefined) {
             return (
-                <NonIdealState
-                    visual={IconClasses.SELECT}
-                    className="nonIdealState"
-                    description="Choose from the searches above to view sections"
-                />
+                <div>
+                    <NonIdealState
+                        visual={IconClasses.SELECT}
+                        className="nonIdealState"
+                        description="Choose from the searches above to view sections"
+                    />
+                    <div style={{paddingTop: "30px"}}>
+                        <SelectedSectionsTable />
+                    </div>
+                </div>
             );
         } else if (this.props.hasSearchItems) {
             return <SectionList searchItem={this.props.selectedSearchItem} />;

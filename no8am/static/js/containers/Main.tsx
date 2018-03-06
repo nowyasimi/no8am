@@ -17,6 +17,12 @@ export class Main extends React.Component<IMainDispatchProps, undefined> {
 
     public componentDidMount() {
         this.props.onLoadSections();
+
+        window.onbeforeunload = (e) => {
+            const dialogText = "Are you sure you want to leave?";
+            e.returnValue = dialogText;
+            return dialogText;
+        };
     }
 
     public render() {

@@ -187,6 +187,7 @@ export const searchAgainForAbbreviation = (searchItems: ISearchItem[]): ISearchI
 
     return selectedSearchItem === undefined ? searchItems : [...searchItemsWithoutCourseAbbreviation, {
         ...selectedSearchItem,
+        color: chooseColorForNewSearchItem(searchItems),
         currentItemCourseAbbreviation: null,
         selectedCrns: [],
     }];
