@@ -2,12 +2,10 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {Button, Classes, IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
+import {IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
 
-import OpenDialog from "../components/OpenDialog";
-import SaveDialog from "../components/SaveDialog";
 import CourseCards from "../search/CourseCards";
-import {searchKeyCombo, SearchOmnibox} from "../search/SearchOmnibox";
+import {SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
 import SectionList from "../sections/SectionList";
 import SelectedSectionsTable from "../sections/SelectedSectionsTable";
 
@@ -16,7 +14,6 @@ import {DataLoadingState} from "../Constants";
 import {clickAdvancedSectionSelection, returnOfClickAdvancedSectionSelection} from "../filters/FilterActions";
 import {getSelectedSearchItemMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem} from "../Interfaces";
-import {openSearchOmnibox, returnOfOpenSearchOmnibox} from "../search/SearchActions";
 
 type ILeftSideProps = ILeftSideStateProps & ILeftSideDispatchProps;
 
@@ -29,17 +26,22 @@ interface ILeftSideStateProps {
 
 interface ILeftSideDispatchProps {
     onClickAdvancedSectionSelection: () => typeof returnOfClickAdvancedSectionSelection;
-    onOpenSearchOmnibox: () => typeof returnOfOpenSearchOmnibox;
 }
 
 @connect<ILeftSideStateProps, ILeftSideDispatchProps, ILeftSideProps>(mapStateToProps, mapDispatchToProps)
 export default class LeftSide extends React.Component<ILeftSideProps>  {
 
     private instructions: JSX.Element = (
-        <div>Use the search button to start or press
+        <div> Click the search box above to start or press
             <span style={{paddingLeft: "5px"}}><KeyCombo combo={searchKeyCombo} /></span>
         </div>
     );
+
+    public componentDidMount() {
+        window.onbeforeunload = (e) => {
+            return this.props.hasSearchItems;
+        };
+    }
 
     public componentWillReceiveProps(nextProps: ILeftSideProps) {
         const currentSearchItem = this.props.selectedSearchItem;
@@ -56,16 +58,8 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
 
         return (
             <div className="col-sm-6" id="filters">
-                <SearchOmnibox />
-
-                <div className={`${Classes.BUTTON_GROUP} ${Classes.FILL} ${Classes.LARGE}`}>
-                    <OpenDialog />
-                    <SaveDialog />
-                    <Button iconName="search" text="Search" onClick={this.props.onOpenSearchOmnibox} />
-                </div>
-
+                <SearchBoxWithPopover />
                 <CourseCards />
-
                 {mainContent}
             </div>
         );
@@ -142,6 +136,5 @@ function mapStateToProps(state: IAllReducers): ILeftSideStateProps {
 function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILeftSideDispatchProps {
     return bindActionCreators({
         onClickAdvancedSectionSelection: clickAdvancedSectionSelection,
-        onOpenSearchOmnibox: openSearchOmnibox,
     }, dispatch);
 }

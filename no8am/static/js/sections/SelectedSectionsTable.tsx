@@ -58,9 +58,9 @@ export default class SelectedSectionsTable
             case 3:
                 return section.credits;
             case 4:
-                return section.CCC;
+                return section.CCC.join(",");
             case 5:
-                return section.professor;
+                return section.professor.join(";");
         }
     }
 }

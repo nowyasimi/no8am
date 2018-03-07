@@ -189,26 +189,27 @@ body,html{height: 100%;}
     display: block;
 }
 
-.pt-omnibox {
+.searchPopoverPortal .pt-overlay-content {
     z-index: 21;
-    width: 600px;
-    left: calc(50% - 300px);
-    top: 30px;
-    max-height: 100%;
+    width: 49%;
 }
 
-.pt-omnibox .pt-menu-item-label {
+.searchPopover {
+    width: 100%;
+}
+
+.searchItem .pt-menu-item-label {
     padding-top: 18px;
     width: 100%;
     white-space: normal;
 }
 
-.pt-omnibox .pt-menu {
+.searchPopover .pt-menu {
     max-height: 89%;
     overflow-y: auto;
 }
 
-.pt-omnibox .pt-menu-item.pt-disabled {
+.searchItem.pt-menu-item.pt-disabled {
     font-weight: 500;
     font-size: 15pt;
     color: #403b3b!important;
@@ -224,82 +225,6 @@ body,html{height: 100%;}
 
 .OmniboxTitle h6 {
     font-size: 20px;
-}
-
-.twitter-typeahead {
-  width: 100%
-}
-.typeahead,
-.tt-query,
-.tt-hint {
-  height: 50px;
-  padding: 8px 12px;
-  font-size: 24px;
-  line-height: 30px;
-  border: 2px solid #ccc;
-  -webkit-border-radius: 8px;
-     -moz-border-radius: 8px;
-          border-radius: 8px;
-  outline: none;
-  width:100%;
-}
-
-.tt-menu {
-  background-color: #fff;
-}
-
-.typeahead:focus {
-  border: 2px solid #0097cf;
-}
-
-.tt-query {
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
-.tt-hint {
-  color: #999
-}
-
-.tt-menu {
-  margin-top: 12px;
-  padding: 8px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 8px;
-     -moz-border-radius: 8px;
-          border-radius: 8px;
-  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-          box-shadow: 0 5px 10px rgba(0,0,0,.2);
-  max-height: 400px;
-  overflow-y: auto;
-  width: 100%;
-}
-
-.tt-suggestion {
-  padding: 3px 20px 10px;
-  font-size: 18px;
-  line-height: 24px;
-}
-
-.tt-suggestion:not(:first-of-type) {
-  border-top: 1px solid #ccc;
-}
-
-/*.tt-suggestion {
-  border-top: 1px solid #ccc;
-}*/
-
-.tt-suggestion:hover, .tt-suggestion.tt-cursor {
-  color: #fff;
-  background-color: #0097cf;
-}
-
-.tt-suggestion p {
-  margin: 0;
 }
 
 .courseDescription {

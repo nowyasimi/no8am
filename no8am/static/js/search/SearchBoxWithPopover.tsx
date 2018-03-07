@@ -2,68 +2,67 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuItem} from "@blueprintjs/core";
-import {ISelectItemRendererProps, Omnibox} from "@blueprintjs/labs";
+import {Classes, Hotkey, Hotkeys, HotkeysTarget, IconClasses, MenuItem} from "@blueprintjs/core";
+import {ISelectItemRendererProps, Suggest} from "@blueprintjs/labs";
 import * as classNames from "classnames";
 
 import {connect} from "../Connect";
 import {DataLoadingState, SearchItemType, SearchItemTypes} from "../Constants";
 import {getAllSections} from "../Helpers";
 import {IAllReducers, IMetadata} from "../Interfaces";
-import {closeSearchOmnibox, ILoadMetadataThunk, loadMetadata, openSearchOmnibox, returnOfCloseSearchOmnibox,
-        returnOfOpenSearchOmnibox, returnOfToggleSearchOmnibox, toggleSearchOmnibox} from "../search/SearchActions";
+import {ILoadMetadataThunk, loadMetadata} from "../search/SearchActions";
 import {returnOfSearchItem, searchItem} from "../sections/SectionActions";
 
-export const searchKeyCombo = "mod + k";
+export const searchKeyCombo = "s";
 
-interface ISearchOmniboxStateProps {
-    isOpen: boolean;
+interface ISearchBoxWithPopoverStateProps {
     metadata: IMetadata[];
     searchHistory: IMetadata[];
     status: DataLoadingState;
 }
 
-interface ISearchOmniboxDispatchProps {
-    onCloseSearchOmnibox: () => typeof returnOfCloseSearchOmnibox;
+interface ISearchBoxWithPopoverDispatchProps {
     onLoadMetadata: () => ILoadMetadataThunk;
-    onOpenSearchOmnibox: () => typeof returnOfOpenSearchOmnibox;
     onSearchItem: (item: IMetadata) => typeof returnOfSearchItem;
-    onToggleSearchOmnibox: () => typeof returnOfToggleSearchOmnibox;
 }
 
 interface IMetadataByType {
-    [x: string]: SearchOmniboxItem[];
+    [x: string]: SearchBoxWithPopoverItem[];
 }
 
 interface ISearchHeader {
     text: string;
 }
 
-type SearchOmniboxItem = ISearchHeader | IMetadata;
+type SearchBoxWithPopoverItem = ISearchHeader | IMetadata;
 
-const SearchOmniboxWrapper = Omnibox.ofType<SearchOmniboxItem>();
+const SuggestWrapper = Suggest.ofType<SearchBoxWithPopoverItem>();
 
-@connect<ISearchOmniboxStateProps, ISearchOmniboxDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
+@connect<ISearchBoxWithPopoverStateProps, ISearchBoxWithPopoverDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
 @HotkeysTarget
-export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & ISearchOmniboxDispatchProps> {
-
-    private initialContent = (
-        <MenuItem
-            disabled={true}
-            text={"Search by CCC, course, or number of credits"}
-        />
-    );
+export class SearchBoxWithPopover
+    extends React.Component<ISearchBoxWithPopoverStateProps & ISearchBoxWithPopoverDispatchProps> {
 
     private noResults = (
         // TODO
         // } else if (this.props.searchHistory.length > 0) {
-        //     return ([{text: "Recent Searches (No results)"}] as SearchOmniboxItem[])
+        //     return ([{text: "Recent Searches (No results)"}] as SearchBoxWithPopoverItem[])
         //         .concat(this.props.searchHistory);
         <MenuItem
             disabled={true}
             text={"No results for query"}
         />
     );
+
+    private popoverProps = {
+        popoverClassName: "searchPopover",
+        portalClassName: "searchPopoverPortal",
+    };
+
+    private inputProps = {
+        id: "searchInput",
+        leftIconName: IconClasses.SEARCH,
+    };
 
     public componentDidMount() {
         this.props.onLoadMetadata();
@@ -76,16 +75,8 @@ export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & IS
                     allowInInput={true}
                     global={true}
                     combo={searchKeyCombo}
-                    label="Toggle Omnibox"
-                    onKeyDown={this.props.onToggleSearchOmnibox}
-                />
-                <Hotkey
-                    allowInInput={true}
-                    disabled={!this.props.isOpen}
-                    global={true}
-                    combo="esc"
-                    label="Close Omnibox"
-                    onKeyDown={this.props.onCloseSearchOmnibox}
+                    label="Open Search Box"
+                    onKeyDown={this.onOpenSearchBox}
                 />
             </Hotkeys>
         );
@@ -93,21 +84,23 @@ export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & IS
 
     public render() {
         return (
-            <SearchOmniboxWrapper
-                isOpen={this.props.isOpen}
+            <SuggestWrapper
+                closeOnSelect={true}
+                inputProps={this.inputProps}
+                inputValueRenderer={this.inputValueRenderer}
                 itemListPredicate={this.itemListPredicate}
                 itemRenderer={this.itemRenderer}
                 items={this.props.metadata}
-                initialContent={this.initialContent}
                 noResults={this.noResults}
                 onItemSelect={this.onItemSelect}
-                onClose={this.props.onCloseSearchOmnibox}
-                resetOnSelect={true}
+                popoverProps={this.popoverProps}
             />
         );
     }
 
-    private itemListPredicate = (query: string, itemList: SearchOmniboxItem[]): SearchOmniboxItem[] => {
+    private inputValueRenderer = (item: SearchBoxWithPopoverItem) => "";
+
+    private itemListPredicate = (query: string, itemList: SearchBoxWithPopoverItem[]): SearchBoxWithPopoverItem[] => {
         // get metadata that matches query
         const filteredList = itemList.filter((x) => isMetadata(x) && x.token.includes(query.toLowerCase()));
 
@@ -128,7 +121,7 @@ export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & IS
 
         filteredListByType.Course.sort(courseSort(query));
 
-        const filteredListWithHeadersByType: SearchOmniboxItem[] = SearchItemTypes
+        const filteredListWithHeadersByType: SearchBoxWithPopoverItem[] = SearchItemTypes
             // prevent adding headers if there are no results for the itemType
             .filter((itemType) => filteredListByType[itemType].length !== 0)
             // add header for each itemType
@@ -140,8 +133,8 @@ export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & IS
         return filteredListWithHeadersByType.slice(0, 50);
     }
 
-    private itemRenderer({handleClick, isActive, item}: ISelectItemRendererProps<SearchOmniboxItem>) {
-        const classes = classNames({
+    private itemRenderer({handleClick, isActive, item}: ISelectItemRendererProps<SearchBoxWithPopoverItem>) {
+        const classes = classNames("searchItem", {
             [Classes.ACTIVE]: isActive,
             [Classes.INTENT_PRIMARY]: isActive,
         });
@@ -169,24 +162,33 @@ export class SearchOmnibox extends React.Component<ISearchOmniboxStateProps & IS
         }
     }
 
-    private onItemSelect = (item: SearchOmniboxItem | undefined) => {
-        if (this.props.isOpen && item !== undefined && isMetadata(item)) {
+    private onItemSelect = (item: SearchBoxWithPopoverItem | undefined) => {
+        if (item !== undefined && isMetadata(item)) {
             this.props.onSearchItem(item);
-            this.props.onCloseSearchOmnibox();
         }
     }
 
+    private onOpenSearchBox = (event: KeyboardEvent) => {
+        const searchInputElement = document.getElementById(this.inputProps.id);
+        const popoverElements = document.getElementsByClassName(this.popoverProps.popoverClassName);
+
+        // intercept the event and focus on the search box if it is not open
+        if (searchInputElement != null && popoverElements.length === 0) {
+            event.preventDefault();
+            searchInputElement.focus();
+        }
+    }
 }
 
-const isMetadata = (searchOmniboxItem: SearchOmniboxItem): searchOmniboxItem is IMetadata => {
-    return (searchOmniboxItem as IMetadata).token !== undefined;
+const isMetadata = (searchBoxItem: SearchBoxWithPopoverItem): searchBoxItem is IMetadata => {
+    return (searchBoxItem as IMetadata).token !== undefined;
 };
 
-const isSearchHeader = (searchOmniboxItem: SearchOmniboxItem): searchOmniboxItem is ISearchHeader => {
-    return (searchOmniboxItem as ISearchHeader).text !== undefined;
+const isSearchHeader = (searchBoxItem: SearchBoxWithPopoverItem): searchBoxItem is ISearchHeader => {
+    return (searchBoxItem as ISearchHeader).text !== undefined;
 };
 
-const courseSort = (query: string) => (a: SearchOmniboxItem, b: SearchOmniboxItem) => {
+const courseSort = (query: string) => (a: SearchBoxWithPopoverItem, b: SearchBoxWithPopoverItem) => {
     // ignore headers, they should never be passed to this function
     if (!isMetadata(a) || !isMetadata(b)) {
         throw Error("Headers should not be passed to courseSort");
@@ -266,21 +268,17 @@ export const getMetadataUsingAllSections = createSelector(
         return [...metadata, ...coursesNotInMetadata, ...departmentsNotInMetadata, ...cccNotInMetadata];
 });
 
-function mapStateToProps(state: IAllReducers): ISearchOmniboxStateProps {
+function mapStateToProps(state: IAllReducers): ISearchBoxWithPopoverStateProps {
     return {
-        isOpen: state.search.isSearchOmniboxOpen,
         metadata: getMetadataUsingAllSections(state),
         searchHistory: state.search.searchHistory,
         status: state.search.status,
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ISearchOmniboxDispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ISearchBoxWithPopoverDispatchProps {
     return bindActionCreators({
-        onCloseSearchOmnibox: closeSearchOmnibox,
         onLoadMetadata: loadMetadata,
-        onOpenSearchOmnibox: openSearchOmnibox,
         onSearchItem: (item: IMetadata) => searchItem(item),
-        onToggleSearchOmnibox: toggleSearchOmnibox,
     }, dispatch);
 }

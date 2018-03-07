@@ -109,7 +109,6 @@ export interface IFilterReducer {
 }
 
 export interface ISearchReducer {
-    readonly isSearchOmniboxOpen: boolean;
     readonly searchHistory: IMetadata[];
     readonly status: DataLoadingState;
     readonly metadata: IMetadata[];

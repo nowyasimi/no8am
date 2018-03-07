@@ -6,7 +6,6 @@ import {searchItem} from "../sections/SectionActions";
 import * as SearchActions from "./SearchActions";
 
 const initialState: ISearchReducer = {
-    isSearchOmniboxOpen: false,
     metadata: [],
     searchHistory: [],
     status: DataLoadingState.LOADING,
@@ -26,24 +25,6 @@ export const search = (state = initialState, action: SearchActions.IActions): IS
             return {
                 ...state,
                 status: DataLoadingState.FAILED,
-            };
-
-        case getType(SearchActions.toggleSearchOmnibox):
-            return {
-                ...state,
-                isSearchOmniboxOpen: !state.isSearchOmniboxOpen,
-            };
-
-        case getType(SearchActions.closeSearchOmnibox):
-            return {
-                ...state,
-                isSearchOmniboxOpen: false,
-            };
-
-        case getType(SearchActions.openSearchOmnibox):
-            return {
-                ...state,
-                isSearchOmniboxOpen: true,
             };
 
         case getType(searchItem):

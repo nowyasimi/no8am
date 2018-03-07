@@ -49,35 +49,11 @@ export const loadMetadata = (): ILoadMetadataThunk => {
     };
 };
 
-export const toggleSearchOmnibox = createAction("TOGGLE_SEARCH_OMNIBOX",
-    () => ({
-        type: "TOGGLE_SEARCH_OMNIBOX",
-    }),
-);
-
-export const closeSearchOmnibox = createAction("CLOSE_SEARCH_OMNIBOX",
-    () => ({
-        type: "CLOSE_SEARCH_OMNIBOX",
-    }),
-);
-
-export const openSearchOmnibox = createAction("OPEN_SEARCH_OMNIBOX",
-    () => ({
-        type: "OPEN_SEARCH_OMNIBOX",
-    }),
-);
-
 export const returnOfReceiveMetadata = getReturnOfExpression(receiveMetadata);
 export const returnOfErrorReceivingMetadata = getReturnOfExpression(errorReceivingMetadata);
-export const returnOfToggleSearchOmnibox = getReturnOfExpression(toggleSearchOmnibox);
-export const returnOfCloseSearchOmnibox = getReturnOfExpression(closeSearchOmnibox);
-export const returnOfOpenSearchOmnibox = getReturnOfExpression(openSearchOmnibox);
 export const returnOfSearchItem = getReturnOfExpression(searchItem);
 
 export type IActions =
     | typeof returnOfReceiveMetadata
     | typeof returnOfErrorReceivingMetadata
-    | typeof returnOfToggleSearchOmnibox
-    | typeof returnOfCloseSearchOmnibox
-    | typeof returnOfOpenSearchOmnibox
     | typeof returnOfSearchItem;
