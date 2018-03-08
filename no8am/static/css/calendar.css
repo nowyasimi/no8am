@@ -305,17 +305,6 @@ body,html{height: 100%;}
 	font-size: 12px; margin-top: 4px; display: none;
 }
 /**************************** Calendar ****************************/
-#calendar-col {
-    position: fixed;
-    left: 50%;
-    height:100%;
-    padding-top:1%;
-}
-
-#calendar-col > div {
-    height:100%;
-}
-
 #calendar{
     height:99%;
     margin: 0 auto;

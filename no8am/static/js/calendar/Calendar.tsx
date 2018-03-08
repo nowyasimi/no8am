@@ -17,6 +17,10 @@ interface ICalendarStateProps {
     selectedSearchItem: ISearchItemWithMatchingSections | undefined;
 }
 
+interface ICalendarProps {
+    style: React.CSSProperties;
+}
+
 interface ISectionToSeparateByDay {
     isSectionListHover: boolean;
     isSelected: boolean;
@@ -27,8 +31,8 @@ interface ICalendarSectionsByDay {
     [key: string]: JSX.Element[];
 }
 
-@connect<ICalendarStateProps, {}, {}>(mapStateToProps)
-export default class Calendar extends React.Component<ICalendarStateProps> {
+@connect<ICalendarStateProps, {}, ICalendarProps>(mapStateToProps)
+export default class Calendar extends React.Component<ICalendarStateProps & ICalendarProps> {
 
     public render() {
         const sectionListHoverSection = this.getSectionListHoverSection();
@@ -54,16 +58,14 @@ export default class Calendar extends React.Component<ICalendarStateProps> {
         const calendarSectionsInCalendar = this.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
 
         return (
-            <div className="col-sm-6 page2bg" id="calendar-col">
-                <div>
-                    <div id="calendar" className="list-group">
-                        <div id="calendar-titles" className="panel-heading">
-                            {this.generate_calendar_titles()}
-                        </div>
-                        <div id="course-data" className="list-group-item">
-                            <div className="week">
-                                {calendarSectionsInCalendar}
-                            </div>
+            <div className="col-sm-6 page2bg" id="calendar-col" style={this.props.style}>
+                <div id="calendar" className="list-group">
+                    <div id="calendar-titles" className="panel-heading">
+                        {this.generate_calendar_titles()}
+                    </div>
+                    <div id="course-data" className="list-group-item">
+                        <div className="week">
+                            {calendarSectionsInCalendar}
                         </div>
                     </div>
                 </div>

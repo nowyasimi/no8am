@@ -1,6 +1,8 @@
 import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 
+import MediaQuery from "react-responsive";
+
 import {connect} from "../Connect";
 import {IAllReducers} from "../Interfaces";
 import {ILoadSectionsThunk, loadSections} from "../sections/SectionActions";
@@ -15,6 +17,17 @@ interface IMainDispatchProps {
 @connect<{}, IMainDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
 export class Main extends React.Component<IMainDispatchProps, undefined> {
 
+    private mobileCalendarStyle = {
+        height: "100%",
+        paddingTop: "1%",
+    };
+
+    private defaultCalendarStyle = {
+        ...this.mobileCalendarStyle,
+        left: "50%",
+        position: "fixed",
+    };
+
     public componentDidMount() {
         this.props.onLoadSections();
     }
@@ -23,7 +36,12 @@ export class Main extends React.Component<IMainDispatchProps, undefined> {
         return (
             <div>
                 <LeftSide />
-                <Calendar />
+                <MediaQuery minWidth={900}>
+                    <Calendar style={this.defaultCalendarStyle} />
+                </MediaQuery>
+                <MediaQuery maxWidth={900}>
+                    <Calendar style={this.mobileCalendarStyle} />
+                </MediaQuery>
             </div>
         );
     }
