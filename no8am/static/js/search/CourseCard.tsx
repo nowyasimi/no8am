@@ -4,8 +4,10 @@ import {bindActionCreators, Dispatch} from "redux";
 
 import {connect} from "../Connect";
 
-import {Classes, Icon, IconClasses} from "@blueprintjs/core";
+import {Classes, Icon, IconClasses, Tag} from "@blueprintjs/core";
 import * as classNames from "classnames";
+import MediaQuery from "react-responsive";
+
 import {CalendarSectionColorType, colorMapping} from "../Constants";
 import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
 import {clickCourseCard, returnOfClickCourseCard} from "../sections/SectionActions";
@@ -15,7 +17,21 @@ const cardStyle = {
     margin: "10px",
     maxWidth: "50%",
     minWidth: "30%",
-    padding: "10px",
+    padding: "0px 10px 0px 10px",
+};
+
+const titleStyle = {
+    fontSize: "16px",
+};
+
+const tickStyle = {
+    float: "right",
+    paddingRight: "3px",
+};
+
+const sectionTagStyle = {
+    float: "right",
+    lineHeight: "14px",
 };
 
 interface ICourseCard {
@@ -47,7 +63,7 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
                 style={cardStyleWithColor}
                 onClick={this.props.onClickCourseCard}
             >
-                <h5>{this.formatTitle()}</h5>
+                <h5 style={titleStyle}>{this.formatTitle()}</h5>
                 <p>{this.formatAbbreviations()}</p>
             </div>
         );
@@ -77,9 +93,23 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
     private createAbbreviation(abbreviation: string, selectedAbbreviations: string[]) {
         const selectedIcon = selectedAbbreviations.find((currentAbbreviation) =>
             abbreviation === currentAbbreviation) !== undefined ?
-            <Icon iconName={IconClasses.TICK} /> : null;
+            <Icon style={tickStyle} iconName={IconClasses.TICK} /> : null;
 
-        return <span key={abbreviation}>{abbreviation} {selectedIcon} <br /></span>;
+        const numberOfSections = this.props.searchItem.sectionsInSearchItem.filter(
+            (section) => section.departmentAndCourse === abbreviation).length;
+
+        const numberOfSectionsTag = (
+            <span>
+                <MediaQuery minWidth={900}>
+                    <Tag style={sectionTagStyle}> {numberOfSections} Sections </Tag>
+                </MediaQuery>
+                <MediaQuery maxWidth={900}>
+                    <Tag style={sectionTagStyle}> {numberOfSections} </Tag>
+                </MediaQuery>
+            </span>
+        );
+
+        return <span key={abbreviation}>{abbreviation} {numberOfSectionsTag} {selectedIcon} <br /></span>;
     }
 
     private getSelectedAbbreviations(): string[] {

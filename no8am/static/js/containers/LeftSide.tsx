@@ -7,7 +7,7 @@ import {IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
 import CourseCards from "../search/CourseCards";
 import {SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
 import SectionList from "../sections/SectionList";
-import SelectedSectionsTable from "../sections/SelectedSectionsTable";
+import SelectedSectionsSummary from "../sections/SelectedSectionsSummary";
 
 import {connect} from "../Connect";
 import {DataLoadingState} from "../Constants";
@@ -92,7 +92,7 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
                         description="Choose from the searches above to view sections"
                     />
                     <div style={{paddingTop: "30px"}}>
-                        <SelectedSectionsTable />
+                        <SelectedSectionsSummary />
                     </div>
                 </div>
             );
