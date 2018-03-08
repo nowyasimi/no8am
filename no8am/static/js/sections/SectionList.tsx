@@ -79,7 +79,10 @@ export default class SectionList extends React.Component<ISectionListStateProps 
     }
 
     private createCardsFromSectionGroup(sections: Section[]): JSX.Element[] {
-        if (sections.every((section) => this.isManaged(section))) {
+        const managedSections = sections.map((section) => this.isManaged(section));
+        const visibleSections = sections.map((section) => this.isVisible(section));
+
+        if (managedSections.every((isManaged) => isManaged)) {
             const course = sections[0].departmentAndBareCourse;
             return [(
                 <SectionListManagedCard
@@ -88,26 +91,21 @@ export default class SectionList extends React.Component<ISectionListStateProps 
                 />
             )];
         } else {
-            return sections.map((section) => (
+            // only add a margin to the bottom of a section group if at least one card in the group is visible
+            const allHidden = visibleSections.every((isVisible) => !isVisible);
+
+            return sections.map((section, index) => (
                 <SectionListCard
                     key={section.CRN}
                     section={section}
-                    isLastOfType={this.isLastOfType(sections, section)}
-                    isManaged={this.isManaged(section)}
+                    addMargin={!allHidden && index === sections.length - 1}
+                    isManaged={managedSections[index]}
                     isSelected={this.isSelected(section)}
                     isUnavailable={this.isUnavailable(section)}
-                    isVisible={this.isVisible(section)}
+                    isVisible={visibleSections[index]}
                 />),
             );
         }
-    }
-
-    // separates different types of sections in the section list
-    private isLastOfType(sections: Section[], section: Section): boolean {
-        const lastSectionOfType = sections.filter((maybeSectionOfType) =>
-            this.isVisible(section) && this.isVisible(maybeSectionOfType)).pop();
-
-        return lastSectionOfType !== undefined && lastSectionOfType.CRN === section.CRN;
     }
 
     // handles case when another course card contains the course baseAbbreviation

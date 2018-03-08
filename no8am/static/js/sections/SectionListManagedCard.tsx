@@ -9,6 +9,7 @@ import {IAllReducers} from "../Interfaces";
 import {goToManagedCard, returnOfGoToManagedCard} from "./SectionActions";
 
 const defaultStyle = {
+    marginBottom: "20px",
     maxHeight: "100px",
     opacity: 1,
 };

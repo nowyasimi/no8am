@@ -22,20 +22,18 @@ const defaultStyle = {
     width: 0,
 };
 
-const transitionStyles: any = {
-    entered:  {
-        maxHeight: "100px",
-        opacity: 1,
-        transition: baseTransition,
-        width: "100%",
-    },
+const transitionStyle: any = {
+    maxHeight: "100px",
+    opacity: 1,
+    transition: baseTransition,
+    width: "100%",
 };
 
 const unavailableExtraSectionMessage = "This section can be selected with one of the following main sections:";
 const unavailableMainSectionMessage = "This section cannot be selected due to other selections for this course";
 
 interface ISectionListCard {
-    isLastOfType: boolean;
+    addMargin: boolean;
     isManaged: boolean;
     isSelected: boolean;
     isUnavailable: boolean;
@@ -106,12 +104,18 @@ export default class SectionListCard
             violationSection: isViolation,
         });
 
+        const transitionStyleUsingState = transitionState !== "entered" ? {} : transitionStyle;
+
+        const marginStyle = {
+            marginBottom: this.props.addMargin ? "20px" : 0,
+        };
+
         return (
             <div
                 className={sectionCardClasses}
                 onMouseEnter={this.props.onMouseEnterSectionListCard}
                 onMouseLeave={this.props.onMouseLeaveSectionListCard}
-                style={{...defaultStyle, ...transitionStyles[transitionState]}}
+                style={{...defaultStyle, ...transitionStyleUsingState, ...marginStyle}}
             >
                 <ul
                     className={sectionDetailsClasses}

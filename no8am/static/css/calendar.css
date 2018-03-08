@@ -138,10 +138,6 @@ body,html{height: 100%;}
     width: 100%;
 }
 
-.sectionCard:last-child {
-    margin-bottom:20px;
-}
-
 .sectionCard {
     padding: 0;
 }
