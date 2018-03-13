@@ -68,3 +68,11 @@ export const getSelectedSections = createSelector(
         // flatten to 1D array of selected sections
         .reduce((selectedSections, nextSelectedSections) => selectedSections.concat(nextSelectedSections), []),
 );
+
+export const getUniqueCCCs = createSelector(
+    [getAllSections],
+    (allSections) => [...new Set(allSections
+        .map((section) => section.CCC)
+        .reduce((allCCCs, sectionCCCs) => allCCCs.concat(sectionCCCs), []))]
+        .sort(),
+);

@@ -18,6 +18,7 @@ interface ICalendarStateProps {
 }
 
 interface ICalendarProps {
+    innerCalendarStyle: React.CSSProperties;
     style: React.CSSProperties;
 }
 
@@ -58,8 +59,8 @@ export default class Calendar extends React.Component<ICalendarStateProps & ICal
         const calendarSectionsInCalendar = this.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
 
         return (
-            <div className="col-sm-6 page2bg" id="calendar-col" style={this.props.style}>
-                <div id="calendar" className="list-group">
+            <div className="page2bg" id="calendar-col" style={this.props.style}>
+                <div id="calendar" className="list-group" style={this.props.innerCalendarStyle}>
                     <div id="calendar-titles" className="panel-heading">
                         {this.generate_calendar_titles()}
                     </div>

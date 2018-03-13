@@ -15,9 +15,18 @@ export const updateFilterTime = createAction("UPDATE_FILTER_TIME",
     }),
 );
 
+export const updateFilterCCC = createAction("UPDATE_FILTER_CCC",
+    (filterCCC) => ({
+        filterCCC,
+        type: "UPDATE_FILTER_CCC",
+    }),
+);
+
 export const returnOfClickAdvancedSectionSelection = getReturnOfExpression(clickAdvancedSectionSelection);
 export const returnOfUpdateFilterTime = getReturnOfExpression(updateFilterTime);
+export const returnOfUpdateFilterCCC = getReturnOfExpression(updateFilterCCC);
 
 export type IActions =
     | typeof returnOfClickAdvancedSectionSelection
-    | typeof returnOfUpdateFilterTime;
+    | typeof returnOfUpdateFilterTime
+    | typeof returnOfUpdateFilterCCC;

@@ -4,7 +4,7 @@ import {createSelector} from "reselect";
 import {connect} from "../Connect";
 
 import {filterSectionsWithSearchItem, getAllSections,
-        getSelectedSearchItemMemoized, getUnselectedSearchItemsMemoized} from "../Helpers";
+        getSelectedSearchItemMemoized, getUniqueCCCs, getUnselectedSearchItemsMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem, ISectionExtra, Section} from "../Interfaces";
 
 import GlobalFilters from "../filters/GlobalFilters";
@@ -18,6 +18,7 @@ interface ISectionListProps {
 }
 
 interface ISectionListStateProps {
+    availableCCCs: string[];
     filterTime: [number, number];
     isAdvanced: boolean;
     managedSections: Section[];
@@ -142,7 +143,11 @@ export default class SectionList extends React.Component<ISectionListStateProps 
                  this.props.searchItem.currentItemCourseAbbreviation === section.departmentAndBareCourse)) &&
         // section is within filtered time range
                 (section.meetingTimes.every((meetingTime) => meetingTime.startTime >= this.props.filterTime[0] &&
-                                      meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1])));
+                                      meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1]))) &&
+        // section at least one CCC is in the CCC filter
+                (section.CCC.find((currentCCC) =>
+                    this.props.availableCCCs.find((currentAvailableCCC) =>
+                        currentAvailableCCC === currentCCC) !== undefined) !== undefined);
     }
 }
 
@@ -174,8 +179,16 @@ const getSectionsForSelectedSearchItem = createSelector(
     },
 );
 
+const getFilterCCCs = (state: IAllReducers) => state.filters.filterCCCs;
+
+const getAvailableCCCs = createSelector(
+    [getFilterCCCs, getUniqueCCCs],
+    (filterCCCs, uniqueCCCs) => filterCCCs.length === 0 ? uniqueCCCs : filterCCCs,
+);
+
 function mapStateToProps(state: IAllReducers): ISectionListStateProps {
     return {
+        availableCCCs: getAvailableCCCs(state),
         filterTime: state.filters.filterTime,
         isAdvanced: state.filters.isAdvanced,
         managedSections: getAllManagedSections(state),

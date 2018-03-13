@@ -24,8 +24,38 @@ export class Main extends React.Component<IMainDispatchProps, undefined> {
 
     private defaultCalendarStyle = {
         ...this.mobileCalendarStyle,
-        left: "50%",
         position: "fixed",
+        right: "10px",
+    };
+
+    private innerCalendarDisableTextSelection = {
+        KhtmlUserSelect: "none",
+        MozUserSelect: "none",
+        MsUserSelect: "none",
+        WebkitTouchCallout: "none",
+        WebkitUserSelect: "none",
+        userSelect: "none",
+    };
+
+    private mobileInnerCalendarStyle = {
+        ...this.innerCalendarDisableTextSelection,
+        height: "99%",
+        margin: "0 auto",
+        position: "center",
+        textAlign: "center",
+        width: "100%",
+    };
+
+    private defaultInnerCalendarStyle = {
+        ...this.mobileInnerCalendarStyle,
+        width: "400px",
+    };
+
+    private mobileLeftSideStyle = {};
+
+    private defaultLeftSideStyle = {
+        float: "left",
+        width: "calc(100% - 430px)",
     };
 
     public componentDidMount() {
@@ -35,12 +65,13 @@ export class Main extends React.Component<IMainDispatchProps, undefined> {
     public render() {
         return (
             <div>
-                <LeftSide />
                 <MediaQuery minWidth={900}>
-                    <Calendar style={this.defaultCalendarStyle} />
+                    <LeftSide style={this.defaultLeftSideStyle} />
+                    <Calendar style={this.defaultCalendarStyle} innerCalendarStyle={this.defaultInnerCalendarStyle} />
                 </MediaQuery>
                 <MediaQuery maxWidth={900}>
-                    <Calendar style={this.mobileCalendarStyle} />
+                    <LeftSide style={this.mobileLeftSideStyle} />
+                    <Calendar style={this.mobileCalendarStyle} innerCalendarStyle={this.mobileInnerCalendarStyle} />
                 </MediaQuery>
             </div>
         );

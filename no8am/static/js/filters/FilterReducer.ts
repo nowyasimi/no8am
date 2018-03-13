@@ -4,6 +4,7 @@ import {IFilterReducer} from "../Interfaces";
 import * as FilterActions from "./FilterActions";
 
 export const initialState: IFilterReducer = {
+    filterCCCs: [],
     filterTime: [0, 28],
     isAdvanced: false,
 };
@@ -21,6 +22,12 @@ export const filters = (state = initialState, action: FilterActions.IActions) =>
             return {
                 ...state,
                 filterTime: action.filterTime,
+            };
+
+        case getType(FilterActions.updateFilterCCC):
+            return {
+                ...state,
+                filterCCCs: action.filterCCC,
             };
 
         default:

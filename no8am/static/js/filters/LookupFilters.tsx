@@ -1,7 +1,7 @@
 import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 
-import {Button, Checkbox, Classes, Dialog, Intent} from "@blueprintjs/core";
+import {Button, ButtonGroup, Checkbox, Classes, Dialog, Intent} from "@blueprintjs/core";
 import {Tooltip2} from "@blueprintjs/labs";
 import * as classNames from "classnames";
 import {Position} from "popper.js";
@@ -11,6 +11,7 @@ import {IAllReducers, ISearchItem} from "../Interfaces";
 import {clickDoneSelecting, removeSearch, returnOfClickDoneSelecting, returnOfRemoveSearch,
         returnOfRevertToOriginAbbreviation, returnOfSearchAgainForAbbreviation, revertToOriginAbbreviation,
         searchAgainForAbbreviation} from "../sections/SectionActions";
+import FilterCCC from "./FilterCCC";
 import FilterTime from "./FilterTime";
 
 interface ILookupFiltersProps {
@@ -42,6 +43,11 @@ export default class LookupFilters
         paddingTop: "10px",
     };
 
+    private buttonStyle = {
+        borderRadius: "inherit",
+        marginRight: "-1px",
+    };
+
     public constructor(props: ILookupFiltersDispatchProps & ILookupFiltersProps) {
         super(props);
 
@@ -66,7 +72,10 @@ export default class LookupFilters
                     {sectionFilterSentence}
                 </div>
                 <FilterTime filterTime={this.props.filterTime} />
-                {this.renderButtons()}
+                {/* <FilterCCC /> */}
+                <ButtonGroup>
+                    {this.renderButtons()}
+                </ButtonGroup>
                 {this.renderConfirmRevertDialog()}
             </div>
         );
@@ -105,19 +114,17 @@ export default class LookupFilters
     }
 
     private renderButtons() {
-        return (
-            <div>
-                {this.renderOriginAbbreviationButtons(Intent.NONE)}
-                <Button
-                    text={`Done selecting`}
-                    onClick={this.props.onClickDoneSelecting}
-                />
-                <Button
-                    text={`Remove search`}
-                    onClick={this.props.onRemoveSearch}
-                />
-            </div>
-        );
+        return [
+            this.renderOriginAbbreviationButtons(Intent.NONE), (
+            <Button
+                text={`Done selecting`}
+                onClick={this.props.onClickDoneSelecting}
+            />), (
+            <Button
+                text={`Remove search`}
+                onClick={this.props.onRemoveSearch}
+            />),
+        ];
     }
 
     private renderOriginAbbreviationButtons(revertButtonIntent: Intent) {
@@ -144,6 +151,7 @@ export default class LookupFilters
                         text={`Revert to ${this.props.searchItem.originItemAbbreviation}`}
                         onClick={this.onRevertToOriginAbbreviationWithDialogHandler}
                         intent={revertButtonIntent}
+                        style={this.buttonStyle}
                     />
                 </Tooltip2>
                 ), (
@@ -157,6 +165,7 @@ export default class LookupFilters
                         className={classes}
                         text={`Search again for ${this.props.searchItem.originItemAbbreviation}`}
                         onClick={this.onSearchAgainForAbbreviationWithDialogHandler}
+                        style={this.buttonStyle}
                     />
                 </Tooltip2>
                 ),

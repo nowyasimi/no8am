@@ -8,7 +8,7 @@ import * as classNames from "classnames";
 
 import {connect} from "../Connect";
 import {DataLoadingState, SearchItemType, SearchItemTypes} from "../Constants";
-import {getAllSections} from "../Helpers";
+import {getAllSections, getUniqueCCCs} from "../Helpers";
 import {IAllReducers, IMetadata} from "../Interfaces";
 import {ILoadMetadataThunk, loadMetadata} from "../search/SearchActions";
 import {returnOfSearchItem, searchItem} from "../sections/SectionActions";
@@ -19,6 +19,7 @@ interface ISearchBoxWithPopoverStateProps {
     metadata: IMetadata[];
     searchHistory: IMetadata[];
     status: DataLoadingState;
+    uniqueCCCs: string[];
 }
 
 interface ISearchBoxWithPopoverDispatchProps {
@@ -171,9 +172,10 @@ export class SearchBoxWithPopover
     private onOpenSearchBox = (event: KeyboardEvent) => {
         const searchInputElement = document.getElementById(this.inputProps.id);
         const popoverElements = document.getElementsByClassName(this.popoverProps.popoverClassName);
+        const filterCCCPopoverElement = document.getElementById("filterCCCPopover");
 
-        // intercept the event and focus on the search box if it is not open
-        if (searchInputElement != null && popoverElements.length === 0) {
+        // intercept the event and focus on the search box if it is not open and the ccc filter box is not open
+        if (filterCCCPopoverElement === null && searchInputElement !== null && popoverElements.length === 0) {
             event.preventDefault();
             searchInputElement.focus();
         }
@@ -222,8 +224,8 @@ const courseSort = (query: string) => (a: SearchBoxWithPopoverItem, b: SearchBox
 export const getMetadata = (state: IAllReducers): IMetadata[] => state.search.metadata;
 
 export const getMetadataUsingAllSections = createSelector(
-    [getMetadata, getAllSections],
-    (metadata, allSections) => {
+    [getMetadata, getAllSections, getUniqueCCCs],
+    (metadata, allSections, uniqueCCCs) => {
         const coursesNotInMetadata: IMetadata[] = [...new Set(allSections
             .filter((section) => section.main)
             .map((section) => section.departmentAndCourse))]
@@ -251,9 +253,7 @@ export const getMetadataUsingAllSections = createSelector(
                 userFriendlyFormat: departmentAbbreviation,
             }));
 
-        const cccNotInMetadata: IMetadata[] = [...new Set(allSections
-            .map((section) => section.CCC)
-            .reduce((allCCCs, sectionCCCs) => allCCCs.concat(sectionCCCs), []))]
+        const cccNotInMetadata: IMetadata[] = uniqueCCCs
             .filter((cccAbbreviation) =>
                 metadata.find((metadataItem) => metadataItem.abbreviation === cccAbbreviation) === undefined)
             .map((cccAbbreviation) => ({
@@ -273,6 +273,7 @@ function mapStateToProps(state: IAllReducers): ISearchBoxWithPopoverStateProps {
         metadata: getMetadataUsingAllSections(state),
         searchHistory: state.search.searchHistory,
         status: state.search.status,
+        uniqueCCCs: getUniqueCCCs(state),
     };
 }
 

@@ -104,6 +104,7 @@ export interface ICalendarReducer {
 }
 
 export interface IFilterReducer {
+    filterCCCs: string[];
     filterTime: [number, number];
     isAdvanced: boolean;
 }

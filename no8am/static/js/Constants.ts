@@ -90,7 +90,7 @@ export enum SearchItemType {
 }
 
 export const DAYS_OF_WEEK: string[] = ["M", "T", "W", "R", "F"];
-export const DAYS_OF_WEEK_LONG: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+export const DAYS_OF_WEEK_LONG: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 export const SECTION_TYPES: string[] = ["main", "R", "L", "P"];
 export const EXTRA_SECTION_TYPES: string[] = ["R", "L", "P"];
 

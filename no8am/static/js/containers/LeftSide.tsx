@@ -2,7 +2,7 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
+import {Button, IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
 
 import CourseCards from "../search/CourseCards";
 import {SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
@@ -15,7 +15,15 @@ import {clickAdvancedSectionSelection, returnOfClickAdvancedSectionSelection} fr
 import {getSelectedSearchItemMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem} from "../Interfaces";
 
-type ILeftSideProps = ILeftSideStateProps & ILeftSideDispatchProps;
+const buttonStyle = {
+    marginLeft: "5px",
+};
+
+type ILeftSideAllProps = ILeftSideProps & ILeftSideStateProps & ILeftSideDispatchProps;
+
+interface ILeftSideProps {
+    style: React.CSSProperties;
+}
 
 interface ILeftSideStateProps {
     hasSearchItems: boolean;
@@ -29,7 +37,7 @@ interface ILeftSideDispatchProps {
 }
 
 @connect<ILeftSideStateProps, ILeftSideDispatchProps, ILeftSideProps>(mapStateToProps, mapDispatchToProps)
-export default class LeftSide extends React.Component<ILeftSideProps>  {
+export default class LeftSide extends React.Component<ILeftSideAllProps>  {
 
     private instructions: JSX.Element = (
         <div> Click the search box above to start or press
@@ -57,8 +65,10 @@ export default class LeftSide extends React.Component<ILeftSideProps>  {
         const mainContent = this.getMainContent();
 
         return (
-            <div className="col-sm-6" id="filters">
+            <div id="filters" style={this.props.style}>
                 <SearchBoxWithPopover />
+                {/* <Button rightIconName={"refresh"} text={"Check for course updates"} style={buttonStyle} /> */}
+                {/* <Button iconName={"help"} style={buttonStyle} /> */}
                 <CourseCards />
                 {mainContent}
             </div>
