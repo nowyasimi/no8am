@@ -5,6 +5,7 @@ import {connect} from "../Connect";
 import {IAllReducers} from "../Interfaces";
 
 import {Button, Menu, MenuItem, Popover, Position, RangeSlider} from "@blueprintjs/core";
+import {IconNames} from "@blueprintjs/icons";
 
 import {returnOfUpdateFilterTime, updateFilterTime} from "./FilterActions";
 import {initialState} from "./FilterReducer";
@@ -29,9 +30,9 @@ export default class FilterTime extends React.Component<IFilterTimeDispatchProps
                 position={Position.RIGHT_TOP}
             >
                 <Button
-                    iconName="time"
+                    icon={IconNames.TIME}
                     text={this.renderButtonText()}
-                    rightIconName="caret-right"
+                    rightIcon={IconNames.CARET_RIGHT}
                     className="filterTimeButton"
                 />
             </Popover>
@@ -63,7 +64,7 @@ export default class FilterTime extends React.Component<IFilterTimeDispatchProps
                         max={initialState.filterTime[1]}
                         stepSize={2}
                         labelStepSize={10}
-                        renderLabel={renderLabel}
+                        labelRenderer={renderLabel}
                         onChange={this.props.onUpdateFilterTime}
                         value={this.props.filterTime}
                     />

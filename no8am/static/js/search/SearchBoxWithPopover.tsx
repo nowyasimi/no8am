@@ -2,8 +2,9 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {Classes, Hotkey, Hotkeys, HotkeysTarget, IconClasses, MenuItem} from "@blueprintjs/core";
-import {ISelectItemRendererProps, Suggest} from "@blueprintjs/labs";
+import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuItem} from "@blueprintjs/core";
+import {IconNames} from "@blueprintjs/icons";
+import {IItemRendererProps, Suggest} from "@blueprintjs/select";
 import * as classNames from "classnames";
 
 import {connect} from "../Connect";
@@ -62,7 +63,7 @@ export class SearchBoxWithPopover
 
     private inputProps = {
         id: "searchInput",
-        leftIconName: IconClasses.SEARCH,
+        leftIcon: IconNames.SEARCH,
     };
 
     public componentDidMount() {
@@ -134,10 +135,10 @@ export class SearchBoxWithPopover
         return filteredListWithHeadersByType.slice(0, 50);
     }
 
-    private itemRenderer({handleClick, isActive, item}: ISelectItemRendererProps<SearchBoxWithPopoverItem>) {
+    private itemRenderer(item: SearchBoxWithPopoverItem, {handleClick, modifiers}: IItemRendererProps) {
         const classes = classNames("searchItem", {
-            [Classes.ACTIVE]: isActive,
-            [Classes.INTENT_PRIMARY]: isActive,
+            [Classes.ACTIVE]: modifiers.active,
+            [Classes.INTENT_PRIMARY]: modifiers.active,
         });
 
         if (isMetadata(item)) {

@@ -67,11 +67,17 @@ export class Main extends React.Component<IMainDispatchProps, undefined> {
             <div>
                 <MediaQuery minWidth={900}>
                     <LeftSide style={this.defaultLeftSideStyle} />
-                    <Calendar style={this.defaultCalendarStyle} innerCalendarStyle={this.defaultInnerCalendarStyle} />
+                    <Calendar
+                        style={this.defaultCalendarStyle}
+                        innerCalendarStyle={this.defaultInnerCalendarStyle}
+                    />
                 </MediaQuery>
                 <MediaQuery maxWidth={900}>
                     <LeftSide style={this.mobileLeftSideStyle} />
-                    <Calendar style={this.mobileCalendarStyle} innerCalendarStyle={this.mobileInnerCalendarStyle} />
+                    <Calendar
+                        style={this.mobileCalendarStyle}
+                        innerCalendarStyle={this.mobileInnerCalendarStyle}
+                    />
                 </MediaQuery>
             </div>
         );

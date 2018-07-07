@@ -2,7 +2,8 @@ import * as React from "react";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {Button, IconClasses, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
+import {Button, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
+import {IconNames} from "@blueprintjs/icons";
 
 import CourseCards from "../search/CourseCards";
 import {SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
@@ -97,7 +98,7 @@ export default class LeftSide extends React.Component<ILeftSideAllProps>  {
             return (
                 <div>
                     <NonIdealState
-                        visual={IconClasses.SELECT}
+                        visual={IconNames.SELECT}
                         className="nonIdealState"
                         description="Choose from the searches above to view sections"
                     />

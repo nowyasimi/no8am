@@ -7,7 +7,7 @@ import {connect} from "../Connect";
 import {getSelectedSections} from "../Helpers";
 import {IAllReducers, SectionWithColor} from "../Interfaces";
 
-const totalClassHoursStyle = {
+const totalClassHoursStyle: React.CSSProperties = {
     fontSize: "16px",
     marginBottom: "10px",
     textAlign: "center",
@@ -31,14 +31,14 @@ export default class SelectedSectionsSummary
                 </div>
                 <Table
                     numRows={numberOfSelectedSections}
-                    renderBodyContextMenu={this.renderBodyContextMenu}
+                    bodyContextMenuRenderer={this.renderBodyContextMenu}
                 >
-                    <Column name="Course Number" renderCell={this.renderCell} />
-                    <Column name="CRN" renderCell={this.renderCell} />
-                    <Column name="Title" renderCell={this.renderCell} />
-                    <Column name="Credits" renderCell={this.renderCell} />
-                    <Column name="CCCs" renderCell={this.renderCell} />
-                    <Column name="Professors" renderCell={this.renderCell} />
+                    <Column name="Course Number" cellRenderer={this.renderCell} />
+                    <Column name="CRN" cellRenderer={this.renderCell} />
+                    <Column name="Title" cellRenderer={this.renderCell} />
+                    <Column name="Credits" cellRenderer={this.renderCell} />
+                    <Column name="CCCs" cellRenderer={this.renderCell} />
+                    <Column name="Professors" cellRenderer={this.renderCell} />
                 </Table>
             </div>
         );

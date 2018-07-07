@@ -4,7 +4,8 @@ import {bindActionCreators, Dispatch} from "redux";
 
 import {connect} from "../Connect";
 
-import {Classes, Icon, IconClasses, Tag} from "@blueprintjs/core";
+import {Classes, Icon, Tag} from "@blueprintjs/core";
+import {IconNames} from "@blueprintjs/icons";
 import * as classNames from "classnames";
 import MediaQuery from "react-responsive";
 
@@ -24,12 +25,12 @@ const titleStyle = {
     fontSize: "16px",
 };
 
-const tickStyle = {
+const tickStyle: React.CSSProperties = {
     float: "right",
     paddingRight: "3px",
 };
 
-const sectionTagStyle = {
+const sectionTagStyle: React.CSSProperties = {
     float: "right",
     lineHeight: "14px",
 };
@@ -93,7 +94,7 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
     private createAbbreviation(abbreviation: string, selectedAbbreviations: string[]) {
         const selectedIcon = selectedAbbreviations.find((currentAbbreviation) =>
             abbreviation === currentAbbreviation) !== undefined ?
-            <Icon style={tickStyle} iconName={IconClasses.TICK} /> : null;
+            <Icon style={tickStyle} icon={IconNames.TICK} /> : null;
 
         const numberOfSections = this.props.searchItem.sectionsInSearchItem.filter(
             (section) => section.departmentAndCourse === abbreviation).length;
