@@ -1,12 +1,10 @@
 import * as React from "react";
-import {bindActionCreators, Dispatch} from "redux";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 import {Classes} from "@blueprintjs/core";
 
-import {connect} from "../Connect";
-
-import {IAllReducers} from "../Interfaces";
-import {goToManagedCard, returnOfGoToManagedCard} from "./SectionActions";
+import {goToManagedCard} from "./SectionActions";
 
 const defaultStyle = {
     marginBottom: "20px",
@@ -19,12 +17,10 @@ interface ISectionListManagedCard {
 }
 
 interface ISectionListManagedCardDispatchProps {
-    onClickManagedCard?: () => typeof returnOfGoToManagedCard;
+    onClickManagedCard?: () => void;
 }
 
-@connect<{}, ISectionListManagedCardDispatchProps, ISectionListManagedCard>(() => {}, mapDispatchToProps)
-export default class SectionListManagedCard
-    extends React.Component<ISectionListManagedCard & ISectionListManagedCardDispatchProps> {
+class SectionListManagedCard extends React.Component<ISectionListManagedCard & ISectionListManagedCardDispatchProps> {
 
     public render() {
 
@@ -46,9 +42,11 @@ export default class SectionListManagedCard
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>,
-                            props: ISectionListManagedCard): ISectionListManagedCardDispatchProps {
-    return bindActionCreators({
-        onClickManagedCard: () => goToManagedCard(props.managedAbbreviation),
-    }, dispatch);
-}
+const SectionListManagedCardConnected = connect(
+    () => ({}),
+    (dispatch, props: ISectionListManagedCard): ISectionListManagedCardDispatchProps => bindActionCreators({
+    onClickManagedCard: () => goToManagedCard(props.managedAbbreviation),
+    }, dispatch),
+)(SectionListManagedCard);
+
+export default SectionListManagedCardConnected;

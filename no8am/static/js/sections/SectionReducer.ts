@@ -1,9 +1,11 @@
-import {getType} from "ts-redux-actions";
+import {ActionType, getType} from "typesafe-actions";
 
 import {Colors, DataLoadingState, SearchItemType} from "../Constants";
 import {IMetadata, ISearchItem, ISectionReducer, Section} from "../Interfaces";
 
-import * as SectionActions from "./SectionActions";
+import * as sectionActions from "./SectionActions";
+
+export type SectionActionType = ActionType<typeof sectionActions>;
 
 const initialState: ISectionReducer = {
     allSections: [],
@@ -12,78 +14,78 @@ const initialState: ISectionReducer = {
     status: DataLoadingState.LOADING,
 };
 
-export const sections = (state = initialState, action: SectionActions.IActions): ISectionReducer => {
+export const sections = (state = initialState, action: SectionActionType): ISectionReducer => {
 
         switch (action.type) {
-            case getType(SectionActions.receiveSections):
+            case getType(sectionActions.receiveSections):
                 return {
                     ...state,
-                    allSections: action.sections,
+                    allSections: action.payload.sections,
                     status: DataLoadingState.LOADED,
                 };
 
-            case getType(SectionActions.errorReceivingSections):
+            case getType(sectionActions.errorReceivingSections):
                 return {
                     ...state,
                     status: DataLoadingState.FAILED,
                 };
 
-            case getType(SectionActions.mouseEnterSectionListCard):
+            case getType(sectionActions.mouseEnterSectionListCard):
                 return {
                     ...state,
-                    sectionListHoverCrn: action.section.CRN,
+                    sectionListHoverCrn: action.payload.section.CRN,
                 };
 
-            case getType(SectionActions.mouseLeaveSectionListCard):
+            case getType(sectionActions.mouseLeaveSectionListCard):
                 return {
                     ...state,
                     sectionListHoverCrn: null,
                 };
 
-            case getType(SectionActions.clickSectionListCard):
+            case getType(sectionActions.clickSectionListCard):
                 return {
                     ...state,
-                    searchItems: clickSectionListCard(action.section, action.isManaged,
+                    searchItems: clickSectionListCard(action.payload.section, action.payload.isManaged,
                         state.allSections, state.searchItems),
                 };
 
-            case getType(SectionActions.clickCourseCard):
+            case getType(sectionActions.clickCourseCard):
                 return {
                     ...state,
-                    searchItems: selectSearchItem(action.clickedSearchItem, state.searchItems),
+                    searchItems: selectSearchItem(action.payload.clickedSearchItem, state.searchItems),
                 };
 
-            case getType(SectionActions.goToManagedCard):
+            case getType(sectionActions.goToManagedCard):
                 return {
                     ...state,
-                    searchItems: goToManagedCard(action.abbreviation, state.searchItems),
+                    searchItems: goToManagedCard(action.payload.abbreviation, state.searchItems),
                 };
 
-            case getType(SectionActions.searchItem):
+            case getType(sectionActions.searchItem):
                 return {
                     ...state,
-                    searchItems: newSearchItem(action.item, state.allSections, state.searchItems),
+                    searchItems: newSearchItem(action.payload.item, state.allSections, state.searchItems),
                 };
 
-            case getType(SectionActions.clickDoneSelecting):
+            case getType(sectionActions.clickDoneSelecting):
                 return {
                     ...state,
                     searchItems: deselectAllSearchItems(state.searchItems),
                 };
 
-            case getType(SectionActions.revertToOriginAbbreviation):
+            case getType(sectionActions.revertToOriginAbbreviation):
                 return {
                     ...state,
                     searchItems: revertToOriginItemAbbreviation(state.searchItems),
                 };
 
-            case getType(SectionActions.searchAgainForAbbreviation):
+            case getType(sectionActions.searchAgainForAbbreviation):
                 return {
                     ...state,
                     searchItems: searchAgainForAbbreviation(state.searchItems),
                 };
 
-            case getType(SectionActions.removeSearch):
+            case getType(sectionActions.removeSearch):
                 return {
                     ...state,
                     searchItems: getUnselectedSearchItems(state.searchItems),

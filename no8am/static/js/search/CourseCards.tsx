@@ -1,10 +1,9 @@
 import * as React from "react";
-
-import {connect} from "../Connect";
+import {connect} from "react-redux";
 
 import {getSearchItemsWithSections} from "../Helpers";
 import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
-import {CourseCard} from "./CourseCard";
+import CourseCard from "./CourseCard";
 
 const cardContainerStyle: React.CSSProperties = {
     display: "flex",
@@ -15,8 +14,7 @@ interface ICourseCardStateProps {
     searchItems: ISearchItemWithMatchingSections[];
 }
 
-@connect<ICourseCardStateProps, {}, ICourseCardStateProps>(mapStateToProps)
-export default class CourseCards extends React.Component<ICourseCardStateProps> {
+class CourseCards extends React.Component<ICourseCardStateProps> {
 
     public render() {
         return (
@@ -36,8 +34,10 @@ export default class CourseCards extends React.Component<ICourseCardStateProps> 
     }
 }
 
-function mapStateToProps(state: IAllReducers): ICourseCardStateProps {
-    return {
+const CourseCardsConnected = connect(
+    (state: IAllReducers): ICourseCardStateProps => ({
         searchItems: getSearchItemsWithSections(state),
-    };
-}
+    }),
+)(CourseCards);
+
+export default CourseCardsConnected;

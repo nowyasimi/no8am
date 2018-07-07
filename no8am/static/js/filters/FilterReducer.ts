@@ -1,7 +1,9 @@
-import {getType} from "ts-redux-actions";
+import {ActionType, getType} from "typesafe-actions";
 
 import {IFilterReducer} from "../Interfaces";
-import * as FilterActions from "./FilterActions";
+import * as filterActions from "./FilterActions";
+
+export type FilterActionType = ActionType<typeof filterActions>;
 
 export const initialState: IFilterReducer = {
     filterCCCs: [],
@@ -9,25 +11,25 @@ export const initialState: IFilterReducer = {
     isAdvanced: false,
 };
 
-export const filters = (state = initialState, action: FilterActions.IActions) => {
+export const filters = (state = initialState, action: FilterActionType) => {
     switch (action.type) {
 
-        case getType(FilterActions.clickAdvancedSectionSelection):
+        case getType(filterActions.clickAdvancedSectionSelection):
             return {
                 ...state,
                 isAdvanced: !state.isAdvanced,
             };
 
-        case getType(FilterActions.updateFilterTime):
+        case getType(filterActions.updateFilterTime):
             return {
                 ...state,
-                filterTime: action.filterTime,
+                filterTime: action.payload.filterTime,
             };
 
-        case getType(FilterActions.updateFilterCCC):
+        case getType(filterActions.updateFilterCCC):
             return {
                 ...state,
-                filterCCCs: action.filterCCC,
+                filterCCCs: action.payload.filterCCC,
             };
 
         default:

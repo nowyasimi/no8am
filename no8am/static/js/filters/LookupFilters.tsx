@@ -1,17 +1,13 @@
 import * as React from "react";
-import {bindActionCreators, Dispatch} from "redux";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
-import {Button, ButtonGroup, Checkbox, Classes, Dialog, Intent} from "@blueprintjs/core";
-import {Tooltip2} from "@blueprintjs/labs";
+import {Button, ButtonGroup, Checkbox, Classes, Dialog, Intent, Position, Tooltip} from "@blueprintjs/core";
 import * as classNames from "classnames";
-import {Position} from "popper.js";
 
-import {connect} from "../Connect";
-import {IAllReducers, ISearchItem} from "../Interfaces";
-import {clickDoneSelecting, removeSearch, returnOfClickDoneSelecting, returnOfRemoveSearch,
-        returnOfRevertToOriginAbbreviation, returnOfSearchAgainForAbbreviation, revertToOriginAbbreviation,
-        searchAgainForAbbreviation} from "../sections/SectionActions";
-import FilterCCC from "./FilterCCC";
+import {ISearchItem} from "../Interfaces";
+import {clickDoneSelecting, removeSearch, revertToOriginAbbreviation,
+    searchAgainForAbbreviation} from "../sections/SectionActions";
 import FilterTime from "./FilterTime";
 
 interface ILookupFiltersProps {
@@ -22,10 +18,10 @@ interface ILookupFiltersProps {
 }
 
 interface ILookupFiltersDispatchProps {
-    onClickDoneSelecting: () => typeof returnOfClickDoneSelecting;
-    onRevertToOriginAbbreviation: () => typeof returnOfRevertToOriginAbbreviation;
-    onSearchAgainForAbbreviation: () => typeof returnOfSearchAgainForAbbreviation;
-    onRemoveSearch: () => typeof returnOfRemoveSearch;
+    onClickDoneSelecting: () => void;
+    onRevertToOriginAbbreviation: () => void;
+    onSearchAgainForAbbreviation: () => void;
+    onRemoveSearch: () => void;
 }
 
 interface ILookupFiltersState {
@@ -33,17 +29,15 @@ interface ILookupFiltersState {
     doNotAskToConfirmRevertAgain: boolean;
 }
 
-@connect<{}, ILookupFiltersDispatchProps, ILookupFiltersProps>((state: IAllReducers) => ({}), mapDispatchToProps)
-export default class LookupFilters
-    extends React.Component<ILookupFiltersDispatchProps & ILookupFiltersProps, ILookupFiltersState> {
+class LookupFilters extends React.Component<ILookupFiltersDispatchProps & ILookupFiltersProps, ILookupFiltersState> {
 
     private shouldConfirmRevertLocalStorageKey = "shouldConfirmRevert";
 
-    private checkboxStyle = {
+    private checkboxStyle: React.CSSProperties = {
         paddingTop: "10px",
     };
 
-    private buttonStyle = {
+    private buttonStyle: React.CSSProperties = {
         borderRadius: "inherit",
         marginRight: "-1px",
     };
@@ -84,7 +78,7 @@ export default class LookupFilters
     private renderConfirmRevertDialog() {
         return (
             <Dialog
-                iconName="warning-sign"
+                icon={"warning-sign"}
                 isOpen={this.state && this.state.isConfirmRevertDialogOpen}
                 onClose={this.closeConfirmRevertDialog}
                 title={`Are you sure you want to revert to ${this.props.searchItem.originItemAbbreviation}?`}
@@ -137,13 +131,12 @@ export default class LookupFilters
             const courseAbbreviation = this.props.searchItem.currentItemCourseAbbreviation;
             const abbreviation = this.props.searchItem.originItemAbbreviation;
             const tooltipDelay = 1000;
-            const tooltipPlacement: Position = "bottom";
 
             return [(
-                <Tooltip2
+                <Tooltip
                     content={`Remove selected sections for ${courseAbbreviation} and go to ${abbreviation}`}
                     hoverOpenDelay={tooltipDelay}
-                    placement={tooltipPlacement}
+                    position={Position.BOTTOM}
                     disabled={disableButtonsAndPopovers}
                 >
                     <Button
@@ -153,12 +146,12 @@ export default class LookupFilters
                         intent={revertButtonIntent}
                         style={this.buttonStyle}
                     />
-                </Tooltip2>
+                </Tooltip>
                 ), (
-                <Tooltip2
+                <Tooltip
                     content={`Keep search for ${courseAbbreviation} and create a new search for ${abbreviation}`}
                     hoverOpenDelay={tooltipDelay}
-                    placement={tooltipPlacement}
+                    position={Position.BOTTOM}
                     disabled={disableButtonsAndPopovers}
                 >
                     <Button
@@ -167,7 +160,7 @@ export default class LookupFilters
                         onClick={this.onSearchAgainForAbbreviationWithDialogHandler}
                         style={this.buttonStyle}
                     />
-                </Tooltip2>
+                </Tooltip>
                 ),
             ];
         }
@@ -224,11 +217,14 @@ export default class LookupFilters
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILookupFiltersDispatchProps {
-    return bindActionCreators({
+const LookupFiltersConnected = connect(
+    () => ({}),
+    (dispatch): ILookupFiltersDispatchProps => bindActionCreators({
         onClickDoneSelecting: clickDoneSelecting,
         onRemoveSearch: removeSearch,
         onRevertToOriginAbbreviation: revertToOriginAbbreviation,
         onSearchAgainForAbbreviation: searchAgainForAbbreviation,
-    }, dispatch);
-}
+    }, dispatch),
+)(LookupFilters);
+
+export default LookupFiltersConnected;

@@ -1,9 +1,9 @@
 import * as React from "react";
+import {connect} from "react-redux";
 
 import {Menu} from "@blueprintjs/core";
 import {Cell, Column, CopyCellsMenuItem, IMenuContext, Table} from "@blueprintjs/table";
 
-import {connect} from "../Connect";
 import {getSelectedSections} from "../Helpers";
 import {IAllReducers, SectionWithColor} from "../Interfaces";
 
@@ -17,9 +17,7 @@ interface ISelectedSectionsSummaryStateProps {
     selectedSections: SectionWithColor[];
 }
 
-@connect<ISelectedSectionsSummaryStateProps, {}, {}>(mapStateToProps)
-export default class SelectedSectionsSummary
-    extends React.Component<ISelectedSectionsSummaryStateProps> {
+class SelectedSectionsSummary extends React.Component<ISelectedSectionsSummaryStateProps> {
 
     public render() {
         const numberOfSelectedSections = this.props.selectedSections.length;
@@ -82,8 +80,8 @@ export default class SelectedSectionsSummary
         (totalHours, currentMeetingTime) => totalHours + Math.round(currentMeetingTime.duration) / 2, 0)
 }
 
-function mapStateToProps(state: IAllReducers): ISelectedSectionsSummaryStateProps {
-    return {
-        selectedSections: getSelectedSections(state),
-    };
-}
+const SelectedSectionsSummaryConnected = connect((state: IAllReducers): ISelectedSectionsSummaryStateProps => ({
+    selectedSections: getSelectedSections(state),
+}))(SelectedSectionsSummary);
+
+export default SelectedSectionsSummaryConnected;

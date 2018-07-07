@@ -1,7 +1,6 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {createSelector} from "reselect";
-
-import {connect} from "../Connect";
 
 import {filterSectionsWithSearchItem, getAllSections,
         getSelectedSearchItemMemoized, getUniqueCCCs, getUnselectedSearchItemsMemoized} from "../Helpers";
@@ -26,8 +25,7 @@ interface ISectionListStateProps {
     selectedSections: Section[];
 }
 
-@connect<ISectionListStateProps, {}, ISectionListProps>(mapStateToProps)
-export default class SectionList extends React.Component<ISectionListStateProps & ISectionListProps> {
+class SectionList extends React.Component<ISectionListStateProps & ISectionListProps> {
 
     public render() {
 
@@ -144,7 +142,7 @@ export default class SectionList extends React.Component<ISectionListStateProps 
         // section is within filtered time range
                 (section.meetingTimes.every((meetingTime) => meetingTime.startTime >= this.props.filterTime[0] &&
                                       meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1]))) &&
-        // section at least one CCC is in the CCC filter
+        // section has at least one CCC is in the CCC filter
                 (section.CCC.find((currentCCC) =>
                     this.props.availableCCCs.find((currentAvailableCCC) =>
                         currentAvailableCCC === currentCCC) !== undefined) !== undefined);
@@ -186,13 +184,15 @@ const getAvailableCCCs = createSelector(
     (filterCCCs, uniqueCCCs) => filterCCCs.length === 0 ? uniqueCCCs : filterCCCs,
 );
 
-function mapStateToProps(state: IAllReducers): ISectionListStateProps {
-    return {
+const SectionListConnected = connect(
+    (state: IAllReducers): ISectionListStateProps => ({
         availableCCCs: getAvailableCCCs(state),
         filterTime: state.filters.filterTime,
         isAdvanced: state.filters.isAdvanced,
         managedSections: getAllManagedSections(state),
         sections: getSectionsForSelectedSearchItem(state),
         selectedSections: getSelectedSectionsForSelectedCourseCard(state),
-    };
-}
+    }),
+)(SectionList);
+
+export default SectionListConnected;

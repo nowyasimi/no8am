@@ -1,8 +1,6 @@
 import * as React from "react";
-
-import {bindActionCreators, Dispatch} from "redux";
-
-import {connect} from "../Connect";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 import {Classes, Icon, Tag} from "@blueprintjs/core";
 import {IconNames} from "@blueprintjs/icons";
@@ -10,8 +8,8 @@ import * as classNames from "classnames";
 import MediaQuery from "react-responsive";
 
 import {CalendarSectionColorType, colorMapping} from "../Constants";
-import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
-import {clickCourseCard, returnOfClickCourseCard} from "../sections/SectionActions";
+import {ISearchItemWithMatchingSections} from "../Interfaces";
+import {clickCourseCard} from "../sections/SectionActions";
 
 const cardStyle = {
     flex: "1 0 auto",
@@ -40,11 +38,10 @@ interface ICourseCard {
 }
 
 interface ICourseCardDispatchProps {
-    onClickCourseCard: () => typeof returnOfClickCourseCard;
+    onClickCourseCard: () => void;
 }
 
-@connect<{}, ICourseCardDispatchProps, ICourseCard>(null, mapDispatchToProps)
-export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatchProps> {
+class CourseCard extends React.Component<ICourseCard & ICourseCardDispatchProps> {
 
     public render() {
         const classes = classNames({
@@ -137,8 +134,11 @@ export class CourseCard extends React.Component<ICourseCard & ICourseCardDispatc
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, ownProps: ICourseCard): ICourseCardDispatchProps {
-    return bindActionCreators({
+const CourseCardConnected = connect(
+    null,
+    (dispatch, ownProps: ICourseCard): ICourseCardDispatchProps => bindActionCreators({
         onClickCourseCard: () => clickCourseCard(ownProps.searchItem),
-    }, dispatch);
-}
+    }, dispatch),
+)(CourseCard);
+
+export default CourseCardConnected;

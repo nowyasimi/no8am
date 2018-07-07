@@ -1,7 +1,6 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {createSelector} from "reselect";
-
-import {connect} from "../Connect";
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from "../Constants";
 import {filterSectionsWithSearchItemWithColor, getAllSections,
@@ -32,8 +31,7 @@ interface ICalendarSectionsByDay {
     [key: string]: JSX.Element[];
 }
 
-@connect<ICalendarStateProps, {}, ICalendarProps>(mapStateToProps)
-export default class Calendar extends React.Component<ICalendarStateProps & ICalendarProps> {
+class Calendar extends React.Component<ICalendarStateProps & ICalendarProps> {
 
     public render() {
         const sectionListHoverSection = this.getSectionListHoverSection();
@@ -177,10 +175,12 @@ const getSelectedSearchItemWithSections = createSelector(
     },
 );
 
-function mapStateToProps(state: IAllReducers): ICalendarStateProps {
-    return {
+const CalendarConnected = connect(
+    (state: IAllReducers): ICalendarStateProps => ({
         sectionListHoverCrn: getSectionListHoverCrn(state),
         selectedSearchItem: getSelectedSearchItemWithSections(state),
         selectedSections: getSelectedSections(state),
-    };
-}
+    }),
+)(Calendar);
+
+export default CalendarConnected;

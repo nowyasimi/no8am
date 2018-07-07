@@ -1,7 +1,7 @@
 import {createSelector} from "reselect";
 
 import {SearchItemType} from "./Constants";
-import {IAllReducers, ISearchItem, Section, SectionWithColor, IMetadata} from "./Interfaces";
+import {IAllReducers, ISearchItem, Section, SectionWithColor} from "./Interfaces";
 
 import {getSelectedSearchItem, getUnselectedSearchItems} from "./sections/SectionReducer";
 

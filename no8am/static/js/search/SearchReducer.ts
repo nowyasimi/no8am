@@ -1,9 +1,11 @@
-import {getType} from "ts-redux-actions";
+import {ActionType, getType} from "typesafe-actions";
 
 import {DataLoadingState} from "../Constants";
 import {ISearchReducer} from "../Interfaces";
 import {searchItem} from "../sections/SectionActions";
-import * as SearchActions from "./SearchActions";
+import * as searchActions from "./SearchActions";
+
+export type SilterActionType = ActionType<typeof searchActions> | ActionType<typeof searchItem>;
 
 const initialState: ISearchReducer = {
     metadata: [],
@@ -11,17 +13,17 @@ const initialState: ISearchReducer = {
     status: DataLoadingState.LOADING,
 };
 
-export const search = (state = initialState, action: SearchActions.IActions): ISearchReducer => {
+export const search = (state = initialState, action: SilterActionType): ISearchReducer => {
 
     switch (action.type) {
-        case getType(SearchActions.receiveMetadata):
+        case getType(searchActions.receiveMetadata):
             return {
                 ...state,
-                metadata: action.metadata,
+                metadata: action.payload.metadata,
                 status: DataLoadingState.LOADED,
             };
 
-        case getType(SearchActions.errorReceivingMetadata):
+        case getType(searchActions.errorReceivingMetadata):
             return {
                 ...state,
                 status: DataLoadingState.FAILED,
@@ -30,7 +32,7 @@ export const search = (state = initialState, action: SearchActions.IActions): IS
         case getType(searchItem):
             return {
                 ...state,
-                searchHistory: [action.item, ...state.searchHistory],
+                searchHistory: [action.payload.item, ...state.searchHistory],
             };
 
         default:

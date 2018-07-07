@@ -1,13 +1,11 @@
 import * as React from "react";
-import {bindActionCreators, Dispatch} from "redux";
-
-import {connect} from "../Connect";
-import {IAllReducers} from "../Interfaces";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 import {Button, Menu, MenuItem, Popover, Position, RangeSlider} from "@blueprintjs/core";
 import {IconNames} from "@blueprintjs/icons";
 
-import {returnOfUpdateFilterTime, updateFilterTime} from "./FilterActions";
+import {updateFilterTime} from "./FilterActions";
 import {initialState} from "./FilterReducer";
 
 type IFilterTime = [number, number];
@@ -17,11 +15,10 @@ interface IFilterTimeProps {
 }
 
 interface IFilterTimeDispatchProps {
-    onUpdateFilterTime: (filterTime: IFilterTime) => typeof returnOfUpdateFilterTime;
+    onUpdateFilterTime: typeof updateFilterTime;
 }
 
-@connect<{}, IFilterTimeDispatchProps, IFilterTimeProps>((state: IAllReducers) => ({}), mapDispatchToProps)
-export default class FilterTime extends React.Component<IFilterTimeDispatchProps & IFilterTimeProps> {
+class FilterTime extends React.Component<IFilterTimeDispatchProps & IFilterTimeProps> {
 
     public render() {
         return (
@@ -100,8 +97,11 @@ const renderLabel = (value: any) => {
     return hourString + amOrPmString;
 };
 
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>) {
-    return bindActionCreators({
-        onUpdateFilterTime: (filterTime) => updateFilterTime(filterTime),
-    }, dispatch);
-}
+const FilterTimeConnected = connect(
+    () => ({}),
+    (dispatch) => bindActionCreators({
+        onUpdateFilterTime: (filterTime: [number, number]) => updateFilterTime(filterTime),
+    }, dispatch),
+)(FilterTime);
+
+export default FilterTimeConnected;

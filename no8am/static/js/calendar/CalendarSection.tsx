@@ -1,12 +1,11 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {bindActionCreators, Dispatch} from "redux";
 
-import {mouseEnterCalendarSection, mouseLeaveCalendarSection, returnOfMouseEnterCalendarSection,
-        returnOfMouseLeaveCalendarSection} from "../calendar/CalendarActions.js";
-import {connect} from "../Connect";
+import {mouseEnterCalendarSection, mouseLeaveCalendarSection} from "../calendar/CalendarActions.js";
 import {CalendarSectionColorType, colorMapping, Colors} from "../Constants";
 import {IAllReducers, SectionWithColor} from "../Interfaces";
-import {goToManagedCard, returnOfGoToManagedCard} from "../sections/SectionActions";
+import {goToManagedCard} from "../sections/SectionActions";
 
 interface ICalendarSectionProps {
     isSectionListHover: boolean;
@@ -21,14 +20,12 @@ interface ICalendarSectionStateProps {
 }
 
 interface ICalendarSectionDispatchProps {
-    onGoToManagedCard?: () => typeof returnOfGoToManagedCard;
-    onMouseEnterCalendarSection?: () => typeof returnOfMouseEnterCalendarSection;
-    onMouseLeaveCalendarSection?: () => typeof returnOfMouseLeaveCalendarSection;
+    onGoToManagedCard?: () => void;
+    onMouseEnterCalendarSection?: () => void;
+    onMouseLeaveCalendarSection?: () => void;
 }
 
-@connect<ICalendarSectionStateProps, ICalendarSectionDispatchProps, ICalendarSectionProps>
-    (mapStateToProps, mapDispatchToProps)
-export default class CalendarSection
+class CalendarSection
     extends React.Component<ICalendarSectionStateProps & ICalendarSectionDispatchProps & ICalendarSectionProps> {
 
     public render() {
@@ -81,16 +78,15 @@ export default class CalendarSection
     }
 }
 
-function mapStateToProps(state: IAllReducers): ICalendarSectionStateProps {
-    return {
+const CalendarSectionConnected = connect(
+    (state: IAllReducers): ICalendarSectionStateProps => ({
         calendarHoverCRN: state.calendar.hoverCRN,
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, sectionProps: ICalendarSectionProps) {
-    return bindActionCreators({
+    }),
+    (dispatch: Dispatch<IAllReducers>, sectionProps: ICalendarSectionProps) => bindActionCreators({
         onGoToManagedCard: () => goToManagedCard(sectionProps.section.departmentAndBareCourse),
         onMouseEnterCalendarSection: () => mouseEnterCalendarSection(sectionProps.section.CRN),
         onMouseLeaveCalendarSection: mouseLeaveCalendarSection,
-    }, dispatch);
-}
+    }, dispatch),
+)(CalendarSection);
+
+export default CalendarSectionConnected;

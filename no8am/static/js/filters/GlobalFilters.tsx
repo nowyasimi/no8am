@@ -1,7 +1,7 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {bindActionCreators, Dispatch} from "redux";
 
-import {connect} from "../Connect";
 import {IAllReducers} from "../Interfaces";
 
 import {Switch} from "@blueprintjs/core";
@@ -9,18 +9,17 @@ import TimeAgo from "react-timeago";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import englishStrings from "react-timeago/lib/language-strings/en";
 
-import {clickAdvancedSectionSelection, returnOfClickAdvancedSectionSelection} from "./FilterActions";
+import {clickAdvancedSectionSelection} from "./FilterActions";
 
 interface IGlobalFiltersStateProps {
     isAdvanced?: boolean;
 }
 
 interface IGlobalFiltersDispatchProps {
-    onClickAdvancedSectionSelection?: () => typeof returnOfClickAdvancedSectionSelection;
+    onClickAdvancedSectionSelection?: () => void;
 }
 
-@connect<IGlobalFiltersStateProps, IGlobalFiltersDispatchProps, {}> (mapStateToProps, mapDispatchToProps)
-export default class GlobalFilters extends React.Component<IGlobalFiltersStateProps & IGlobalFiltersDispatchProps> {
+class GlobalFilters extends React.Component<IGlobalFiltersStateProps & IGlobalFiltersDispatchProps> {
 
     public render() {
         const formatter = buildFormatter(englishStrings);
@@ -41,14 +40,13 @@ export default class GlobalFilters extends React.Component<IGlobalFiltersStatePr
     }
 }
 
-function mapStateToProps(state: IAllReducers): IGlobalFiltersStateProps {
-    return {
+const GlobalFiltersConnected = connect(
+    (state: IAllReducers): IGlobalFiltersStateProps => ({
         isAdvanced: state.filters.isAdvanced,
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): IGlobalFiltersDispatchProps {
-    return bindActionCreators({
+    }),
+    (dispatch: Dispatch<IAllReducers>): IGlobalFiltersDispatchProps => bindActionCreators({
         onClickAdvancedSectionSelection: clickAdvancedSectionSelection,
-    }, dispatch);
-}
+    }, dispatch),
+)(GlobalFilters);
+
+export default GlobalFiltersConnected;

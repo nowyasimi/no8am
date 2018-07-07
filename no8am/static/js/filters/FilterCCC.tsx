@@ -1,15 +1,15 @@
 import * as React from "react";
-import {bindActionCreators, Dispatch} from "redux";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 import {Classes, MenuItem} from "@blueprintjs/core";
-import {ISelectItemRendererProps, MultiSelect} from "@blueprintjs/labs";
+import {IItemRendererProps, MultiSelect} from "@blueprintjs/select";
 import * as classNames from "classnames";
 
-import {connect} from "../Connect";
 import {getUniqueCCCs} from "../Helpers";
 import {IAllReducers} from "../Interfaces";
 
-import {returnOfUpdateFilterCCC, updateFilterCCC} from "./FilterActions";
+import {updateFilterCCC} from "./FilterActions";
 
 interface IFilterCCCStateProps {
     filterCCCs: string[];
@@ -17,11 +17,10 @@ interface IFilterCCCStateProps {
 }
 
 interface IFilterCCCDispatchProps {
-    onUpdateFilterCCC: (filterCCC: string[]) => typeof returnOfUpdateFilterCCC;
+    onUpdateFilterCCC: (filterCCC: string[]) => void;
 }
 
-@connect<IFilterCCCStateProps, IFilterCCCDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
-export default class FilterCCC extends React.Component<IFilterCCCStateProps & IFilterCCCDispatchProps> {
+class FilterCCC extends React.Component<IFilterCCCStateProps & IFilterCCCDispatchProps> {
 
     public render() {
         return (
@@ -37,10 +36,10 @@ export default class FilterCCC extends React.Component<IFilterCCCStateProps & IF
         );
     }
 
-    private itemRenderer = ({item, isActive, handleClick}: ISelectItemRendererProps<string>) => {
+    private itemRenderer = (item: string, {modifiers, handleClick}: IItemRendererProps) => {
         const classes = classNames({
-            [Classes.ACTIVE]: isActive,
-            [Classes.INTENT_PRIMARY]: isActive,
+            [Classes.ACTIVE]: modifiers.active,
+            [Classes.INTENT_PRIMARY]: modifiers.active,
         });
 
         return (
@@ -71,15 +70,14 @@ export default class FilterCCC extends React.Component<IFilterCCCStateProps & IF
     }
 }
 
-function mapStateToProps(state: IAllReducers): IFilterCCCStateProps {
-    return {
+const FilterCCCConnected = connect(
+    (state: IAllReducers): IFilterCCCStateProps => ({
         allCCCs: getUniqueCCCs(state),
         filterCCCs: state.filters.filterCCCs,
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>) {
-    return bindActionCreators({
+    }),
+    (dispatch) => bindActionCreators({
         onUpdateFilterCCC: (filterCCC) => updateFilterCCC(filterCCC),
-    }, dispatch);
-}
+    }, dispatch),
+)(FilterCCC);
+
+export default FilterCCCConnected;

@@ -1,10 +1,10 @@
+/*
 import * as React from 'react'
 import {connect} from 'react-redux'
 
 import {Button, Dialog, Icon} from '@blueprintjs/core'
 
 import {} from "../actions/sectionActions"
-
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class SaveDialog extends React.Component {
@@ -53,3 +53,4 @@ function mapDispatchToProps(dispatch) {
     return {
     }
 }
+*/

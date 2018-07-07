@@ -1,18 +1,18 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
 import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuItem} from "@blueprintjs/core";
-import {IconNames} from "@blueprintjs/icons";
+import {IconName, IconNames} from "@blueprintjs/icons";
 import {IItemRendererProps, Suggest} from "@blueprintjs/select";
 import * as classNames from "classnames";
 
-import {connect} from "../Connect";
 import {DataLoadingState, SearchItemType, SearchItemTypes} from "../Constants";
 import {getAllSections, getUniqueCCCs} from "../Helpers";
 import {IAllReducers, IMetadata} from "../Interfaces";
-import {ILoadMetadataThunk, loadMetadata} from "../search/SearchActions";
-import {returnOfSearchItem, searchItem} from "../sections/SectionActions";
+import {loadMetadata} from "../search/SearchActions";
+import {searchItem} from "../sections/SectionActions";
 
 export const searchKeyCombo = "s";
 
@@ -24,8 +24,8 @@ interface ISearchBoxWithPopoverStateProps {
 }
 
 interface ISearchBoxWithPopoverDispatchProps {
-    onLoadMetadata: () => ILoadMetadataThunk;
-    onSearchItem: (item: IMetadata) => typeof returnOfSearchItem;
+    onLoadMetadata: () => void;
+    onSearchItem: (item: IMetadata) => void;
 }
 
 interface IMetadataByType {
@@ -40,9 +40,8 @@ type SearchBoxWithPopoverItem = ISearchHeader | IMetadata;
 
 const SuggestWrapper = Suggest.ofType<SearchBoxWithPopoverItem>();
 
-@connect<ISearchBoxWithPopoverStateProps, ISearchBoxWithPopoverDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
 @HotkeysTarget
-export class SearchBoxWithPopover
+class SearchBoxWithPopover
     extends React.Component<ISearchBoxWithPopoverStateProps & ISearchBoxWithPopoverDispatchProps> {
 
     private noResults = (
@@ -63,7 +62,7 @@ export class SearchBoxWithPopover
 
     private inputProps = {
         id: "searchInput",
-        leftIcon: IconNames.SEARCH,
+        leftIcon: IconNames.SEARCH as IconName,
     };
 
     public componentDidMount() {
@@ -269,18 +268,15 @@ export const getMetadataUsingAllSections = createSelector(
         return [...metadata, ...coursesNotInMetadata, ...departmentsNotInMetadata, ...cccNotInMetadata];
 });
 
-function mapStateToProps(state: IAllReducers): ISearchBoxWithPopoverStateProps {
-    return {
+export const SearchBoxWithPopoverConnected = connect(
+    (state: IAllReducers): ISearchBoxWithPopoverStateProps => ({
         metadata: getMetadataUsingAllSections(state),
         searchHistory: state.search.searchHistory,
         status: state.search.status,
         uniqueCCCs: getUniqueCCCs(state),
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ISearchBoxWithPopoverDispatchProps {
-    return bindActionCreators({
+    }),
+    (dispatch: Dispatch<IAllReducers>): ISearchBoxWithPopoverDispatchProps => bindActionCreators({
         onLoadMetadata: loadMetadata,
         onSearchItem: (item: IMetadata) => searchItem(item),
-    }, dispatch);
-}
+    }, dispatch),
+)(SearchBoxWithPopover);

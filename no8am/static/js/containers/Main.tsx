@@ -1,59 +1,56 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {bindActionCreators, Dispatch} from "redux";
 
 import MediaQuery from "react-responsive";
 
-import {connect} from "../Connect";
 import {IAllReducers} from "../Interfaces";
-import {ILoadSectionsThunk, loadSections} from "../sections/SectionActions";
+import {loadSections} from "../sections/SectionActions";
 
 import Calendar from "../calendar/Calendar";
 import LeftSide from "./LeftSide";
 
 interface IMainDispatchProps {
-    onLoadSections: () => ILoadSectionsThunk;
+    onLoadSections: () => void;
 }
 
-@connect<{}, IMainDispatchProps, {}>(mapStateToProps, mapDispatchToProps)
-export class Main extends React.Component<IMainDispatchProps, undefined> {
+class Main extends React.Component<IMainDispatchProps> {
 
-    private mobileCalendarStyle = {
+    private mobileCalendarStyle: React.CSSProperties = {
         height: "100%",
         paddingTop: "1%",
     };
 
-    private defaultCalendarStyle = {
+    private defaultCalendarStyle: React.CSSProperties = {
         ...this.mobileCalendarStyle,
         position: "fixed",
         right: "10px",
     };
 
-    private innerCalendarDisableTextSelection = {
-        KhtmlUserSelect: "none",
+    private innerCalendarDisableTextSelection: React.CSSProperties = {
         MozUserSelect: "none",
-        MsUserSelect: "none",
         WebkitTouchCallout: "none",
         WebkitUserSelect: "none",
+        msUserSelect: "none",
         userSelect: "none",
     };
 
-    private mobileInnerCalendarStyle = {
+    private mobileInnerCalendarStyle: React.CSSProperties = {
         ...this.innerCalendarDisableTextSelection,
         height: "99%",
         margin: "0 auto",
-        position: "center",
         textAlign: "center",
         width: "100%",
     };
 
-    private defaultInnerCalendarStyle = {
+    private defaultInnerCalendarStyle: React.CSSProperties = {
         ...this.mobileInnerCalendarStyle,
         width: "400px",
     };
 
-    private mobileLeftSideStyle = {};
+    private mobileLeftSideStyle: React.CSSProperties = {};
 
-    private defaultLeftSideStyle = {
+    private defaultLeftSideStyle: React.CSSProperties = {
         float: "left",
         width: "calc(100% - 430px)",
     };
@@ -85,12 +82,11 @@ export class Main extends React.Component<IMainDispatchProps, undefined> {
 
 }
 
-function mapStateToProps(state: IAllReducers) {
-    return {};
-}
-
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): IMainDispatchProps {
-    return bindActionCreators({
+const MainConnected = connect(
+    () => ({}),
+    (dispatch: Dispatch<IAllReducers>): IMainDispatchProps => bindActionCreators({
         onLoadSections: loadSections,
-    }, dispatch);
-}
+    }, dispatch),
+)(Main);
+
+export default MainConnected;

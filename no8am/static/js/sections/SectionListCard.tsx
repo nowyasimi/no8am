@@ -1,15 +1,13 @@
 import * as React from "react";
+import {connect} from "react-redux";
 import {bindActionCreators, Dispatch} from "redux";
-
-import {connect} from "../Connect";
 
 import {Classes, Position, Tooltip} from "@blueprintjs/core";
 import * as classNames from "classnames";
 import {Transition} from "react-transition-group";
 
 import {IAllReducers, Section} from "../Interfaces";
-import {clickSectionListCard, mouseEnterSectionListCard, mouseLeaveSectionListCard, returnOfClickSectionListCard,
-        returnOfMouseEnterSectionListCard, returnOfMouseLeaveSectionListCard} from "./SectionActions";
+import {clickSectionListCard, mouseEnterSectionListCard, mouseLeaveSectionListCard} from "./SectionActions";
 
 const duration: number = 500;
 
@@ -47,14 +45,12 @@ interface ISectionListCardStateProps {
 }
 
 interface ISectionListCardDispatchProps {
-    onClickSectionListCard?: () => typeof returnOfClickSectionListCard;
-    onMouseEnterSectionListCard?: () => typeof returnOfMouseEnterSectionListCard;
-    onMouseLeaveSectionListCard?: () => typeof returnOfMouseLeaveSectionListCard;
+    onClickSectionListCard?: () => void;
+    onMouseEnterSectionListCard?: () => void;
+    onMouseLeaveSectionListCard?: () => void;
 }
 
-@connect<ISectionListCardStateProps, ISectionListCardDispatchProps, ISectionListCard>
-    (mapStateToProps, mapDispatchToProps)
-export default class SectionListCard
+class SectionListCard
     extends React.Component<ISectionListCard & ISectionListCardDispatchProps & ISectionListCardStateProps> {
 
     public render() {
@@ -142,17 +138,16 @@ export default class SectionListCard
     }
 }
 
-function mapStateToProps(state: IAllReducers): ISectionListCardStateProps {
-    return {
+const SectionListCardConnected = connect(
+    (state: IAllReducers): ISectionListCardStateProps => ({
         isAdvanced: state.filters.isAdvanced,
         sectionListHoverCrn: state.calendar.hoverCRN,
-    };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>, props: ISectionListCard): ISectionListCardDispatchProps {
-    return bindActionCreators({
+    }),
+    (dispatch: Dispatch<IAllReducers>, props: ISectionListCard): ISectionListCardDispatchProps => bindActionCreators({
         onClickSectionListCard: () => clickSectionListCard(props.section, props.isManaged),
         onMouseEnterSectionListCard: () => mouseEnterSectionListCard(props.section),
         onMouseLeaveSectionListCard: mouseLeaveSectionListCard,
-    }, dispatch);
-}
+    }, dispatch),
+)(SectionListCard);
+
+export default SectionListCardConnected;

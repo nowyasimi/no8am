@@ -1,26 +1,24 @@
 import * as React from "react";
-import {bindActionCreators, Dispatch} from "redux";
+import {connect} from "react-redux";
 import {createSelector} from "reselect";
 
-import {Button, KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
+import {KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
 import {IconNames} from "@blueprintjs/icons";
 
 import CourseCards from "../search/CourseCards";
-import {SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
+import {SearchBoxWithPopoverConnected as SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
 import SectionList from "../sections/SectionList";
 import SelectedSectionsSummary from "../sections/SelectedSectionsSummary";
 
-import {connect} from "../Connect";
 import {DataLoadingState} from "../Constants";
-import {clickAdvancedSectionSelection, returnOfClickAdvancedSectionSelection} from "../filters/FilterActions";
 import {getSelectedSearchItemMemoized} from "../Helpers";
 import {IAllReducers, ISearchItem} from "../Interfaces";
 
-const buttonStyle = {
-    marginLeft: "5px",
-};
+// const buttonStyle: React.CSSProperties = {
+//     marginLeft: "5px",
+// };
 
-type ILeftSideAllProps = ILeftSideProps & ILeftSideStateProps & ILeftSideDispatchProps;
+type ILeftSideAllProps = ILeftSideProps & ILeftSideStateProps;
 
 interface ILeftSideProps {
     style: React.CSSProperties;
@@ -33,12 +31,7 @@ interface ILeftSideStateProps {
     sectionStatus: DataLoadingState;
 }
 
-interface ILeftSideDispatchProps {
-    onClickAdvancedSectionSelection: () => typeof returnOfClickAdvancedSectionSelection;
-}
-
-@connect<ILeftSideStateProps, ILeftSideDispatchProps, ILeftSideProps>(mapStateToProps, mapDispatchToProps)
-export default class LeftSide extends React.Component<ILeftSideAllProps>  {
+class LeftSide extends React.Component<ILeftSideAllProps>  {
 
     private instructions: JSX.Element = (
         <div> Click the search box above to start or press
@@ -52,7 +45,7 @@ export default class LeftSide extends React.Component<ILeftSideAllProps>  {
         };
     }
 
-    public componentWillReceiveProps(nextProps: ILeftSideProps) {
+    public componentWillReceiveProps(nextProps: ILeftSideAllProps) {
         const currentSearchItem = this.props.selectedSearchItem;
         const nextSearchItem = nextProps.selectedSearchItem;
 
@@ -107,7 +100,7 @@ export default class LeftSide extends React.Component<ILeftSideAllProps>  {
                     </div>
                 </div>
             );
-        } else if (this.props.hasSearchItems) {
+        } else if (this.props.hasSearchItems && this.props.selectedSearchItem !== undefined) {
             return <SectionList searchItem={this.props.selectedSearchItem} />;
         } else if (!this.props.hasSearchItems) {
             return (
@@ -135,17 +128,13 @@ const getHasSearchItems = createSelector(
     (searchItems) => (searchItems.length > 0),
 );
 
-function mapStateToProps(state: IAllReducers): ILeftSideStateProps {
-    return {
+const LeftSideConnected = connect(
+    (state: IAllReducers): ILeftSideStateProps => ({
         hasSearchItems: getHasSearchItems(state),
         searchStatus: state.search.status,
         sectionStatus: state.sections.status,
         selectedSearchItem: getSelectedSearchItemMemoized(state),
-    };
-}
+    }),
+)(LeftSide);
 
-function mapDispatchToProps(dispatch: Dispatch<IAllReducers>): ILeftSideDispatchProps {
-    return bindActionCreators({
-        onClickAdvancedSectionSelection: clickAdvancedSectionSelection,
-    }, dispatch);
-}
+export default LeftSideConnected;

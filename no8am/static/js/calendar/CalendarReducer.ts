@@ -1,21 +1,23 @@
-import {getType} from "ts-redux-actions";
+import {ActionType, getType} from "typesafe-actions";
 
 import {ICalendarReducer} from "../Interfaces";
-import * as CalendarActions from "./CalendarActions";
+import * as calendarActions from "./CalendarActions";
+
+export type CalendarActionType = ActionType<typeof calendarActions>;
 
 const initialState: ICalendarReducer = {
     hoverCRN: null,
 };
 
-export const calendar = (state = initialState, action: CalendarActions.IActions): ICalendarReducer => {
+export const calendar = (state = initialState, action: CalendarActionType): ICalendarReducer => {
     switch (action.type) {
-        case getType(CalendarActions.mouseEnterCalendarSection):
+        case getType(calendarActions.mouseEnterCalendarSection):
             return {
                 ...state,
-                hoverCRN: action.CRN,
+                hoverCRN: action.payload.CRN,
             };
 
-        case getType(CalendarActions.mouseLeaveCalendarSection):
+        case getType(calendarActions.mouseLeaveCalendarSection):
             return {
                 ...state,
                 hoverCRN: null,
