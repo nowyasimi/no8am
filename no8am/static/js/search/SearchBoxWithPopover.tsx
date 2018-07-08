@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators, Dispatch} from "redux";
 import {createSelector} from "reselect";
 
-import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuItem} from "@blueprintjs/core";
+import {Classes, Hotkey, Hotkeys, HotkeysTarget, MenuDivider, MenuItem} from "@blueprintjs/core";
 import {IconName, IconNames} from "@blueprintjs/icons";
 import {IItemRendererProps, Suggest} from "@blueprintjs/select";
 import * as classNames from "classnames";
@@ -134,7 +134,7 @@ class SearchBoxWithPopover
         return filteredListWithHeadersByType.slice(0, 50);
     }
 
-    private itemRenderer(item: SearchBoxWithPopoverItem, {handleClick, modifiers}: IItemRendererProps) {
+    private itemRenderer(item: SearchBoxWithPopoverItem, {index, handleClick, modifiers}: IItemRendererProps) {
         const classes = classNames("searchItem", {
             [Classes.ACTIVE]: modifiers.active,
             [Classes.INTENT_PRIMARY]: modifiers.active,
@@ -147,17 +147,23 @@ class SearchBoxWithPopover
                     key={`${item.itemType}${item.token}`}
                     text={item.userFriendlyFormat}
                     label={item.info}
+                    multiline={true}
                     onClick={handleClick}
                 />);
         } else if (isSearchHeader(item)) {
-             return (
+            const menuItem = (
                 <MenuItem
-                    disabled={true}
                     className={classes}
                     key={item.text}
                     text={item.text}
-                    onClick={handleClick}
+                    disabled={true}
                 />);
+
+            return index === 0 ? menuItem : (
+                <div>
+                    <MenuDivider />
+                    {menuItem}
+                </div>);
         } else {
             return <div>TODO</div>;
         }

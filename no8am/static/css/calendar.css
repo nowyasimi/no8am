@@ -10,17 +10,14 @@ body,html{height: 100%;}
 }
 .row {height:100%;}
 
-/************************ Background Colors ************************/
-
-@media (min-width: 768px) {
-	#filters {
-		height: 100%;
-	}
-}
-
 /**************************** Page 1 ****************************/
 #mainReactContainer > div {
 	height: 100%;
+}
+
+.searchContainer > .pt-popover-wrapper {
+	padding: 10px;
+	width: 100%;
 }
 
 .viewToggleButtonContainer {
@@ -195,17 +192,15 @@ body,html{height: 100%;}
 }
 
 .searchItem .pt-menu-item-label {
-    padding-top: 18px;
-    width: 100%;
-    white-space: normal;
+    width: calc(100% - 200px);
 }
 
 .searchPopover .pt-menu {
-    max-height: 89%;
+    max-height: 90vh;
     overflow-y: auto;
 }
 
-.searchItem.pt-menu-item.pt-disabled {
+.searchItem.pt-menu-item.pt-disabled div {
     font-weight: 500;
     font-size: 15pt;
     color: #403b3b!important;

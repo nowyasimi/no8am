@@ -141,11 +141,12 @@ class SectionList extends React.Component<ISectionListStateProps & ISectionListP
                  this.props.searchItem.currentItemCourseAbbreviation === section.departmentAndBareCourse)) &&
         // section is within filtered time range
                 (section.meetingTimes.every((meetingTime) => meetingTime.startTime >= this.props.filterTime[0] &&
-                                      meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1]))) &&
+                                      meetingTime.duration + meetingTime.startTime <= this.props.filterTime[1])));
         // section has at least one CCC is in the CCC filter
-                (section.CCC.find((currentCCC) =>
-                    this.props.availableCCCs.find((currentAvailableCCC) =>
-                        currentAvailableCCC === currentCCC) !== undefined) !== undefined);
+        // TODO - handle sections that do not fill any CCC requirement
+                // (section.CCC.find((currentCCC) =>
+                //     this.props.availableCCCs.find((currentAvailableCCC) =>
+                //         currentAvailableCCC === currentCCC) !== undefined) !== undefined);
     }
 }
 

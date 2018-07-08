@@ -9,6 +9,7 @@ import {loadSections} from "../sections/SectionActions";
 
 import Calendar from "../calendar/Calendar";
 import LeftSide from "./LeftSide";
+import Search from "./Search";
 
 interface IMainDispatchProps {
     onLoadSections: () => void;
@@ -16,15 +17,36 @@ interface IMainDispatchProps {
 
 class Main extends React.Component<IMainDispatchProps> {
 
+    private mobileContainerStyle: React.CSSProperties = {
+        display: "flex",
+        flexWrap: "wrap",
+    };
+
+    private defaultContainerStyle: React.CSSProperties = {
+        ...this.mobileContainerStyle,
+        flexWrap: "nowrap",
+    };
+
+    private mobileSearchStyle: React.CSSProperties = {
+        width: "100%",
+    };
+
+    private defaultSearchStyle: React.CSSProperties = {
+        flexBasis: "250px",
+        width: "inherit",
+    };
+
     private mobileCalendarStyle: React.CSSProperties = {
-        height: "100%",
+        height: "100vh",
         paddingTop: "1%",
+        width: "100%",
     };
 
     private defaultCalendarStyle: React.CSSProperties = {
         ...this.mobileCalendarStyle,
-        position: "fixed",
+        flexBasis: "400px",
         right: "10px",
+        width: "inherit",
     };
 
     private innerCalendarDisableTextSelection: React.CSSProperties = {
@@ -45,14 +67,19 @@ class Main extends React.Component<IMainDispatchProps> {
 
     private defaultInnerCalendarStyle: React.CSSProperties = {
         ...this.mobileInnerCalendarStyle,
+        position: "fixed",
         width: "400px",
     };
 
-    private mobileLeftSideStyle: React.CSSProperties = {};
+    private mobileLeftSideStyle: React.CSSProperties = {
+        width: "100%",
+    };
 
     private defaultLeftSideStyle: React.CSSProperties = {
-        float: "left",
-        width: "calc(100% - 430px)",
+        flexBasis: "40%",
+        flexGrow: 1,
+        paddingRight: "12px",
+        width: "inherit",
     };
 
     public componentDidMount() {
@@ -63,18 +90,24 @@ class Main extends React.Component<IMainDispatchProps> {
         return (
             <div>
                 <MediaQuery minWidth={900}>
-                    <LeftSide style={this.defaultLeftSideStyle} />
-                    <Calendar
-                        style={this.defaultCalendarStyle}
-                        innerCalendarStyle={this.defaultInnerCalendarStyle}
-                    />
+                    <div style={this.defaultContainerStyle}>
+                        <Search style={this.defaultSearchStyle} />
+                        <LeftSide style={this.defaultLeftSideStyle} />
+                        <Calendar
+                            style={this.defaultCalendarStyle}
+                            innerCalendarStyle={this.defaultInnerCalendarStyle}
+                        />
+                    </div>
                 </MediaQuery>
                 <MediaQuery maxWidth={900}>
-                    <LeftSide style={this.mobileLeftSideStyle} />
-                    <Calendar
-                        style={this.mobileCalendarStyle}
-                        innerCalendarStyle={this.mobileInnerCalendarStyle}
-                    />
+                    <div style={this.mobileContainerStyle}>
+                        <Search style={this.mobileSearchStyle} />
+                        <LeftSide style={this.mobileLeftSideStyle} />
+                        <Calendar
+                            style={this.mobileCalendarStyle}
+                            innerCalendarStyle={this.mobileInnerCalendarStyle}
+                        />
+                    </div>
                 </MediaQuery>
             </div>
         );

@@ -14,7 +14,7 @@ import {clickCourseCard} from "../sections/SectionActions";
 const cardStyle = {
     flex: "1 0 auto",
     margin: "10px",
-    maxWidth: "50%",
+    maxWidth: "400px",
     minWidth: "30%",
     padding: "0px 10px 0px 10px",
 };

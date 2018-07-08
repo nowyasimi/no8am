@@ -6,7 +6,7 @@ import {Classes, Position, Tooltip} from "@blueprintjs/core";
 import * as classNames from "classnames";
 import {Transition} from "react-transition-group";
 
-import {IAllReducers, Section} from "../Interfaces";
+import {IAllReducers, ISectionMain, Section} from "../Interfaces";
 import {clickSectionListCard, mouseEnterSectionListCard, mouseLeaveSectionListCard} from "./SectionActions";
 
 const duration: number = 500;
@@ -55,7 +55,7 @@ class SectionListCard
 
     public render() {
 
-        const unavailableMessage = this.props.section.main ? unavailableMainSectionMessage :
+        const unavailableMessage = isMain(this.props.section) ? unavailableMainSectionMessage :
             `${unavailableExtraSectionMessage} ${this.props.section.dependent_main_sections}`;
 
         const sectionListCardWithTransition = (
@@ -136,6 +136,10 @@ class SectionListCard
             </div>
         );
     }
+}
+
+function isMain(section: Section): section is ISectionMain {
+    return section.main;
 }
 
 const SectionListCardConnected = connect(

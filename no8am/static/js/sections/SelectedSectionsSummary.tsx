@@ -30,6 +30,7 @@ class SelectedSectionsSummary extends React.Component<ISelectedSectionsSummarySt
                 <Table
                     numRows={numberOfSelectedSections}
                     bodyContextMenuRenderer={this.renderBodyContextMenu}
+                    columnWidths={[100, 60, 60, 60, 60, 80]}
                 >
                     <Column name="Course Number" cellRenderer={this.renderCell} />
                     <Column name="CRN" cellRenderer={this.renderCell} />

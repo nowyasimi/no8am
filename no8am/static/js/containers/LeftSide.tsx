@@ -5,8 +5,7 @@ import {createSelector} from "reselect";
 import {KeyCombo, NonIdealState, Spinner} from "@blueprintjs/core";
 import {IconNames} from "@blueprintjs/icons";
 
-import CourseCards from "../search/CourseCards";
-import {SearchBoxWithPopoverConnected as SearchBoxWithPopover, searchKeyCombo} from "../search/SearchBoxWithPopover";
+import {searchKeyCombo} from "../search/SearchBoxWithPopover";
 import SectionList from "../sections/SectionList";
 import SelectedSectionsSummary from "../sections/SelectedSectionsSummary";
 
@@ -34,7 +33,7 @@ interface ILeftSideStateProps {
 class LeftSide extends React.Component<ILeftSideAllProps>  {
 
     private instructions: JSX.Element = (
-        <div> Click the search box above to start or press
+        <div> Click the search box to start or press
             <span style={{paddingLeft: "5px"}}><KeyCombo combo={searchKeyCombo} /></span>
         </div>
     );
@@ -59,11 +58,9 @@ class LeftSide extends React.Component<ILeftSideAllProps>  {
         const mainContent = this.getMainContent();
 
         return (
-            <div id="filters" style={this.props.style}>
-                <SearchBoxWithPopover />
+            <div style={this.props.style}>
                 {/* <Button rightIconName={"refresh"} text={"Check for course updates"} style={buttonStyle} /> */}
                 {/* <Button iconName={"help"} style={buttonStyle} /> */}
-                <CourseCards />
                 {mainContent}
             </div>
         );
@@ -93,7 +90,7 @@ class LeftSide extends React.Component<ILeftSideAllProps>  {
                     <NonIdealState
                         visual={IconNames.SELECT}
                         className="nonIdealState"
-                        description="Choose from the searches above to view sections"
+                        description="Choose from the searches to view sections"
                     />
                     <div style={{paddingTop: "30px"}}>
                         <SelectedSectionsSummary />
