@@ -85,8 +85,8 @@ class SectionListCard
     }
 
     private createSectionListCard(transitionState: any) {
-        // identify if section is selected and violates selection rules based on other selections
 
+        // identify if section is selected and violates selection rules based on other selections
         const isViolation = this.props.isSelected && this.props.isUnavailable && !this.props.isManaged;
 
         const sectionCardClasses = classNames(

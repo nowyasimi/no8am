@@ -30,6 +30,11 @@ export const clickSectionListCard = createAction("CLICK_SECTION_LIST_CARD", (res
         section,
 }));
 
+export const removeSelectedSection = createAction("REMOVE_SELECTED_SECTION", (resolve) =>
+    (section: Interfaces.Section) => resolve({
+        section,
+}));
+
 export const clickCourseCard = createAction("CLICK_COURSE_CARD", (resolve) =>
     (clickedSearchItem: Interfaces.ISearchItem) => resolve({clickedSearchItem}));
 

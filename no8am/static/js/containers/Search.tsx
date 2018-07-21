@@ -14,8 +14,8 @@ export default class Search extends React.Component<ISearchProps> {
         return (
             <div className="searchContainer" style={this.props.style}>
                 <SearchBoxWithPopover />
-                <CourseButtons />
                 <CourseCards />
+                <CourseButtons />
             </div>
         );
     }

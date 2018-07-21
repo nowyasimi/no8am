@@ -1,10 +1,8 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import {createSelector} from "reselect";
 
 import {DAYS_OF_WEEK, DAYS_OF_WEEK_LONG} from "../Constants";
-import {filterSectionsWithSearchItemWithColor, getAllSections,
-        getSelectedSearchItemMemoized, getSelectedSections} from "../Helpers";
+import {getSelectedSearchItemWithSections, getSelectedSections} from "../Helpers";
 import {IAllReducers, ISearchItemWithMatchingSections, SectionWithColor} from "../Interfaces";
 import CalendarSection from "./CalendarSection";
 
@@ -153,27 +151,13 @@ class Calendar extends React.Component<ICalendarStateProps & ICalendarProps> {
           this.props.selectedSections.find((section) => section.CRN === this.props.sectionListHoverCrn) !== undefined) {
             return undefined;
         } else {
-            return this.props.selectedSearchItem.sectionsInSearchItem
+            return this.props.selectedSearchItem.sectionsMatchingOrigin
                     .find((currentSection) => currentSection.CRN === this.props.sectionListHoverCrn);
         }
     }
 }
 
 const getSectionListHoverCrn = (state: IAllReducers) => state.sections.sectionListHoverCrn;
-
-const getSelectedSearchItemWithSections = createSelector(
-    [getAllSections, getSelectedSearchItemMemoized],
-    (allSections, selectedSearchItem) => {
-        if (selectedSearchItem === undefined) {
-            return undefined;
-        } else {
-            return {
-                ...selectedSearchItem,
-                sectionsInSearchItem: filterSectionsWithSearchItemWithColor(selectedSearchItem, allSections, false),
-            };
-        }
-    },
-);
 
 const CalendarConnected = connect(
     (state: IAllReducers): ICalendarStateProps => ({

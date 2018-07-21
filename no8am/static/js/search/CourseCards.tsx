@@ -1,7 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
 
-import {getSearchItemsWithSections} from "../Helpers";
+import {getConflictCrns, getSearchItemsWithSections} from "../Helpers";
 import {IAllReducers, ISearchItemWithMatchingSections} from "../Interfaces";
 import CourseCard from "./CourseCard";
 
@@ -11,6 +11,7 @@ const cardContainerStyle: React.CSSProperties = {
 };
 
 interface ICourseCardStateProps {
+    conflictCrns: string[];
     searchItems: ISearchItemWithMatchingSections[];
 }
 
@@ -27,6 +28,7 @@ class CourseCards extends React.Component<ICourseCardStateProps> {
     private createCourseCards() {
         return this.props.searchItems.map((currentSearchItem) => (
             <CourseCard
+                allConflicts={this.props.conflictCrns}
                 key={`${currentSearchItem.currentItemCourseAbbreviation}${currentSearchItem.originItemAbbreviation}`}
                 searchItem={currentSearchItem}
             />
@@ -36,6 +38,7 @@ class CourseCards extends React.Component<ICourseCardStateProps> {
 
 const CourseCardsConnected = connect(
     (state: IAllReducers): ICourseCardStateProps => ({
+        conflictCrns: getConflictCrns(state),
         searchItems: getSearchItemsWithSections(state),
     }),
 )(CourseCards);

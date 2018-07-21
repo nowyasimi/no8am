@@ -23,7 +23,7 @@ const titleStyle = {
     fontSize: "16px",
 };
 
-const tickStyle: React.CSSProperties = {
+const iconStyle: React.CSSProperties = {
     float: "right",
     paddingRight: "3px",
 };
@@ -34,6 +34,7 @@ const sectionTagStyle: React.CSSProperties = {
 };
 
 interface ICourseCard {
+    allConflicts: string[];
     searchItem: ISearchItemWithMatchingSections;
 }
 
@@ -91,9 +92,12 @@ class CourseCard extends React.Component<ICourseCard & ICourseCardDispatchProps>
     private createAbbreviation(abbreviation: string, selectedAbbreviations: string[]) {
         const selectedIcon = selectedAbbreviations.find((currentAbbreviation) =>
             abbreviation === currentAbbreviation) !== undefined ?
-            <Icon style={tickStyle} icon={IconNames.TICK} /> : null;
+            <Icon style={iconStyle} icon={IconNames.TICK} /> : null;
 
-        const numberOfSections = this.props.searchItem.sectionsInSearchItem.filter(
+        const conflictIcon = this.abbreviationHasConflicts(abbreviation) ?
+            <Icon style={iconStyle} icon={IconNames.WARNING_SIGN} /> : null;
+
+        const numberOfSections = this.props.searchItem.sectionsMatchingCourse.filter(
             (section) => section.departmentAndCourse === abbreviation).length;
 
         const numberOfSectionsTag = (
@@ -107,14 +111,26 @@ class CourseCard extends React.Component<ICourseCard & ICourseCardDispatchProps>
             </span>
         );
 
-        return <span key={abbreviation}>{abbreviation} {numberOfSectionsTag} {selectedIcon} <br /></span>;
+        return (
+            <span key={abbreviation}>
+                {abbreviation} {numberOfSectionsTag} {conflictIcon} {selectedIcon} <br />
+            </span>
+        );
     }
 
     private getSelectedAbbreviations(): string[] {
         return this.props.searchItem.selectedCrns
-            .map((crn) => this.props.searchItem.sectionsInSearchItem.find((section) => section.CRN === crn))
+            .map((crn) => this.props.searchItem.sectionsMatchingCourse.find((section) => section.CRN === crn))
             .map((section) => section === undefined ? section : section.departmentAndCourse)
             .filter((section): section is string => section !== undefined);
+    }
+
+    private abbreviationHasConflicts(abbreviation: string): boolean {
+        const selectedSection = this.props.searchItem.selectedSectionsInSearchItem.find(
+            (section) => section.departmentAndCourse === abbreviation);
+
+        return selectedSection === undefined ? false :
+            this.props.allConflicts.find((conflictCrn) => conflictCrn === selectedSection.CRN) !== undefined;
     }
 
     /**
@@ -128,7 +144,7 @@ class CourseCard extends React.Component<ICourseCard & ICourseCardDispatchProps>
      */
     private filterAbbreviations() {
         return this.props.searchItem.currentItemCourseAbbreviation !== null ?
-            [...new Set(this.props.searchItem.sectionsInSearchItem
+            [...new Set(this.props.searchItem.sectionsMatchingCourse
                 .map((section) => section.departmentAndCourse))] :
             [];
     }

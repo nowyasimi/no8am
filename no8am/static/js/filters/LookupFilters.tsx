@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import {ISearchItem} from "../Interfaces";
+import {FilterTime as FilterTimeType, ISearchItem} from "../Interfaces";
 import FilterTime from "./FilterTime";
 
 interface ILookupFiltersProps {
-    filterTime: [number, number];
+    filterTime: FilterTimeType;
     searchItem: ISearchItem;
     numberOfSectionsVisible: number;
     numberOfSectionsTotal: number;

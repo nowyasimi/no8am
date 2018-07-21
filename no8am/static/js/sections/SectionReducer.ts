@@ -49,6 +49,12 @@ export const sections = (state = initialState, action: SectionActionType): ISect
                         state.allSections, state.searchItems),
                 };
 
+            case getType(sectionActions.removeSelectedSection):
+                return {
+                    ...state,
+                    searchItems: removeSelectedSection(action.payload.section, state.searchItems),
+                };
+
             case getType(sectionActions.clickCourseCard):
                 return {
                     ...state,
@@ -114,11 +120,12 @@ const isSearchItemSelected = (searchItem: ISearchItem, searchItems: ISearchItem[
 const isSearchItemEqual = (searchItemA: ISearchItem | undefined, searchItemB: ISearchItem | undefined) =>
     searchItemA !== undefined
     && searchItemB !== undefined
-    && (searchItemA.currentItemCourseAbbreviation === searchItemB.currentItemCourseAbbreviation
-    || (searchItemA.originItemAbbreviation === searchItemB.originItemAbbreviation
-        && searchItemA.searchItemType === searchItemB.searchItemType
-        && searchItemA.currentItemCourseAbbreviation === null
-        && searchItemB.currentItemCourseAbbreviation === null));
+    && ((searchItemA.currentItemCourseAbbreviation === searchItemB.currentItemCourseAbbreviation
+         && searchItemA.currentItemCourseAbbreviation !== null)
+        || (searchItemA.originItemAbbreviation === searchItemB.originItemAbbreviation
+            && searchItemA.searchItemType === searchItemB.searchItemType
+            && searchItemA.currentItemCourseAbbreviation === null
+            && searchItemB.currentItemCourseAbbreviation === null));
 
 /**
  * Redirects user to a managed search if they click a managed section card in the section list.
@@ -320,6 +327,19 @@ const clickSectionListCard = (clickedSection: Section, isManaged: boolean, allSe
             };
         }
     });
+
+/**
+ * Removes a section if it exists in the selected section list of any searches.
+ * @param section Section to remove
+ * @param searchItems List of all searches performed (and includes selected sections)
+ */
+const removeSelectedSection = (section: Section, searchItems: ISearchItem[]): ISearchItem[] =>
+    searchItems.map((currentSearchItem) =>
+        currentSearchItem.currentItemCourseAbbreviation !== section.departmentAndBareCourse ? currentSearchItem :
+        {
+            ...currentSearchItem,
+            selectedCrns: currentSearchItem.selectedCrns.filter((selectedCrn) => selectedCrn !== section.CRN),
+        });
 
 /**
  * Filters out siblings of clicked section from the list of crns.

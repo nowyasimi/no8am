@@ -42,12 +42,23 @@ export interface ISectionMain extends ISectionUnparsed, IMeetingTimes {}
 export interface ISectionExtra extends ISectionExtraUnparsed, IMeetingTimes {}
 export interface ISection extends ISectionMain, ISectionExtra {}
 
-interface ISectionColor {
+export interface ISectionColor {
     color: Colors;
 }
 
 export interface ISectionMainWithColor extends ISectionMain, ISectionColor {}
 export interface ISectionExtraWithColor extends ISectionExtra, ISectionColor {}
+
+export interface ISectionUIProperties {
+    conflicts: Section[];
+    isManaged: boolean;
+    isSelected: boolean;
+    isUnavailable: boolean;
+    isVisible: boolean;
+}
+
+export interface ISectionMainWithUIProperties extends ISectionMain, ISectionUIProperties {}
+export interface ISectionExtraWithUIProperties extends ISectionExtra, ISectionUIProperties {}
 
 export type SectionUnparsed =
     | ISectionUnparsed
@@ -60,6 +71,10 @@ export type Section =
 export type SectionWithColor =
     | ISectionMainWithColor
     | ISectionExtraWithColor;
+
+export type SectionWithUIProperties =
+    | ISectionMainWithUIProperties
+    | ISectionExtraWithUIProperties;
 
 export interface IMetadataUnparsed {
     abbreviation: string;
@@ -86,6 +101,8 @@ export interface IColors {
     [color: number]: IColor;
 }
 
+export type FilterTime = [number, number];
+
 export interface ISearchItem {
     readonly color: Colors;
     readonly currentItemCourseAbbreviation: string | null;
@@ -96,7 +113,9 @@ export interface ISearchItem {
 }
 
 export interface ISearchItemWithMatchingSections extends ISearchItem {
-    readonly sectionsInSearchItem: SectionWithColor[];
+    readonly sectionsMatchingCourse: SectionWithColor[];
+    readonly sectionsMatchingOrigin: SectionWithColor[];
+    readonly selectedSectionsInSearchItem: SectionWithColor[];
 }
 
 export interface ICalendarReducer {
@@ -105,7 +124,7 @@ export interface ICalendarReducer {
 
 export interface IFilterReducer {
     filterCCCs: string[];
-    filterTime: [number, number];
+    filterTime: FilterTime;
     isAdvanced: boolean;
 }
 
