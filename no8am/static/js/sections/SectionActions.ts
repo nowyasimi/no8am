@@ -1,21 +1,35 @@
 import {Dispatch} from "redux";
 import {createAction} from "typesafe-actions";
 
-import {SECTIONS_URL} from "../Constants";
 import * as Interfaces from "../Interfaces";
 
 export const receiveSections = createAction("RECEIVE_SECTIONS", (resolve) =>
-    (sections: Interfaces.Section[]) => resolve({sections}));
+    (loadSectionsResponse: IParsedLoadSectionsResponse) => resolve({loadSectionsResponse}));
 
 export const errorReceivingSections = createAction("ERROR_RECEIVING_SECTIONS");
+
+interface ILoadSectionsResponse {
+    last_updated_seconds: number;
+    expiration_seconds: number;
+    data: Interfaces.SectionUnparsed[];
+}
+
+interface IParsedLoadSectionsResponse {
+    last_updated_seconds: number;
+    expiration_seconds: number;
+    sections: Interfaces.Section[];
+}
 
 export const loadSections = () => {
     return (dispatch: Dispatch<Interfaces.IAllReducers>) => {
         return fetch(SECTIONS_URL)
             .then((response) => response.json(),
                   (error) => dispatch(errorReceivingSections()))
-            .then((jsonResponse) => initializeSections(jsonResponse.sections))
-            .then((sections: Interfaces.Section[]) => dispatch(receiveSections(sections)));
+            .then((jsonResponse: ILoadSectionsResponse) => ({
+                    ...jsonResponse,
+                    sections: initializeSections(jsonResponse.data),
+                }))
+            .then((initializedResponse) => dispatch(receiveSections(initializedResponse)));
     };
 };
 
@@ -51,6 +65,8 @@ export const revertToOriginAbbreviation = createAction("REVERT_TO_ORIGIN_ABBREVI
 export const searchAgainForAbbreviation = createAction("SEARCH_AGAIN_FOR_ABBREVIATION");
 
 export const removeSearch = createAction("REMOVE_SEARCH");
+
+export const setUpdateCheckAvailable = createAction("SET_UPDATE_CHECK_AVAILABLE");
 
 const initializeSections = (sections: Interfaces.SectionUnparsed[]): Interfaces.Section[] => {
     return sections.map((section) => ({

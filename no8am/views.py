@@ -70,9 +70,9 @@ def bucknell(config=None):
 
 @app.route('/sections/')
 def course_lookup():
-	cache_time, sections = get_course_information()
+	data, _ = get_course_information()
 
-	return jsonify(cache_time=cache_time, sections=sections)
+	return jsonify(data=data)
 
 
 @app.route('/category')

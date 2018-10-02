@@ -6,7 +6,7 @@ import zlib
 from no8am import ENABLE_CACHE
 
 # TODO - adjust cache time based on time of year
-DEFAULT_CACHE_TIME = 172800
+DEFAULT_CACHE_TIME = 3600
 DYNAMODB_COURSE_DATA_TABLE_NAME = 'no8am-course-data'
 
 dynamodb_client = None
@@ -48,13 +48,15 @@ def course_data_get(primary_key):
 	if "Item" in get_item_result.keys():
 		# get age of item to check if item has expired
 		item = get_item_result["Item"]
-		last_updated_time = int(item["last_updated_time"]["N"])
+		last_updated_time = int(item["last_updated_seconds"]["N"])
 		expiration_time_seconds = last_updated_time + int(item["expiration_seconds"]["N"])
 
-		if time() <= expiration_time_seconds:
-			return last_updated_time, json.loads(zlib.decompress(item["data"]["B"]))
-		else:
-			return None, None
+		return {
+			"last_updated_seconds": int(item["last_updated_seconds"]["N"]),
+			"expiration_seconds": int(item["expiration_seconds"]["N"]),
+			"data": json.loads(zlib.decompress(item["data"]["B"]))
+		}, None
+
 	else:
 		return None, None
 
@@ -77,7 +79,7 @@ def course_data_set(primary_key, val, timeout=DEFAULT_CACHE_TIME):
 	data_to_store = {
 		"primary_key": {"S": primary_key},
 		"data": {"B": zlib.compress(json.dumps(val))},
-		"last_updated_time": {"N": str(cache_time)},
+		"last_updated_seconds": {"N": str(cache_time)},
 		"expiration_seconds": {"N": str(timeout)}
 	}
 

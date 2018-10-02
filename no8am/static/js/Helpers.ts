@@ -5,12 +5,11 @@ import {FilterTime, IAllReducers, ISearchItem, ISectionExtra, Section, SectionWi
 
 import {getSelectedSearchItem} from "./sections/SectionReducer";
 
-// filter by origin abbreviation when possible, this is necessary for SectionList transitions
 export const filterSectionsWithSearchItem = (searchItem: ISearchItem, allSections: Section[]) => {
 
-    const abbreviation = searchItem.originItemAbbreviation === null ?
-        searchItem.currentItemCourseAbbreviation :
-        searchItem.originItemAbbreviation;
+    const abbreviation = searchItem.currentItemCourseAbbreviation === null ?
+        searchItem.originItemAbbreviation :
+        searchItem.currentItemCourseAbbreviation;
 
     const searchType = searchItem.searchItemType;
 

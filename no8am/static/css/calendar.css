@@ -15,7 +15,7 @@ body,html{height: 100%;}
 	height: 100%;
 }
 
-.searchContainer > .pt-popover-wrapper {
+.searchContainer > .bp3-popover-wrapper {
 	padding: 10px;
 	width: 100%;
 }
@@ -100,19 +100,6 @@ body,html{height: 100%;}
 	margin-bottom: 5px;
 }
 
-.nonIdealState {
-    padding-top: 20px;
-    height: auto;
-}
-
-.nonIdealState .pt-non-ideal-state-title {
-    font-size: 26px;
-}
-
-.nonIdealState .pt-non-ideal-state-description {
-    font-size: 16px;
-}
-
 .filters {
 	margin-bottom: 20px;
 }
@@ -165,7 +152,7 @@ body,html{height: 100%;}
 }
 
 .selectedSection {
-    background-color: lawngreen;
+    background-color: #d6d6d6;
 }
 
 .managedSection {
@@ -182,32 +169,32 @@ body,html{height: 100%;}
     display: block;
 }
 
-.searchPopoverPortal .pt-overlay-content {
+.searchPopoverPortal .bp3-overlay-content {
     z-index: 21;
     width: 49%;
 }
 
 .searchPopover {
-    width: 100%;
+		width: 50%;
 }
 
-.searchItem .pt-menu-item-label {
+.searchItem .bp3-menu-item-label {
     width: calc(100% - 200px);
 }
 
-.searchPopover .pt-menu {
+.searchPopover .bp3-menu {
     max-height: 90vh;
     overflow-y: auto;
 }
 
-.searchItem.pt-menu-item.pt-disabled div {
+.searchItem.bp3-menu-item.bp3-disabled div {
     font-weight: 500;
     font-size: 15pt;
     color: #403b3b!important;
 }
 
-.searchOmniboxKeyCombo {
-    padding-left: 10px;
+.bp3-key-combo {
+    display: inline;
 }
 
 .OmniboxTitle {
@@ -299,42 +286,6 @@ body,html{height: 100%;}
 .cache-age {
 	font-size: 12px; margin-top: 4px; display: none;
 }
-/**************************** Calendar ****************************/
-#calendar-titles {
-	height: 45px;
-	background-color: #f5f5f5;
-	padding: 0 0 0 0;
-}
-
-#calendar-titles:after {
-    content: '';
-    display: inline-block;
-    width: 100%;
-}
-
-.dayweek{
-	margin-top: 1.5%;
-	width:20%;
-	float:left;
-	display:block;
-	text-align:center;
-	font-size:18px;
-	line-height:31px;
-	text-shadow:0 1px 0 #ffffff;
-	font-weight: bold;
-}
-
-.day {
-	width:20%;
-	float:left;
-    height:1px;
-    padding-top: 5px;
-}
-
-#course-data{
-	padding: 0 0 0 0;
-    height: calc(100% - 45px);
-}
 
 /**************************** Course table modal ****************************/
 .sectionListModal {
@@ -345,31 +296,6 @@ body,html{height: 100%;}
     opacity:.98;
 		margin-top: 0;
 }
-/*#courseTable {*/
-    /*opacity:.98;*/
-    /*text-align: left;*/
-/*}*/
-
-/*.courseTable.modal-dialog {*/
-    /*width: 100%;*/
-/*}*/
-
-/*#courseTable .modal-dialog {*/
-    /*position: absolute;*/
-    /*left: 10px;*/
-    /*margin-top: 10px;*/
-/*}*/
-
-/*#courseTable .modal-body {*/
-    /*padding: 0 0 0 0;*/
-    /*overflow-y: auto;*/
-    /*margin-left: 0px;*/
-    /*margin-right: 0px*/
-/*}*/
-
-/*.courseTable {*/
-    /*height: 100%;*/
-/*}*/
 
 .modal-container {
     position: relative;
@@ -382,62 +308,6 @@ body,html{height: 100%;}
     margin-bottom: 5px;
     width: 100%;
     font-size: 16px;
-}
-
-/**************************** Section details spinner ****************************/
-
-.spinner {
-  margin: 20px auto;
-  width: 50px;
-  height: 40px;
-  text-align: center;
-  font-size: 10px;
-}
-
-.spinner > div {
-  background-color: #333;
-  height: 100%;
-  width: 6px;
-  display: inline-block;
-  margin-right: 2px;
-
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
 }
 
 /**************************** Event Columns and Bubbles ****************************/

@@ -9,6 +9,8 @@ export type SectionActionType = ActionType<typeof sectionActions>;
 
 const initialState: ISectionReducer = {
     allSections: [],
+    expirationSeconds: null,
+    lastUpdateSeconds: null,
     searchItems: [],
     sectionListHoverCrn: null,
     status: DataLoadingState.LOADING,
@@ -20,8 +22,16 @@ export const sections = (state = initialState, action: SectionActionType): ISect
             case getType(sectionActions.receiveSections):
                 return {
                     ...state,
-                    allSections: action.payload.sections,
+                    allSections: action.payload.loadSectionsResponse.sections,
+                    expirationSeconds: action.payload.loadSectionsResponse.expiration_seconds,
+                    lastUpdateSeconds: action.payload.loadSectionsResponse.last_updated_seconds,
                     status: DataLoadingState.LOADED,
+                };
+
+            case getType(sectionActions.setUpdateCheckAvailable):
+                return {
+                    ...state,
+                    status: DataLoadingState.UPDATE_AVAILABLE,
                 };
 
             case getType(sectionActions.errorReceivingSections):

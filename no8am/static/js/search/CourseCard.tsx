@@ -19,6 +19,10 @@ const cardStyle = {
     padding: "0px 10px 0px 10px",
 };
 
+const cardParagraphStyle: React.CSSProperties = {
+    lineHeight: "1.5",
+};
+
 const titleStyle = {
     fontSize: "16px",
 };
@@ -63,7 +67,7 @@ class CourseCard extends React.Component<ICourseCard & ICourseCardDispatchProps>
                 onClick={this.props.onClickCourseCard}
             >
                 <h5 style={titleStyle}>{this.formatTitle()}</h5>
-                <p>{this.formatAbbreviations()}</p>
+                <p style={cardParagraphStyle}>{this.formatAbbreviations()}</p>
             </div>
         );
     }

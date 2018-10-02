@@ -58,27 +58,6 @@ def get_user_format_semester():
 	return "{0} {1}-{2}".format(user_format_semester, bucknell_format_year - 1, bucknell_format_year)
 
 
-def get_course_numbers_in_department(department_name):
-	"""
-	Gets course numbers in a department for the current term. This is used to filter out descriptions for
-	courses not being offered in the current term. Will use cache if cache is enabled.
-
-	:param department_name: A department such as CSCI or ECON
-	:return: A list of course numbers in the department
-	"""
-
-	from no8am.scraper import Department
-
-	try:
-		cache_time, all_courses = Department.process_department_request(department_name)
-	except:
-		return []
-
-	courses_in_department = filter(lambda course: course["deptName"] == department_name, all_courses)
-
-	return map(lambda course: course["deptName"] + " " + course["courseNum"], courses_in_department)
-
-
 def parseAndCurate():
 	"""
 	Fetches all course descriptions and filters the descriptions to only include courses currently being offered.
@@ -86,7 +65,9 @@ def parseAndCurate():
 	:return: A list of descriptions for courses being offered in the current term.
 	"""
 
-	courseNums = get_all_course_numbers()
+	from no8am.scraper import get_course_information
+
+	courseNums = map(lambda course: course["departmentAndBareCourse"], get_course_information())
 	print "doing descriptions...."
 	final = []
 	rows = get_all_course_descriptions()

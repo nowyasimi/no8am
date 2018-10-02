@@ -20,7 +20,13 @@
          "STATIC_LOCATION": "https://static-beta.no8.am",
          "STATIC_DOMAIN": "static-beta.no8.am",
          "ENABLE_CACHE": "true"
-       }
+       },
+       "events": [
+            {
+                "function": "poller.poll_database_to_check_if_update_needed",
+                "expression": "rate(1 minute)"
+            }
+        ]
     },
     "production": {
        "extends": "common",

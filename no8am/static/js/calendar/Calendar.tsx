@@ -8,6 +8,34 @@ import CalendarSection from "./CalendarSection";
 
 import { isNullOrUndefined } from "util";
 
+const calendarTitleContainerStyle: React.CSSProperties = {
+    backgroundColor: "#f5f5f5",
+    height: "30px",
+    padding: 0,
+};
+
+const calendarColumnStyle: React.CSSProperties = {
+    float: "left",
+    width: "18.3%",
+};
+
+const dayOfWeekCalendarTitleStyle: React.CSSProperties = {
+    ...calendarColumnStyle,
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginTop: "1%",
+};
+
+const calendarCourseDataStyle: React.CSSProperties = {
+    height: "calc(100% - 30px)",
+    padding: 0,
+};
+
+const hoursOfDayColumnStyle: React.CSSProperties = {
+    float: "left",
+    width: "8.5%",
+};
+
 interface ICalendarStateProps {
     sectionListHoverCrn: string | null;
     selectedSections: SectionWithColor[];
@@ -55,28 +83,68 @@ class Calendar extends React.Component<ICalendarStateProps & ICalendarProps> {
         const calendarSectionsInCalendar = this.addCalendarSectionsToCalendar(sectionsSeparatedByDay);
 
         return (
-            <div className="page2bg" id="calendar-col" style={this.props.style}>
-                <div id="calendar" className="list-group" style={this.props.innerCalendarStyle}>
-                    <div id="calendar-titles" className="panel-heading">
-                        {this.generate_calendar_titles()}
+            <div style={this.props.style}>
+                <div className="list-group" style={this.props.innerCalendarStyle}>
+                    <div style={calendarTitleContainerStyle} className="panel-heading">
+                        <div style={{...hoursOfDayColumnStyle, color: "#f5f5f5"}}> - </div>
+                        {this.generateCalendarTitles()}
                     </div>
-                    <div id="course-data" className="list-group-item">
-                        <div className="week">
-                            {calendarSectionsInCalendar}
+                    <div style={calendarCourseDataStyle} className="list-group-item">
+                        <div style={{...hoursOfDayColumnStyle, height: "100%", backgroundColor: "#f5f5f5", borderRightWidth: "0.5px", borderRightStyle: "groove", borderRightColor: "rgb(255, 255, 255)"}} className="day">
+                            <ul>
+                                {this.createHoursOfDay()}
+                            </ul>
                         </div>
+                        {calendarSectionsInCalendar}
                     </div>
                 </div>
             </div>
         );
     }
 
+    private createHoursOfDay(): JSX.Element[] {
+        const hoursInDay = 14;
+        const liStyle: React.CSSProperties = {
+            display: "block",
+            height: `${100 / hoursInDay}%`,
+            width: "10%",
+        };
+        const pStyle: React.CSSProperties = {
+            color: "black",
+            fontSize: "12px",
+            marginLeft: "0px",
+            marginTop: "1px",
+        };
+
+        return [...Array(hoursInDay).keys()]
+            .map((hourOfDay) => (
+                <li className="selectedCalendarSection" style={{...liStyle, top: `${100 * hourOfDay / hoursInDay}%`}}>
+                    <p className="courseNum" style={pStyle}>
+                        {this.convertHourOfDayToTime(hourOfDay)}
+                    </p>
+                </li>
+            ));
+    }
+
+    private convertHourOfDayToTime(hourOfDay: number) {
+        const hourSinceStartOfDay = 8 + hourOfDay;
+
+        if (hourSinceStartOfDay === 12) {
+            return "12pm";
+        } else if (hourSinceStartOfDay > 12) {
+            return `${hourSinceStartOfDay - 12}pm`;
+        } else {
+            return `${hourSinceStartOfDay}am`;
+        }
+    }
+
     /**
      * Create the calendar header that displays each day of the week.
      */
-    private generate_calendar_titles() {
+    private generateCalendarTitles() {
         // iterate through DAYS_OF_WEEK so columns in the calendar are sorted by day of week
         return DAYS_OF_WEEK_LONG.map((day) => (
-            <div className="dayweek" key={day}>
+            <div style={dayOfWeekCalendarTitleStyle} key={day}>
                 {day.slice(0, 3)}<span className="hidden-xs hidden-sm hidden-md">{day.slice(3)}</span>
             </div>
         ));
@@ -89,8 +157,8 @@ class Calendar extends React.Component<ICalendarStateProps & ICalendarProps> {
     private addCalendarSectionsToCalendar(sectionsSeparatedByDay: ICalendarSectionsByDay) {
         // iterate through DAYS_OF_WEEK so columns in the calendar are sorted by day of week
         return DAYS_OF_WEEK.map((day) => (
-            <div className="day" id={day} key={`day${day}`}>
-                <ul className="list-unstyled open">
+            <div style={calendarColumnStyle} className="day" id={day} key={`day${day}`}>
+                <ul>
                     {sectionsSeparatedByDay[day]}
                 </ul>
             </div>

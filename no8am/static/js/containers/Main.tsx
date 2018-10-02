@@ -8,7 +8,7 @@ import {IAllReducers} from "../Interfaces";
 import {loadSections} from "../sections/SectionActions";
 
 import Calendar from "../calendar/Calendar";
-import LeftSide from "./LeftSide";
+import Middle from "./Middle";
 import Search from "./Search";
 
 interface IMainDispatchProps {
@@ -32,8 +32,8 @@ class Main extends React.Component<IMainDispatchProps> {
     };
 
     private defaultSearchStyle: React.CSSProperties = {
-        flexBasis: "250px",
-        width: "inherit",
+        position: "fixed",
+        width: "250px",
     };
 
     private mobileCalendarStyle: React.CSSProperties = {
@@ -71,11 +71,11 @@ class Main extends React.Component<IMainDispatchProps> {
         width: "400px",
     };
 
-    private mobileLeftSideStyle: React.CSSProperties = {
+    private mobileMiddleStyle: React.CSSProperties = {
         width: "100%",
     };
 
-    private defaultLeftSideStyle: React.CSSProperties = {
+    private defaultMiddleStyle: React.CSSProperties = {
         flexBasis: "40%",
         flexGrow: 1,
         paddingRight: "12px",
@@ -92,7 +92,7 @@ class Main extends React.Component<IMainDispatchProps> {
                 <MediaQuery minWidth={900}>
                     <div style={this.defaultContainerStyle}>
                         <Search style={this.defaultSearchStyle} />
-                        <LeftSide style={this.defaultLeftSideStyle} />
+                        <Middle style={this.defaultMiddleStyle} />
                         <Calendar
                             style={this.defaultCalendarStyle}
                             innerCalendarStyle={this.defaultInnerCalendarStyle}
@@ -102,7 +102,7 @@ class Main extends React.Component<IMainDispatchProps> {
                 <MediaQuery maxWidth={900}>
                     <div style={this.mobileContainerStyle}>
                         <Search style={this.mobileSearchStyle} />
-                        <LeftSide style={this.mobileLeftSideStyle} />
+                        <Middle style={this.mobileMiddleStyle} />
                         <Calendar
                             style={this.mobileCalendarStyle}
                             innerCalendarStyle={this.mobileInnerCalendarStyle}

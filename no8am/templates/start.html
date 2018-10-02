@@ -24,12 +24,15 @@
     savedSchedule = {{ session.pop('saved_schedule', '{}')|safe }};
     APP_ROOT = "{{ APP_ROOT }}";
     METADATA_URL = "{{ url_for('static', filename='metadata.json') }}";
+    SECTIONS_URL = "{{ url_for('static', filename='sections.json') }}";
     CURRENT_SEMESTER = "{{ CURRENT_SEMESTER }}";
   </script>
 
   {% assets "app-js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
   {% endassets %}
+
+  <script type="text/javascript" src="https://cdn.statuspage.io/se-v2.js"></script>
 
   {% include "handlebarTemplates.html" %}
 

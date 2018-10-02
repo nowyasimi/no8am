@@ -28,14 +28,13 @@ interface ICourseButtonsState {
     doNotAskToConfirmRevertAgain: boolean;
 }
 
-class LookupFilters
+class CourseButtons
     extends React.Component<ICourseButtonsDispatchProps & ICourseButtonsStateProps, ICourseButtonsState> {
 
     private shouldConfirmRevertLocalStorageKey = "shouldConfirmRevert";
 
     private buttonGroupStyle: React.CSSProperties = {
-        padding: "10px",
-        width: "100%",
+        padding: "10px 0px 10px 0px",
     };
 
     private checkboxStyle: React.CSSProperties = {
@@ -59,7 +58,7 @@ class LookupFilters
     public render() {
         return this.props.searchItem !== undefined ? (
             <div>
-                <ButtonGroup vertical={true} style={this.buttonGroupStyle}>
+                <ButtonGroup style={this.buttonGroupStyle}>
                     {this.renderButtons(this.props.searchItem)}
                 </ButtonGroup>
                 {this.renderConfirmRevertDialog(this.props.searchItem)}
@@ -88,7 +87,7 @@ class LookupFilters
                 </div>
                 <div className={Classes.DIALOG_FOOTER}>
                     <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                        {this.renderOriginAbbreviationButtons(Intent.PRIMARY, searchItem)}
+                        {this.renderOriginAbbreviationButtons(true, searchItem)}
                     </div>
                 </div>
             </Dialog>
@@ -101,7 +100,7 @@ class LookupFilters
 
     private renderButtons(searchItem: ISearchItem) {
         return [
-            this.renderOriginAbbreviationButtons(Intent.NONE, searchItem), (
+            this.renderOriginAbbreviationButtons(false, searchItem), (
             <Button
                 text={`Done selecting`}
                 onClick={this.props.onClickDoneSelecting}
@@ -113,9 +112,10 @@ class LookupFilters
         ];
     }
 
-    private renderOriginAbbreviationButtons(revertButtonIntent: Intent, searchItem: ISearchItem) {
+    private renderOriginAbbreviationButtons(isForConfirmRevertDialog: boolean, searchItem: ISearchItem) {
         if (searchItem.originItemAbbreviation !== null) {
             const disableButtonsAndPopovers = searchItem.currentItemCourseAbbreviation === null;
+            const highlightRevertButton = searchItem.selectedCrns.length === 0 && !disableButtonsAndPopovers;
             const classes = classNames({
                 [Classes.DISABLED]: disableButtonsAndPopovers,
             });
@@ -135,7 +135,7 @@ class LookupFilters
                         className={classes}
                         text={`Revert to ${searchItem.originItemAbbreviation}`}
                         onClick={this.onRevertToOriginAbbreviationWithDialogHandler}
-                        intent={revertButtonIntent}
+                        intent={isForConfirmRevertDialog || highlightRevertButton ? Intent.PRIMARY : Intent.NONE}
                         style={this.buttonStyle}
                     />
                 </Tooltip>
@@ -210,7 +210,7 @@ class LookupFilters
     }
 }
 
-const LookupFiltersConnected = connect(
+export default connect(
     (state: IAllReducers): ICourseButtonsStateProps => ({
         searchItem: getSelectedSearchItemMemoized(state),
     }),
@@ -220,6 +220,4 @@ const LookupFiltersConnected = connect(
         onRevertToOriginAbbreviation: revertToOriginAbbreviation,
         onSearchAgainForAbbreviation: searchAgainForAbbreviation,
     }, dispatch),
-)(LookupFilters);
-
-export default LookupFiltersConnected;
+)(CourseButtons);

@@ -17,6 +17,19 @@ import {IAllReducers, ISearchItem} from "../Interfaces";
 //     marginLeft: "5px",
 // };
 
+const commonNonIdealStateStyle: React.CSSProperties = {
+    height: "auto",
+    paddingTop: "40px",
+};
+
+const titleStyle: React.CSSProperties = {
+    fontSize: "26px",
+};
+
+const descriptionStyle: React.CSSProperties = {
+    fontSize: "16px",
+};
+
 type ILeftSideAllProps = ILeftSideProps & ILeftSideStateProps;
 
 interface ILeftSideProps {
@@ -33,8 +46,10 @@ interface ILeftSideStateProps {
 class LeftSide extends React.Component<ILeftSideAllProps>  {
 
     private instructions: JSX.Element = (
-        <div> Click the search box to start or press
-            <span style={{paddingLeft: "5px"}}><KeyCombo combo={searchKeyCombo} /></span>
+        <div>
+            Click the search box to start or press
+            <span style={{paddingLeft: "5px"}} />
+            <KeyCombo combo={searchKeyCombo} />
         </div>
     );
 
@@ -77,20 +92,19 @@ class LeftSide extends React.Component<ILeftSideAllProps>  {
         } else if (this.props.searchStatus === DataLoadingState.LOADING ||
                    this.props.sectionStatus === DataLoadingState.LOADING) {
             return (
-                <NonIdealState
-                    visual={<Spinner />}
-                    className="nonIdealState"
-                    // TODO - make this a skeleton in search
-                    description={`Loading course information`}
-                />
+                <div style={commonNonIdealStateStyle}>
+                    <NonIdealState
+                        icon={<Spinner />}
+                        description={<span style={descriptionStyle}>Loading course information</span>}
+                    />
+                </div>
             );
         } else if (this.props.hasSearchItems && this.props.selectedSearchItem === undefined) {
             return (
-                <div>
+                <div style={commonNonIdealStateStyle}>
                     <NonIdealState
-                        visual={IconNames.SELECT}
-                        className="nonIdealState"
-                        description="Choose from the searches to view sections"
+                        icon={IconNames.SELECT}
+                        description={<span style={descriptionStyle}>Choose from the searches to view sections</span>}
                     />
                     <div style={{paddingTop: "30px"}}>
                         <SelectedSectionsSummary />
@@ -101,11 +115,12 @@ class LeftSide extends React.Component<ILeftSideAllProps>  {
             return <SectionList searchItem={this.props.selectedSearchItem} />;
         } else if (!this.props.hasSearchItems) {
             return (
-                <NonIdealState
-                    className="nonIdealState"
-                    title="Welcome to No8am!"
-                    description={this.instructions}
-                />
+                <div style={commonNonIdealStateStyle}>
+                    <NonIdealState
+                        title={<span style={titleStyle}>Welcome to No8am!</span>}
+                        description={<span style={descriptionStyle}>{this.instructions}</span>}
+                    />
+                </div>
             );
         } else {
             return (

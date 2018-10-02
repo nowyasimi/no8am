@@ -149,16 +149,21 @@ class Section(object):
 		self.professor = list(section[5].strings)
 		self.freeSeats = str(''.join(section[6].strings).replace(u'\xa0', " "))
 
-		if str(''.join(section[10].strings)) == 'Desc': # Index 10 col is Course Desc
-			self.waitList = ""
-			self.resSeats = str(''.join(section[7].strings))
-			self.prm = str(''.join(section[8].strings))
-			self.CCC = str(''.join(section[9].strings)).strip().split()
-		else: # Index 10 col is CCC
-			self.waitList = str(''.join(section[7].strings))
-			self.resSeats = str(''.join(section[8].strings))
-			self.prm = str(''.join(section[9].strings))
-			self.CCC = str(''.join(section[10].strings)).strip().split()
+		self.waitList = ""
+		self.resSeats = str(''.join(section[7].strings))
+		self.prm = str(''.join(section[8].strings))
+		self.CCC = str(''.join(section[9].strings)).strip().split()
+
+		# if str(''.join(section[10].strings)) == 'Desc': # Index 10 col is Course Desc
+		# 	self.waitList = ""
+		# 	self.resSeats = str(''.join(section[7].strings))
+		# 	self.prm = str(''.join(section[8].strings))
+		# 	self.CCC = str(''.join(section[9].strings)).strip().split()
+		# else: # Index 10 col is CCC
+		# 	self.waitList = str(''.join(section[7].strings))
+		# 	self.resSeats = str(''.join(section[8].strings))
+		# 	self.prm = str(''.join(section[9].strings))
+		# 	self.CCC = str(''.join(section[10].strings)).strip().split()
 
 		self.message = str(''.join(message[0].strings).replace(u'\u2019', "")) if message is not None else None
 
@@ -290,13 +295,6 @@ class Course:
 
 
 def get_course_information():
-
-	# return cached data, if it exists
-	cache_time, cached_sections = course_data_get(TERM)
-
-	if cached_sections is not None:
-		return cache_time, cached_sections
-
 	all_sections_with_message = get_sections_with_message()
 	grouped_sections_by_course = group_sections_by_course(all_sections_with_message)
 	parsed_courses = map(Course, grouped_sections_by_course)
@@ -304,9 +302,7 @@ def get_course_information():
 	formatted_results = [course.export() for course in sorted_courses]
 	flattened_sections = [item for sublist in formatted_results for item in sublist]
 
-	cache_time, _ = course_data_set(TERM, flattened_sections)
-
-	return cache_time, flattened_sections
+	return flattened_sections
 
 def get_sections_with_message():
 	session = FuturesSession()

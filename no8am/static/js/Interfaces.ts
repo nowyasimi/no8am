@@ -136,6 +136,8 @@ export interface ISearchReducer {
 
 export interface ISectionReducer {
     readonly allSections: Section[];
+    readonly expirationSeconds: number | null;
+    readonly lastUpdateSeconds: number | null;
     readonly searchItems: ISearchItem[];
     readonly sectionListHoverCrn: string | null;
     readonly status: DataLoadingState;

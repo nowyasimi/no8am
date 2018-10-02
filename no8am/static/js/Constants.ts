@@ -77,6 +77,7 @@ export enum DataLoadingState {
     LOADED,
     LOADING,
     REFRESHING,
+    UPDATE_AVAILABLE,
 }
 
 // items appear in search box in this order
@@ -98,6 +99,5 @@ const APP_ROOT_IMPORTED = APP_ROOT;
 export const CCC_LOOKUP_URL: string = APP_ROOT_IMPORTED + "/category/ccc/";
 export const CREDIT_LOOKUP_URL: string = APP_ROOT_IMPORTED + "/category/credit/";
 export const DEPT_LOOKUP_URL: string = APP_ROOT_IMPORTED + "/course/";
-export const SECTIONS_URL: string = APP_ROOT_IMPORTED + "/sections/";
 export const SECTION_DETAILS_URL: string = APP_ROOT_IMPORTED + "/sectiondetails/";
 export const STORE_CONFIG_URL: string = APP_ROOT_IMPORTED + "/storeConfig/";

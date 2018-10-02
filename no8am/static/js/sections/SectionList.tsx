@@ -6,8 +6,8 @@ import {getAllSections, getSectionsForSelectedSearchItem,
         getSelectedSearchItemMemoized, getUniqueCCCs} from "../Helpers";
 import {FilterTime, IAllReducers, ISearchItem, Section, SectionWithUIProperties} from "../Interfaces";
 
-import GlobalFilters from "../filters/GlobalFilters";
 import LookupFilters from "../filters/LookupFilters";
+import CourseButtons from "../search/CourseButtons";
 import {getSelectedSectionsForSearchItem} from "../sections/SectionReducer";
 import SectionListGroup from "./SectionListGroup";
 
@@ -25,10 +25,6 @@ interface ISectionListStateProps {
 class SectionList extends React.Component<ISectionListStateProps & ISectionListProps> {
 
     public render() {
-
-        // TODO - fix cache time
-        // const cacheTime = this.props.data.cache_time || new Date();
-
         const sectionCards = this.groupSectionsByType()
             .map((sectionGroup) => (
                 <div key={sectionGroup[0].departmentAndCourse}>
@@ -36,18 +32,10 @@ class SectionList extends React.Component<ISectionListStateProps & ISectionListP
                 </div>
             ));
 
-        const visibleCount = this.props.sections.reduce((previousVisibleCount: number, section) =>
-            previousVisibleCount + (section.isVisible ? 1 : 0), 0);
-
         return (
-            <div className="sectionList">
-                <GlobalFilters />
-                <LookupFilters
-                    filterTime={this.props.filterTime}
-                    searchItem={this.props.searchItem}
-                    numberOfSectionsVisible={visibleCount}
-                    numberOfSectionsTotal={this.props.sections.length}
-                />
+            <div>
+                <CourseButtons />
+                <LookupFilters filterTime={this.props.filterTime} />
                 {sectionCards}
             </div>
         );
