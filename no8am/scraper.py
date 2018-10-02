@@ -288,6 +288,9 @@ class Course:
 		:return: A dictionary of course data that can be read by the client
 		"""
 
+		if len(self.main_sections) == 0:
+			return None
+
 		return {
 			"sections": {crn: self.main_sections[crn].export() for crn in self.main_sections},
 			"deptName": self.main_sections[self.main_sections.keys()[0]].department,
@@ -392,7 +395,7 @@ class Department:
 		parsed_courses = map(Course, grouped_sections)
 
 		# create format that can be stored in cache or returned to user
-		formatted_results = [course.export() for course in parsed_courses]
+		formatted_results = [course.export() for course in parsed_courses if course.export() is not None]
 
 		cache_time = course_data_set(department_name, formatted_results)
 
