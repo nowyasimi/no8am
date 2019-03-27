@@ -6,56 +6,13 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-from no8am import DEPARTMENT_LIST, CCC_LIST
+from no8am import DEPARTMENT_LIST, CCC_LIST, get_current_term, get_all_courses
 
-BUCKNELL_COURSE_DESCRIPTIONS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/bwckctlg.p_display_courses"
+BUCKNELL_COURSE_DESCRIPTIONS_URL = "https://ssb-prod.ec.bucknell.edu/PROD/bwckctlg.p_display_courses"
 
 COURSE_DESCRIPTION_FILENAME = "bucknellCourseDescriptions.json"
 
 DEPARTMENTS = None
-
-
-def get_bucknell_format_semester():
-	"""
-	Uses the current date to determine which semester of course date to scrape from Bucknell servers.
-	Course data for the Fall semester is scraped between 3/1 and 9/15, and the Spring semester between 9/15 and 3/1.
-
-	For the 2016-2017 school year, fall course selection be formatted as '201701', and spring as '201705'.
-
-	:return: A string representing the current semester to scrape from Bucknell servers
-	"""
-
-	date = datetime.today()
-
-	# Bucknell-defined course selection year (eg for 2016-2017 year, course selection year is 2017)
-	course_selection_year = date.year + 1 if date.month >= 3 else date.year
-
-	# Create date objects for the start of course selection in the current academic year
-	start_spring_semester = datetime(course_selection_year - 1, 9, 15)
-	start_fall_semester = datetime(date.year, 3, 1)
-
-	# Create a string for the Fall or Spring semester
-	if start_fall_semester <= date < start_spring_semester:
-		return str(course_selection_year) + '01'
-	else:
-		return str(course_selection_year) + '05'
-
-
-def get_user_format_semester():
-	"""
-	Converts the Bucknell-format semester string to a user-friendly representation.
-
-	:return: A string representing the current semester like 'Fall 2016-2017'
-	"""
-
-	bucknell_format = get_bucknell_format_semester()
-
-	bucknell_format_year, bucknell_format_semester = int(bucknell_format[:4]), bucknell_format[4:]
-
-	user_format_semester = 'Fall' if bucknell_format_semester == '01' else 'Spring'
-
-	return "{0} {1}-{2}".format(user_format_semester, bucknell_format_year - 1, bucknell_format_year)
-
 
 
 def is_valid_department(dept):
@@ -63,7 +20,7 @@ def is_valid_department(dept):
         Checks whether a department is in the list of valid department codes.
 
         :param dept: department code
-        :return: True if dept is a valid department 
+        :return: True if dept is a valid department
         """
         for dept_dic in DEPARTMENT_LIST:
                 if dept_dic["abbreviation"] == dept:
@@ -77,7 +34,7 @@ def is_valid_ccc_req(req):
         requirements.
 
         :param req: CCC requirement code
-        :return: True if req is a valid CCC requirement 
+        :return: True if req is a valid CCC requirement
         """
         for req_dic in CCC_LIST:
                 if req_dic["abbreviation"] == req:
@@ -151,7 +108,8 @@ def get_all_course_descriptions():
 	:return: A list of course descriptions
 	"""
 
-	term = get_bucknell_format_semester()
+	# TODO - use scraper
+	term = get_current_term()["CodeBanner"]
 
 	payload = [
 		("term_in", term),
@@ -185,13 +143,9 @@ def get_all_course_numbers():
 	:return: A list of course numbers
 	"""
 
-	courseNums = []
-	print "Getting course nums..."
-	# TODO - parallelize this to guarantee completion within 5 minute AWS Lambda execution limit
-	for x in DEPARTMENTS:
-		print x
-		courseNums += get_course_numbers_in_department(x)
-	return courseNums
+	courses = get_all_courses()
+
+	return [x["Subj"] + " " + x["Number"] for x in courses]
 
 
 def generate_course_descriptions():

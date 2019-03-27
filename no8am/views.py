@@ -6,8 +6,8 @@ from functools import wraps
 import json
 
 from no8am import app, store_link, get_link, generate_short_link, Department, CreditOrCCC, \
-	find_course_in_department, fetch_section_details, get_user_format_semester, generate_metadata, \
-	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, \
+	find_course_in_department, fetch_section_details, generate_metadata, \
+	CCC_LIST, CREDIT_LIST, DEPARTMENT_LIST, APPLICATION_ROOT, get_current_term, \
         STATIC_LOCATION, SIMPLE_FORM_TOKEN, is_valid_department, is_valid_ccc_req
 
 
@@ -65,7 +65,7 @@ def bucknell(config=None):
 	else:
 		metadata = generate_metadata() if STATIC_LOCATION == 'local' else None
 		return render_template(
-			'start.html', CURRENT_SEMESTER=get_user_format_semester(), APP_ROOT=APPLICATION_ROOT, metadata=metadata
+			'start.html', CURRENT_SEMESTER=get_current_term()["Description"], APP_ROOT=APPLICATION_ROOT, metadata=metadata
 		)
 
 
@@ -79,7 +79,7 @@ def course_lookup(department=None, course_number=None):
 		return jsonify(departments=DEPARTMENT_LIST)
 
 	department = department.upper()
-        
+
         if not is_valid_department(department):
                 error = "{0} is not a valid department".format(department)
                 return jsonify(error=error), httplib.NOT_FOUND
@@ -118,9 +118,9 @@ def other_lookup(category=None, lookup_val=None):
 	elif category in ['ccc', 'credit'] and lookup_val is not None:
 		lookup_val = lookup_val.upper()
 
-                if not is_valid_ccc_req(lookup_val):
-                    error = "{0} is not a valid CCC requirement".format(lookup_val)
-                    return jsonify(error=error), httplib.NOT_FOUND
+		if category == 'ccc' and not is_valid_ccc_req(lookup_val):
+			error = "{0} is not a valid CCC requirement".format(lookup_val)
+			return jsonify(error=error), httplib.NOT_FOUND
 
 		cache_time, all_courses = CreditOrCCC.process_ccc_or_credit_request(category, lookup_val)
 		return jsonify(courses=all_courses, cache_time=cache_time)

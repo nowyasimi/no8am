@@ -468,14 +468,9 @@ function courseButtonErrorHandler(e) {
  * @return {number} Integer representing the number of 30 minute intervals past 8am for the provided time.
  */
 export function parseHours(time) {
-  let splitted = time.split(":");
-  let hour = parseInt(splitted[0]);
-  let minutes = parseInt(splitted[1].slice(0,2));
-  let amOrPm = splitted[1].slice(2);
+  let hour = parseInt(time.slice(0,2));
+  let minutes = parseInt(time.slice(2));
 
-  if (amOrPm == "pm" && hour != 12) {
-    hour += 12;
-  }
   hour += -8 + minutes/60;
 
   return hour*2;

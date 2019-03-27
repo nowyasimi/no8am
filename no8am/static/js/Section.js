@@ -1,4 +1,4 @@
-import {colorDict} from './Constants';
+import {colorDict, DAYS_OF_WEEK} from './Constants';
 
 import {parseHours, calendarElement} from './base';
 
@@ -7,11 +7,15 @@ export class Section {
         this.CRN = CRN;
         Object.assign(this, object);
         this.timesMet = Section.restructureHours(object["timesMet"]);
-        this.roomMet = object["roomMet"] === ", " ? "" : object["roomMet"];
-        this.professor = object["professor"] === "; " ? "" : object["professor"];
-        this.daysMet = []; // format: {"M": [1,2], "W": [1,3]} so Monday is a class from 8am to 9am and
-                           // Wednesday is from 8am to 9:30am
-        this.parseTimesMet();
+        this.roomMet = object["timesMet"].map(meeting => meeting["Location"])
+          .filter(location => location !== null)
+          .join(", ");
+        this.professor = object["professor"].map(prof => prof["Display"])
+          .join("; ");
+        // format: {"M": [1,2], "W": [1,3]} so Monday is a class from 8am to 9am and
+        // Wednesday is from 8am to 9:30am
+        this.daysMet = [];
+        this.parseTimesMet(object["timesMet"])
         this.extra_section_lists = {"L": [], "R": [], "P": []};
 
         if (object.hasOwnProperty('extra_section_lists')) {
@@ -29,58 +33,62 @@ export class Section {
         }
     }
 
-    static restructureHours(hours) {
-        let timesMet = [];
-        while (hours != '') {
-            if (hours.includes("TBA")) {
-                return timesMet;
-            }
-            let mIndex = hours.indexOf('m');
+    static convertMilitaryTime(time) {
 
-            let tempTimes = hours.substring(0, mIndex+1);
-            hours = hours.substring(mIndex+1);
+      if (typeof time === 'undefined' || time === null)
+          return "TBA";
 
-            let tempHours = tempTimes.split(" ")[1];
-            let startTime = tempHours.split("-")[0];
-            let endTime = tempHours.split("-")[1];
+      // Convert hour part of string to integer.
+      var hours = parseInt(time.substring(0, 2));
 
-            let cI1 = startTime.indexOf(":");
-            let cI2 = endTime.indexOf(":");
+      // Convert minute part of string to integer.
+      var minutes = parseInt(time.substring(2, 4));
 
-            let startHour = parseInt(startTime.slice(0, cI1));
-            let endHour = parseInt(endTime.slice(0, cI2));
-            let amOrPm = endTime.slice(cI2 + 3);
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
 
-            if (amOrPm == 'am' || (startHour != 12 && endHour == 12) || startHour > endHour) {
-                tempTimes = tempTimes.split("-").join("am-");
-            }
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
 
-            else {
-                tempTimes = tempTimes.split("-").join("pm-");
-            }
-
-            timesMet.push(tempTimes);
-        }
-        return timesMet;
+      return strTime;
     }
 
-    parseTimesMet() {
-        for (let x of this.timesMet) {
-            let dayAndTime = x.split(" ");
-            let days = dayAndTime[0];
-            let duration = dayAndTime[1];
+    static restructureHours(meetingTimes) {
+        var result = "";
+        for (let meetingTime of meetingTimes) {
+          for (let day of DAYS_OF_WEEK) {
+              result += meetingTime[day] === "Y" ? day : "";
+          }
 
-            let time = duration.split("-");
-            let start = time[0];
-            let end = time[1];
-            let parsedStart = parseHours(start);
-            let parsedEnd = parseHours(end) - parsedStart;
+          result += ` ${Section.convertMilitaryTime(meetingTime["Start"])}`;
 
-            for (let day of days){
-                if (day === "S") {
-                    continue;
+          let time = Section.convertMilitaryTime(meetingTime["End"]);
+
+          if (time !== "TBA") {
+            result += ` - ${time} `;
+          }
+        }
+
+        return result;
+    }
+
+    parseTimesMet(timesMet) {
+        for (let x of timesMet) {
+            let unparsedStart = x["Start"];
+            let unparsedEnd = x["End"];
+
+            if (unparsedStart == null || unparsedEnd == null) {
+              continue;
+            }
+
+            let parsedStart = parseHours(unparsedStart);
+            let parsedEnd = parseHours(unparsedEnd) - parsedStart;
+
+            for (let day of DAYS_OF_WEEK) {
+                if (x[day] === "Y") {
+                    this.daysMet.push( [day, parsedStart, parsedEnd, x["Start"], x["End"]] );
                 }
-                this.daysMet.push( [day, parsedStart, parsedEnd, start.slice(0,-2), end.slice(0,-2)] );
             }
         }
     }
@@ -138,6 +146,3 @@ export class Section {
         };
     }
 }
-
-
-

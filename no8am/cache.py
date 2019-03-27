@@ -4,7 +4,7 @@ from time import time
 from no8am import REDIS_PASS, REDIS_SERVER
 
 # TODO - adjust cache time based on time of year
-DEFAULT_CACHE_TIME = 172800
+DEFAULT_CACHE_TIME = 60
 
 # cache is disabled if Redis is not configured
 DISABLE_CACHE = True if REDIS_PASS is None or REDIS_SERVER is None else False

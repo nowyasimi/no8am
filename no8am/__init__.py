@@ -36,9 +36,9 @@ CDN(app)
 from no8am.metadata import DEPARTMENT_LIST, CCC_LIST, CREDIT_LIST
 from no8am.cache import course_data_get, course_data_set
 from no8am.database import store_link, get_link, generate_short_link
-from no8am.utility import get_bucknell_format_semester, generate_course_descriptions, get_user_format_semester
+from no8am.scraper import Department, CreditOrCCC, find_course_in_department, fetch_section_details, get_current_term, get_all_courses
+from no8am.utility import generate_course_descriptions
 from no8am.minify import update_static_files, generate_metadata, JS_OUTPUT_FILENAME
-from no8am.scraper import Department, CreditOrCCC, find_course_in_department, fetch_section_details
 from no8am.utility import is_valid_department, is_valid_ccc_req
 
 import no8am.views

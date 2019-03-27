@@ -4,45 +4,30 @@ import re
 from itertools import groupby
 import string
 from enum import Enum
-from no8am import get_bucknell_format_semester, course_data_get, course_data_set
+from no8am import course_data_get, course_data_set
 
-TERM = get_bucknell_format_semester()
 message_regex = re.compile("([ -])([0-9]{2})([ ,.]|$)")
 section_range_regex = re.compile(" ([0-9]{2})-([0-9]{2})")
 courseNumFull_regex = re.compile("[A-Z]+ [0-9]{3}[A-Z]* [0-9]+")
 
 BUCKNELL_COURSE_DATA_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/hwzkschd.P_Bucknell_SchedDisplay"
-BUCKNELL_SECTION_DETAILS_URL = "https://www.bannerssb.bucknell.edu/ERPPRD/hwzkdpac.P_Bucknell_CGUpdate"
+BUCKNELL_SECTION_DETAILS_URL = "https://ssb-prod.ec.bucknell.edu/PROD/hwzkdpac.P_Bucknell_CGUpdate"
+BUCKNELL_PUB_APPS_URL = "https://pubapps.bucknell.edu/CourseInformation"
+BUCKNELL_TERM_URL = BUCKNELL_PUB_APPS_URL + "/data/term"
+BUCKNELL_COURSE_DATA_URL_PREFIX = BUCKNELL_PUB_APPS_URL + "/data/course/term/"
 
 # Types of extra sections L (lab), R (recitation), P (problem session)
 EXTRA_SECTIONS = "LRP"
 
 
-class LookupType(Enum):
-	DEPARTMENT = 'DPT'
-	CCC = 'REQ2'
-	CREDIT = 'CRD'
+def get_current_term():
+	# TODO - cache this
+    terms = requests.get(BUCKNELL_TERM_URL, verify=False).json()
+    return next(term for term in terms if term["Default"] == "Y")
 
-
-def fetch_course_html(payload_value, lookup_type):
-	"""
-	Helper function for retrieving course data from Bucknell servers.
-
-	:param payload_value: The data being requested in a category
-	:param lookup_type: The category of data being requested
-	:return: Sections as raw HTML
-	"""
-
-	payload = {
-		'term': TERM,
-		'param1': payload_value,
-		'lookopt': lookup_type.value,
-		'openopt': 'ALL'
-	}
-
-	r = requests.get(BUCKNELL_COURSE_DATA_URL, params=payload)
-	return r.text
-
+def get_all_courses():
+    url = BUCKNELL_COURSE_DATA_URL_PREFIX + get_current_term()["CodeBanner"]
+    return requests.get(url, verify=False).json()
 
 def fetch_section_details(crn, department):
 	"""
@@ -60,16 +45,15 @@ def fetch_section_details(crn, department):
 	if details is not None:
 		return details["set_time"], details["data"]
 
+	term = get_current_term()["CodeBanner"]
+
 	# Create and execute server request
 	payload = {
 		'formopt': 'VIEWSECT',
-		'term': TERM,
+		'term': term,
 		'updsubj': department,
 		'crn': crn,
-		'viewterm': TERM,
-		'viewlookopt': 'DPT',
-		'viewparam1': department,
-		'viewopenopt': 'ALL',
+		'viewterm': term,
 	}
 
 	r = requests.get(BUCKNELL_SECTION_DETAILS_URL, params=payload)
@@ -118,43 +102,26 @@ class Section(object):
 
 	def __init__(self, section, message=None):
 		"""
-		Parses HTML for an individual section and stores extra sections (labs, etc) if it
+		Parses JSON for an individual section and stores extra sections (labs, etc) if it
 		is a main section.
 
-		:param section: Section HTML
+		:param section: Section JSON
 		:param message: Message containing restrictions and other information for the section
 		"""
 
-		course_number_with_section = str(''.join(section[1].strings))
-		bare_course_number = " ".join(course_number_with_section.split(" ")[:2]).rstrip(string.letters)
-		department, course_number, section_number = course_number_with_section.split(" ")
+		self.department = section["Subj"]				  											# DEPT
+		self.course_number = section["Number"]								 						# 	   000X
+		self.sectionNum = section["Section"] 														# 			00
+		self.courseNum = self.department + " " + self.course_number + " " + self.sectionNum 		# DEPT 000X 00
+		self.bare_course_number = self.department + " " + self.course_number.rstrip(string.letters)	# DEPT 000
 
-		self.bare_course_number = bare_course_number		# DEPT 000
-		self.courseNum = course_number_with_section 		# DEPT 000X 00
-		self.department = department  						# DEPT
-		self.course_number = course_number 					# 	   000X
-		self.sectionNum = section_number 					# 			00
+		self.CRN = section["Crn"]
+		self.courseName = section["Title"]
+		self.timesMet = section["Meetings"]
+		self.professor = section["Instructors"]
+		self.CCC = [x["Code"] for x in section["Reqs"]]
 
-		self.CRN = str(section[0].string)
-		self.courseName = str(''.join(section[2].strings))
-		self.timesMet = str(''.join(section[3].strings))
-		self.roomMet = str(', '.join(section[4].strings))
-		self.professor = str('; '.join(section[5].strings))
-		self.freeSeats = str(''.join(section[6].strings).replace(u'\xa0', " "))
-
-		if str(''.join(section[10].strings)) != 'Desc':			# Index 10 col is CCC
-			self.waitList = str(''.join(section[7].strings))
-			self.resSeats = str(''.join(section[8].strings))
-			self.prm = str(''.join(section[9].strings))
-			self.CCC = str(''.join(section[10].strings)).strip()
-		else:													# Index 10 col is Course Desc
-			self.waitList = ""
-			print ("Number 2")
-			self.resSeats = str(''.join(section[7].strings))
-			self.prm = str(''.join(section[8].strings))
-			self.CCC = str(''.join(section[9].strings)).strip()
-		
-		self.message = str(''.join(message[0].strings).replace(u'\u2019', "")) if message is not None else None
+		self.message = section["Footnote"]
 		self.main = False 	# assume section is not main
 
 		# to be used if main section
@@ -235,14 +202,12 @@ class Course:
 			message = section.message
 
 			# Makes sure section is DEPT 101 00, not DEPT 101R 00 or DEPT 101L 00
-			if message is None or len(re.findall(courseNumFull_regex, message)) == 0 or not section.main:
+			if message is None or not section.main:
 				continue
 
-			message_text = message.split(': ')[1].lower()
-
 			# find ranges of sections like "labs 60-69"
-			legal_sections = [x[1] for x in re.findall(message_regex, message_text)]
-			for x in re.findall(section_range_regex, message_text):
+			legal_sections = [x[1] for x in re.findall(message_regex, message)]
+			for x in re.findall(section_range_regex, message):
 				# convert range of sections to list and convert to string
 				legal_sections += [str(y) for y in range(int(x[0]), int(x[1]) + 1)]
 
@@ -297,6 +262,15 @@ class Course:
 			"courseNum": self.main_sections[self.main_sections.keys()[0]].course_number
 		}
 
+def filter_sections_by_type(sections, lookup_type, lookup_val):
+	# TODO - sort
+	if lookup_type == "ccc":
+		return [x for x in sections if lookup_val in [y["Code"] for y in x["Reqs"]]]
+	elif lookup_type == "credit":
+		# TODO - also use CreditMax
+		return [x for x in sections if x["Credit"] == lookup_val]
+	else:
+		return [x for x in sections if lookup_val in x["DeptCodes"]]
 
 class CreditOrCCC:
 	"""
@@ -319,18 +293,11 @@ class CreditOrCCC:
 		if cache_data is not None:
 			return cache_data["set_time"], cache_data["data"]
 
-		# fetch the HTML
-		lookup_type_enum = LookupType[lookup_type.upper()]
-		html = fetch_course_html(lookup_value, lookup_type_enum)
-
-		# extract section data from html
-		sections = extract_sections(html)
-
-		# ignore elements that don't contain course data
-		filtered_sections = filter(lambda x: len(x) > 5, sections)
+		# fetch the course data
+		sections = filter_sections_by_type(get_all_courses(), lookup_type, lookup_value)
 
 		# generate a list of dictionaries to organize data for each section
-		all_courses = map(CreditOrCCC.handle_ccc_or_credit_section, filtered_sections)
+		all_courses = map(CreditOrCCC.handle_ccc_or_credit_section, sections)
 
 		# store in cache and return data
 		cache_time = course_data_set(lookup_value, all_courses)
@@ -346,15 +313,7 @@ class CreditOrCCC:
 		:return: A course object for that section
 		"""
 
-		# divide a row of section data into its individual columns
-		data = section.find_all("td")
-
-		section = Section(data)
-
-		course = Course(section, True)
-
-		return course.export()
-
+		return Course(Section(section), True).export()
 
 class Department:
 	"""
@@ -376,20 +335,11 @@ class Department:
 		if cache_data is not None:
 			return cache_data["set_time"], cache_data["data"]
 
-		# fetch the HTML
-		html = fetch_course_html(department_name, LookupType.DEPARTMENT)
-
-		# extract sections from HTML
-		sections = extract_sections(html)
-
-		# ignore first row of section data if it is a department message
-		sections = sections[1:] if len(sections[0].find_all("td")) == 1 else sections
-
-		# divide a row of section data into its individual columns
-		section_split = map(lambda current_section: current_section.find_all("td"), sections)
+		# fetch the sections
+		sections = filter_sections_by_type(get_all_courses(), None, department_name)
 
 		# group sections by course
-		grouped_sections = Department.group_sections_by_course(section_split)
+		grouped_sections = Department.group_sections_by_course(sections)
 
 		# parse courses to group sections with their labs, recitations, etc.
 		parsed_courses = map(Course, grouped_sections)
@@ -403,22 +353,8 @@ class Department:
 
 	@staticmethod
 	def group_sections_by_course(sections):
-		sections_with_message = []
-		grouped_sections = []
-
-		# group section with its message, if it has one
-		for index, section in enumerate(sections):
-			if len(section) == 1:
-				continue
-
-			message = sections[index + 1] if index < len(sections) - 1 and len(sections[index + 1]) == 1 else None
-			sections_with_message.append(Section(section, message))
-
-		# group sections by course
-		for key, group in groupby(sections_with_message, lambda x: x.bare_course_number):
-			grouped_sections.append(list(group))
-
-		return grouped_sections
+		sorted_sections = sorted([Section(x) for x in sections], key=lambda x: x.courseNum)
+		return [list(group) for key, group in groupby(sorted_sections, lambda x: x.bare_course_number)]
 
 
 def find_course_in_department(parsed_data, department_name, course_number):

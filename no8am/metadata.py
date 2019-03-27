@@ -91,6 +91,6 @@ CCC_LIST = [
 ]
 
 CREDIT_LIST = [
-	{"abbreviation": ".5", "name": "Half Credit"},
-	{"abbreviation": ".25", "name": "Quarter Credit"}
+	{"abbreviation": "0.5", "name": "Half Credit"},
+	{"abbreviation": "0.25", "name": "Quarter Credit"}
 ]

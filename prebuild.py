@@ -17,17 +17,17 @@ def update_static_files_wrapper():
     while update_metadata_response not in ['y', 'n']:
         update_metadata_response = raw_input("Update metadata? [y/n]: ")
 
-    update_static = update_static_response == 'y'
-    update_metadata = update_metadata_response == 'y'
+    should_update_static = update_static_response == 'y'
+    should_update_metadata = update_metadata_response == 'y'
 
     # update the requested files to S3 and invalidate the CloudFront cache
-    if update_static:
+    if should_update_static:
         update_static_files()
 
-    if update_metadata:
+    if should_update_metadata:
         update_metadata()
 
-    if update_static or update_metadata:
+    if should_update_static or should_update_metadata:
         invalidate_cache()
 
 

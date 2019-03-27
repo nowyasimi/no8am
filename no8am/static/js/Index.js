@@ -24,9 +24,10 @@ $(function() {
 
     initializeHandlebarsTemplates();
 
-    $.getJSON(METADATA_URL, function(metadata) {
-       initializeTypeahead(metadata)
-    });
+    $.ajax(METADATA_URL, {crossDomain: true})
+      .done(function(metadata) {
+         initializeTypeahead(metadata)
+      });
 
     // add courses if saved schedule from custom link if schedule exists
     if (!$.isEmptyObject(savedSchedule)) {
